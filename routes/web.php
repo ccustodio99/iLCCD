@@ -27,6 +27,7 @@ use App\Http\Controllers\JobOrderController;
 use App\Http\Controllers\RequisitionController;
 use App\Http\Controllers\InventoryItemController;
 use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\DocumentController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -40,4 +41,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('requisitions', RequisitionController::class)->except('show');
     Route::resource('inventory', InventoryItemController::class)->except('show');
     Route::resource('purchase-orders', PurchaseOrderController::class)->except('show');
+    Route::resource('documents', DocumentController::class)->except('show');
 });
