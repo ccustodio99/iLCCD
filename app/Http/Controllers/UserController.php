@@ -16,7 +16,8 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return view('users.edit', compact('user'));
+        $roles = ['admin', 'staff', 'head', 'president', 'finance', 'itrc'];
+        return view('users.edit', compact('user', 'roles'));
     }
 
     public function update(Request $request, User $user)
@@ -25,10 +26,16 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|confirmed|min:8',
+            'role' => 'required|string',
+            'department' => 'nullable|string|max:255',
+            'is_active' => 'boolean',
         ]);
 
         $user->name = $data['name'];
         $user->email = $data['email'];
+        $user->role = $data['role'];
+        $user->department = $data['department'] ?? null;
+        $user->is_active = $data['is_active'] ?? false;
         if (!empty($data['password'])) {
             $user->password = Hash::make($data['password']);
         }
