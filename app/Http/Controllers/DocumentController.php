@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Document;
 use App\Models\DocumentVersion;
+use App\Models\DocumentLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,6 +39,11 @@ class DocumentController extends Controller
             'version' => 1,
             'path' => $path,
             'uploaded_by' => $request->user()->id,
+        ]);
+        DocumentLog::create([
+            'document_id' => $document->id,
+            'user_id' => $request->user()->id,
+            'action' => 'upload',
         ]);
         return redirect()->route('documents.index');
     }
@@ -74,6 +80,11 @@ class DocumentController extends Controller
             $document->current_version = $version;
             $document->save();
         }
+        DocumentLog::create([
+            'document_id' => $document->id,
+            'user_id' => $request->user()->id,
+            'action' => 'update',
+        ]);
         return redirect()->route('documents.index');
     }
 
@@ -87,6 +98,11 @@ class DocumentController extends Controller
             Storage::delete($version->path);
         }
         $document->delete();
+        DocumentLog::create([
+            'document_id' => $document->id,
+            'user_id' => $request->user()->id,
+            'action' => 'delete',
+        ]);
         return redirect()->route('documents.index');
     }
 }
