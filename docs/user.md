@@ -124,3 +124,10 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
 For an overview of the entire system refer to the [project README](../README.md).
 
 More guides are listed in the [documentation index](README.md).
+
+---
+
+## 🚀 Navigation
+- Previous: [Access Control Module](Access_Control_Module.md)
+- Next: [User Interface & Branding](user-interface-branding.md)
+- [Documentation Index](README.md)

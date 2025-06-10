@@ -92,3 +92,9 @@ For an overview of all system modules consult the [project README](../README.md)
 | Christ-Centeredness | Ethical digital conduct, fairness in all access policies       |
 
 For more guides visit the [documentation index](README.md).
+
+---
+
+## 🚀 Navigation
+- Next: [User Management Module](user.md)
+- [Documentation Index](README.md)
