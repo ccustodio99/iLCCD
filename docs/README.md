@@ -11,6 +11,7 @@ Welcome to the documentation hub for the LCCD Integrated Information System. Thi
 - [KPI & Audit Dashboard](kpi-audit-log-dashboard.md)
 - [Job Order Module](job-order-module.md)
 - [Requisition Management Module](requisition-management-module.md)
+- [Inventory Module](inventory-module.md)
 - [Purchase Order System](purchase-order-module.md)
 
 For a high-level overview of the project, see the [project README](../README.md).
