@@ -15,6 +15,7 @@ The Access Control module is the core of security and data integrity in the syst
   - Manage users or departments
   - Access to sensitive modules or audit logs
 - **Permissions** are enforced both at the UI level (what buttons/menus are visible) and at the controller level (what the backend will allow).
+- Route middleware (`role:admin`, etc.) checks the authenticated user's role before allowing access to sensitive endpoints.
 - **Departmental scoping**: Data access is filtered by department unless the role has cross-department permissions (e.g., Admin, President).
 
 ### 2. Secure Login Mechanisms

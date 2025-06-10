@@ -139,6 +139,7 @@ Every action is traceable; every step is value-aligned.
 ## 🛡️ Access Control & Security
 
 - **RBAC:** Strict, granular permission by role & department
+- **Middleware:** `role` middleware protects sensitive routes
 - **Secure login:** HTTPS, bcrypt/Argon2 hashing
 - **Sessions:** Auto-logout (15 min inactivity), ID regeneration
 - **CSRF protection:** On all sensitive forms

@@ -3,14 +3,14 @@
 use App\Models\User;
 
 it('allows admin to view user list', function () {
-    $admin = User::factory()->create();
+    $admin = User::factory()->create(['role' => 'admin']);
     $this->actingAs($admin);
     $response = $this->get('/users');
     $response->assertStatus(200);
 });
 
 it('allows admin to edit a user', function () {
-    $admin = User::factory()->create();
+    $admin = User::factory()->create(['role' => 'admin']);
     $user = User::factory()->create();
     $this->actingAs($admin);
     $response = $this->put("/users/{$user->id}", [
@@ -28,7 +28,7 @@ it('allows admin to edit a user', function () {
 
 
 it('rejects invalid role during update', function () {
-    $admin = User::factory()->create();
+    $admin = User::factory()->create(['role' => 'admin']);
     $user = User::factory()->create();
     $this->actingAs($admin);
     $response = $this->from("/users/{$user->id}/edit")->put("/users/{$user->id}", [
