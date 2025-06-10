@@ -50,7 +50,8 @@ The Access Control module is the core of security and data integrity in the syst
 ### Current Implementation
 - Role-based middleware restricts access to routes.
 - Passwords are hashed and sessions regenerate on login/logout.
-- Features like account lockout, two-factor auth, and automatic session timeout are not yet implemented.
+- Automatic logout after 30 minutes of inactivity is configured via the session lifetime.
+- Account lockout and two-factor authentication are still pending.
 
 ---
 

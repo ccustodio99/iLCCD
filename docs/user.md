@@ -80,7 +80,8 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
 ### Current Implementation
 - Users can register and log in with hashed passwords.
 - Admins manage roles, departments, and activation status.
-- 2FA, password expiry, account lockout, and auto-logout are planned features.
+- Automatic logout after 30 minutes of inactivity is enabled.
+- 2FA, password expiry, and account lockout are planned features.
 
 ### Password Policy & Session Management
 - Minimum 8 characters with a mix of letters, numbers, and symbols
