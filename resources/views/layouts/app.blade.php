@@ -21,8 +21,8 @@
     <div class="container">
 
         <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
-
             <img src="{{ asset('assets/images/LCCD.jpg') }}" alt="LCCD Logo" width="40" class="me-2">
+            <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Department Logo" width="40" class="me-2">
             LCCD Integrated Information System
         </a>
     </div>
