@@ -16,6 +16,7 @@
 - [Directory Structure (Laravel)](#directory-structure-laravel)
 - [Documentation & Resources](#documentation--resources)
 - [Contributing](#contributing)
+- [License](#license)
 
 ---
 
@@ -200,10 +201,16 @@ Every action is traceable; every step is value-aligned.
   - Fork & branch from `main`
   - Follow AGENTS.md for code style, commit format, pull request protocol
   - Test your changes, include screenshots for UI
-- **Code checks:**  
+- **Code checks:**
   - PHP: `php artisan test` (or `php -l file.php`)
   - HTML/CSS: [W3C Validator](https://validator.w3.org/)
   - Accessibility: [WAVE Tool](https://wave.webaim.org/)
+
+---
+
+## 📜 License
+
+Released under the [MIT License](LICENSE).
 
 ---
 
