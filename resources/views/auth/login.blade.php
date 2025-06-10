@@ -29,6 +29,7 @@
         <div class="mt-2">
             <a href="{{ route('home') }}">Back to Home</a>
         </div>
+
     </form>
 </div>
 @endsection

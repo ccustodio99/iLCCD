@@ -33,3 +33,4 @@ test('login page contains link to home', function () {
     $response = $this->get('/login');
     $response->assertSee(route('home'));
 });
+
