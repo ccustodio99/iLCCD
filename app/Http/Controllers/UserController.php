@@ -16,17 +16,19 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        $roles = ['admin', 'staff', 'head', 'president', 'finance', 'itrc'];
+        $roles = User::ROLES;
         return view('users.edit', compact('user', 'roles'));
     }
 
     public function update(Request $request, User $user)
     {
+        $roles = User::ROLES;
+
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|confirmed|min:8',
-            'role' => 'required|string',
+            'role' => 'required|in:' . implode(',', $roles),
             'department' => 'nullable|string|max:255',
             'is_active' => 'boolean',
         ]);
