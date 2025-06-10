@@ -11,8 +11,8 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
 
 ## 🧩 Core Features
 
-### 1. User Account Creation and Management
 - Admin users can create, edit, or remove accounts.
+  Self-service registration is available for new users and requires only the **Name**, **Email**, **Password**, and **Confirm Password** fields. Department and contact details can be set by an admin after the account is created.
 - Each account includes:
   - Full name
   - Email / Username
