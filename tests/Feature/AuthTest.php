@@ -28,3 +28,9 @@ test('forgot password page is accessible', function () {
     $response = $this->get('/forgot-password');
     $response->assertStatus(200);
 });
+
+test('login page contains link to home', function () {
+    $response = $this->get('/login');
+    $response->assertSee(route('home'));
+});
+
