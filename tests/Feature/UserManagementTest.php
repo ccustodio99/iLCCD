@@ -26,6 +26,20 @@ it('allows admin to edit a user', function () {
     expect($user->fresh()->name)->toBe('Updated');
 });
 
+
+it('rejects invalid role during update', function () {
+    $admin = User::factory()->create();
+    $user = User::factory()->create();
+    $this->actingAs($admin);
+    $response = $this->from("/users/{$user->id}/edit")->put("/users/{$user->id}", [
+        'name' => 'Test',
+        'email' => 'test@example.com',
+        'role' => 'invalid',
+    ]);
+    $response->assertSessionHasErrors('role');
+});
+
+
 it('prevents login for inactive users', function () {
     $user = User::factory()->create(['is_active' => false]);
     $response = $this->post('/login', [

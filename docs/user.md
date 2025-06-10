@@ -23,7 +23,9 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
 - Optional: Bulk user registration (CSV import).
 
 ### 2. Role Assignments and Permission Settings
-- Roles are predefined and linked to system modules. For example:
+- Roles are predefined and linked to system modules. Allowed roles are:
+  `admin`, `staff`, `head`, `president`, `finance`, and `itrc`.
+  Examples include:
   - **Faculty/Staff**: Can create tickets, requisitions, and job orders.
   - **Department Heads**: Can review/approve within their scope.
   - **President**: Strategic approval, high-level dashboards.
