@@ -18,3 +18,9 @@ Route::post('/register', [RegisterController::class, 'store']);
 
 Route::get('/forgot-password', [ForgotPasswordController::class, 'show'])->name('password.request');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+use App\Http\Controllers\UserController;
+
+Route::middleware('auth')->group(function () {
+    Route::resource('users', UserController::class)->except(['show', 'create', 'store']);
+});
