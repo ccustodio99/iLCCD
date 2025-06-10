@@ -16,7 +16,9 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+
         $roles = User::ROLES;
+
         return view('users.edit', compact('user', 'roles'));
     }
 
@@ -28,7 +30,10 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|confirmed|min:8',
+
+
             'role' => 'required|in:' . implode(',', $roles),
+
             'department' => 'nullable|string|max:255',
             'is_active' => 'boolean',
         ]);

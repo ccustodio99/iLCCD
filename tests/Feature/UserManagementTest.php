@@ -26,6 +26,7 @@ it('allows admin to edit a user', function () {
     expect($user->fresh()->name)->toBe('Updated');
 });
 
+
 it('rejects invalid role during update', function () {
     $admin = User::factory()->create();
     $user = User::factory()->create();
@@ -37,6 +38,7 @@ it('rejects invalid role during update', function () {
     ]);
     $response->assertSessionHasErrors('role');
 });
+
 
 it('prevents login for inactive users', function () {
     $user = User::factory()->create(['is_active' => false]);
