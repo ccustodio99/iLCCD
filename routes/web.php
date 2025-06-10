@@ -22,6 +22,7 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TicketController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -30,4 +31,5 @@ Route::middleware('auth')->group(function () {
         ->middleware('role:admin');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::resource('tickets', TicketController::class)->except('show');
 });
