@@ -25,7 +25,9 @@ use App\Http\Controllers\DashboardController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::resource('users', UserController::class)->except(['show', 'create', 'store']);
+    Route::resource('users', UserController::class)
+        ->except(['show', 'create', 'store'])
+        ->middleware('role:admin');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
