@@ -24,6 +24,12 @@
         <div class="d-grid">
             <button type="submit" class="btn cta">Register</button>
         </div>
+        <div class="mt-3">
+            <a href="{{ route('login') }}">Already have an account? Login</a>
+        </div>
+        <div class="mt-2">
+            <a href="{{ route('home') }}">Back to Home</a>
+        </div>
     </form>
 </div>
 @endsection
