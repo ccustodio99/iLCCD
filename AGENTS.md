@@ -76,8 +76,9 @@ This guide ensures **every contributor (human or AI)** follows best practices fo
 1. **Branch:**
    - Create a feature branch: `git checkout -b [module]-[short-description]`
 2. **Commit:**
-   - Message format: `[Module] Short, clear summary (max 72 chars)`
+   - Message format: `[Module] Short summary` (max 72 chars)
      - Example: `[Inventory] Fix stock deduction on requisition approval`
+     - Optional Git hook: copy `githooks/commit-msg` to `.git/hooks/commit-msg` to enforce the format
 3. **Pull Request:**
    - Describe what you changed and why
    - Reference related issues if any
