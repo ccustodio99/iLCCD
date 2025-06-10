@@ -25,6 +25,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\JobOrderController;
 use App\Http\Controllers\RequisitionController;
+use App\Http\Controllers\InventoryItemController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -36,4 +37,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('tickets', TicketController::class)->except('show');
     Route::resource('job-orders', JobOrderController::class)->except('show');
     Route::resource('requisitions', RequisitionController::class)->except('show');
+    Route::resource('inventory', InventoryItemController::class)->except('show');
 });
