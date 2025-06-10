@@ -18,7 +18,20 @@ it('allows admin to edit a user', function () {
         'email' => 'updated@example.com',
         'password' => 'newpassword',
         'password_confirmation' => 'newpassword',
+        'role' => 'admin',
+        'department' => 'ITRC',
+        'is_active' => true,
     ]);
     $response->assertRedirect('/users');
     expect($user->fresh()->name)->toBe('Updated');
+});
+
+it('prevents login for inactive users', function () {
+    $user = User::factory()->create(['is_active' => false]);
+    $response = $this->post('/login', [
+        'email' => $user->email,
+        'password' => 'password',
+    ]);
+    $response->assertSessionHasErrors('email');
+    $this->assertGuest();
 });
