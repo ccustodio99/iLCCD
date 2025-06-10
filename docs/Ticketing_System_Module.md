@@ -12,6 +12,13 @@ The Ticketing System is the all-in-one portal for reporting issues and requestin
 
 The interface uses Bootstrap 5 with official LCCD branding and is secured through the Access Control module. For more information on other modules, see the [documentation index](README.md).
 
+
+---
+## 🚀 Navigation
+- Previous: [User Interface & Branding](user-interface-branding.md)
+- Next: [Document Management Module](document-management-module.md)
+- [Documentation Index](README.md)
+
 ## Basic Workflow
 
 1. Users create tickets specifying category, subject, description, and optional due date.
