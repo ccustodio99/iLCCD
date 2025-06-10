@@ -47,6 +47,10 @@ The Access Control module is the core of security and data integrity in the syst
   - Role or permission changes
   - Unauthorized access attempts
 - Logs are immutable and regularly reviewed by the ITRC/admin.
+### Current Implementation
+- Role-based middleware restricts access to routes.
+- Passwords are hashed and sessions regenerate on login/logout.
+- Features like account lockout, two-factor auth, and automatic session timeout are not yet implemented.
 
 ---
 
