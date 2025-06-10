@@ -19,7 +19,7 @@ test('users can register and log in', function () {
         'password' => 'password',
     ]);
 
-    $response->assertRedirect('/');
+    $response->assertRedirect('/dashboard');
     $this->assertAuthenticated();
 });
 
