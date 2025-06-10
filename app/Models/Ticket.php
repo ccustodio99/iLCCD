@@ -17,12 +17,16 @@ class Ticket extends Model
         'description',
         'status',
         'due_at',
+        'escalated_at',
+        'resolved_at',
     ];
 
     protected function casts(): array
     {
         return [
             'due_at' => 'datetime',
+            'escalated_at' => 'datetime',
+            'resolved_at' => 'datetime',
         ];
     }
 
