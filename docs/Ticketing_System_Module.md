@@ -11,8 +11,10 @@ The Ticketing System is the all-in-one portal for reporting issues and requestin
 📊 **KPI integration:** Resolution times, escalation counts, and audit logs feed into the KPI dashboard for management insight. Every action is logged for accountability.
 
 The interface uses Bootstrap 5 with official LCCD branding and is secured through the Access Control module. For more information on other modules, see the [documentation index](README.md).
-
-
+### Current Implementation
+- Users can create, edit, and delete their own tickets with category, subject, description, and due date.
+- Tickets are listed on the My Tickets page.
+- SLA timers, job order linkage, and KPI dashboard features are not yet implemented.
 ---
 ## 🚀 Navigation
 - Previous: [User Interface & Branding](user-interface-branding.md)
