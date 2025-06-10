@@ -14,9 +14,22 @@
         .navbar-brand, .nav-link { color: #ffffff !important; }
         .cta { background-color: #FFCD38; color: #1B2660; }
         footer { background-color: #1B2660; color: #ffffff; padding: 1rem 0; }
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #1B2660;
+            color: #ffffff;
+            padding: 0.5rem;
+            z-index: 100;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container d-flex align-items-center justify-content-between">
         <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
@@ -47,7 +60,7 @@
         @endauth
     </div>
 </nav>
-<main class="py-5">
+<main id="main-content" class="py-5">
     @yield('content')
 </main>
 <footer class="text-center">
