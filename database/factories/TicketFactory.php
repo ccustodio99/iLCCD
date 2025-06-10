@@ -22,6 +22,8 @@ class TicketFactory extends Factory
             'description' => fake()->paragraph(),
             'status' => 'open',
             'due_at' => now()->addDays(3),
+            'escalated_at' => null,
+            'resolved_at' => null,
         ];
     }
 }

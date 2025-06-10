@@ -54,6 +54,10 @@ class TicketController extends Controller
             'due_at' => 'nullable|date',
         ]);
         $ticket->update($data);
+        if ($data['status'] === 'closed' && $ticket->resolved_at === null) {
+            $ticket->resolved_at = now();
+            $ticket->save();
+        }
         return redirect()->route('tickets.index');
     }
 

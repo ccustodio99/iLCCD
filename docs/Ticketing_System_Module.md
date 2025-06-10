@@ -14,7 +14,8 @@ The interface uses Bootstrap 5 with official LCCD branding and is secured throug
 ### Current Implementation
 - Users can create, edit, and delete their own tickets with category, subject, description, and due date.
 - Tickets are listed on the My Tickets page.
-- SLA timers, job order linkage, and KPI dashboard features are not yet implemented.
+- Automatic SLA monitoring escalates overdue tickets every minute.
+- KPI logs capture escalation timestamps for dashboard reporting.
 ---
 ## 🚀 Navigation
 - Previous: [User Interface & Branding](user-interface-branding.md)
