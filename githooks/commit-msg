@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Validate commit message style: [Module] Short summary
+pattern='^\[[A-Za-z0-9_-]+\] .{1,72}$'
+commit_msg=$(cat "$1")
+if ! echo "$commit_msg" | grep -Eq "$pattern"; then
+    echo "Commit message must follow '[Module] Short summary'" >&2
+    exit 1
+fi

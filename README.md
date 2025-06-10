@@ -197,10 +197,13 @@ Every action is traceable; every step is value-aligned.
 
 ## 🤝 Contributing
 
-- **How:**  
+- **How:**
   - Fork & branch from `main`
   - Follow AGENTS.md for code style, commit format, pull request protocol
   - Test your changes, include screenshots for UI
+- **Commit message style:** `[Module] Short summary` (max 72 chars)
+  - Example: `[Inventory] Fix stock deduction on requisition approval`
+  - Optional Git hook: copy `githooks/commit-msg` to `.git/hooks/commit-msg` to enforce the format
 - **Code checks:**
   - PHP: `php artisan test` (or `php -l file.php`)
   - HTML/CSS: [W3C Validator](https://validator.w3.org/)
