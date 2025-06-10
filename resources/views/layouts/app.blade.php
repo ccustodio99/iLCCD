@@ -18,13 +18,30 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container">
-
+    <div class="container d-flex align-items-center">
         <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
             <img src="{{ asset('assets/images/LCCD.jpg') }}" alt="LCCD Logo" width="40" class="me-2">
             <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Department Logo" width="40" class="me-2">
             LCCD Integrated Information System
         </a>
+
+        <div class="ms-auto">
+            @auth
+            <ul class="navbar-nav flex-row">
+                <li class="nav-item me-3"><a class="nav-link" href="{{ route('profile.edit') }}">Profile</a></li>
+                <li class="nav-item">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="nav-link btn btn-link p-0">Logout</button>
+                    </form>
+                </li>
+            </ul>
+            @else
+            <ul class="navbar-nav flex-row">
+                <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
+            </ul>
+            @endauth
+        </div>
     </div>
 </nav>
 <main class="py-5">

@@ -20,7 +20,10 @@ Route::get('/forgot-password', [ForgotPasswordController::class, 'show'])->name(
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
 
 Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class)->except(['show', 'create', 'store']);
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
