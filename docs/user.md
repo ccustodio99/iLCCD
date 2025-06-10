@@ -53,6 +53,11 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
   - Role or department modifications
 - Logs are stored in `storage/logs` and feed into the **Audit & KPI dashboard**.
 
+### 6. Profile Management
+- Each user can update their own **name**, **email**, and password from the *My Profile* page.
+- Password changes require confirmation and log an audit entry.
+- Access via the Profile link in the top navigation when logged in.
+
 ---
 
 ## 🖼️ User Interface Design Notes
