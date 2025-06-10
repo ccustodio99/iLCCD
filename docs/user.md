@@ -77,6 +77,11 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
 - Automatic logout on inactivity.
 - Access checks at both **front-end** and **controller-level**.
 - Logs are immutable and monitored by ITRC.
+### Current Implementation
+- Users can register and log in with hashed passwords.
+- Admins manage roles, departments, and activation status.
+- Automatic logout after 30 minutes of inactivity is enabled.
+- 2FA, password expiry, and account lockout are planned features.
 
 ### Password Policy & Session Management
 - Minimum 8 characters with a mix of letters, numbers, and symbols
