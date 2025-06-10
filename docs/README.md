@@ -8,6 +8,7 @@ Welcome to the documentation hub for the LCCD Integrated Information System. Thi
 - [User Interface & Branding](user-interface-branding.md)
 - [Ticketing System Module](Ticketing_System_Module.md)
 - [Document Management Module](document-management-module.md)
+- [Document KPI & Log Dashboard](document-kpi-log-dashboard.md)
 - [KPI & Audit Dashboard](kpi-audit-log-dashboard.md)
 - [Job Order Module](job-order-module.md)
 - [Requisition Management Module](requisition-management-module.md)

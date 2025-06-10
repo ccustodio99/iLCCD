@@ -77,6 +77,6 @@ For more guides visit the [documentation index](README.md).
 ---
 
 ## 🚀 Navigation
-- Previous: [Document Management Module](document-management-module.md)
+- Previous: [Document KPI & Log Dashboard](document-kpi-log-dashboard.md)
 - Next: [Job Order Module](job-order-module.md)
 - [Documentation Index](README.md)
