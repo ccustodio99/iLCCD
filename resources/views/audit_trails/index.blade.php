@@ -28,7 +28,17 @@
                     @if($log->changes)
                         <ul class="list-unstyled mb-0">
                             @foreach($log->changes as $field => $values)
-                                <li>{{ $field }}: {{ $values['old'] }} → {{ $values['new'] }}</li>
+                                @php
+                                    $label = $field;
+                                    $old = $values['old'];
+                                    $new = $values['new'];
+                                    if ($field === 'assigned_to_id') {
+                                        $label = 'assigned_to';
+                                        $old = \App\Models\User::find($values['old'])?->name;
+                                        $new = \App\Models\User::find($values['new'])?->name;
+                                    }
+                                @endphp
+                                <li>{{ $label }}: {{ $old }} → {{ $new }}</li>
                             @endforeach
                         </ul>
                     @endif
