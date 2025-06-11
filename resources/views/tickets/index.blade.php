@@ -4,6 +4,7 @@
 <div class="container">
     <h1 class="mb-4">My Tickets</h1>
     <a href="{{ route('tickets.create') }}" class="btn btn-primary mb-3">New Ticket</a>
+    <div class="table-responsive">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -33,6 +34,7 @@
             @endforeach
         </tbody>
     </table>
+    </div>
     {{ $tickets->links() }}
 </div>
 @endsection

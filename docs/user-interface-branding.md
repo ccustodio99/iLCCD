@@ -1,4 +1,8 @@
-Documentation coming soon.
+The user interface follows a mobile-first approach using Bootstrap 5. All
+module tables are wrapped in a `table-responsive` container so they scroll
+horizontally on small screens. The main navigation now links to Tickets,
+Job Orders, Requisitions, Inventory, Purchase Orders, and Documents to
+make switching between modules quick and intuitive.
 
 ---
 

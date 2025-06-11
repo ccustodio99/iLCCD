@@ -22,6 +22,7 @@
         </div>
     </div>
     <h3>Recent Activity</h3>
+    <div class="table-responsive">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -42,5 +43,6 @@
             @endforeach
         </tbody>
     </table>
+    </div>
 </div>
 @endsection
