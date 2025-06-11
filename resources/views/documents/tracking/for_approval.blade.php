@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Documents for Approval')
+
 @section('content')
 <div class="container">
     <h1 class="mb-4">Documents for Approval/Checking</h1>

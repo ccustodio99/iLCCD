@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Inventory')
+
 @section('content')
 <div class="container">
     <h1 class="mb-4">My Inventory Items</h1>

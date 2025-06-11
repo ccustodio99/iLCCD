@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'LCCD IIS') }}</title>
+    <title>@yield('title', config('app.name', 'LCCD IIS'))</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <!-- Material Icons -->
@@ -37,6 +37,11 @@
             text-decoration: none;
             display: block;
             padding: 0.75rem 1rem;
+        }
+        .nav-link.active {
+            background-color: #FFCD38;
+            color: #1B2660;
+            font-weight: 600;
         }
         .sidebar a:hover {
             background-color: #FFCD38;
@@ -102,27 +107,27 @@
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <button id="menu-toggle" aria-label="Toggle menu">&#9776;</button>
+    <button id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
     <div class="d-flex">
-        <nav class="sidebar">
+        <nav class="sidebar" aria-label="Main navigation">
             <a class="navbar-brand d-flex align-items-center mb-3" href="{{ route('home') }}">
                 <img src="{{ asset('assets/images/LCCD.jpg') }}" alt="LCCD Logo" width="40" class="me-2">
                 <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Department Logo" width="40" class="me-2">
             </a>
             <ul class="nav flex-column">
                 @auth
-                    <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('tickets.index') }}">Tickets</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('job-orders.index') }}">Job Orders</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('requisitions.index') }}">Requisitions</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('inventory.index') }}">Inventory</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('purchase-orders.index') }}">Purchase Orders</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('documents.index') }}">Documents</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('audit-trails.index') }}">Audit Trail</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('dashboard')) active @endif" href="{{ route('dashboard') }}" @if(request()->routeIs('dashboard')) aria-current="page" @endif>Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('tickets.*')) active @endif" href="{{ route('tickets.index') }}" @if(request()->routeIs('tickets.*')) aria-current="page" @endif>Tickets</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('job-orders.*')) active @endif" href="{{ route('job-orders.index') }}" @if(request()->routeIs('job-orders.*')) aria-current="page" @endif>Job Orders</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('requisitions.*')) active @endif" href="{{ route('requisitions.index') }}" @if(request()->routeIs('requisitions.*')) aria-current="page" @endif>Requisitions</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('inventory.*')) active @endif" href="{{ route('inventory.index') }}" @if(request()->routeIs('inventory.*')) aria-current="page" @endif>Inventory</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('purchase-orders.*')) active @endif" href="{{ route('purchase-orders.index') }}" @if(request()->routeIs('purchase-orders.*')) aria-current="page" @endif>Purchase Orders</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('documents.*')) active @endif" href="{{ route('documents.index') }}" @if(request()->routeIs('documents.*')) aria-current="page" @endif>Documents</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('audit-trails.*')) active @endif" href="{{ route('audit-trails.index') }}" @if(request()->routeIs('audit-trails.*')) aria-current="page" @endif>Audit Trail</a></li>
                     @if(auth()->user()->role === 'admin')
-                        <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}">Users</a></li>
+                        <li class="nav-item"><a class="nav-link @if(request()->routeIs('users.*')) active @endif" href="{{ route('users.index') }}" @if(request()->routeIs('users.*')) aria-current="page" @endif>Users</a></li>
                     @endif
-                    <li class="nav-item"><a class="nav-link" href="{{ route('profile.edit') }}">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('profile.*')) active @endif" href="{{ route('profile.edit') }}" @if(request()->routeIs('profile.*')) aria-current="page" @endif>Profile</a></li>
                     <li class="nav-item">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -156,7 +161,8 @@
     const menuToggle = document.getElementById('menu-toggle');
     const sidebar = document.querySelector('.sidebar');
     menuToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('active');
+        const expanded = sidebar.classList.toggle('active');
+        menuToggle.setAttribute('aria-expanded', expanded);
     });
 </script>
 </body>
