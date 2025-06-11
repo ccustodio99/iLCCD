@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Requisition;
+use App\Models\InventoryItem;
+use App\Models\PurchaseOrder;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -59,6 +61,20 @@ class RequisitionController extends Controller
             $requisition->approved_at = now();
             $requisition->approved_by_id = auth()->id();
             $requisition->save();
+
+            $item = InventoryItem::where('name', $requisition->item)->first();
+            if (!$item || $item->quantity < $requisition->quantity) {
+                PurchaseOrder::create([
+                    'user_id' => auth()->id(),
+                    'requisition_id' => $requisition->id,
+                    'inventory_item_id' => $item?->id,
+                    'item' => $requisition->item,
+                    'quantity' => $requisition->quantity,
+                    'status' => 'draft',
+                ]);
+            } else {
+                $item->decrement('quantity', $requisition->quantity);
+            }
         }
         return redirect()->route('requisitions.index');
     }

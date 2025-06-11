@@ -55,3 +55,22 @@ it('converts ticket to job order', function () {
     $ticket->refresh();
     expect($ticket->status)->toBe('converted');
 });
+
+it('converts ticket to requisition', function () {
+    $user = User::factory()->create(['department' => 'IT']);
+    $this->actingAs($user);
+
+    $ticket = Ticket::factory()->for($user)->create([
+        'category' => 'Supplies',
+        'subject' => 'Projector Bulb',
+        'description' => 'Need replacement bulb',
+    ]);
+
+    $response = $this->post("/tickets/{$ticket->id}/requisition");
+
+    $response->assertRedirect('/requisitions');
+
+    expect(App\Models\Requisition::where('item', 'Projector Bulb')->exists())->toBeTrue();
+    $ticket->refresh();
+    expect($ticket->status)->toBe('converted');
+});

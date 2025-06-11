@@ -12,6 +12,8 @@ class Requisition extends Model
 
     protected $fillable = [
         'user_id',
+        'ticket_id',
+        'job_order_id',
         'department',
         'item',
         'quantity',
@@ -38,5 +40,15 @@ class Requisition extends Model
     public function approvedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by_id');
+    }
+
+    public function ticket(): BelongsTo
+    {
+        return $this->belongsTo(Ticket::class);
+    }
+
+    public function jobOrder(): BelongsTo
+    {
+        return $this->belongsTo(JobOrder::class);
     }
 }

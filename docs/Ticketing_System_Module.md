@@ -28,6 +28,6 @@ The interface uses Bootstrap 5 with official LCCD branding and is secured throug
 2. Tickets are listed on the "My Tickets" page with status tracking and simple editing.
 3. Only the creator may modify or delete their tickets.
 4. Tickets requiring maintenance or repairs convert to **Job Orders**.
-5. If materials or tools are needed for the job, a linked **Requisition** is created.
-6. Approved requisitions deduct items from **Inventory**; if none are available, a **Purchase Order** is generated for Finance.
-7. All related documents, like approvals or receipts, are stored in the **Document Management** module.
+5. If materials or tools are needed for the job, the system checks **Inventory**. When stock is missing, it automatically creates a linked **Requisition**.
+6. Once a requisition is approved, Inventory is checked again. Out‑of‑stock items trigger a **Purchase Order** for the Finance team; otherwise inventory is deducted.
+7. All approvals and receipts are filed in **Document Management** so the ticket has a complete trail.

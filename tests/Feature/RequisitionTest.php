@@ -37,3 +37,25 @@ it('prevents editing others requisitions', function () {
     $response = $this->get("/requisitions/{$req->id}/edit");
     $response->assertForbidden();
 });
+
+it('creates purchase order when approved and item missing', function () {
+    $user = User::factory()->create(['department' => 'IT']);
+    $this->actingAs($user);
+
+    $req = Requisition::factory()->for($user)->create([
+        'item' => 'Projector',
+        'quantity' => 1,
+    ]);
+
+    $response = $this->put("/requisitions/{$req->id}", [
+        'item' => 'Projector',
+        'quantity' => 1,
+        'specification' => $req->specification,
+        'purpose' => $req->purpose,
+        'status' => 'approved',
+    ]);
+
+    $response->assertRedirect('/requisitions');
+
+    expect(App\Models\PurchaseOrder::where('requisition_id', $req->id)->exists())->toBeTrue();
+});
