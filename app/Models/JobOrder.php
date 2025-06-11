@@ -13,6 +13,7 @@ class JobOrder extends Model
 
     protected $fillable = [
         'user_id',
+        'ticket_id',
         'job_type',
         'description',
         'status',
