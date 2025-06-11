@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Models\AuditTrail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * Trait to automatically log model events to the audit trail.
@@ -34,5 +35,13 @@ trait LogsAudit
             'user_id' => Auth::id(),
             'action' => $action,
         ]);
+    }
+
+    /**
+     * Access the audit trail entries for this model.
+     */
+    public function auditTrails(): MorphMany
+    {
+        return $this->morphMany(AuditTrail::class, 'auditable');
     }
 }

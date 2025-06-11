@@ -13,7 +13,7 @@ class RequisitionController extends Controller
     public function index()
     {
         $requisitions = Requisition::where('user_id', auth()->id())
-            ->with('items')
+            ->with(['items', 'auditTrails.user'])
             ->paginate(10);
         return view('requisitions.index', compact('requisitions'));
     }
@@ -54,6 +54,7 @@ class RequisitionController extends Controller
         if ($requisition->user_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
+        $requisition->load(['items', 'auditTrails.user']);
         return view('requisitions.edit', compact('requisition'));
     }
 

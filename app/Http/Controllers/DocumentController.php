@@ -13,7 +13,9 @@ class DocumentController extends Controller
 {
     public function index()
     {
-        $documents = Document::where('user_id', auth()->id())->paginate(10);
+        $documents = Document::where('user_id', auth()->id())
+            ->with('auditTrails.user')
+            ->paginate(10);
         return view('documents.index', compact('documents'));
     }
 
@@ -53,6 +55,7 @@ class DocumentController extends Controller
         if ($document->user_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
+        $document->load('auditTrails.user');
         return view('documents.edit', compact('document'));
     }
 
