@@ -21,7 +21,7 @@
             @foreach ($tickets as $ticket)
             <tr>
                 <td>{{ $ticket->category }}</td>
-                <td>{{ $ticket->subject }}</td>
+                <td>{{ $ticket->formatted_subject }}</td>
                 <td>{{ ucfirst($ticket->status) }}</td>
                 <td>{{ optional($ticket->due_at)->format('Y-m-d') }}</td>
                 <td>
@@ -113,7 +113,7 @@
                 </div>
                 <div class="modal-body">
                     <p><strong>Category:</strong> {{ $ticket->category }}</p>
-                    <p><strong>Subject:</strong> {{ $ticket->subject }}</p>
+                    <p><strong>Subject:</strong> {{ $ticket->formatted_subject }}</p>
                     <p><strong>Description:</strong> {{ $ticket->description }}</p>
                     <p><strong>Status:</strong> {{ ucfirst($ticket->status) }}</p>
                     <p><strong>Assigned To:</strong> {{ optional($ticket->assignedTo)->name ?? 'Unassigned' }}</p>

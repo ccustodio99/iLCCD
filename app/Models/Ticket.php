@@ -67,4 +67,12 @@ class Ticket extends Model
     {
         return $this->hasMany(TicketComment::class);
     }
+
+    /**
+     * Get the formatted subject in "Category - Issue Summary - ID" form.
+     */
+    public function getFormattedSubjectAttribute(): string
+    {
+        return $this->category.' - '.$this->subject.' - '.$this->id;
+    }
 }
