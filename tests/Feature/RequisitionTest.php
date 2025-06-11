@@ -8,19 +8,20 @@ it('allows authenticated user to create requisition', function () {
     $this->actingAs($user);
 
     $response = $this->post('/requisitions', [
-        'item' => 'Laptop',
-        'quantity' => 2,
-        'specification' => 'Dell',
+        'item' => ['Laptop', 'Mouse'],
+        'quantity' => [2, 1],
+        'specification' => ['Dell', 'Logitech'],
         'purpose' => 'Office work',
     ]);
 
     $response->assertRedirect('/requisitions');
-    expect(Requisition::where('item', 'Laptop')->exists())->toBeTrue();
+    expect(Requisition::whereHas('items', fn($q) => $q->where('item', 'Laptop'))->exists())->toBeTrue();
 });
 
 it('shows user requisitions', function () {
     $user = User::factory()->create();
-    $req = Requisition::factory()->for($user)->create(['item' => 'Printer']);
+    $req = Requisition::factory()->for($user)->create();
+    $req->items()->update(['item' => 'Printer']);
     $this->actingAs($user);
 
     $response = $this->get('/requisitions');
@@ -42,15 +43,16 @@ it('creates purchase order when approved and item missing', function () {
     $user = User::factory()->create(['department' => 'IT']);
     $this->actingAs($user);
 
-    $req = Requisition::factory()->for($user)->create([
+    $req = Requisition::factory()->for($user)->create();
+    $req->items()->update([
         'item' => 'Projector',
         'quantity' => 1,
     ]);
 
     $response = $this->put("/requisitions/{$req->id}", [
-        'item' => 'Projector',
-        'quantity' => 1,
-        'specification' => $req->specification,
+        'item' => ['Projector'],
+        'quantity' => [1],
+        'specification' => [$req->items->first()->specification],
         'purpose' => $req->purpose,
         'status' => 'approved',
     ]);

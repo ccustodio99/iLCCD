@@ -12,7 +12,9 @@ class RequisitionController extends Controller
 {
     public function index()
     {
-        $requisitions = Requisition::where('user_id', auth()->id())->paginate(10);
+        $requisitions = Requisition::where('user_id', auth()->id())
+            ->with('items')
+            ->paginate(10);
         return view('requisitions.index', compact('requisitions'));
     }
 
@@ -24,15 +26,26 @@ class RequisitionController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'item' => 'required|string|max:255',
-            'quantity' => 'required|integer|min:1',
-            'specification' => 'nullable|string',
+            'item.*' => 'required|string|max:255',
+            'quantity.*' => 'required|integer|min:1',
+            'specification.*' => 'nullable|string',
             'purpose' => 'required|string',
         ]);
-        $data['user_id'] = $request->user()->id;
-        $data['department'] = $request->user()->department;
-        $data['status'] = 'pending_head';
-        Requisition::create($data);
+
+        $requisition = Requisition::create([
+            'user_id' => $request->user()->id,
+            'department' => $request->user()->department,
+            'purpose' => $data['purpose'],
+            'status' => 'pending_head',
+        ]);
+
+        foreach ($data['item'] as $i => $name) {
+            $requisition->items()->create([
+                'item' => $name,
+                'quantity' => $data['quantity'][$i] ?? 1,
+                'specification' => $data['specification'][$i] ?? null,
+            ]);
+        }
         return redirect()->route('requisitions.index');
     }
 
@@ -50,30 +63,46 @@ class RequisitionController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $data = $request->validate([
-            'item' => 'required|string|max:255',
-            'quantity' => 'required|integer|min:1',
-            'specification' => 'nullable|string',
+            'item.*' => 'required|string|max:255',
+            'quantity.*' => 'required|integer|min:1',
+            'specification.*' => 'nullable|string',
             'purpose' => 'required|string',
             'status' => 'required|string',
         ]);
-        $requisition->update($data);
+
+        $requisition->update([
+            'purpose' => $data['purpose'],
+            'status' => $data['status'],
+        ]);
+
+        $requisition->items()->delete();
+        foreach ($data['item'] as $i => $name) {
+            $requisition->items()->create([
+                'item' => $name,
+                'quantity' => $data['quantity'][$i] ?? 1,
+                'specification' => $data['specification'][$i] ?? null,
+            ]);
+        }
+
         if ($data['status'] === 'approved' && $requisition->approved_at === null) {
             $requisition->approved_at = now();
             $requisition->approved_by_id = auth()->id();
             $requisition->save();
 
-            $item = InventoryItem::where('name', $requisition->item)->first();
-            if (!$item || $item->quantity < $requisition->quantity) {
-                PurchaseOrder::create([
-                    'user_id' => auth()->id(),
-                    'requisition_id' => $requisition->id,
-                    'inventory_item_id' => $item?->id,
-                    'item' => $requisition->item,
-                    'quantity' => $requisition->quantity,
-                    'status' => 'draft',
-                ]);
-            } else {
-                $item->decrement('quantity', $requisition->quantity);
+            foreach ($requisition->items as $reqItem) {
+                $item = InventoryItem::where('name', $reqItem->item)->first();
+                if (!$item || $item->quantity < $reqItem->quantity) {
+                    PurchaseOrder::create([
+                        'user_id' => auth()->id(),
+                        'requisition_id' => $requisition->id,
+                        'inventory_item_id' => $item?->id,
+                        'item' => $reqItem->item,
+                        'quantity' => $reqItem->quantity,
+                        'status' => 'draft',
+                    ]);
+                } else {
+                    $item->decrement('quantity', $reqItem->quantity);
+                }
             }
         }
         return redirect()->route('requisitions.index');

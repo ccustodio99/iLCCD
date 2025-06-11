@@ -17,15 +17,21 @@ class RequisitionFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'department' => fake()->randomElement(['IT', 'HR', 'Admin']),
-            'item' => fake()->words(2, true),
-            'quantity' => fake()->numberBetween(1, 10),
-            'specification' => fake()->sentence(),
-            'purpose' => fake()->sentence(),
+            'department' => $this->faker->randomElement(['IT', 'HR', 'Admin']),
+            'purpose' => $this->faker->sentence(),
             'status' => 'pending_head',
             'remarks' => null,
             'approved_by_id' => null,
             'approved_at' => null,
         ];
+    }
+
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Requisition $requisition) {
+            \App\Models\RequisitionItem::factory()
+                ->count(1)
+                ->create(['requisition_id' => $requisition->id]);
+        });
     }
 }

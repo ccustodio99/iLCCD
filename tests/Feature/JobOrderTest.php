@@ -74,7 +74,8 @@ it('creates requisition when materials not in stock', function () {
     $response->assertRedirect('/job-orders');
 
     expect(Requisition::where('job_order_id', $order->id)
-        ->where('item', 'Switch')->exists())->toBeTrue();
+        ->whereHas('items', fn($q) => $q->where('item', 'Switch'))
+        ->exists())->toBeTrue();
 });
 
 it('marks job order complete', function () {

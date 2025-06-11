@@ -70,7 +70,7 @@ it('converts ticket to requisition', function () {
 
     $response->assertRedirect('/requisitions');
 
-    expect(App\Models\Requisition::where('item', 'Projector Bulb')->exists())->toBeTrue();
+    expect(App\Models\Requisition::whereHas('items', fn($q) => $q->where('item', 'Projector Bulb'))->exists())->toBeTrue();
     $ticket->refresh();
     expect($ticket->status)->toBe('converted');
 });

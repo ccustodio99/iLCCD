@@ -96,14 +96,17 @@ class TicketController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
-        Requisition::create([
+        $requisition = Requisition::create([
             'user_id' => $ticket->user_id,
             'ticket_id' => $ticket->id,
             'department' => auth()->user()->department,
-            'item' => $ticket->subject,
-            'quantity' => 1,
             'purpose' => $ticket->description,
             'status' => 'pending_head',
+        ]);
+
+        $requisition->items()->create([
+            'item' => $ticket->subject,
+            'quantity' => 1,
         ]);
 
         $ticket->update(['status' => 'converted']);
