@@ -53,5 +53,6 @@
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
     </form>
+    @include('audit_trails._list', ['logs' => $inventoryItem->auditTrails])
 </div>
 @endsection

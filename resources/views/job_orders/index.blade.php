@@ -62,6 +62,7 @@
                             @endforeach
                         </ul>
                     @endif
+                    @include('audit_trails._list', ['logs' => $jobOrder->auditTrails])
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

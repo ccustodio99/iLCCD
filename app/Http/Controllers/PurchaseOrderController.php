@@ -10,7 +10,9 @@ class PurchaseOrderController extends Controller
 {
     public function index()
     {
-        $orders = PurchaseOrder::where('user_id', auth()->id())->paginate(10);
+        $orders = PurchaseOrder::where('user_id', auth()->id())
+            ->with('auditTrails.user')
+            ->paginate(10);
         return view('purchase_orders.index', compact('orders'));
     }
 
@@ -41,6 +43,7 @@ class PurchaseOrderController extends Controller
         if ($purchaseOrder->user_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
+        $purchaseOrder->load('auditTrails.user');
         return view('purchase_orders.edit', compact('purchaseOrder'));
     }
 
