@@ -12,7 +12,9 @@ class JobOrderController extends Controller
 {
     public function index()
     {
-        $jobOrders = JobOrder::where('user_id', auth()->id())->paginate(10);
+        $jobOrders = JobOrder::with(['requisitions', 'ticket'])
+            ->where('user_id', auth()->id())
+            ->paginate(10);
         return view('job_orders.index', compact('jobOrders'));
     }
 
