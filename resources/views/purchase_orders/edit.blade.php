@@ -24,7 +24,12 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Status</label>
-            <input type="text" name="status" class="form-control" value="{{ old('status', $purchaseOrder->status) }}" required>
+            <select name="status" class="form-select" required>
+                @php($statuses = ['draft' => 'Draft', 'ordered' => 'Ordered', 'received' => 'Received'])
+                @foreach($statuses as $value => $label)
+                    <option value="{{ $value }}" {{ old('status', $purchaseOrder->status) === $value ? 'selected' : '' }}>{{ $label }}</option>
+                @endforeach
+            </select>
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
     </form>
