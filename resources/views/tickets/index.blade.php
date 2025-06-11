@@ -128,6 +128,29 @@
                     <p><strong>Resolved:</strong> {{ optional($ticket->resolved_at)->format('Y-m-d H:i') }}</p>
                     <p><strong>Due:</strong> {{ optional($ticket->due_at)->format('Y-m-d H:i') }}</p>
                     @include('audit_trails._list', ['logs' => $ticket->auditTrails])
+
+                    @if($ticket->comments->isNotEmpty())
+                        <h6 class="mt-3">Comments</h6>
+                        <ul class="list-group mb-3">
+                            @foreach($ticket->comments as $comment)
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-between">
+                                        <span>{{ $comment->created_at->format('Y-m-d H:i') }}</span>
+                                        <span>{{ $comment->user->name }}</span>
+                                    </div>
+                                    <p class="mb-0 mt-1">{{ $comment->comment }}</p>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+
+                    @if(auth()->id() === $ticket->user_id || auth()->id() === $ticket->assigned_to_id || $ticket->watchers->contains(auth()->id()))
+                        <form action="{{ route('tickets.comment', $ticket) }}" method="POST" class="mb-3">
+                            @csrf
+                            <textarea name="comment" class="form-control mb-2" rows="2" required></textarea>
+                            <button type="submit" class="btn btn-primary btn-sm">Add Comment</button>
+                        </form>
+                    @endif
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

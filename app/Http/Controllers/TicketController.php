@@ -15,7 +15,7 @@ class TicketController extends Controller
     public function index()
     {
         $tickets = Ticket::where('user_id', auth()->id())
-            ->with(['auditTrails.user', 'watchers', 'assignedTo'])
+            ->with(['auditTrails.user', 'watchers', 'assignedTo', 'comments.user'])
             ->paginate(10);
         $users = User::orderBy('name')->get();
         return view('tickets.index', compact('tickets', 'users'));
@@ -163,6 +163,26 @@ class TicketController extends Controller
             ]);
         }
         return redirect()->route('tickets.index');
+    }
+
+    public function storeComment(Request $request, Ticket $ticket)
+    {
+        if ($ticket->user_id !== $request->user()->id &&
+            $ticket->assigned_to_id !== $request->user()->id &&
+            ! $ticket->watchers->contains($request->user()->id)) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+
+        $data = $request->validate([
+            'comment' => 'required|string',
+        ]);
+
+        $ticket->comments()->create([
+            'user_id' => $request->user()->id,
+            'comment' => $data['comment'],
+        ]);
+
+        return back();
     }
 
     public function destroy(Ticket $ticket)
