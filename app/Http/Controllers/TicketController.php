@@ -34,6 +34,8 @@ class TicketController extends Controller
             'description' => 'required|string',
             'assigned_to_id' => 'nullable|exists:users,id',
             'due_at' => 'nullable|date',
+            'watchers' => 'array',
+            'watchers.*' => 'exists:users,id',
         ]);
         $data['user_id'] = $request->user()->id;
         $data['status'] = 'open';
@@ -45,6 +47,9 @@ class TicketController extends Controller
             ->first();
         if ($head) {
             $watcherIds[] = $head->id;
+        }
+        if (isset($data['watchers'])) {
+            $watcherIds = array_unique(array_merge($watcherIds, $data['watchers']));
         }
         $ticket->watchers()->sync($watcherIds);
 
@@ -72,12 +77,25 @@ class TicketController extends Controller
             'assigned_to_id' => 'nullable|exists:users,id',
             'status' => 'required|string',
             'due_at' => 'nullable|date',
+            'watchers' => 'array',
+            'watchers.*' => 'exists:users,id',
         ]);
         $ticket->update($data);
         if ($data['status'] === 'closed' && $ticket->resolved_at === null) {
             $ticket->resolved_at = now();
             $ticket->save();
         }
+        $watcherIds = User::whereIn('role', ['admin', 'itrc'])->pluck('id')->toArray();
+        $head = User::where('role', 'head')
+            ->where('department', $ticket->user->department)
+            ->first();
+        if ($head) {
+            $watcherIds[] = $head->id;
+        }
+        if (isset($data['watchers'])) {
+            $watcherIds = array_unique(array_merge($watcherIds, $data['watchers']));
+        }
+        $ticket->watchers()->sync($watcherIds);
         return redirect()->route('tickets.index');
     }
 
