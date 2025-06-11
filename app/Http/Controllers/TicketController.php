@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+use App\Models\JobOrder;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -68,5 +69,23 @@ class TicketController extends Controller
         }
         $ticket->delete();
         return redirect()->route('tickets.index');
+    }
+
+    public function convertToJobOrder(Ticket $ticket)
+    {
+        if ($ticket->user_id !== auth()->id()) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+
+        JobOrder::create([
+            'user_id' => $ticket->user_id,
+            'job_type' => $ticket->category,
+            'description' => $ticket->description,
+            'status' => 'new',
+        ]);
+
+        $ticket->update(['status' => 'converted']);
+
+        return redirect()->route('job-orders.index');
     }
 }

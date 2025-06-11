@@ -24,7 +24,11 @@
                 <td>{{ optional($ticket->due_at)->format('Y-m-d') }}</td>
                 <td>
                     <a href="{{ route('tickets.edit', $ticket) }}" class="btn btn-sm btn-primary">Edit</a>
-                    <form action="{{ route('tickets.destroy', $ticket) }}" method="POST" class="d-inline">
+                    <form action="{{ route('tickets.convert', $ticket) }}" method="POST" class="d-inline ms-1">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-secondary" onclick="return confirm('Convert to Job Order?')">Convert</button>
+                    </form>
+                    <form action="{{ route('tickets.destroy', $ticket) }}" method="POST" class="d-inline ms-1">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this ticket?')">Delete</button>

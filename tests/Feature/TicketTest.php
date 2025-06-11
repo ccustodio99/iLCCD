@@ -37,3 +37,21 @@ it('prevents editing others tickets', function () {
     $response = $this->get("/tickets/{$ticket->id}/edit");
     $response->assertForbidden();
 });
+
+it('converts ticket to job order', function () {
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $ticket = Ticket::factory()->for($user)->create([
+        'category' => 'Facilities',
+        'description' => 'Fix door',
+    ]);
+
+    $response = $this->post("/tickets/{$ticket->id}/convert");
+
+    $response->assertRedirect('/job-orders');
+
+    expect(App\Models\JobOrder::where('description', 'Fix door')->exists())->toBeTrue();
+    $ticket->refresh();
+    expect($ticket->status)->toBe('converted');
+});
