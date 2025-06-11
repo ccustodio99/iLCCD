@@ -202,6 +202,7 @@ class TicketController extends Controller
 
         JobOrder::create([
             'user_id' => $ticket->user_id,
+            'ticket_id' => $ticket->id,
             'job_type' => $ticket->category,
             'description' => $ticket->description,
             'status' => 'new',
