@@ -76,3 +76,17 @@ it('creates requisition when materials not in stock', function () {
     expect(Requisition::where('job_order_id', $order->id)
         ->where('item', 'Switch')->exists())->toBeTrue();
 });
+
+it('marks job order complete', function () {
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $order = JobOrder::factory()->for($user)->create();
+
+    $response = $this->put("/job-orders/{$order->id}/complete");
+
+    $response->assertRedirect('/job-orders');
+    $order->refresh();
+    expect($order->status)->toBe('completed');
+    expect($order->completed_at)->not->toBeNull();
+});
