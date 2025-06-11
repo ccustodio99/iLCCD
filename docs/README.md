@@ -10,6 +10,7 @@ Welcome to the documentation hub for the LCCD Integrated Information System. Thi
 - [Document Management Module](document-management-module.md)
 - [Document KPI & Log Dashboard](document-kpi-log-dashboard.md)
 - [KPI & Audit Dashboard](kpi-audit-log-dashboard.md)
+- [Audit Trail Overview](audit-trail-overview.md)
 - [Job Order Module](job-order-module.md)
 - [Requisition Management Module](requisition-management-module.md)
 - [Inventory Module](inventory-module.md)
