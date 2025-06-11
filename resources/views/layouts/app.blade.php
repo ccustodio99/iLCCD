@@ -6,6 +6,8 @@
     <title>{{ config('app.name', 'LCCD IIS') }}</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -33,6 +35,18 @@
         }
         .skip-link:focus {
             top: 0;
+        }
+        .card-quick {
+            border-radius: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+        .card-quick:hover {
+            transform: translateY(-3px);
+        }
+        .card-quick .material-symbols-outlined {
+            font-size: 2.5rem;
+            color: #1B2660;
         }
     </style>
 </head>
