@@ -18,12 +18,12 @@ The interface uses Bootstrap 5 with official LCCD branding and is secured throug
 - KPI logs capture escalation timestamps for dashboard reporting.
 
 ## Ticket Assignment & Watchers
-Tickets can be assigned to another user for resolution in addition to the ticket creator. When a ticket is filed, the following users are automatically added as **watchers** so they receive updates:
+Tickets can be assigned to another user for resolution in addition to the ticket creator. The owner and the assigned user are allowed to update and close the ticket. When a ticket is filed, the following users are automatically added as **watchers** so they receive updates:
 
 - The department head or head of office where the ticket originated
 - IT or system administrators
 
-Additional users may be included as watchers to collaborate on the issue. Watchers can follow progress and comment but only users with the proper role can modify or close the ticket.
+Additional users may be included as watchers to collaborate on the issue. Watchers can follow progress and comment, but only the ticket owner and the assigned user can modify or close the ticket.
 ---
 ## 🚀 Navigation
 - Previous: [User Interface & Branding](user-interface-branding.md)
