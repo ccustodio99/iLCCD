@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Create Account')
+
 @section('content')
 <div class="container" style="max-width: 400px;">
     <h1 class="mb-4 text-center">Create Account</h1>

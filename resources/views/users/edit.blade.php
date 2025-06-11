@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Edit User')
+
 @section('content')
 <div class="container" style="max-width: 500px;">
     <h1 class="mb-4">Edit User</h1>

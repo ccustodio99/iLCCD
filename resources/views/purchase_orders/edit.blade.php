@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Edit Purchase Order')
+
 @section('content')
 <div class="container">
     <h1 class="mb-4">Edit Purchase Order</h1>

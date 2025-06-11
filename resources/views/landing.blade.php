@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Welcome')
+
 @section('content')
 <div class="container text-center">
     <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Logo" class="img-fluid mb-4" style="max-width:200px;">

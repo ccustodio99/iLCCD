@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Login')
+
 @section('content')
 <div class="container" style="max-width: 400px;">
     <h1 class="mb-4 text-center">Login</h1>
