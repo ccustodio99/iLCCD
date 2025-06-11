@@ -24,5 +24,23 @@
             <a href="{{ route('documents.index') }}" class="btn cta w-100">Documents</a>
         </div>
     </div>
+    <h2 class="mt-4">Document Tracking</h2>
+    <div class="row justify-content-center">
+        <div class="col-6 col-md-4 mb-3">
+            <a href="#" class="btn cta w-100">Incoming</a>
+        </div>
+        <div class="col-6 col-md-4 mb-3">
+            <a href="#" class="btn cta w-100">Outgoing</a>
+        </div>
+        <div class="col-6 col-md-4 mb-3">
+            <a href="#" class="btn cta w-100">For Approval/Checking</a>
+        </div>
+        <div class="col-6 col-md-4 mb-3">
+            <a href="#" class="btn cta w-100">Tracking</a>
+        </div>
+        <div class="col-6 col-md-4 mb-3">
+            <a href="#" class="btn cta w-100">Other Reports</a>
+        </div>
+    </div>
 </div>
 @endsection
