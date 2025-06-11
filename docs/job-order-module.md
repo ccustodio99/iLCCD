@@ -25,11 +25,13 @@ begins.
      maintenance, or another office.
    - Both the assignee and requester receive notifications.
 
-3. **Triggering Material Requisitions**
-   - When a job requires supplies, a linked requisition is created
-     automatically.
+3. **Requesting Materials**
+   - When a job requires supplies, the system first checks **Inventory**.
+   - Available stock is deducted immediately and noted on the job order.
+   - If items are missing, a linked **Requisition** is created so the
+     materials can be procured.
    - Job status syncs with the requisition so work only begins once
-     materials arrive.
+     materials arrive or are approved for purchase.
 
 4. **Evaluation and Execution Logging**
    - Jobs move through clear statuses: New → Approved → Assigned → In

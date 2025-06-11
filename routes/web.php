@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::post('tickets/{ticket}/convert', [TicketController::class, 'convertToJobOrder'])->name('tickets.convert');
     Route::post('tickets/{ticket}/requisition', [TicketController::class, 'convertToRequisition'])->name('tickets.requisition');
     Route::resource('job-orders', JobOrderController::class)->except('show');
+    Route::post('job-orders/{jobOrder}/materials', [JobOrderController::class, 'requestMaterials'])->name('job-orders.materials');
     Route::resource('requisitions', RequisitionController::class)->except('show');
     Route::resource('inventory', InventoryItemController::class)->except('show');
     Route::resource('purchase-orders', PurchaseOrderController::class)->except('show');
