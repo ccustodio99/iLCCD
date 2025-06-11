@@ -6,6 +6,7 @@ use App\Models\Ticket;
 use App\Models\JobOrder;
 use App\Models\Requisition;
 use App\Models\User;
+use App\Models\AuditTrail;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -53,6 +54,26 @@ class TicketController extends Controller
         }
         $ticket->watchers()->sync($watcherIds);
 
+        AuditTrail::create([
+            'auditable_id' => $ticket->id,
+            'auditable_type' => Ticket::class,
+            'user_id' => $request->user()->id,
+            'ip_address' => $request->ip(),
+            'action' => 'watchers_updated',
+            'comment' => 'Watchers: ' . User::whereIn('id', $watcherIds)->pluck('name')->join(', '),
+        ]);
+
+        if ($ticket->assigned_to_id) {
+            AuditTrail::create([
+                'auditable_id' => $ticket->id,
+                'auditable_type' => Ticket::class,
+                'user_id' => $request->user()->id,
+                'ip_address' => $request->ip(),
+                'action' => 'assigned',
+                'comment' => 'Assigned to: ' . $ticket->assignedTo?->name,
+            ]);
+        }
+
         return redirect()->route('tickets.index');
     }
 
@@ -81,6 +102,16 @@ class TicketController extends Controller
             'watchers.*' => 'exists:users,id',
         ]);
         $ticket->update($data);
+        if ($ticket->wasChanged('assigned_to_id')) {
+            AuditTrail::create([
+                'auditable_id' => $ticket->id,
+                'auditable_type' => Ticket::class,
+                'user_id' => $request->user()->id,
+                'ip_address' => $request->ip(),
+                'action' => 'assigned',
+                'comment' => 'Assigned to: ' . $ticket->assignedTo?->name,
+            ]);
+        }
         if ($data['status'] === 'closed' && $ticket->resolved_at === null) {
             $ticket->resolved_at = now();
             $ticket->save();
@@ -95,7 +126,18 @@ class TicketController extends Controller
         if (isset($data['watchers'])) {
             $watcherIds = array_unique(array_merge($watcherIds, $data['watchers']));
         }
+        $originalWatchers = $ticket->watchers()->pluck('users.id')->toArray();
         $ticket->watchers()->sync($watcherIds);
+        if ($watcherIds !== array_values($originalWatchers)) {
+            AuditTrail::create([
+                'auditable_id' => $ticket->id,
+                'auditable_type' => Ticket::class,
+                'user_id' => $request->user()->id,
+                'ip_address' => $request->ip(),
+                'action' => 'watchers_updated',
+                'comment' => 'Watchers: ' . User::whereIn('id', $watcherIds)->pluck('name')->join(', '),
+            ]);
+        }
         return redirect()->route('tickets.index');
     }
 

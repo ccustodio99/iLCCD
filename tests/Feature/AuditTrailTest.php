@@ -67,3 +67,33 @@ it('logs failed login attempts', function () {
     expect(AuditTrail::where('user_id', $user->id)
         ->where('action', 'login_failed')->exists())->toBeTrue();
 });
+
+it('logs watchers update and assignment actions', function () {
+    $user = User::factory()->create();
+    $assignee = User::factory()->create();
+    $watcher = User::factory()->create();
+    $this->actingAs($user);
+
+    $this->post('/tickets', [
+        'category' => 'IT',
+        'subject' => 'Printer',
+        'description' => 'Broken',
+        'watchers' => [$watcher->id],
+    ])->assertRedirect('/tickets');
+
+    $ticket = App\Models\Ticket::where('subject', 'Printer')->first();
+
+    expect(AuditTrail::where('auditable_id', $ticket->id)
+        ->where('action', 'watchers_updated')->exists())->toBeTrue();
+
+    $this->put("/tickets/{$ticket->id}", [
+        'category' => $ticket->category,
+        'subject' => $ticket->subject,
+        'description' => $ticket->description,
+        'status' => $ticket->status,
+        'assigned_to_id' => $assignee->id,
+    ])->assertRedirect('/tickets');
+
+    expect(AuditTrail::where('auditable_id', $ticket->id)
+        ->where('action', 'assigned')->exists())->toBeTrue();
+});
