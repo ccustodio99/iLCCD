@@ -55,6 +55,7 @@ trait LogsAudit
             'auditable_id' => $this->getKey(),
             'auditable_type' => static::class,
             'user_id' => Auth::id(),
+            'ip_address' => request()->ip(),
             'action' => $action,
             'changes' => $changes,
         ]);

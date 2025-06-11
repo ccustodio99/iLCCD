@@ -52,6 +52,7 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
   - Access to sensitive modules
   - Role or department modifications
 - Logs are stored in `storage/logs` and feed into the **Audit & KPI dashboard**.
+  Each entry also includes the user's IP address for accountability.
 
 ### 6. Profile Management
 - Each user can update their own **name**, **email**, and password from the *My Profile* page.

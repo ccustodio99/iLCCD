@@ -15,6 +15,7 @@ class AuditTrail extends Model
         'auditable_id',
         'auditable_type',
         'user_id',
+        'ip_address',
         'action',
         'changes',
     ];
