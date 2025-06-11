@@ -4,6 +4,7 @@
 <div class="container">
     <h1 class="mb-4">My Requisitions</h1>
     <a href="{{ route('requisitions.create') }}" class="btn btn-primary mb-3">New Requisition</a>
+    <div class="table-responsive">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -31,6 +32,7 @@
             @endforeach
         </tbody>
     </table>
+    </div>
     {{ $requisitions->links() }}
 </div>
 @endsection

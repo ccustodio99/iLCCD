@@ -4,6 +4,25 @@
 <div class="container text-center">
     <h1 class="mb-4">Dashboard</h1>
     <p>You are logged in!</p>
-    <a href="{{ route('tickets.index') }}" class="btn cta mt-3">Go to Tickets</a>
+    <div class="row justify-content-center">
+        <div class="col-6 col-md-4 mb-3">
+            <a href="{{ route('tickets.index') }}" class="btn cta w-100">Tickets</a>
+        </div>
+        <div class="col-6 col-md-4 mb-3">
+            <a href="{{ route('job-orders.index') }}" class="btn cta w-100">Job Orders</a>
+        </div>
+        <div class="col-6 col-md-4 mb-3">
+            <a href="{{ route('requisitions.index') }}" class="btn cta w-100">Requisitions</a>
+        </div>
+        <div class="col-6 col-md-4 mb-3">
+            <a href="{{ route('inventory.index') }}" class="btn cta w-100">Inventory</a>
+        </div>
+        <div class="col-6 col-md-4 mb-3">
+            <a href="{{ route('purchase-orders.index') }}" class="btn cta w-100">Purchase Orders</a>
+        </div>
+        <div class="col-6 col-md-4 mb-3">
+            <a href="{{ route('documents.index') }}" class="btn cta w-100">Documents</a>
+        </div>
+    </div>
 </div>
 @endsection

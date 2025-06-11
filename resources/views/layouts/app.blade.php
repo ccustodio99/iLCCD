@@ -47,6 +47,11 @@
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item me-lg-3"><a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a></li>
             <li class="nav-item me-lg-3"><a class="nav-link" href="{{ route('tickets.index') }}">Tickets</a></li>
+            <li class="nav-item me-lg-3"><a class="nav-link" href="{{ route('job-orders.index') }}">Job Orders</a></li>
+            <li class="nav-item me-lg-3"><a class="nav-link" href="{{ route('requisitions.index') }}">Requisitions</a></li>
+            <li class="nav-item me-lg-3"><a class="nav-link" href="{{ route('inventory.index') }}">Inventory</a></li>
+            <li class="nav-item me-lg-3"><a class="nav-link" href="{{ route('purchase-orders.index') }}">Purchase Orders</a></li>
+            <li class="nav-item me-lg-3"><a class="nav-link" href="{{ route('documents.index') }}">Documents</a></li>
             @if(auth()->user()->role === 'admin')
                 <li class="nav-item me-lg-3"><a class="nav-link" href="{{ route('users.index') }}">Users</a></li>
             @endif

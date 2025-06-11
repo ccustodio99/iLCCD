@@ -4,6 +4,7 @@
 <div class="container">
     <h1 class="mb-4">My Job Orders</h1>
     <a href="{{ route('job-orders.create') }}" class="btn btn-primary mb-3">New Job Order</a>
+    <div class="table-responsive">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -31,6 +32,7 @@
             @endforeach
         </tbody>
     </table>
+    </div>
     {{ $jobOrders->links() }}
 </div>
 @endsection
