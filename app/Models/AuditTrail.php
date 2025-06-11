@@ -16,6 +16,11 @@ class AuditTrail extends Model
         'auditable_type',
         'user_id',
         'action',
+        'changes',
+    ];
+
+    protected $casts = [
+        'changes' => 'array',
     ];
 
     public function auditable(): MorphTo

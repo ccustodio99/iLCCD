@@ -3,11 +3,11 @@
 Every module in the LCCD Integrated Information System records key actions to a unified **audit trail**. These logs support accountability, reporting, and compliance across Tickets, Job Orders, Requisitions, Inventory, Purchase Orders, Document Management, and User Management.
 
 ## 📑 What Gets Logged
-- **Record changes** – creation, updates, approvals, returns, and deletions
+- **Record changes** – creation, updates (with field differences), approvals, returns, and deletions
 - **User activity** – logins, profile edits, and permission changes
 - **Workflow steps** – ticket escalations, job order status moves, requisition approvals
 
-All logs capture the user, timestamp, module, affected record, and action performed. Logs are stored in `storage/logs` and displayed in the [KPI & Audit Log Dashboard](kpi-audit-log-dashboard.md).
+All logs capture the user, timestamp, module, affected record, and action performed. When a record is updated, the audit trail stores the specific fields that changed showing the previous and new values. Logs are stored in `storage/logs` and displayed in the [KPI & Audit Log Dashboard](kpi-audit-log-dashboard.md).
 
 ## 🧩 Module Highlights
 - **Ticketing System** – Resolution times and escalations feed into the audit log. Each ticket has a details view listing creation, updates, and escalations.
