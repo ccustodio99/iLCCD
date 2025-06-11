@@ -31,6 +31,7 @@ class LoginController extends Controller
                     'auditable_id' => $user->id,
                     'auditable_type' => User::class,
                     'user_id' => $user->id,
+                    'ip_address' => $request->ip(),
                     'action' => 'login_failed',
                 ]);
 
@@ -47,6 +48,7 @@ class LoginController extends Controller
                 'auditable_id' => $user->id,
                 'auditable_type' => User::class,
                 'user_id' => $user->id,
+                'ip_address' => $request->ip(),
                 'action' => 'login',
             ]);
 
@@ -62,6 +64,7 @@ class LoginController extends Controller
                 'auditable_id' => $user->id,
                 'auditable_type' => User::class,
                 'user_id' => $user->id,
+                'ip_address' => $request->ip(),
                 'action' => 'login_failed',
             ]);
         }
@@ -82,6 +85,7 @@ class LoginController extends Controller
                 'auditable_id' => $userId,
                 'auditable_type' => User::class,
                 'user_id' => $userId,
+                'ip_address' => $request->ip(),
                 'action' => 'logout',
             ]);
         }
