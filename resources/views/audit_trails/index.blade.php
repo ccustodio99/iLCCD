@@ -14,6 +14,7 @@
                 <th>Model</th>
                 <th>Action</th>
                 <th>Changes</th>
+                <th>Comment</th>
             </tr>
         </thead>
         <tbody>
@@ -32,6 +33,7 @@
                         </ul>
                     @endif
                 </td>
+                <td>{{ $log->comment }}</td>
             </tr>
             @endforeach
         </tbody>
