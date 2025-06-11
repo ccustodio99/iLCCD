@@ -98,7 +98,7 @@ class DemoSeeder extends Seeder
             'email' => 'head@example.com',
             'password' => Hash::make('Password1'),
             'role' => 'head',
-            'department' => 'Department Heads',
+            'department' => 'CCS',
         ]);
 
         $faculty = User::factory()->create([
@@ -130,7 +130,11 @@ class DemoSeeder extends Seeder
             )
             ->create();
 
-        $tickets->each(function (Ticket $ticket) {
+        $watchers = [$admin->id, $itrc->id, $head->id];
+
+        $tickets->each(function (Ticket $ticket) use ($watchers) {
+            $ticket->watchers()->sync($watchers);
+
             AuditTrail::factory()->create([
                 'auditable_id' => $ticket->id,
                 'auditable_type' => Ticket::class,
