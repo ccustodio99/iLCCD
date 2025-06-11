@@ -77,7 +77,12 @@ class TicketController extends Controller
                 'user_id' => $request->user()->id,
                 'ip_address' => $request->ip(),
                 'action' => 'assigned',
-                'comment' => 'Assigned to: ' . $ticket->assignedTo?->name,
+                'changes' => [
+                    'assigned_to_id' => [
+                        'old' => null,
+                        'new' => $ticket->assigned_to_id,
+                    ],
+                ],
             ]);
         }
 
@@ -116,7 +121,12 @@ class TicketController extends Controller
                 'user_id' => $request->user()->id,
                 'ip_address' => $request->ip(),
                 'action' => 'assigned',
-                'comment' => 'Assigned to: ' . $ticket->assignedTo?->name,
+                'changes' => [
+                    'assigned_to_id' => [
+                        'old' => $ticket->getOriginal('assigned_to_id'),
+                        'new' => $ticket->assigned_to_id,
+                    ],
+                ],
             ]);
         }
         if ($data['status'] === 'closed' && $ticket->resolved_at === null) {
