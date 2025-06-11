@@ -1,8 +1,9 @@
 The user interface follows a mobile‑first approach using **Bootstrap 5**. All
 module tables are wrapped in a `table-responsive` container so they scroll
-horizontally on small screens. The main navigation links to **Tickets**,
-**Job Orders**, **Requisitions**, **Inventory**, **Purchase Orders**, and
-**Documents** so moving between modules is quick and intuitive.
+horizontally on small screens. Navigation lives in a left sidebar that collapses
+behind a hamburger button on mobile. It links to **Tickets**, **Job Orders**,
+**Requisitions**, **Inventory**, **Purchase Orders**, and **Documents** so moving
+between modules is quick and intuitive.
 
 ### Improved Navigation
 
