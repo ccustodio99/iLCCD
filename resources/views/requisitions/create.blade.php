@@ -5,18 +5,23 @@
     <h1 class="mb-4">New Requisition</h1>
     <form action="{{ route('requisitions.store') }}" method="POST">
         @csrf
-        <div class="mb-3">
-            <label class="form-label">Item</label>
-            <input type="text" name="item" class="form-control" value="{{ old('item') }}" required>
+        <div id="items-container">
+            <div class="row g-2 mb-3 item-row">
+                <div class="col-md-5">
+                    <label class="form-label">Item</label>
+                    <input type="text" name="item[]" class="form-control" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Quantity</label>
+                    <input type="number" name="quantity[]" class="form-control" value="1" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Specification</label>
+                    <input type="text" name="specification[]" class="form-control">
+                </div>
+            </div>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Quantity</label>
-            <input type="number" name="quantity" class="form-control" value="{{ old('quantity', 1) }}" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Specification</label>
-            <textarea name="specification" class="form-control" rows="3">{{ old('specification') }}</textarea>
-        </div>
+        <button type="button" id="add-item" class="btn btn-secondary mb-3">Add Item</button>
         <div class="mb-3">
             <label class="form-label">Purpose</label>
             <textarea name="purpose" class="form-control" rows="3" required>{{ old('purpose') }}</textarea>
@@ -24,4 +29,12 @@
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
+<script>
+document.getElementById('add-item').addEventListener('click', function () {
+    const container = document.getElementById('items-container');
+    const row = container.querySelector('.item-row').cloneNode(true);
+    row.querySelectorAll('input').forEach(input => input.value = input.type === 'number' ? 1 : '');
+    container.appendChild(row);
+});
+</script>
 @endsection

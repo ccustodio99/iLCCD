@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\RequisitionItem;
 
 class Requisition extends Model
 {
@@ -15,9 +17,6 @@ class Requisition extends Model
         'ticket_id',
         'job_order_id',
         'department',
-        'item',
-        'quantity',
-        'specification',
         'purpose',
         'status',
         'remarks',
@@ -50,5 +49,10 @@ class Requisition extends Model
     public function jobOrder(): BelongsTo
     {
         return $this->belongsTo(JobOrder::class);
+    }
+
+    public function items(): HasMany
+    {
+        return $this->hasMany(RequisitionItem::class);
     }
 }

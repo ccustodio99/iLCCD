@@ -107,15 +107,18 @@ class JobOrderController extends Controller
         if ($item && $item->quantity >= $data['quantity']) {
             $item->decrement('quantity', $data['quantity']);
         } else {
-            Requisition::create([
+            $requisition = Requisition::create([
                 'user_id' => $request->user()->id,
                 'job_order_id' => $jobOrder->id,
                 'department' => $request->user()->department,
+                'purpose' => $data['purpose'],
+                'status' => 'pending_head',
+            ]);
+
+            $requisition->items()->create([
                 'item' => $data['item'],
                 'quantity' => $data['quantity'],
                 'specification' => $data['specification'] ?? null,
-                'purpose' => $data['purpose'],
-                'status' => 'pending_head',
             ]);
         }
 

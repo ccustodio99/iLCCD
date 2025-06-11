@@ -8,8 +8,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Item</th>
-                <th>Qty</th>
+                <th>Items</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -17,8 +16,13 @@
         <tbody>
             @foreach ($requisitions as $requisition)
             <tr>
-                <td>{{ $requisition->item }}</td>
-                <td>{{ $requisition->quantity }}</td>
+                <td>
+                    <ul class="mb-0">
+                        @foreach($requisition->items as $item)
+                        <li>{{ $item->item }} ({{ $item->quantity }})</li>
+                        @endforeach
+                    </ul>
+                </td>
                 <td>{{ ucfirst(str_replace('_', ' ', $requisition->status)) }}</td>
                 <td>
                     <a href="{{ route('requisitions.edit', $requisition) }}" class="btn btn-sm btn-primary">Edit</a>
