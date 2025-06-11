@@ -17,6 +17,7 @@ class TicketFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
+            'assigned_to_id' => null,
             'category' => fake()->randomElement(['IT', 'Facilities', 'Documents']),
             'subject' => fake()->sentence(4),
             'description' => fake()->paragraph(),
