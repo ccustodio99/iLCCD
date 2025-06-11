@@ -27,7 +27,7 @@
         <tbody>
             @forelse ($tickets as $ticket)
             <tr>
-                <td>{{ $ticket->subject }}</td>
+                <td>{{ $ticket->formatted_subject }}</td>
                 <td>{{ ucfirst($ticket->status) }}</td>
                 <td>{{ optional($ticket->due_at)->format('Y-m-d') }}</td>
             </tr>
