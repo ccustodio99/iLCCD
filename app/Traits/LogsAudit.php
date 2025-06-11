@@ -29,11 +29,34 @@ trait LogsAudit
             return;
         }
 
+        $changes = null;
+
+        if ($action === 'updated') {
+            $diff = collect($this->getChanges())
+                ->except(['updated_at'])
+                ->mapWithKeys(function ($value, $field) {
+                    return [
+                        $field => [
+                            'old' => $this->getOriginal($field),
+                            'new' => $value,
+                        ],
+                    ];
+                })
+                ->toArray();
+
+            if (! empty($diff)) {
+                $changes = $diff;
+            } else {
+                return; // only timestamp changed
+            }
+        }
+
         AuditTrail::create([
             'auditable_id' => $this->getKey(),
             'auditable_type' => static::class,
             'user_id' => Auth::id(),
             'action' => $action,
+            'changes' => $changes,
         ]);
     }
 
