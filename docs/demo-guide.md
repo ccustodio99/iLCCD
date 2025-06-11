@@ -34,16 +34,25 @@ These commands assume a local development setup with PHP, Composer, Node.js, and
 ## 3️⃣ Demo Credentials
 | Role  | Email               | Password |
 |-------|---------------------|----------|
-| Admin | admin@example.com   | Password1 |
-| Staff | staff@example.com   | Password1 |
-| User  | user@example.com    | Password1 |
+| Admin        | admin@example.com      | Password1 |
+| President    | president@example.com  | Password1 |
+| Finance      | finance@example.com    | Password1 |
+| Registrar    | registrar@example.com  | Password1 |
+| HR           | hr@example.com         | Password1 |
+| Clinic       | clinic@example.com     | Password1 |
+| ITRC Admin   | itrc@example.com       | Password1 |
+| Department Head | head@example.com    | Password1 |
+| Faculty/Staff| faculty@example.com    | Password1 |
+| Academic Unit| academic@example.com   | Password1 |
+| Staff        | staff@example.com      | Password1 |
+| User         | user@example.com       | Password1 |
 
 *Passwords are intentionally generic for demo purposes only.*
 
 ---
 
 ## 4️⃣ Demo Data
-Running the seeders will create demo accounts and sample records for every module. The default dataset now includes **five tickets** *(one archived)*, **three job orders**, **four requisitions**, **eight inventory items**, **two purchase orders**, and **three documents with version history**. Each record generates a corresponding **audit trail entry** so you can showcase approval logs and document uploads. Modify `database/seeders/DemoSeeder.php` if you want to adjust the content.
+Running the seeders will create demo accounts for all major roles and sample records for every module. The default dataset now includes **five tickets** *(one archived)*, **three job orders**, **four requisitions**, **eight inventory items**, **two purchase orders**, and **three documents with version history**. Each record generates a corresponding **audit trail entry** so you can showcase approval logs and document uploads. Modify `database/seeders/DemoSeeder.php` if you want to adjust the content.
 
 ---
 

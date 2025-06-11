@@ -45,6 +45,78 @@ class DemoSeeder extends Seeder
             'department' => 'CCS',
         ]);
 
+        $president = User::factory()->create([
+            'name' => 'Demo President',
+            'email' => 'president@example.com',
+            'password' => Hash::make('Password1'),
+            'role' => 'president',
+            'department' => 'Administration',
+        ]);
+
+        $finance = User::factory()->create([
+            'name' => 'Demo Finance',
+            'email' => 'finance@example.com',
+            'password' => Hash::make('Password1'),
+            'role' => 'finance',
+            'department' => 'Finance Office',
+        ]);
+
+        $registrar = User::factory()->create([
+            'name' => 'Demo Registrar',
+            'email' => 'registrar@example.com',
+            'password' => Hash::make('Password1'),
+            'role' => 'registrar',
+            'department' => 'Registrar',
+        ]);
+
+        $hr = User::factory()->create([
+            'name' => 'Demo HR',
+            'email' => 'hr@example.com',
+            'password' => Hash::make('Password1'),
+            'role' => 'hr',
+            'department' => 'HR Department',
+        ]);
+
+        $clinic = User::factory()->create([
+            'name' => 'Demo Clinic',
+            'email' => 'clinic@example.com',
+            'password' => Hash::make('Password1'),
+            'role' => 'clinic',
+            'department' => 'Clinic',
+        ]);
+
+        $itrc = User::factory()->create([
+            'name' => 'Demo ITRC',
+            'email' => 'itrc@example.com',
+            'password' => Hash::make('Password1'),
+            'role' => 'itrc',
+            'department' => 'ITRC',
+        ]);
+
+        $head = User::factory()->create([
+            'name' => 'Demo Head',
+            'email' => 'head@example.com',
+            'password' => Hash::make('Password1'),
+            'role' => 'head',
+            'department' => 'Department Heads',
+        ]);
+
+        $faculty = User::factory()->create([
+            'name' => 'Demo Faculty',
+            'email' => 'faculty@example.com',
+            'password' => Hash::make('Password1'),
+            'role' => 'staff',
+            'department' => 'Faculty/Staff',
+        ]);
+
+        $academic = User::factory()->create([
+            'name' => 'Demo Academic',
+            'email' => 'academic@example.com',
+            'password' => Hash::make('Password1'),
+            'role' => 'academic',
+            'department' => 'Academic Units',
+        ]);
+
         // Tickets
         $tickets = Ticket::factory()
             ->count(5)
