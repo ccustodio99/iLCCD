@@ -8,7 +8,7 @@ This guide provides a structured approach for demonstrating the LCCD Integrated 
 ## 1️⃣ Demo Flow
 1. **Clone the repository** and install dependencies.
 2. **Prepare the environment** using the provided `.env.example` as a template.
-3. **Run database migrations and seeders** to populate demo data.
+3. **Run database migrations and seeders** (`php artisan migrate --seed`) to load the demo dataset.
 4. **Launch the local server** and log in with the demo accounts.
 5. **Walk through core modules** such as Ticketing, Job Orders, and Inventory.
 6. **Highlight approval workflows, notifications, and audit logs.**
@@ -43,7 +43,7 @@ These commands assume a local development setup with PHP, Composer, Node.js, and
 ---
 
 ## 4️⃣ Demo Data
-Running the seeders will create demo accounts along with tickets, job orders, requisitions, inventory items, purchase orders, and documents. Modify `database/seeders/DemoSeeder.php` if you want to adjust the content.
+Running the seeders will create demo accounts and sample records for every module. The default dataset includes **five tickets**, **three job orders**, **four requisitions**, **eight inventory items**, **two purchase orders**, and **three documents with version history**. Modify `database/seeders/DemoSeeder.php` if you want to adjust the content.
 
 ---
 
