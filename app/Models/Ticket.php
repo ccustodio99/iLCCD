@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\TicketComment;
 use App\Traits\LogsAudit;
 
 class Ticket extends Model
@@ -60,5 +61,10 @@ class Ticket extends Model
     public function watchers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'ticket_watchers')->withTimestamps();
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(TicketComment::class);
     }
 }
