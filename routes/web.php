@@ -30,6 +30,7 @@ use App\Http\Controllers\InventoryItemController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DocumentDashboardController;
+use App\Http\Controllers\DocumentTrackingController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -48,4 +49,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('purchase-orders', PurchaseOrderController::class)->except('show');
     Route::resource('documents', DocumentController::class)->except('show');
     Route::get('documents-dashboard', [DocumentDashboardController::class, 'index'])->name('documents.dashboard');
+    Route::prefix('document-tracking')->group(function () {
+        Route::get('incoming', [DocumentTrackingController::class, 'incoming'])->name('document-tracking.incoming');
+        Route::get('outgoing', [DocumentTrackingController::class, 'outgoing'])->name('document-tracking.outgoing');
+        Route::get('for-approval', [DocumentTrackingController::class, 'forApproval'])->name('document-tracking.for-approval');
+        Route::get('tracking', [DocumentTrackingController::class, 'tracking'])->name('document-tracking.tracking');
+        Route::get('reports', [DocumentTrackingController::class, 'reports'])->name('document-tracking.reports');
+    });
 });
