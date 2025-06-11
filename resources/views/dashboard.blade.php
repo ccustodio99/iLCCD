@@ -27,19 +27,19 @@
     <h2 class="mt-4">Document Tracking</h2>
     <div class="row justify-content-center">
         <div class="col-6 col-md-4 mb-3">
-            <a href="#" class="btn cta w-100">Incoming</a>
+            <a href="{{ route('document-tracking.incoming') }}" class="btn cta w-100">Incoming</a>
         </div>
         <div class="col-6 col-md-4 mb-3">
-            <a href="#" class="btn cta w-100">Outgoing</a>
+            <a href="{{ route('document-tracking.outgoing') }}" class="btn cta w-100">Outgoing</a>
         </div>
         <div class="col-6 col-md-4 mb-3">
-            <a href="#" class="btn cta w-100">For Approval/Checking</a>
+            <a href="{{ route('document-tracking.for-approval') }}" class="btn cta w-100">For Approval/Checking</a>
         </div>
         <div class="col-6 col-md-4 mb-3">
-            <a href="#" class="btn cta w-100">Tracking</a>
+            <a href="{{ route('document-tracking.tracking') }}" class="btn cta w-100">Tracking</a>
         </div>
         <div class="col-6 col-md-4 mb-3">
-            <a href="#" class="btn cta w-100">Other Reports</a>
+            <a href="{{ route('document-tracking.reports') }}" class="btn cta w-100">Other Reports</a>
         </div>
     </div>
 </div>
