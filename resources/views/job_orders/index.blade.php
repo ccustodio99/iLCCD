@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h1 class="mb-4">My Job Orders</h1>
-    <a href="{{ route('job-orders.create') }}" class="btn btn-primary mb-3">New Job Order</a>
+    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#newJobOrderModal">New Job Order</button>
     <div class="table-responsive">
     <table class="table table-striped">
         <thead>
@@ -107,5 +107,33 @@
         </div>
     </div>
     @endforeach
+
+    <div class="modal fade" id="newJobOrderModal" tabindex="-1" aria-labelledby="newJobOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newJobOrderModalLabel">New Job Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('job-orders.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Type</label>
+                            <input type="text" name="job_type" class="form-control" value="{{ old('job_type') }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" class="form-control" rows="4" required>{{ old('description') }}</textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
