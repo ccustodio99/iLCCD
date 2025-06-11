@@ -34,4 +34,14 @@ class Ticket extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function jobOrder()
+    {
+        return $this->hasOne(JobOrder::class);
+    }
+
+    public function requisitions()
+    {
+        return $this->hasMany(Requisition::class);
+    }
 }

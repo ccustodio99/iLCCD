@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use App\Models\JobOrder;
+use App\Models\Requisition;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -87,5 +88,26 @@ class TicketController extends Controller
         $ticket->update(['status' => 'converted']);
 
         return redirect()->route('job-orders.index');
+    }
+
+    public function convertToRequisition(Ticket $ticket)
+    {
+        if ($ticket->user_id !== auth()->id()) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+
+        Requisition::create([
+            'user_id' => $ticket->user_id,
+            'ticket_id' => $ticket->id,
+            'department' => auth()->user()->department,
+            'item' => $ticket->subject,
+            'quantity' => 1,
+            'purpose' => $ticket->description,
+            'status' => 'pending_head',
+        ]);
+
+        $ticket->update(['status' => 'converted']);
+
+        return redirect()->route('requisitions.index');
     }
 }

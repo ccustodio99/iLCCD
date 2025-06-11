@@ -134,10 +134,11 @@ flowchart TD
 Every action is traceable; every step is value-aligned.
 
 **Workflow summary:**
-1. Ticket is created and may spawn a Job Order or Requisition.
-2. Job Orders needing supplies automatically create a linked Requisition.
-3. Approved Requisitions deduct from Inventory or trigger a Purchase Order if items are missing.
-4. Documents like approvals and receipts are stored in the Document Management module.
+1. Every process begins with a **Ticket**.
+2. Tickets can convert to a **Job Order** (for maintenance/setup) or directly to a **Requisition**.
+3. Job Orders check **Inventory** for required materials; missing items create a linked Requisition.
+4. Approved Requisitions deduct from Inventory or spawn a **Purchase Order** when stock is unavailable (handled by Finance).
+5. All related files—approvals, receipts, instructions—are archived in **Document Management**.
 
 ---
 

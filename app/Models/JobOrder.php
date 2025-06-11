@@ -35,6 +35,16 @@ class JobOrder extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function ticket(): BelongsTo
+    {
+        return $this->belongsTo(Ticket::class);
+    }
+
+    public function requisitions()
+    {
+        return $this->hasMany(Requisition::class);
+    }
+
     public function assignedTo(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_to_id');
