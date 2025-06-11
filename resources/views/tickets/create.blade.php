@@ -21,7 +21,8 @@
             <label class="form-label">Due Date</label>
             <input type="date" name="due_at" class="form-control" value="{{ old('due_at') }}">
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary me-2">Submit</button>
+        <a href="{{ route('tickets.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 @endsection
