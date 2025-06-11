@@ -40,6 +40,7 @@
         </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
+    @include('audit_trails._list', ['logs' => $requisition->auditTrails])
 </div>
 <script>
 document.getElementById('add-item').addEventListener('click', function () {

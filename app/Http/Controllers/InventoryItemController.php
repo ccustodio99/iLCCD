@@ -10,7 +10,9 @@ class InventoryItemController extends Controller
 {
     public function index()
     {
-        $items = InventoryItem::where('user_id', auth()->id())->paginate(10);
+        $items = InventoryItem::where('user_id', auth()->id())
+            ->with('auditTrails.user')
+            ->paginate(10);
         return view('inventory.index', compact('items'));
     }
 
@@ -43,6 +45,7 @@ class InventoryItemController extends Controller
         if ($inventoryItem->user_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
+        $inventoryItem->load('auditTrails.user');
         return view('inventory.edit', compact('inventoryItem'));
     }
 
