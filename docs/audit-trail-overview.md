@@ -9,8 +9,6 @@ Every module in the LCCD Integrated Information System records key actions to a 
 
 All logs capture the user, timestamp, IP address, module, affected record, and action performed. When a record is updated, the audit trail stores the specific fields that changed showing the previous and new values. Logs are stored in `storage/logs` and displayed in the [KPI & Audit Log Dashboard](kpi-audit-log-dashboard.md).
 
-Each log entry may also include an optional **comment** describing the context of the action, such as new ticket watchers or assignment changes.
-
 ## 🧩 Module Highlights
 - **Ticketing System** – Resolution times and escalations feed into the audit log. Each ticket has a details view listing creation, updates, and escalations.
 - **Job Orders** – Start/finish times and all status updates are recorded for transparency.

@@ -18,7 +18,6 @@ class AuditTrail extends Model
         'ip_address',
         'action',
         'changes',
-        'comment',
     ];
 
     protected $casts = [
