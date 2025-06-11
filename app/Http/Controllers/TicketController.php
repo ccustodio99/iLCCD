@@ -54,13 +54,20 @@ class TicketController extends Controller
         }
         $ticket->watchers()->sync($watcherIds);
 
+        $watcherNames = User::whereIn('id', $watcherIds)->pluck('name')->join(', ');
+
         AuditTrail::create([
             'auditable_id' => $ticket->id,
             'auditable_type' => Ticket::class,
             'user_id' => $request->user()->id,
             'ip_address' => $request->ip(),
             'action' => 'watchers_updated',
-            'comment' => 'Watchers: ' . User::whereIn('id', $watcherIds)->pluck('name')->join(', '),
+            'changes' => [
+                'watchers' => [
+                    'old' => null,
+                    'new' => $watcherNames,
+                ],
+            ],
         ]);
 
         if ($ticket->assigned_to_id) {
@@ -129,13 +136,20 @@ class TicketController extends Controller
         $originalWatchers = $ticket->watchers()->pluck('users.id')->toArray();
         $ticket->watchers()->sync($watcherIds);
         if ($watcherIds !== array_values($originalWatchers)) {
+            $oldWatcherNames = User::whereIn('id', $originalWatchers)->pluck('name')->join(', ');
+            $newWatcherNames = User::whereIn('id', $watcherIds)->pluck('name')->join(', ');
             AuditTrail::create([
                 'auditable_id' => $ticket->id,
                 'auditable_type' => Ticket::class,
                 'user_id' => $request->user()->id,
                 'ip_address' => $request->ip(),
                 'action' => 'watchers_updated',
-                'comment' => 'Watchers: ' . User::whereIn('id', $watcherIds)->pluck('name')->join(', '),
+                'changes' => [
+                    'watchers' => [
+                        'old' => $oldWatcherNames,
+                        'new' => $newWatcherNames,
+                    ],
+                ],
             ]);
         }
         return redirect()->route('tickets.index');
