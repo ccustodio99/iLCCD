@@ -21,6 +21,15 @@
             <textarea name="description" class="form-control" rows="4" required>{{ old('description', $ticket->description) }}</textarea>
         </div>
         <div class="mb-3">
+            <label class="form-label">Assign To</label>
+            <select name="assigned_to_id" class="form-select">
+                <option value="">Unassigned</option>
+                @foreach($users as $u)
+                    <option value="{{ $u->id }}" {{ old('assigned_to_id', $ticket->assigned_to_id) == $u->id ? 'selected' : '' }}>{{ $u->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mb-3">
             <label class="form-label">Status</label>
             <select name="status" class="form-select" required>
                 @php($statuses = ['open' => 'Open', 'escalated' => 'Escalated', 'converted' => 'Converted', 'closed' => 'Closed'])

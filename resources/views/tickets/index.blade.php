@@ -72,6 +72,15 @@
                             <textarea name="description" class="form-control" rows="4" required>{{ old('description') }}</textarea>
                         </div>
                         <div class="mb-3">
+                            <label class="form-label">Assign To</label>
+                            <select name="assigned_to_id" class="form-select">
+                                <option value="">Unassigned</option>
+                                @foreach($users as $u)
+                                    <option value="{{ $u->id }}" {{ old('assigned_to_id') == $u->id ? 'selected' : '' }}>{{ $u->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label">Due Date</label>
                             <input type="date" name="due_at" class="form-control" value="{{ old('due_at') }}">
                         </div>
@@ -98,6 +107,12 @@
                     <p><strong>Subject:</strong> {{ $ticket->subject }}</p>
                     <p><strong>Description:</strong> {{ $ticket->description }}</p>
                     <p><strong>Status:</strong> {{ ucfirst($ticket->status) }}</p>
+                    <p><strong>Assigned To:</strong> {{ optional($ticket->assignedTo)->name ?? 'Unassigned' }}</p>
+                    <p><strong>Watchers:</strong>
+                        @foreach($ticket->watchers as $w)
+                            <span class="badge bg-secondary">{{ $w->name }}</span>
+                        @endforeach
+                    </p>
                     <p><strong>Created:</strong> {{ $ticket->created_at->format('Y-m-d H:i') }}</p>
                     <p><strong>Updated:</strong> {{ $ticket->updated_at->format('Y-m-d H:i') }}</p>
                     <p><strong>Escalated:</strong> {{ optional($ticket->escalated_at)->format('Y-m-d H:i') }}</p>
@@ -133,6 +148,15 @@
                         <div class="mb-3">
                             <label class="form-label">Description</label>
                             <textarea name="description" class="form-control" rows="4" required>{{ old('description', $ticket->description) }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Assign To</label>
+                            <select name="assigned_to_id" class="form-select">
+                                <option value="">Unassigned</option>
+                                @foreach($users as $u)
+                                    <option value="{{ $u->id }}" {{ old('assigned_to_id', $ticket->assigned_to_id) == $u->id ? 'selected' : '' }}>{{ $u->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Status</label>

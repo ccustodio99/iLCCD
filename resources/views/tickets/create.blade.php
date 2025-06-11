@@ -20,6 +20,15 @@
             <textarea name="description" class="form-control" rows="4" required>{{ old('description') }}</textarea>
         </div>
         <div class="mb-3">
+            <label class="form-label">Assign To</label>
+            <select name="assigned_to_id" class="form-select">
+                <option value="">Unassigned</option>
+                @foreach($users as $u)
+                    <option value="{{ $u->id }}" {{ old('assigned_to_id') == $u->id ? 'selected' : '' }}>{{ $u->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mb-3">
             <label class="form-label">Due Date</label>
             <input type="date" name="due_at" class="form-control" value="{{ old('due_at') }}">
         </div>

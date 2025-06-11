@@ -74,3 +74,22 @@ it('converts ticket to requisition', function () {
     $ticket->refresh();
     expect($ticket->status)->toBe('converted');
 });
+
+it('adds watchers on ticket creation', function () {
+    $user = User::factory()->create(['department' => 'CCS']);
+    $head = User::factory()->create(['role' => 'head', 'department' => 'CCS']);
+    $admin = User::factory()->create(['role' => 'admin']);
+
+    $this->actingAs($user);
+
+    $this->post('/tickets', [
+        'category' => 'IT',
+        'subject' => 'Printer',
+        'description' => 'Broken',
+    ]);
+
+    $ticket = Ticket::where('subject', 'Printer')->first();
+    $expected = collect([$admin->id, $head->id])->sort()->values()->all();
+    expect($ticket->watchers->pluck('id')->sort()->values()->all())
+        ->toBe($expected);
+});
