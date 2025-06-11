@@ -6,12 +6,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Traits\LogsAudit;
 
 class User extends Authenticatable
 {
     public const ROLES = ['admin', 'staff', 'head', 'president', 'finance', 'itrc'];
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, LogsAudit;
 
     /**
      * The attributes that are mass assignable.

@@ -118,6 +118,7 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('inventory.index') }}">Inventory</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('purchase-orders.index') }}">Purchase Orders</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('documents.index') }}">Documents</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('audit-trails.index') }}">Audit Trail</a></li>
                     @if(auth()->user()->role === 'admin')
                         <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}">Users</a></li>
                     @endif

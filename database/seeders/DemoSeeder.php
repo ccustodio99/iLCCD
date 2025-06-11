@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AuditTrail;
 use App\Models\Document;
 use App\Models\DocumentLog;
 use App\Models\DocumentVersion;
@@ -57,6 +58,15 @@ class DemoSeeder extends Seeder
             )
             ->create();
 
+        $tickets->each(function (Ticket $ticket) {
+            AuditTrail::factory()->create([
+                'auditable_id' => $ticket->id,
+                'auditable_type' => Ticket::class,
+                'user_id' => $ticket->user_id,
+                'action' => 'created',
+            ]);
+        });
+
         // Job Orders linked to first three tickets
         $jobOrders = $tickets->take(3)->map(function (Ticket $ticket, $index) use ($staff) {
             return JobOrder::factory()
@@ -74,9 +84,18 @@ class DemoSeeder extends Seeder
                 ->create();
         });
 
+        $jobOrders->each(function (JobOrder $jo) {
+            AuditTrail::factory()->create([
+                'auditable_id' => $jo->id,
+                'auditable_type' => JobOrder::class,
+                'user_id' => $jo->user_id,
+                'action' => 'created',
+            ]);
+        });
+
         // Requisitions linked to tickets and job orders
         $tickets->take(3)->each(function (Ticket $ticket, $index) use ($user, $jobOrders) {
-            Requisition::factory()
+            $req = Requisition::factory()
                 ->for($user)
                 ->for($ticket)
                 ->for($jobOrders[$index])
@@ -86,13 +105,27 @@ class DemoSeeder extends Seeder
                     'approved_at' => now()->subDay(),
                 ])
                 ->create();
+
+            AuditTrail::factory()->create([
+                'auditable_id' => $req->id,
+                'auditable_type' => Requisition::class,
+                'user_id' => $user->id,
+                'action' => 'created',
+            ]);
         });
 
         // Additional requisition not tied to job order
-        Requisition::factory()
+        $extraReq = Requisition::factory()
             ->for($user)
             ->for($tickets->last())
             ->create();
+
+        AuditTrail::factory()->create([
+            'auditable_id' => $extraReq->id,
+            'auditable_type' => Requisition::class,
+            'user_id' => $user->id,
+            'action' => 'created',
+        ]);
 
         // Inventory items
         $items = InventoryItem::factory()
@@ -110,10 +143,19 @@ class DemoSeeder extends Seeder
             ))
             ->create();
 
+        $items->each(function (InventoryItem $item) use ($admin) {
+            AuditTrail::factory()->create([
+                'auditable_id' => $item->id,
+                'auditable_type' => InventoryItem::class,
+                'user_id' => $admin->id,
+                'action' => 'created',
+            ]);
+        });
+
         // Purchase orders referencing requisitions and inventory
         $requisitions = Requisition::limit(2)->get();
         $requisitions->each(function (Requisition $req, $index) use ($admin, $items) {
-            PurchaseOrder::factory()
+            $po = PurchaseOrder::factory()
                 ->for($admin)
                 ->for($req)
                 ->for($items[$index])
@@ -122,20 +164,43 @@ class DemoSeeder extends Seeder
                     'ordered_at' => now()->subDays(1),
                 ])
                 ->create();
+
+            AuditTrail::factory()->create([
+                'auditable_id' => $po->id,
+                'auditable_type' => PurchaseOrder::class,
+                'user_id' => $admin->id,
+                'action' => 'created',
+            ]);
         });
 
-        // Documents with versions and logs
+        // Documents with versions, logs and audit trails
         $documents = Document::factory()->count(3)->for($admin)->create();
         $documents->each(function (Document $document) use ($admin) {
-            DocumentVersion::factory()->count(2)
+            $versions = DocumentVersion::factory()->count(3)
                 ->for($document)
                 ->for($admin, 'uploader')
                 ->create();
 
-            DocumentLog::factory()
-                ->for($document)
-                ->for($admin)
-                ->create(['action' => 'upload']);
+            $versions->each(function (DocumentVersion $version) use ($document, $admin) {
+                DocumentLog::factory()
+                    ->for($document)
+                    ->for($admin)
+                    ->create(['action' => 'upload']);
+
+                AuditTrail::factory()->create([
+                    'auditable_id' => $version->id,
+                    'auditable_type' => DocumentVersion::class,
+                    'user_id' => $admin->id,
+                    'action' => 'uploaded',
+                ]);
+            });
+
+            AuditTrail::factory()->create([
+                'auditable_id' => $document->id,
+                'auditable_type' => Document::class,
+                'user_id' => $admin->id,
+                'action' => 'created',
+            ]);
         });
     }
 }

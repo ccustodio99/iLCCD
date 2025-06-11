@@ -31,6 +31,7 @@ use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DocumentDashboardController;
 use App\Http\Controllers\DocumentTrackingController;
+use App\Http\Controllers\AuditTrailController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -50,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('purchase-orders', PurchaseOrderController::class)->except('show');
     Route::resource('documents', DocumentController::class)->except('show');
     Route::get('documents-dashboard', [DocumentDashboardController::class, 'index'])->name('documents.dashboard');
+    Route::get('audit-trails', [AuditTrailController::class, 'index'])->name('audit-trails.index');
     Route::prefix('document-tracking')->group(function () {
         Route::get('incoming', [DocumentTrackingController::class, 'incoming'])->name('document-tracking.incoming');
         Route::get('outgoing', [DocumentTrackingController::class, 'outgoing'])->name('document-tracking.outgoing');
