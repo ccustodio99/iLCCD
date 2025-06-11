@@ -51,9 +51,12 @@ it('converts ticket to job order', function () {
 
     $response->assertRedirect('/job-orders');
 
-    expect(App\Models\JobOrder::where('description', 'Fix door')->exists())->toBeTrue();
+    $jobOrder = App\Models\JobOrder::where('description', 'Fix door')->first();
+    expect($jobOrder)->not->toBeNull();
+    expect($jobOrder->ticket_id)->toBe($ticket->id);
     $ticket->refresh();
     expect($ticket->status)->toBe('converted');
+    expect($ticket->jobOrder->id)->toBe($jobOrder->id);
 });
 
 it('converts ticket to requisition', function () {
@@ -70,9 +73,12 @@ it('converts ticket to requisition', function () {
 
     $response->assertRedirect('/requisitions');
 
-    expect(App\Models\Requisition::whereHas('items', fn($q) => $q->where('item', 'Projector Bulb'))->exists())->toBeTrue();
+    $req = App\Models\Requisition::whereHas('items', fn($q) => $q->where('item', 'Projector Bulb'))->first();
+    expect($req)->not->toBeNull();
+    expect($req->ticket_id)->toBe($ticket->id);
     $ticket->refresh();
     expect($ticket->status)->toBe('converted');
+    expect($ticket->requisitions->first()->id)->toBe($req->id);
 });
 
 it('adds watchers on ticket creation', function () {
