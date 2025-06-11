@@ -28,6 +28,10 @@
                         @csrf
                         <button type="submit" class="btn btn-sm btn-secondary" onclick="return confirm('Convert to Job Order?')">Convert</button>
                     </form>
+                    <form action="{{ route('tickets.requisition', $ticket) }}" method="POST" class="d-inline ms-1">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Convert to Requisition?')">Requisition</button>
+                    </form>
                     <form action="{{ route('tickets.destroy', $ticket) }}" method="POST" class="d-inline ms-1">
                         @csrf
                         @method('DELETE')
