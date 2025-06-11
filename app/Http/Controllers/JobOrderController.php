@@ -61,6 +61,22 @@ class JobOrderController extends Controller
         return redirect()->route('job-orders.index');
     }
 
+    public function complete(JobOrder $jobOrder)
+    {
+        if ($jobOrder->user_id !== auth()->id()) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+
+        if ($jobOrder->status !== 'completed') {
+            $jobOrder->update([
+                'status' => 'completed',
+                'completed_at' => now(),
+            ]);
+        }
+
+        return redirect()->route('job-orders.index');
+    }
+
     public function destroy(JobOrder $jobOrder)
     {
         if ($jobOrder->user_id !== auth()->id()) {
