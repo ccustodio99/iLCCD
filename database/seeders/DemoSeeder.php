@@ -54,7 +54,7 @@ class DemoSeeder extends Seeder
                 ['status' => 'open'],
                 ['status' => 'resolved', 'resolved_at' => now()->subDay()],
                 ['status' => 'escalated', 'escalated_at' => now()->subHours(2)],
-                ['status' => 'open']
+                ['status' => 'open', 'archived_at' => now()->subDays(3)]
             )
             ->create();
 
