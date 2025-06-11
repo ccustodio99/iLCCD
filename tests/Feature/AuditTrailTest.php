@@ -38,3 +38,32 @@ it('stores changed fields on update', function () {
     expect($log->changes['subject']['old'])->toBe('Old');
     expect($log->changes['subject']['new'])->toBe('New');
 });
+
+it('logs login and logout actions', function () {
+    $user = User::factory()->create();
+
+    $this->post('/login', [
+        'email' => $user->email,
+        'password' => 'password',
+    ])->assertRedirect('/dashboard');
+
+    expect(AuditTrail::where('user_id', $user->id)
+        ->where('action', 'login')->exists())->toBeTrue();
+
+    $this->post('/logout');
+
+    expect(AuditTrail::where('user_id', $user->id)
+        ->where('action', 'logout')->exists())->toBeTrue();
+});
+
+it('logs failed login attempts', function () {
+    $user = User::factory()->create();
+
+    $this->post('/login', [
+        'email' => $user->email,
+        'password' => 'wrong-password',
+    ])->assertSessionHasErrors('email');
+
+    expect(AuditTrail::where('user_id', $user->id)
+        ->where('action', 'login_failed')->exists())->toBeTrue();
+});

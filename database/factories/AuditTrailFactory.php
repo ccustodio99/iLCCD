@@ -19,6 +19,7 @@ class AuditTrailFactory extends Factory
             'auditable_id' => 1,
             'auditable_type' => 'App\\Models\\Ticket',
             'user_id' => User::factory(),
+            'ip_address' => $this->faker->ipv4(),
             'action' => 'created',
         ];
     }

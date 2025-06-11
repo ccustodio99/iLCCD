@@ -139,6 +139,7 @@ class DemoSeeder extends Seeder
                 'auditable_id' => $ticket->id,
                 'auditable_type' => Ticket::class,
                 'user_id' => $ticket->user_id,
+                'ip_address' => '127.0.0.1',
                 'action' => 'created',
             ]);
         });
@@ -165,6 +166,7 @@ class DemoSeeder extends Seeder
                 'auditable_id' => $jo->id,
                 'auditable_type' => JobOrder::class,
                 'user_id' => $jo->user_id,
+                'ip_address' => '127.0.0.1',
                 'action' => 'created',
             ]);
         });
@@ -186,6 +188,7 @@ class DemoSeeder extends Seeder
                 'auditable_id' => $req->id,
                 'auditable_type' => Requisition::class,
                 'user_id' => $user->id,
+                'ip_address' => '127.0.0.1',
                 'action' => 'created',
             ]);
         });
@@ -200,6 +203,7 @@ class DemoSeeder extends Seeder
             'auditable_id' => $extraReq->id,
             'auditable_type' => Requisition::class,
             'user_id' => $user->id,
+            'ip_address' => '127.0.0.1',
             'action' => 'created',
         ]);
 
@@ -224,6 +228,7 @@ class DemoSeeder extends Seeder
                 'auditable_id' => $item->id,
                 'auditable_type' => InventoryItem::class,
                 'user_id' => $admin->id,
+                'ip_address' => '127.0.0.1',
                 'action' => 'created',
             ]);
         });
@@ -245,6 +250,7 @@ class DemoSeeder extends Seeder
                 'auditable_id' => $po->id,
                 'auditable_type' => PurchaseOrder::class,
                 'user_id' => $admin->id,
+                'ip_address' => '127.0.0.1',
                 'action' => 'created',
             ]);
         });
@@ -267,6 +273,7 @@ class DemoSeeder extends Seeder
                     'auditable_id' => $version->id,
                     'auditable_type' => DocumentVersion::class,
                     'user_id' => $admin->id,
+                    'ip_address' => '127.0.0.1',
                     'action' => 'uploaded',
                 ]);
             });
@@ -275,6 +282,7 @@ class DemoSeeder extends Seeder
                 'auditable_id' => $document->id,
                 'auditable_type' => Document::class,
                 'user_id' => $admin->id,
+                'ip_address' => '127.0.0.1',
                 'action' => 'created',
             ]);
         });
