@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Ticket;
 use App\Models\JobOrder;
 use App\Models\Requisition;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,14 +14,16 @@ class TicketController extends Controller
     public function index()
     {
         $tickets = Ticket::where('user_id', auth()->id())
-            ->with('auditTrails.user')
+            ->with(['auditTrails.user', 'watchers', 'assignedTo'])
             ->paginate(10);
-        return view('tickets.index', compact('tickets'));
+        $users = User::orderBy('name')->get();
+        return view('tickets.index', compact('tickets', 'users'));
     }
 
     public function create()
     {
-        return view('tickets.create');
+        $users = User::orderBy('name')->get();
+        return view('tickets.create', compact('users'));
     }
 
     public function store(Request $request)
@@ -29,31 +32,44 @@ class TicketController extends Controller
             'category' => 'required|string|max:255',
             'subject' => 'required|string|max:255',
             'description' => 'required|string',
+            'assigned_to_id' => 'nullable|exists:users,id',
             'due_at' => 'nullable|date',
         ]);
         $data['user_id'] = $request->user()->id;
         $data['status'] = 'open';
-        Ticket::create($data);
+        $ticket = Ticket::create($data);
+
+        $watcherIds = User::whereIn('role', ['admin', 'itrc'])->pluck('id')->toArray();
+        $head = User::where('role', 'head')
+            ->where('department', $request->user()->department)
+            ->first();
+        if ($head) {
+            $watcherIds[] = $head->id;
+        }
+        $ticket->watchers()->sync($watcherIds);
+
         return redirect()->route('tickets.index');
     }
 
     public function edit(Ticket $ticket)
     {
-        if ($ticket->user_id !== auth()->id()) {
+        if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
-        return view('tickets.edit', compact('ticket'));
+        $users = User::orderBy('name')->get();
+        return view('tickets.edit', compact('ticket', 'users'));
     }
 
     public function update(Request $request, Ticket $ticket)
     {
-        if ($ticket->user_id !== auth()->id()) {
+        if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $data = $request->validate([
             'category' => 'required|string|max:255',
             'subject' => 'required|string|max:255',
             'description' => 'required|string',
+            'assigned_to_id' => 'nullable|exists:users,id',
             'status' => 'required|string',
             'due_at' => 'nullable|date',
         ]);
@@ -67,7 +83,7 @@ class TicketController extends Controller
 
     public function destroy(Ticket $ticket)
     {
-        if ($ticket->user_id !== auth()->id()) {
+        if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $ticket->delete();
@@ -76,7 +92,7 @@ class TicketController extends Controller
 
     public function convertToJobOrder(Ticket $ticket)
     {
-        if ($ticket->user_id !== auth()->id()) {
+        if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
@@ -94,7 +110,7 @@ class TicketController extends Controller
 
     public function convertToRequisition(Ticket $ticket)
     {
-        if ($ticket->user_id !== auth()->id()) {
+        if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
