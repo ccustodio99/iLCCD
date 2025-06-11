@@ -11,5 +11,5 @@ it('shows dashboard for authenticated users', function () {
     $this->actingAs($user);
     $response = $this->get('/dashboard');
     $response->assertStatus(200);
-    $response->assertSee('Dashboard');
+    $response->assertSee('Pending Tickets');
 });
