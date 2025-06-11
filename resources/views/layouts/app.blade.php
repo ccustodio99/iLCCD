@@ -19,6 +19,18 @@
             position: fixed;
             top: 0;
             left: 0;
+            transition: left 0.3s ease;
+        }
+        #menu-toggle {
+            display: none;
+            background: transparent;
+            border: none;
+            color: #1B2660;
+            font-size: 1.5rem;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1100;
         }
         .sidebar a {
             color: #ffffff;
@@ -33,6 +45,24 @@
         .content-wrapper {
             margin-left: 200px;
             padding-left: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                left: -200px;
+            }
+            .sidebar.active {
+                left: 0;
+            }
+            nav.sidebar.active + .content-wrapper {
+                margin-left: 200px;
+            }
+            .content-wrapper {
+                margin-left: 0;
+            }
+            #menu-toggle {
+                display: block;
+            }
         }
         .cta { background-color: #FFCD38; color: #1B2660; }
         footer { background-color: #1B2660; color: #ffffff; padding: 1rem 0; }
@@ -72,6 +102,7 @@
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
+    <button id="menu-toggle" aria-label="Toggle menu">&#9776;</button>
     <div class="d-flex">
         <nav class="sidebar">
             <a class="navbar-brand d-flex align-items-center mb-3" href="{{ route('home') }}">
@@ -120,6 +151,11 @@
     });
     backToTop.addEventListener('click', () => {
         window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+    const menuToggle = document.getElementById('menu-toggle');
+    const sidebar = document.querySelector('.sidebar');
+    menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
     });
 </script>
 </body>

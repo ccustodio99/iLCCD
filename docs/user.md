@@ -56,7 +56,7 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
 ### 6. Profile Management
 - Each user can update their own **name**, **email**, and password from the *My Profile* page.
 - Password changes require confirmation and log an audit entry.
-- Access via the Profile link in the top navigation when logged in.
+- Access via the Profile link in the left sidebar navigation when logged in.
 
 ---
 
