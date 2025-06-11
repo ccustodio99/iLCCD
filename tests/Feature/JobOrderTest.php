@@ -2,6 +2,8 @@
 
 use App\Models\JobOrder;
 use App\Models\User;
+use App\Models\InventoryItem;
+use App\Models\Requisition;
 
 it('allows authenticated user to create job order', function () {
     $user = User::factory()->create();
@@ -34,4 +36,43 @@ it('prevents editing others job orders', function () {
 
     $response = $this->get("/job-orders/{$order->id}/edit");
     $response->assertForbidden();
+});
+
+it('deducts inventory if materials available', function () {
+    $user = User::factory()->create(['department' => 'IT']);
+    $this->actingAs($user);
+
+    $order = JobOrder::factory()->for($user)->create();
+    $item = InventoryItem::factory()->for($user)->create([
+        'name' => 'Cable',
+        'quantity' => 5,
+    ]);
+
+    $response = $this->post("/job-orders/{$order->id}/materials", [
+        'item' => 'Cable',
+        'quantity' => 3,
+        'purpose' => 'Setup network',
+    ]);
+
+    $response->assertRedirect('/job-orders');
+    $item->refresh();
+    expect($item->quantity)->toBe(2);
+});
+
+it('creates requisition when materials not in stock', function () {
+    $user = User::factory()->create(['department' => 'IT']);
+    $this->actingAs($user);
+
+    $order = JobOrder::factory()->for($user)->create();
+
+    $response = $this->post("/job-orders/{$order->id}/materials", [
+        'item' => 'Switch',
+        'quantity' => 1,
+        'purpose' => 'New network install',
+    ]);
+
+    $response->assertRedirect('/job-orders');
+
+    expect(Requisition::where('job_order_id', $order->id)
+        ->where('item', 'Switch')->exists())->toBeTrue();
 });

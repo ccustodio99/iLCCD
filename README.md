@@ -77,7 +77,7 @@ Deliver a holistic, faith-driven digital backbone for LCCD, empowering every use
 ### 2. 🛠 Job Order Module
 - Request, assign, and track repairs/installations/setups
 - Approval, department assignment, evaluation, full execution logging
-- Auto-generates linked requisitions if materials needed
+- Checks **Inventory** for required items and auto-generates linked requisitions when stock is missing
 
 ### 3. 📝 Requisition Management
 - Structured, multi-stage request/approval for materials, services, assets

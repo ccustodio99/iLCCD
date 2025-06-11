@@ -37,6 +37,7 @@ The **Requisition Management Module** enables LCCD stakeholders to request mater
 - Requesters can monitor their requisitions at all stages via dashboard.
 
 ### 4. Integration with Other Modules
+- **Job Order Module**: Created automatically when a job order needs materials not in stock.
 - **Inventory Module**: Approved requisitions trigger inventory checks and item issuance.
 - **Purchase Order Module**: If requested item is out of stock, system can auto-generate a Purchase Order (PO) for Finance.
 - **Audit Trail**: Every approval, modification, and comment is stored for compliance.
