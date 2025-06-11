@@ -30,6 +30,16 @@
             </select>
         </div>
         <div class="mb-3">
+            <label class="form-label">Watchers</label>
+            <select name="watchers[]" class="form-select" multiple>
+                @php($selected = old('watchers', $ticket->watchers->pluck('id')->toArray()))
+                @foreach($users as $u)
+                    <option value="{{ $u->id }}" {{ in_array($u->id, $selected) ? 'selected' : '' }}>{{ $u->name }}</option>
+                @endforeach
+            </select>
+            <small class="text-muted">Hold Ctrl or Command to select multiple users</small>
+        </div>
+        <div class="mb-3">
             <label class="form-label">Status</label>
             <select name="status" class="form-select" required>
                 @php($statuses = ['open' => 'Open', 'escalated' => 'Escalated', 'converted' => 'Converted', 'closed' => 'Closed'])

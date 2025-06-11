@@ -29,6 +29,15 @@
             </select>
         </div>
         <div class="mb-3">
+            <label class="form-label">Watchers</label>
+            <select name="watchers[]" class="form-select" multiple>
+                @foreach($users as $u)
+                    <option value="{{ $u->id }}" {{ collect(old('watchers'))->contains($u->id) ? 'selected' : '' }}>{{ $u->name }}</option>
+                @endforeach
+            </select>
+            <small class="text-muted">Hold Ctrl or Command to select multiple users</small>
+        </div>
+        <div class="mb-3">
             <label class="form-label">Due Date</label>
             <input type="date" name="due_at" class="form-control" value="{{ old('due_at') }}">
         </div>
