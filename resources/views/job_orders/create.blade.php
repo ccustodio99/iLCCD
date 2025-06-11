@@ -13,7 +13,8 @@
             <label class="form-label">Description</label>
             <textarea name="description" class="form-control" rows="4" required>{{ old('description') }}</textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary me-2">Submit</button>
+        <a href="{{ route('job-orders.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 @endsection

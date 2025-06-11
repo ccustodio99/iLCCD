@@ -26,7 +26,8 @@
             <label class="form-label">Purpose</label>
             <textarea name="purpose" class="form-control" rows="3" required>{{ old('purpose') }}</textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary me-2">Submit</button>
+        <a href="{{ route('requisitions.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 <script>

@@ -21,7 +21,8 @@
             <label class="form-label">Quantity</label>
             <input type="number" name="quantity" class="form-control" value="{{ old('quantity') }}" required>
         </div>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary me-2">Save</button>
+        <a href="{{ route('purchase-orders.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 @endsection

@@ -21,7 +21,8 @@
             <label class="form-label">File</label>
             <input type="file" name="file" class="form-control" required>
         </div>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary me-2">Save</button>
+        <a href="{{ route('documents.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 @endsection

@@ -14,6 +14,13 @@
         .navbar-brand, .nav-link { color: #ffffff !important; }
         .cta { background-color: #FFCD38; color: #1B2660; }
         footer { background-color: #1B2660; color: #ffffff; padding: 1rem 0; }
+        #back-to-top {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            display: none;
+            z-index: 1000;
+        }
         .skip-link {
             position: absolute;
             top: -40px;
@@ -76,6 +83,16 @@
 <footer class="text-center">
     &copy; {{ date('Y') }} La Consolacion College Daet
 </footer>
+<button id="back-to-top" class="btn btn-secondary" aria-label="Back to top">&uarr;</button>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const backToTop = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+        backToTop.style.display = window.scrollY > 200 ? 'block' : 'none';
+    });
+    backToTop.addEventListener('click', () => {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+</script>
 </body>
 </html>
