@@ -27,3 +27,7 @@ The interface uses Bootstrap 5 with official LCCD branding and is secured throug
 1. Users create tickets specifying category, subject, description, and optional due date.
 2. Tickets are listed on the "My Tickets" page with status tracking and simple editing.
 3. Only the creator may modify or delete their tickets.
+4. Tickets requiring maintenance or repairs convert to **Job Orders**.
+5. If materials or tools are needed for the job, a linked **Requisition** is created.
+6. Approved requisitions deduct items from **Inventory**; if none are available, a **Purchase Order** is generated for Finance.
+7. All related documents, like approvals or receipts, are stored in the **Document Management** module.

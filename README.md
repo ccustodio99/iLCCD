@@ -126,11 +126,18 @@ flowchart TD
     C[Multi-stage approvals: Head→President→Finance]
     D[Assignment (IT/Facilities/HR/etc)]
     E[Inventory/PO check—auto-deduct or create PO]
-    F[Job/Order/Request executed, completion logs]
+    F[Job/Order/Request executed]
+    DM[Documents stored]
     G[KPI & audit logs updated]
-    A --> B --> C --> D --> E --> F --> G
+    A --> B --> C --> D --> E --> F --> DM --> G
 ```
 Every action is traceable; every step is value-aligned.
+
+**Workflow summary:**
+1. Ticket is created and may spawn a Job Order or Requisition.
+2. Job Orders needing supplies automatically create a linked Requisition.
+3. Approved Requisitions deduct from Inventory or trigger a Purchase Order if items are missing.
+4. Documents like approvals and receipts are stored in the Document Management module.
 
 ---
 

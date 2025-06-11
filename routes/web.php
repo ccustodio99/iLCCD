@@ -1,4 +1,5 @@
 <?php
+// Workflow: Ticket -> Job Order -> Requisition -> Inventory -> Purchase Order -> Document Management
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
