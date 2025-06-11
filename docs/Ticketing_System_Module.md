@@ -12,7 +12,7 @@ The Ticketing System is the all-in-one portal for reporting issues and requestin
 
 The interface uses Bootstrap 5 with official LCCD branding and is secured through the Access Control module. For more information on other modules, see the [documentation index](README.md).
 ### Current Implementation
-- Users can create, edit, and delete their own tickets with category, subject, description, and due date.
+- Users can create, edit, and archive their own tickets with category, subject, description, and due date.
 - Tickets are listed on the My Tickets page.
 - Automatic SLA monitoring escalates overdue tickets every minute.
 - KPI logs capture escalation timestamps for dashboard reporting.
@@ -26,7 +26,8 @@ The interface uses Bootstrap 5 with official LCCD branding and is secured throug
 
 1. Users create tickets specifying category, subject, description, and optional due date.
 2. Tickets are listed on the "My Tickets" page with status tracking and simple editing.
-3. Only the creator may modify or delete their tickets.
+   Each ticket has a **Details** popup showing audit history like when it was created, updated, escalated, or resolved.
+3. Only the creator may modify or archive their tickets.
 4. Tickets requiring maintenance or repairs convert to **Job Orders**.
 5. If materials or tools are needed for the job, the system checks **Inventory**. When stock is missing, it automatically creates a linked **Requisition**.
 6. Once a requisition is approved, Inventory is checked again. Out‑of‑stock items trigger a **Purchase Order** for the Finance team; otherwise inventory is deducted.

@@ -4,11 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Ticket extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
+    const DELETED_AT = 'archived_at';
 
     protected $fillable = [
         'user_id',
@@ -27,6 +30,7 @@ class Ticket extends Model
             'due_at' => 'datetime',
             'escalated_at' => 'datetime',
             'resolved_at' => 'datetime',
+            'archived_at' => 'datetime',
         ];
     }
 
