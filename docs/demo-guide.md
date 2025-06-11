@@ -22,7 +22,7 @@ composer install
 npm install && npm run build
 
 # Migrate and seed demo data
-php artisan migrate --seed
+php artisan migrate --seed # runs DemoSeeder
 
 # Start the local server
 php artisan serve
@@ -43,7 +43,7 @@ These commands assume a local development setup with PHP, Composer, Node.js, and
 ---
 
 ## 4️⃣ Demo Data
-The seeders create sample tickets, job orders, requisitions, and inventory items. You can modify the seed files in `database/seeders/` to tailor the demo content.
+Running the seeders will create demo accounts along with tickets, job orders, requisitions, inventory items, purchase orders, and documents. Modify `database/seeders/DemoSeeder.php` if you want to adjust the content.
 
 ---
 
