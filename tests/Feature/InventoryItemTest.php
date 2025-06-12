@@ -81,3 +81,16 @@ it('records transaction and increases quantity when returning item', function ()
     expect(InventoryTransaction::where('inventory_item_id', $item->id)
         ->where('action', 'return')->exists())->toBeTrue();
 });
+
+it('highlights low stock items on index', function () {
+    $user = User::factory()->create();
+    InventoryItem::factory()->for($user)->create([
+        'quantity' => 1,
+        'minimum_stock' => 5,
+    ]);
+    $this->actingAs($user);
+
+    $response = $this->get('/inventory');
+
+    $response->assertSee('table-warning', false);
+});

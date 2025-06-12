@@ -18,9 +18,17 @@
         </thead>
         <tbody>
             @foreach ($items as $item)
-            <tr>
+            <tr class="{{ $item->quantity == 0 ? 'table-danger' : ($item->quantity <= $item->minimum_stock ? 'table-warning' : '') }}">
                 <td>{{ $item->name }}</td>
-                <td>{{ $item->quantity }}</td>
+                <td>
+                    @if($item->quantity == 0)
+                        <span class="badge bg-danger">0</span>
+                    @elseif($item->quantity <= $item->minimum_stock)
+                        <span class="badge bg-warning text-dark">{{ $item->quantity }}</span>
+                    @else
+                        {{ $item->quantity }}
+                    @endif
+                </td>
                 <td>{{ ucfirst($item->status) }}</td>
                 <td>
                     <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#inventoryItemModal{{ $item->id }}">Details</button>
