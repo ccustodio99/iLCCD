@@ -17,7 +17,11 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Category</label>
-            <input type="text" name="category" class="form-control" value="{{ old('category') }}">
+            <select name="category" class="form-select">
+                @foreach($categories as $cat)
+                    <option value="{{ $cat }}" {{ old('category') === $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                @endforeach
+            </select>
         </div>
         <div class="mb-3">
             <label class="form-label">Department</label>

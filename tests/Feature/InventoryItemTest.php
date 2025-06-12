@@ -3,15 +3,17 @@
 use App\Models\InventoryItem;
 use App\Models\InventoryTransaction;
 use App\Models\User;
+use App\Models\InventoryCategory;
 
 it('allows authenticated user to create inventory item', function () {
     $user = User::factory()->create();
+    $category = InventoryCategory::factory()->create(['name' => 'IT']);
     $this->actingAs($user);
 
     $response = $this->post('/inventory', [
         'name' => 'Laptop',
         'description' => 'Dell',
-        'category' => 'IT',
+        'category' => $category->name,
         'department' => 'IT',
         'location' => 'Office',
         'supplier' => 'Supplier',
