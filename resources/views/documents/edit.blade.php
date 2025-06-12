@@ -24,7 +24,8 @@
             <label class="form-label">Replace File</label>
             <input type="file" name="file" class="form-control">
         </div>
-        <button type="submit" class="btn btn-primary">Update</button>
+        <button type="submit" class="btn btn-primary me-2">Update</button>
+        <a href="{{ route('documents.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
     @include('audit_trails._list', ['logs' => $document->auditTrails])
 </div>

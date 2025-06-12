@@ -41,7 +41,8 @@
             <input id="is_active" class="form-check-input" type="checkbox" name="is_active" value="1" @checked(old('is_active', $user->is_active))>
             <label class="form-check-label" for="is_active">Active</label>
         </div>
-        <button type="submit" class="btn cta">Update</button>
+        <button type="submit" class="btn cta me-2">Update</button>
+        <a href="{{ route('users.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 @endsection

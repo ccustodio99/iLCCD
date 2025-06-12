@@ -24,7 +24,8 @@
             <label for="password_confirmation" class="form-label">Confirm Password</label>
             <input id="password_confirmation" type="password" name="password_confirmation" class="form-control">
         </div>
-        <button type="submit" class="btn cta">Update</button>
+        <button type="submit" class="btn cta me-2">Update</button>
+        <a href="{{ route('profile.edit') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 @endsection

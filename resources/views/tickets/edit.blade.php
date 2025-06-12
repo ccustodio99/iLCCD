@@ -52,7 +52,8 @@
             <label class="form-label">Due Date</label>
             <input type="date" name="due_at" class="form-control" value="{{ old('due_at', optional($ticket->due_at)->format('Y-m-d')) }}">
         </div>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary me-2">Save</button>
+        <a href="{{ route('tickets.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 @endsection
