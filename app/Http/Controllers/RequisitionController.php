@@ -133,7 +133,7 @@ class RequisitionController extends Controller
                         'inventory_item_id' => $item?->id,
                         'item' => $reqItem->item,
                         'quantity' => $reqItem->quantity,
-                        'status' => 'draft',
+                        'status' => PurchaseOrder::STATUS_DRAFT,
                     ]);
                 } else {
                     $item->decrement('quantity', $reqItem->quantity);

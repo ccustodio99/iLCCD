@@ -38,7 +38,15 @@
         <div class="mb-3">
             <label class="form-label">Status</label>
             <select name="status" class="form-select" required>
-                @php($statuses = ['draft' => 'Draft', 'ordered' => 'Ordered', 'received' => 'Received'])
+                @php($statuses = [
+                    \App\Models\PurchaseOrder::STATUS_DRAFT => 'Draft',
+                    \App\Models\PurchaseOrder::STATUS_PENDING_APPROVAL => 'Pending Approval',
+                    \App\Models\PurchaseOrder::STATUS_APPROVED => 'Approved',
+                    \App\Models\PurchaseOrder::STATUS_ORDERED => 'Ordered',
+                    \App\Models\PurchaseOrder::STATUS_RECEIVED => 'Received',
+                    \App\Models\PurchaseOrder::STATUS_CLOSED => 'Closed',
+                    \App\Models\PurchaseOrder::STATUS_CANCELLED => 'Cancelled',
+                ])
                 @foreach($statuses as $value => $label)
                     <option value="{{ $value }}" {{ old('status', $purchaseOrder->status) === $value ? 'selected' : '' }}>{{ $label }}</option>
                 @endforeach
