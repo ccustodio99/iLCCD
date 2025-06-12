@@ -4,7 +4,7 @@ The Ticketing System is the all-in-one portal for reporting issues and requestin
 
 > **Setup note:** Run `php artisan storage:link` after migrations so ticket attachments can be served.
 
-👉 **Smart routing:** Categories like IT, Facilities, or Documents send the ticket straight to the correct team. Department heads are notified instantly so nothing gets overlooked.
+👉 **Smart routing:** Tickets start with large buttons for categories such as IT, Facilities, Documents, Supplies, Finance, HR, Registrar, Clinic, and Security. Selecting a button reveals its subcategories (progressive disclosure) so the request is routed to the right team. Department heads are notified instantly so nothing gets overlooked.
 
 ⏱️ **SLA monitoring:** Timers track how long tickets stay open. Critical requests escalate if they pass their deadline, ensuring urgent problems receive attention.
 
@@ -14,7 +14,7 @@ The Ticketing System is the all-in-one portal for reporting issues and requestin
 
 The interface uses Bootstrap 5 with official LCCD branding and is secured through the Access Control module. For more information on other modules, see the [documentation index](README.md).
 ### Current Implementation
-- Users can create, edit, and archive their own tickets with category, subject, description, and due date.
+- Users can create, edit, and archive their own tickets with category, subject, description, and due date. Categories are selected using large buttons that reveal subcategories once chosen.
 - Ticket subjects display as `[Category] - [Issue Summary] - Ticket ID` for easy reference.
 - Tickets are listed on the My Tickets page.
 - Automatic SLA monitoring escalates overdue tickets every minute.
