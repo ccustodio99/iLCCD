@@ -234,7 +234,7 @@ class TicketController extends Controller
             'ticket_id' => $ticket->id,
             'job_type' => $ticket->category,
             'description' => $ticket->description,
-            'status' => 'new',
+            'status' => JobOrder::STATUS_PENDING_HEAD,
         ]);
 
         $ticket->update(['status' => 'converted']);

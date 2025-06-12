@@ -31,7 +31,7 @@ class JobOrderController extends Controller
             'attachment' => 'nullable|file|max:2048',
         ]);
         $data['user_id'] = $request->user()->id;
-        $data['status'] = 'new';
+        $data['status'] = JobOrder::STATUS_PENDING_HEAD;
         if ($request->hasFile('attachment')) {
             $data['attachment_path'] = $request->file('attachment')
                 ->store('job_order_attachments', 'public');
@@ -150,5 +150,118 @@ class JobOrderController extends Controller
 
         return \Illuminate\Support\Facades\Storage::disk('public')
             ->download($jobOrder->attachment_path);
+    }
+
+    /** Show job orders awaiting the logged-in approver */
+    public function approvals()
+    {
+        $role = auth()->user()->role;
+        $statusMap = [
+            'head' => JobOrder::STATUS_PENDING_HEAD,
+            'president' => JobOrder::STATUS_PENDING_PRESIDENT,
+            'finance' => JobOrder::STATUS_PENDING_FINANCE,
+        ];
+
+        $status = $statusMap[$role] ?? null;
+        abort_if(!$status, Response::HTTP_FORBIDDEN, 'Access denied');
+
+        $jobOrders = JobOrder::with('user')
+            ->where('status', $status)
+            ->paginate(10);
+
+        return view('job_orders.approvals', compact('jobOrders'));
+    }
+
+    /** Approve the given job order and move to next stage */
+    public function approve(JobOrder $jobOrder)
+    {
+        $this->authorizeApproval($jobOrder);
+
+        $nextRole = null;
+        if ($jobOrder->status === JobOrder::STATUS_PENDING_HEAD) {
+            $jobOrder->status = JobOrder::STATUS_PENDING_PRESIDENT;
+            $nextRole = 'president';
+        } elseif ($jobOrder->status === JobOrder::STATUS_PENDING_PRESIDENT) {
+            $jobOrder->status = JobOrder::STATUS_PENDING_FINANCE;
+            $nextRole = 'finance';
+        } elseif ($jobOrder->status === JobOrder::STATUS_PENDING_FINANCE) {
+            $jobOrder->status = JobOrder::STATUS_APPROVED;
+            $jobOrder->approved_at = now();
+        }
+        $jobOrder->save();
+
+        // notify requester
+        $jobOrder->user->notify(new \App\Notifications\JobOrderStatusNotification(
+            "Your job order #{$jobOrder->id} status is now " . str_replace('_', ' ', $jobOrder->status)
+        ));
+
+        // notify next approver
+        if ($nextRole) {
+            $approver = \App\Models\User::where('role', $nextRole)->first();
+            if ($approver) {
+                $approver->notify(new \App\Notifications\JobOrderStatusNotification(
+                    "Job order #{$jobOrder->id} requires your approval."
+                ));
+            }
+        }
+
+        return redirect()->route('job-orders.approvals');
+    }
+
+    /** Show approved job orders for assignment */
+    public function assignments()
+    {
+        $jobOrders = JobOrder::where('status', JobOrder::STATUS_APPROVED)
+            ->paginate(10);
+
+        $staff = \App\Models\User::where('role', 'staff')->pluck('name', 'id');
+
+        return view('job_orders.assign', compact('jobOrders', 'staff'));
+    }
+
+    /** Assign a job order to a staff */
+    public function assign(Request $request, JobOrder $jobOrder)
+    {
+        $request->validate(['assigned_to_id' => 'required|exists:users,id']);
+
+        $jobOrder->update([
+            'assigned_to_id' => $request->assigned_to_id,
+            'status' => JobOrder::STATUS_ASSIGNED,
+        ]);
+
+        // notify requester and assignee
+        $jobOrder->user->notify(new \App\Notifications\JobOrderStatusNotification(
+            "Your job order #{$jobOrder->id} has been assigned."
+        ));
+
+        if ($jobOrder->assignedTo) {
+            $jobOrder->assignedTo->notify(new \App\Notifications\JobOrderStatusNotification(
+                "Job order #{$jobOrder->id} has been assigned to you."
+            ));
+        }
+
+        return redirect()->route('job-orders.assignments');
+    }
+
+    /** Show job orders assigned to the logged in user */
+    public function assigned()
+    {
+        $jobOrders = JobOrder::where('assigned_to_id', auth()->id())
+            ->where('status', JobOrder::STATUS_ASSIGNED)
+            ->paginate(10);
+
+        return view('job_orders.assigned', compact('jobOrders'));
+    }
+
+    private function authorizeApproval(JobOrder $jobOrder): void
+    {
+        $role = auth()->user()->role;
+        $allowed = (
+            ($role === 'head' && $jobOrder->status === JobOrder::STATUS_PENDING_HEAD) ||
+            ($role === 'president' && $jobOrder->status === JobOrder::STATUS_PENDING_PRESIDENT) ||
+            ($role === 'finance' && $jobOrder->status === JobOrder::STATUS_PENDING_FINANCE)
+        );
+
+        abort_unless($allowed, Response::HTTP_FORBIDDEN, 'Access denied');
     }
 }
