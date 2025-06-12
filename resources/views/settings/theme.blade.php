@@ -16,6 +16,30 @@
             <label for="color_accent" class="form-label">Accent Color</label>
             <input type="color" id="color_accent" name="color_accent" value="{{ $accent }}" class="form-control form-control-color" />
         </div>
+        <div class="mb-3">
+            <label for="font_primary" class="form-label">Primary Font</label>
+            <select id="font_primary" name="font_primary" class="form-select">
+                @foreach(['Poppins', 'Roboto', 'Montserrat'] as $font)
+                    <option value="{{ $font }}" {{ $font_primary === $font ? 'selected' : '' }}>{{ $font }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="font_secondary" class="form-label">Secondary Font</label>
+            <select id="font_secondary" name="font_secondary" class="form-select">
+                @foreach(['Poppins', 'Roboto', 'Montserrat'] as $font)
+                    <option value="{{ $font }}" {{ $font_secondary === $font ? 'selected' : '' }}>{{ $font }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="home_heading" class="form-label">Home Page Heading</label>
+            <input type="text" id="home_heading" name="home_heading" value="{{ $home_heading }}" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label for="home_tagline" class="form-label">Home Page Tagline</label>
+            <textarea id="home_tagline" name="home_tagline" rows="3" class="form-control">{{ $home_tagline }}</textarea>
+        </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
 </div>
