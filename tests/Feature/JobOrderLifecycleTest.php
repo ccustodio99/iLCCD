@@ -111,4 +111,26 @@ it('prevents others from closing job order', function () {
     $this->put("/job-orders/{$order->id}/close")->assertForbidden();
 });
 
+it('rejects starting when not assigned', function () {
+    $assignee = User::factory()->create();
+    $order = JobOrder::factory()->create([
+        'status' => JobOrder::STATUS_IN_PROGRESS,
+        'assigned_to_id' => $assignee->id,
+    ]);
+
+    $this->actingAs($assignee);
+    $this->put("/job-orders/{$order->id}/start")->assertForbidden();
+});
+
+it('rejects finishing when not in progress', function () {
+    $assignee = User::factory()->create();
+    $order = JobOrder::factory()->create([
+        'status' => JobOrder::STATUS_ASSIGNED,
+        'assigned_to_id' => $assignee->id,
+    ]);
+
+    $this->actingAs($assignee);
+    $this->put("/job-orders/{$order->id}/finish")->assertForbidden();
+});
+
 
