@@ -81,6 +81,9 @@ class RequisitionController extends Controller
         if ($requisition->user_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
+        if ($requisition->status === Requisition::STATUS_APPROVED) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
         $data = $request->validate([
             'item.*' => 'required|string|max:255',
             'quantity.*' => 'required|integer|min:1',
@@ -160,6 +163,9 @@ class RequisitionController extends Controller
     public function destroy(Requisition $requisition)
     {
         if ($requisition->user_id !== auth()->id()) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+        if ($requisition->status === Requisition::STATUS_APPROVED) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $requisition->delete();
