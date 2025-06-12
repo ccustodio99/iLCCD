@@ -28,6 +28,23 @@ it('shows user job orders', function () {
     $response->assertSee('Setup');
 });
 
+it('shows job orders assigned to user', function () {
+    $user = User::factory()->create();
+    $requester = User::factory()->create();
+    JobOrder::factory()->for($requester)->create([
+        'job_type' => 'Repair',
+        'assigned_to_id' => $user->id,
+        'status' => JobOrder::STATUS_ASSIGNED,
+    ]);
+
+    $this->actingAs($user);
+
+    $response = $this->get('/job-orders');
+    $response->assertStatus(200);
+    $response->assertSee('Repair');
+    $response->assertSee('Assignee');
+});
+
 it('prevents editing others job orders', function () {
     $user = User::factory()->create();
     $other = User::factory()->create();

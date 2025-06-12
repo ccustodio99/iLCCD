@@ -13,9 +13,12 @@ class JobOrderController extends Controller
     public function index()
     {
         $jobOrders = JobOrder::with(['requisitions', 'ticket', 'auditTrails.user'])
-            ->where('user_id', auth()->id())
+            ->where(function ($q) {
+                $q->where('user_id', auth()->id())
+                    ->orWhere('assigned_to_id', auth()->id());
+            })
             ->paginate(10);
-        return view('job_orders.index', compact('jobOrders'));
+        return view('job_orders.index', compact('jobOrders')); 
     }
 
     public function create()

@@ -13,6 +13,7 @@
                 <th>Type</th>
                 <th>Description</th>
                 <th>Status</th>
+                <th>Role</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -22,6 +23,7 @@
                 <td>{{ $jobOrder->job_type }}</td>
                 <td>{{ Str::limit($jobOrder->description, 50) }}</td>
                 <td>{{ ucfirst($jobOrder->status) }}</td>
+                <td>{{ $jobOrder->user_id === auth()->id() ? 'Requester' : 'Assignee' }}</td>
                 <td>
                     <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#jobOrderModal{{ $jobOrder->id }}">View</button>
                     <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editJobOrderModal{{ $jobOrder->id }}">Edit</button>
@@ -50,6 +52,7 @@
                     <p><strong>Type:</strong> {{ $jobOrder->job_type }}</p>
                     <p><strong>Description:</strong> {{ $jobOrder->description }}</p>
                     <p><strong>Status:</strong> {{ ucfirst($jobOrder->status) }}</p>
+                    <p><strong>Role:</strong> {{ $jobOrder->user_id === auth()->id() ? 'Requester' : 'Assignee' }}</p>
                     @if($jobOrder->ticket_id)
                         <p><strong>Ticket ID:</strong>
                             <a href="{{ route('tickets.index') }}#ticketModal{{ $jobOrder->ticket_id }}">
