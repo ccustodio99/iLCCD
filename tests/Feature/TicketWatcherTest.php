@@ -11,7 +11,7 @@ it('allows adding watchers on ticket creation', function () {
     $this->actingAs($user);
 
     $this->post('/tickets', [
-        'category' => $category->name,
+        'ticket_category_id' => $category->id,
         'subject' => 'Printer',
         'description' => 'Broken',
         'watchers' => [$watcher->id],
@@ -31,7 +31,7 @@ it('allows updating watchers on ticket edit', function () {
     $this->actingAs($user);
 
     $this->put("/tickets/{$ticket->id}", [
-        'category' => $ticket->category,
+        'ticket_category_id' => $ticket->ticket_category_id,
         'subject' => $ticket->subject,
         'description' => $ticket->description,
         'status' => $ticket->status,

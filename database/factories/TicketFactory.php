@@ -19,7 +19,7 @@ class TicketFactory extends Factory
         return [
             'user_id' => User::factory(),
             'assigned_to_id' => null,
-            'category' => fn () => TicketCategory::factory()->create()->name,
+            'ticket_category_id' => TicketCategory::factory(),
             'subject' => fake()->sentence(4),
             'description' => fake()->paragraph(),
             'attachment_path' => null,

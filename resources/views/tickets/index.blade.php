@@ -22,7 +22,7 @@
         <tbody>
             @foreach ($tickets as $ticket)
             <tr>
-                <td>{{ $ticket->category }}</td>
+                <td>{{ $ticket->ticketCategory->name }}</td>
                 <td>{{ $ticket->formatted_subject }}</td>
                 <td>{{ ucfirst($ticket->status) }}</td>
                 <td>{{ optional($ticket->due_at)->format('Y-m-d') }}</td>
@@ -63,9 +63,12 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Category</label>
-                            <select name="category" class="form-select" required>
+                            <select name="ticket_category_id" class="form-select" required>
                                 @foreach($categories as $cat)
-                                    <option value="{{ $cat->name }}" {{ old('category') == $cat->name ? 'selected' : '' }}>{{ $cat->name }}</option>
+                                    <option value="{{ $cat->id }}" {{ old('ticket_category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                                    @foreach($cat->children as $child)
+                                        <option value="{{ $child->id }}" {{ old('ticket_category_id') == $child->id ? 'selected' : '' }}>&nbsp;&nbsp;{{ $child->name }}</option>
+                                    @endforeach
                                 @endforeach
                             </select>
                         </div>
@@ -122,7 +125,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p><strong>Category:</strong> {{ $ticket->category }}</p>
+                    <p><strong>Category:</strong> {{ $ticket->ticketCategory->name }}</p>
                     <p><strong>Subject:</strong> {{ $ticket->formatted_subject }}</p>
                     <p><strong>Description:</strong> {{ $ticket->description }}</p>
                     @if($ticket->attachment_path)
@@ -205,9 +208,12 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Category</label>
-                            <select name="category" class="form-select" required>
+                            <select name="ticket_category_id" class="form-select" required>
                                 @foreach($categories as $cat)
-                                    <option value="{{ $cat->name }}" {{ old('category', $ticket->category) == $cat->name ? 'selected' : '' }}>{{ $cat->name }}</option>
+                                    <option value="{{ $cat->id }}" {{ old('ticket_category_id', $ticket->ticket_category_id) == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                                    @foreach($cat->children as $child)
+                                        <option value="{{ $child->id }}" {{ old('ticket_category_id', $ticket->ticket_category_id) == $child->id ? 'selected' : '' }}>&nbsp;&nbsp;{{ $child->name }}</option>
+                                    @endforeach
                                 @endforeach
                             </select>
                         </div>

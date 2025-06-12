@@ -10,6 +10,10 @@ return new class extends Migration
     {
         Schema::create('ticket_categories', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('parent_id')
+                ->nullable()
+                ->constrained('ticket_categories')
+                ->nullOnDelete();
             $table->string('name');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
