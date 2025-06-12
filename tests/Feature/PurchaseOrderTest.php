@@ -40,6 +40,20 @@ it('shows user purchase orders', function () {
     $response->assertSee('Laptop');
 });
 
+it('shows all purchase orders to admin', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+    $a = User::factory()->create();
+    $b = User::factory()->create();
+    $orderA = PurchaseOrder::factory()->for($a)->create(['item' => 'ItemA']);
+    $orderB = PurchaseOrder::factory()->for($b)->create(['item' => 'ItemB']);
+
+    $this->actingAs($admin);
+    $response = $this->get('/purchase-orders');
+    $response->assertStatus(200);
+    $response->assertSee('ItemA');
+    $response->assertSee('ItemB');
+});
+
 it('prevents editing others purchase orders', function () {
     $user = User::factory()->create();
     $other = User::factory()->create();
@@ -48,6 +62,15 @@ it('prevents editing others purchase orders', function () {
 
     $response = $this->get("/purchase-orders/{$order->id}/edit");
     $response->assertForbidden();
+});
+
+it('allows admin to edit any purchase order', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+    $owner = User::factory()->create();
+    $order = PurchaseOrder::factory()->for($owner)->create();
+
+    $this->actingAs($admin);
+    $this->get("/purchase-orders/{$order->id}/edit")->assertOk();
 });
 
 it('tracks status transitions when updated by finance', function () {
