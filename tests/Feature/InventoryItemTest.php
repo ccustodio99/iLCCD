@@ -43,3 +43,41 @@ it('prevents editing others inventory items', function () {
     $response = $this->get("/inventory/{$item->id}/edit");
     $response->assertForbidden();
 });
+
+use App\Models\InventoryTransaction;
+
+it('records transaction and deducts quantity when issuing item', function () {
+    $this->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class);
+    $user = User::factory()->create();
+    $item = InventoryItem::factory()->for($user)->create(['quantity' => 5]);
+    $this->actingAs($user);
+
+    $request = Illuminate\Http\Request::create('/', 'POST', ['quantity' => 2]);
+    $request->setUserResolver(fn() => $user);
+    $controller = new App\Http\Controllers\InventoryItemController();
+    $response = $controller->issue($request, $item);
+
+    expect($response->status())->toBe(302);
+    $item->refresh();
+    expect($item->quantity)->toBe(3);
+    expect(InventoryTransaction::where('inventory_item_id', $item->id)
+        ->where('action', 'issue')->exists())->toBeTrue();
+});
+
+it('records transaction and increases quantity when returning item', function () {
+    $this->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class);
+    $user = User::factory()->create();
+    $item = InventoryItem::factory()->for($user)->create(['quantity' => 5]);
+    $this->actingAs($user);
+
+    $request = Illuminate\Http\Request::create('/', 'POST', ['quantity' => 2]);
+    $request->setUserResolver(fn() => $user);
+    $controller = new App\Http\Controllers\InventoryItemController();
+    $response = $controller->return($request, $item);
+
+    expect($response->status())->toBe(302);
+    $item->refresh();
+    expect($item->quantity)->toBe(7);
+    expect(InventoryTransaction::where('inventory_item_id', $item->id)
+        ->where('action', 'return')->exists())->toBeTrue();
+});

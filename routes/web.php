@@ -49,6 +49,8 @@ Route::middleware('auth')->group(function () {
     Route::post('job-orders/{jobOrder}/materials', [JobOrderController::class, 'requestMaterials'])->name('job-orders.materials');
     Route::resource('requisitions', RequisitionController::class)->except('show');
     Route::resource('inventory', InventoryItemController::class)->except('show');
+    Route::post('inventory/{inventory}/issue', [InventoryItemController::class, 'issue'])->name('inventory.issue');
+    Route::post('inventory/{inventory}/return', [InventoryItemController::class, 'return'])->name('inventory.return');
     Route::resource('purchase-orders', PurchaseOrderController::class)->except('show');
     Route::resource('documents', DocumentController::class)->except('show');
     Route::get('documents-dashboard', [DocumentDashboardController::class, 'index'])->name('documents.dashboard');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\InventoryItem;
+use App\Models\InventoryTransaction;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -76,6 +77,60 @@ class InventoryItemController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $inventoryItem->delete();
+        return redirect()->route('inventory.index');
+    }
+
+    /**
+     * Issue quantity of an inventory item and record transaction.
+     */
+    public function issue(Request $request, InventoryItem $inventoryItem)
+    {
+        if ($inventoryItem->user_id !== auth()->id()) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+
+        $data = $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        if ($inventoryItem->quantity < $data['quantity']) {
+            return back()->withErrors(['quantity' => 'Not enough stock']);
+        }
+
+        $inventoryItem->decrement('quantity', $data['quantity']);
+
+        InventoryTransaction::create([
+            'inventory_item_id' => $inventoryItem->id,
+            'user_id' => $request->user()->id,
+            'action' => 'issue',
+            'quantity' => $data['quantity'],
+        ]);
+
+        return redirect()->route('inventory.index');
+    }
+
+    /**
+     * Return quantity of an inventory item and record transaction.
+     */
+    public function return(Request $request, InventoryItem $inventoryItem)
+    {
+        if ($inventoryItem->user_id !== auth()->id()) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+
+        $data = $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $inventoryItem->increment('quantity', $data['quantity']);
+
+        InventoryTransaction::create([
+            'inventory_item_id' => $inventoryItem->id,
+            'user_id' => $request->user()->id,
+            'action' => 'return',
+            'quantity' => $data['quantity'],
+        ]);
+
         return redirect()->route('inventory.index');
     }
 }
