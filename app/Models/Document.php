@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Traits\LogsAudit;
+use App\Models\DocumentCategory;
 
 class Document extends Model
 {
@@ -16,7 +17,7 @@ class Document extends Model
         'user_id',
         'title',
         'description',
-        'category',
+        'document_category_id',
         'department',
         'current_version',
     ];
@@ -29,5 +30,10 @@ class Document extends Model
     public function versions(): HasMany
     {
         return $this->hasMany(DocumentVersion::class);
+    }
+
+    public function documentCategory(): BelongsTo
+    {
+        return $this->belongsTo(DocumentCategory::class);
     }
 }

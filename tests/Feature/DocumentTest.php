@@ -2,6 +2,7 @@
 
 use App\Models\Document;
 use App\Models\DocumentVersion;
+use App\Models\DocumentCategory;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -11,10 +12,12 @@ it('allows authenticated user to upload document', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
 
+    $category = DocumentCategory::factory()->create();
+
     $response = $this->post('/documents', [
         'title' => 'Policy',
         'description' => 'Important',
-        'category' => 'policy',
+        'document_category_id' => $category->id,
         'file' => UploadedFile::fake()->create('policy.pdf', 100),
     ]);
 
@@ -49,10 +52,11 @@ it('shows document details with versions', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
 
+    $category = DocumentCategory::factory()->create();
     $this->post('/documents', [
         'title' => 'Handbook',
         'description' => 'Desc',
-        'category' => 'policy',
+        'document_category_id' => $category->id,
         'file' => UploadedFile::fake()->create('file.pdf', 10),
     ]);
 
@@ -76,10 +80,11 @@ it('allows downloading document versions', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
 
+    $category = DocumentCategory::factory()->create();
     $this->post('/documents', [
         'title' => 'Policy',
         'description' => 'Important',
-        'category' => 'policy',
+        'document_category_id' => $category->id,
         'file' => UploadedFile::fake()->create('policy.pdf', 100),
     ]);
 
