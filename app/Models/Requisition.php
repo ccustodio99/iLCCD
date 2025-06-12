@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\RequisitionItem;
 use App\Traits\LogsAudit;
+use App\Traits\ClearsDashboardCache;
 
 class Requisition extends Model
 {
-    use HasFactory, LogsAudit;
+    use HasFactory, LogsAudit, ClearsDashboardCache;
 
     /** Requisition status values */
     public const STATUS_PENDING_HEAD = 'pending_head';

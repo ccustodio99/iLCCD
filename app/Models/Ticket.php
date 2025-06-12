@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Models\TicketComment;
 use App\Traits\LogsAudit;
+use App\Traits\ClearsDashboardCache;
 
 class Ticket extends Model
 {
-    use HasFactory, SoftDeletes, LogsAudit;
+    use HasFactory, SoftDeletes, LogsAudit, ClearsDashboardCache;
 
     const DELETED_AT = 'archived_at';
 
