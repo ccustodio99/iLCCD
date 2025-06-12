@@ -3,6 +3,8 @@
 ## 🎯 Purpose
 The **KPI & Audit Log Dashboard** provides actionable insights and transparent records of all critical processes within LCCD. By tracking key performance indicators (KPIs) and maintaining comprehensive audit logs, this module supports accountability, data-driven improvement, and compliance with institutional standards and policies.
 
+Access the dashboard at `/kpi-dashboard` once logged in.
+
 ---
 
 ## 🧩 Core Features
