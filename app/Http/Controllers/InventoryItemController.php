@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\InventoryItem;
 use App\Models\InventoryTransaction;
 use App\Models\InventoryCategory;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,7 +16,7 @@ class InventoryItemController extends Controller
         $perPage = $this->getPerPage($request);
 
         $items = InventoryItem::where('user_id', auth()->id())
-            ->with(['auditTrails.user', 'transactions.user'])
+            ->with(['auditTrails.user', 'transactions.user', 'inventoryCategory'])
             ->paginate($perPage)
             ->withQueryString();
 
@@ -24,7 +25,7 @@ class InventoryItemController extends Controller
 
     public function create()
     {
-        $categories = InventoryCategory::where('is_active', true)->orderBy('name')->pluck('name');
+        $categories = InventoryCategory::where('is_active', true)->orderBy('name')->get();
 
         return view('inventory.create', compact('categories'));
     }
@@ -34,7 +35,10 @@ class InventoryItemController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'category' => 'nullable|string|max:255',
+            'inventory_category_id' => [
+                'nullable',
+                Rule::exists('inventory_categories', 'id')->where('is_active', true),
+            ],
             'department' => 'required|string|max:255',
             'location' => 'nullable|string|max:255',
             'supplier' => 'nullable|string|max:255',
@@ -54,7 +58,7 @@ class InventoryItemController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $inventoryItem->load('auditTrails.user');
-        $categories = InventoryCategory::where('is_active', true)->orderBy('name')->pluck('name');
+        $categories = InventoryCategory::where('is_active', true)->orderBy('name')->get();
 
         return view('inventory.edit', compact('inventoryItem', 'categories'));
     }
@@ -67,7 +71,10 @@ class InventoryItemController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'category' => 'nullable|string|max:255',
+            'inventory_category_id' => [
+                'nullable',
+                Rule::exists('inventory_categories', 'id')->where('is_active', true),
+            ],
             'department' => 'required|string|max:255',
             'location' => 'nullable|string|max:255',
             'supplier' => 'nullable|string|max:255',

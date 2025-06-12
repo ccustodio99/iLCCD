@@ -17,9 +17,9 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Category</label>
-            <select name="category" class="form-select">
+            <select name="inventory_category_id" class="form-select">
                 @foreach($categories as $cat)
-                    <option value="{{ $cat }}" {{ old('category') === $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                    <option value="{{ $cat->id }}" {{ old('inventory_category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
                 @endforeach
             </select>
         </div>

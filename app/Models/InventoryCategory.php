@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\InventoryItem;
 use App\Traits\LogsAudit;
 
 class InventoryCategory extends Model
@@ -20,5 +22,10 @@ class InventoryCategory extends Model
         return [
             'is_active' => 'boolean',
         ];
+    }
+
+    public function inventoryItems(): HasMany
+    {
+        return $this->hasMany(InventoryItem::class);
     }
 }

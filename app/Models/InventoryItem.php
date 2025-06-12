@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\InventoryTransaction;
+use App\Models\InventoryCategory;
 use App\Traits\LogsAudit;
 
 class InventoryItem extends Model
@@ -18,7 +19,7 @@ class InventoryItem extends Model
         'user_id',
         'name',
         'description',
-        'category',
+        'inventory_category_id',
         'department',
         'location',
         'supplier',
@@ -43,5 +44,10 @@ class InventoryItem extends Model
     public function transactions(): HasMany
     {
         return $this->hasMany(InventoryTransaction::class)->latest();
+    }
+
+    public function inventoryCategory(): BelongsTo
+    {
+        return $this->belongsTo(InventoryCategory::class);
     }
 }
