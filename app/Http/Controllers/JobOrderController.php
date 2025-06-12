@@ -81,7 +81,7 @@ class JobOrderController extends Controller
                 Rule::exists('job_order_types', 'name')->where('is_active', true),
             ],
             'description' => 'required|string',
-            'status' => 'required|string',
+            'status' => ['required', 'string', Rule::in(JobOrder::STATUSES)],
             'attachment' => 'nullable|file|max:2048',
         ]);
         if ($request->hasFile('attachment')) {
@@ -317,6 +317,7 @@ class JobOrderController extends Controller
     public function start(Request $request, JobOrder $jobOrder)
     {
         abort_unless($jobOrder->assigned_to_id === $request->user()->id, Response::HTTP_FORBIDDEN);
+        abort_if($jobOrder->status !== JobOrder::STATUS_ASSIGNED, Response::HTTP_FORBIDDEN);
 
         $data = $request->validate([
             'notes' => 'nullable|string',
@@ -335,6 +336,7 @@ class JobOrderController extends Controller
     public function finish(Request $request, JobOrder $jobOrder)
     {
         abort_unless($jobOrder->assigned_to_id === $request->user()->id, Response::HTTP_FORBIDDEN);
+        abort_if($jobOrder->status !== JobOrder::STATUS_IN_PROGRESS, Response::HTTP_FORBIDDEN);
 
         $data = $request->validate([
             'notes' => 'nullable|string',

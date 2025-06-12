@@ -22,6 +22,18 @@ class JobOrder extends Model
     public const STATUS_COMPLETED = 'completed';
     public const STATUS_CLOSED = 'closed';
 
+    /** All valid status values */
+    public const STATUSES = [
+        self::STATUS_PENDING_HEAD,
+        self::STATUS_PENDING_PRESIDENT,
+        self::STATUS_PENDING_FINANCE,
+        self::STATUS_APPROVED,
+        self::STATUS_ASSIGNED,
+        self::STATUS_IN_PROGRESS,
+        self::STATUS_COMPLETED,
+        self::STATUS_CLOSED,
+    ];
+
     protected $fillable = [
         'user_id',
         'ticket_id',
