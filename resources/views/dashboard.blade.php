@@ -32,7 +32,7 @@
         </select>
     </form>
     <div class="table-responsive">
-    <table class="table table-striped">
+    <table class="table table-striped" id="tickets-table">
         <thead>
             <tr>
                 <th>Subject</th>
@@ -40,7 +40,7 @@
                 <th>Due</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="tickets-body">
             @forelse ($tickets as $ticket)
             <tr>
                 <td>{{ $ticket->formatted_subject }}</td>
@@ -65,7 +65,7 @@
         </select>
     </form>
     <div class="table-responsive">
-    <table class="table table-striped">
+    <table class="table table-striped" id="job-orders-table">
         <thead>
             <tr>
                 <th>Type</th>
@@ -73,7 +73,7 @@
                 <th>Status</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="job-orders-body">
             @forelse ($jobOrders as $order)
             <tr>
                 <td>{{ $order->job_type }}</td>
@@ -98,14 +98,14 @@
         </select>
     </form>
     <div class="table-responsive">
-    <table class="table table-striped">
+    <table class="table table-striped" id="requisitions-table">
         <thead>
             <tr>
                 <th>Purpose</th>
                 <th>Status</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="requisitions-body">
             @forelse ($requisitions as $req)
             <tr>
                 <td>{{ Str::limit($req->purpose, 50) }}</td>
@@ -129,7 +129,7 @@
         </select>
     </form>
     <div class="table-responsive">
-    <table class="table table-striped">
+    <table class="table table-striped" id="purchase-orders-table">
         <thead>
             <tr>
                 <th>Item</th>
@@ -137,7 +137,7 @@
                 <th>Status</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="purchase-orders-body">
             @forelse ($purchaseOrders as $po)
             <tr>
                 <td>{{ $po->item }}</td>
@@ -157,14 +157,14 @@
         <div class="col-md-6">
             <h5>Incoming</h5>
             <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped" id="incoming-docs-table">
                 <thead>
                     <tr>
                         <th>Document</th>
                         <th>User</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="incoming-docs-body">
                     @forelse ($incomingDocuments as $log)
                     <tr>
                         <td>{{ $log->document->title }}</td>
@@ -181,14 +181,14 @@
         <div class="col-md-6">
             <h5>Outgoing</h5>
             <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped" id="outgoing-docs-table">
                 <thead>
                     <tr>
                         <th>Document</th>
                         <th>User</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="outgoing-docs-body">
                     @forelse ($outgoingDocuments as $log)
                     <tr>
                         <td>{{ $log->document->title }}</td>
@@ -206,14 +206,14 @@
 
     <h2 class="mt-5">For Approval/Checking</h2>
     <div class="table-responsive">
-    <table class="table table-striped">
+    <table class="table table-striped" id="for-approval-table">
         <thead>
             <tr>
                 <th>Document</th>
                 <th>User</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="for-approval-body">
             @forelse ($forApprovalDocuments as $log)
             <tr>
                 <td>{{ $log->document->title }}</td>
