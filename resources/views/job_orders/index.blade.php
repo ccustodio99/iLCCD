@@ -35,7 +35,7 @@
                             @method('PUT')
                             <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Close this job order?')">Close</button>
                         </form>
-                    @else
+                    @elseif($jobOrder->user_id === auth()->id())
                         <form action="{{ route('job-orders.complete', $jobOrder) }}" method="POST" class="d-inline">
                             @csrf
                             @method('PUT')
