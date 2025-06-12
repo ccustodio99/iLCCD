@@ -30,6 +30,8 @@ class User extends Authenticatable
         'role',
         'department',
         'is_active',
+        'failed_login_attempts',
+        'lockout_until',
     ];
 
     /**
@@ -53,6 +55,8 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'failed_login_attempts' => 'integer',
+            'lockout_until' => 'datetime',
         ];
     }
 
