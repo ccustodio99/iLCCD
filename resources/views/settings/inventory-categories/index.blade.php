@@ -13,6 +13,7 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Parent</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -21,6 +22,7 @@
             @foreach ($categories as $category)
             <tr>
                 <td>{{ $category->name }}</td>
+                <td>{{ optional($category->parent)->name }}</td>
                 <td>
                     @if($category->is_active)
                         <span class="badge bg-success">Active</span>

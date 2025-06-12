@@ -13,6 +13,7 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Parent</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -21,6 +22,7 @@
             @foreach ($types as $type)
             <tr>
                 <td>{{ $type->name }}</td>
+                <td>{{ optional($type->parent)->name }}</td>
                 <td>
                     @if($type->is_active)
                         <span class="badge bg-success">Active</span>
