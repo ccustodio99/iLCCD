@@ -12,7 +12,7 @@
             </a>
         </p>
     @endif
-    <form action="{{ route('requisitions.update', $requisition) }}" method="POST">
+    <form action="{{ route('requisitions.update', $requisition) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div id="items-container">
@@ -41,6 +41,13 @@
         <div class="mb-3">
             <label class="form-label">Remarks</label>
             <textarea name="remarks" class="form-control" rows="2">{{ old('remarks', $requisition->remarks) }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Attachment</label>
+            <input type="file" name="attachment" class="form-control">
+            @if($requisition->attachment_path)
+                <small class="text-muted">Current: <a href="{{ route('requisitions.attachment', $requisition) }}" target="_blank">Download</a></small>
+            @endif
         </div>
         <div class="mb-3">
             <label class="form-label">Status</label>

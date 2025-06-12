@@ -38,6 +38,7 @@ class Requisition extends Model
         'job_order_id',
         'department',
         'purpose',
+        'attachment_path',
         'status',
         'remarks',
         'approved_by_id',
@@ -48,6 +49,7 @@ class Requisition extends Model
     {
         return [
             'approved_at' => 'datetime',
+            'attachment_path' => 'string',
         ];
     }
 

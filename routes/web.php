@@ -75,6 +75,7 @@ Route::middleware('auth')->group(function () {
     Route::put('requisitions/{requisition}/approve', [RequisitionController::class,'approve'])
         ->middleware('role:head,president,finance')
         ->name('requisitions.approve');
+    Route::get('requisitions/{requisition}/attachment', [RequisitionController::class, 'downloadAttachment'])->name('requisitions.attachment');
     Route::resource('requisitions', RequisitionController::class)->except('show');
     Route::resource('inventory', InventoryItemController::class)->except('show');
     Route::post('inventory/{inventory}/issue', [InventoryItemController::class, 'issue'])->name('inventory.issue');

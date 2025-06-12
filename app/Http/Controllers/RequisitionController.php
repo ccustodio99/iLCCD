@@ -7,6 +7,7 @@ use App\Models\InventoryItem;
 use App\Models\PurchaseOrder;
 use App\Models\InventoryTransaction;
 use App\Models\JobOrder;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -37,15 +38,23 @@ class RequisitionController extends Controller
             'specification.*' => 'nullable|string',
             'purpose' => 'required|string',
             'remarks' => 'nullable|string',
+            'attachment' => 'nullable|file|max:2048',
         ]);
 
-        $requisition = Requisition::create([
+        $requisitionData = [
             'user_id' => $request->user()->id,
             'department' => $request->user()->department,
             'purpose' => $data['purpose'],
             'remarks' => $data['remarks'] ?? null,
             'status' => Requisition::STATUS_PENDING_HEAD,
-        ]);
+        ];
+
+        if ($request->hasFile('attachment')) {
+            $requisitionData['attachment_path'] = $request->file('attachment')
+                ->store('requisition_attachments', 'public');
+        }
+
+        $requisition = Requisition::create($requisitionData);
 
         foreach ($data['item'] as $i => $name) {
             $requisition->items()->create([
@@ -78,13 +87,24 @@ class RequisitionController extends Controller
             'purpose' => 'required|string',
             'remarks' => 'nullable|string',
             'status' => 'required|string',
+            'attachment' => 'nullable|file|max:2048',
         ]);
 
-        $requisition->update([
+        $updateData = [
             'purpose' => $data['purpose'],
             'remarks' => $data['remarks'] ?? null,
             'status' => $data['status'],
-        ]);
+        ];
+
+        if ($request->hasFile('attachment')) {
+            if ($requisition->attachment_path) {
+                Storage::disk('public')->delete($requisition->attachment_path);
+            }
+            $updateData['attachment_path'] = $request->file('attachment')
+                ->store('requisition_attachments', 'public');
+        }
+
+        $requisition->update($updateData);
 
         $requisition->items()->delete();
         foreach ($data['item'] as $i => $name) {
@@ -143,6 +163,19 @@ class RequisitionController extends Controller
         }
         $requisition->delete();
         return redirect()->route('requisitions.index');
+    }
+
+    public function downloadAttachment(Requisition $requisition)
+    {
+        if ($requisition->attachment_path === null) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        if ($requisition->user_id !== auth()->id()) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+
+        return Storage::disk('public')->download($requisition->attachment_path);
     }
 
     /** Show requisitions awaiting the logged-in approver */
