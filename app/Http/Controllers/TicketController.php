@@ -325,7 +325,7 @@ class TicketController extends Controller
         $requisition = Requisition::create([
             'user_id' => $ticket->user_id,
             'ticket_id' => $ticket->id,
-            'department' => auth()->user()->department,
+            'department' => $ticket->user->department,
             'purpose' => $ticket->description,
             'status' => 'pending_head',
         ]);
