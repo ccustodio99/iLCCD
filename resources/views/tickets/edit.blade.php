@@ -5,7 +5,7 @@
 @section('content')
 <div class="container">
     <h1 class="mb-4">Edit Ticket</h1>
-    <form action="{{ route('tickets.update', $ticket) }}" method="POST">
+    <form action="{{ route('tickets.update', $ticket) }}" method="POST" class="ticket-form">
         @csrf
         @method('PUT')
         <div class="mb-3">
@@ -74,21 +74,6 @@
         <button type="submit" class="btn btn-primary me-2">Save</button>
         <a href="{{ route('tickets.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
-    <script>
-        document.querySelectorAll('.category-btn').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                document.querySelectorAll('.category-collapse').forEach(function (col) {
-                    if (col.id !== btn.dataset.bsTarget.substring(1)) {
-                        bootstrap.Collapse.getOrCreateInstance(col).hide();
-                    }
-                });
-            });
-        });
-        document.querySelectorAll('.subcategory-select').forEach(function (sel) {
-            sel.addEventListener('change', function () {
-                document.getElementById('ticket_category_id').value = this.value;
-            });
-        });
-    </script>
+    @include('partials.category-collapse-script')
 </div>
 @endsection
