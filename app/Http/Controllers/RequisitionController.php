@@ -6,6 +6,7 @@ use App\Models\Requisition;
 use App\Models\InventoryItem;
 use App\Models\PurchaseOrder;
 use App\Models\InventoryTransaction;
+use App\Models\JobOrder;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -118,6 +119,16 @@ class RequisitionController extends Controller
                         'requisition_id' => $requisition->id,
                         'action' => 'issue',
                         'quantity' => $reqItem->quantity,
+                    ]);
+                }
+            }
+
+            if ($requisition->job_order_id) {
+                $jobOrder = $requisition->jobOrder;
+                if ($jobOrder && $jobOrder->status !== JobOrder::STATUS_APPROVED) {
+                    $jobOrder->update([
+                        'status' => JobOrder::STATUS_APPROVED,
+                        'approved_at' => now(),
                     ]);
                 }
             }
