@@ -56,7 +56,7 @@
                     <h5 class="modal-title">New Ticket</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('tickets.store') }}" method="POST">
+                <form action="{{ route('tickets.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3">
@@ -70,6 +70,10 @@
                         <div class="mb-3">
                             <label class="form-label">Description</label>
                             <textarea name="description" class="form-control" rows="4" required>{{ old('description') }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Attachment</label>
+                            <input type="file" name="attachment" class="form-control">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Assign To</label>
@@ -115,6 +119,9 @@
                     <p><strong>Category:</strong> {{ $ticket->category }}</p>
                     <p><strong>Subject:</strong> {{ $ticket->formatted_subject }}</p>
                     <p><strong>Description:</strong> {{ $ticket->description }}</p>
+                    @if($ticket->attachment_path)
+                        <p><strong>Attachment:</strong> <a href="{{ Storage::url($ticket->attachment_path) }}" target="_blank">Download</a></p>
+                    @endif
                     <p><strong>Status:</strong> {{ ucfirst($ticket->status) }}</p>
                     <p><strong>Assigned To:</strong> {{ optional($ticket->assignedTo)->name ?? 'Unassigned' }}</p>
                     <p><strong>Watchers:</strong>
@@ -186,7 +193,7 @@
                     <h5 class="modal-title">Edit Ticket</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('tickets.update', $ticket) }}" method="POST">
+                <form action="{{ route('tickets.update', $ticket) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
@@ -201,6 +208,13 @@
                         <div class="mb-3">
                             <label class="form-label">Description</label>
                             <textarea name="description" class="form-control" rows="4" required>{{ old('description', $ticket->description) }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Attachment</label>
+                            <input type="file" name="attachment" class="form-control">
+                            @if($ticket->attachment_path)
+                                <small class="text-muted">Current: <a href="{{ Storage::url($ticket->attachment_path) }}" target="_blank">Download</a></small>
+                            @endif
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Assign To</label>

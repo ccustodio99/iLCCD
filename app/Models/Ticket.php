@@ -22,6 +22,7 @@ class Ticket extends Model
         'category',
         'subject',
         'description',
+        'attachment_path',
         'status',
         'due_at',
         'escalated_at',
