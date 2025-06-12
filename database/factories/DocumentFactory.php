@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Document;
 use App\Models\User;
+use App\Models\DocumentCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +20,7 @@ class DocumentFactory extends Factory
             'user_id' => User::factory(),
             'title' => fake()->sentence(3),
             'description' => fake()->sentence(),
-            'category' => fake()->randomElement(['policy', 'syllabus', 'report']),
+            'document_category_id' => DocumentCategory::factory(),
             'department' => 'CCS',
             'current_version' => 1,
         ];

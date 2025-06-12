@@ -9,6 +9,7 @@ use App\Models\DocumentVersion;
 use App\Models\InventoryItem;
 use App\Models\JobOrder;
 use App\Models\PurchaseOrder;
+use App\Models\DocumentCategory;
 use App\Models\Requisition;
 use App\Models\Ticket;
 use App\Models\TicketComment;
@@ -286,8 +287,22 @@ class DemoSeeder extends Seeder
             ]);
         });
 
+        $docCategories = collect(['Policy', 'Syllabus', 'Report'])->map(function ($name) {
+            return DocumentCategory::create([
+                'name' => $name,
+                'is_active' => true,
+            ]);
+        });
+
         // Documents with versions, logs and audit trails
-        $documents = Document::factory()->count(3)->for($admin)->create();
+        $documents = Document::factory()->count(3)
+            ->for($admin)
+            ->state(new Sequence(
+                ['document_category_id' => $docCategories[0]->id],
+                ['document_category_id' => $docCategories[1]->id],
+                ['document_category_id' => $docCategories[2]->id]
+            ))
+            ->create();
         $documents->each(function (Document $document) use ($admin) {
             $versions = DocumentVersion::factory()->count(3)
                 ->for($document)

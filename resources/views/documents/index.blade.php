@@ -21,7 +21,7 @@
             @foreach ($documents as $document)
             <tr>
                 <td>{{ $document->title }}</td>
-                <td>{{ ucfirst($document->category) }}</td>
+                <td>{{ $document->documentCategory->name }}</td>
                 <td>{{ $document->current_version }}</td>
                 <td>
                     <a href="{{ route('documents.show', $document) }}" class="btn btn-sm btn-info">View</a>

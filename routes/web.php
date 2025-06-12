@@ -36,6 +36,7 @@ use App\Http\Controllers\KpiAuditDashboardController;
 use App\Http\Controllers\TicketCategoryController;
 use App\Http\Controllers\JobOrderTypeController;
 use App\Http\Controllers\InventoryCategoryController;
+use App\Http\Controllers\DocumentCategoryController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -84,6 +85,7 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:admin')->prefix('settings')->group(function () {
         Route::resource('ticket-categories', TicketCategoryController::class)->except('show');
+        Route::resource('document-categories', DocumentCategoryController::class)->except('show');
         Route::put('inventory-categories/{inventoryCategory}/disable', [InventoryCategoryController::class, 'disable'])->name('inventory-categories.disable');
         Route::resource('inventory-categories', InventoryCategoryController::class)->except('show');
         Route::put('job-order-types/{jobOrderType}/disable', [JobOrderTypeController::class, 'disable'])->name('job-order-types.disable');
