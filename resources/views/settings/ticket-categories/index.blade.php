@@ -6,7 +6,10 @@
 <div class="container">
     <h1 class="mb-4">Ticket Categories</h1>
     @include('components.per-page-selector')
-    <a href="{{ route('ticket-categories.create') }}" class="btn btn-sm btn-primary mb-3">Add Category</a>
+    <div class="mb-3 d-flex flex-wrap gap-2">
+        <a href="{{ route('settings.index') }}" class="btn btn-secondary btn-sm">Back to Settings</a>
+        <a href="{{ route('ticket-categories.create') }}" class="btn btn-sm btn-primary">Add Category</a>
+    </div>
     <div class="table-responsive">
     <table class="table table-striped">
     <caption class="visually-hidden">Ticket Categories</caption>
