@@ -31,7 +31,11 @@ class JobOrderController extends Controller
 
     public function create()
     {
-        $types = JobOrderType::where('is_active', true)->orderBy('name')->pluck('name');
+        $types = JobOrderType::whereNull('parent_id')
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->with('children')
+            ->get();
 
         return view('job_orders.create', compact('types'));
     }
@@ -39,11 +43,15 @@ class JobOrderController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
+            'type_parent' => ['required', 'exists:job_order_types,id'],
             'job_type' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::exists('job_order_types', 'name')->where('is_active', true),
+                Rule::exists('job_order_types', 'name')->where(function ($q) use ($request) {
+                    $q->where('parent_id', $request->type_parent)
+                        ->where('is_active', true);
+                }),
             ],
             'description' => 'required|string',
             'attachment' => 'nullable|file|max:2048',
@@ -54,6 +62,7 @@ class JobOrderController extends Controller
             $data['attachment_path'] = $request->file('attachment')
                 ->store('job_order_attachments', 'public');
         }
+        unset($data['type_parent']);
         JobOrder::create($data);
         return redirect()->route('job-orders.index');
     }
@@ -63,9 +72,16 @@ class JobOrderController extends Controller
         if ($jobOrder->user_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
-        $types = JobOrderType::where('is_active', true)->orderBy('name')->pluck('name');
+        $types = JobOrderType::whereNull('parent_id')
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->with('children')
+            ->get();
 
-        return view('job_orders.edit', compact('jobOrder', 'types'));
+        $child = JobOrderType::where('name', $jobOrder->job_type)->first();
+        $parentId = $child?->parent_id;
+
+        return view('job_orders.edit', compact('jobOrder', 'types', 'parentId')); 
     }
 
     public function update(Request $request, JobOrder $jobOrder)
@@ -74,11 +90,15 @@ class JobOrderController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $data = $request->validate([
+            'type_parent' => ['required', 'exists:job_order_types,id'],
             'job_type' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::exists('job_order_types', 'name')->where('is_active', true),
+                Rule::exists('job_order_types', 'name')->where(function ($q) use ($request) {
+                    $q->where('parent_id', $request->type_parent)
+                        ->where('is_active', true);
+                }),
             ],
             'description' => 'required|string',
             'status' => ['required', 'string', Rule::in(JobOrder::STATUSES)],
@@ -91,6 +111,7 @@ class JobOrderController extends Controller
             $data['attachment_path'] = $request->file('attachment')
                 ->store('job_order_attachments', 'public');
         }
+        unset($data['type_parent']);
         $jobOrder->update($data);
         if ($data['status'] === JobOrder::STATUS_COMPLETED && $jobOrder->completed_at === null) {
             $jobOrder->completed_at = now();

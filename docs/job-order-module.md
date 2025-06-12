@@ -19,6 +19,7 @@ begins.
    - The form captures job type, description, optional attachments, and
      auto-fills the requester and department.
    - Job order types are managed under **Settings → Job Order Types**.
+   - When submitting a request, choose a **Type** first. A second dropdown then lists the available **Sub Types** for that category.
 
 2. **Post-Approval Assignment**
    - After multi-level approval (Head → President → Finance when
