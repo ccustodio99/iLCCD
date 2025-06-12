@@ -57,6 +57,26 @@
                     <p><strong>Quantity:</strong> {{ $item->quantity }}</p>
                     <p><strong>Minimum Stock:</strong> {{ $item->minimum_stock }}</p>
                     <p><strong>Status:</strong> {{ ucfirst($item->status) }}</p>
+
+                    <form action="{{ route('inventory.issue', $item) }}" method="POST" class="row g-2 mb-2">
+                        @csrf
+                        <div class="col-auto">
+                            <input type="number" name="quantity" min="1" value="1" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-warning btn-sm">Issue</button>
+                        </div>
+                    </form>
+                    <form action="{{ route('inventory.return', $item) }}" method="POST" class="row g-2">
+                        @csrf
+                        <div class="col-auto">
+                            <input type="number" name="quantity" min="1" value="1" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-success btn-sm">Return</button>
+                        </div>
+                    </form>
+
                     @include('audit_trails._list', ['logs' => $item->auditTrails])
                 </div>
                 <div class="modal-footer">
