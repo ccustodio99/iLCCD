@@ -12,6 +12,6 @@ The seeders populate several baseline records used throughout the system.
 
 Ticket categories already use a parent → child hierarchy with a `parent_id` field. Additional category types may adopt similar relationships in future versions.
 
-These defaults are seeded by `php artisan migrate --seed` and can be modified or expanded using the settings screens.
+These defaults come from **`Database\Seeders\DocumentCategorySeeder`** and are created when running `php artisan migrate --seed`. Demo data from **`DemoSeeder`** reuses these records so no duplicates are created. You can modify or expand them later using the settings screens.
 
 Additional tools include **Theme Settings** where administrators can pick primary and accent colors, select fonts, and edit the home page text. The new **Announcements** manager lets admins post messages that appear on the dashboard.
