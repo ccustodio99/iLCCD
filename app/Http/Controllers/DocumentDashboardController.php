@@ -24,7 +24,8 @@ class DocumentDashboardController extends Controller
         }
 
         $totalUploads = $metricsQuery->count();
-        $totalVersions = DocumentVersion::whereIn('document_id', $metricsQuery->pluck('id'))->count();
+        $documentIdsQuery = $metricsQuery->clone()->select('id');
+        $totalVersions = DocumentVersion::whereIn('document_id', $documentIdsQuery)->count();
         $recentLogs = $logsQuery->take(10)->get();
 
         return view('documents.dashboard', compact('totalUploads', 'totalVersions', 'recentLogs'));
