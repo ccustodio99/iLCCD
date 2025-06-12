@@ -247,10 +247,46 @@ class JobOrderController extends Controller
     public function assigned()
     {
         $jobOrders = JobOrder::where('assigned_to_id', auth()->id())
-            ->where('status', JobOrder::STATUS_ASSIGNED)
+            ->whereIn('status', [JobOrder::STATUS_ASSIGNED, JobOrder::STATUS_IN_PROGRESS])
             ->paginate(10);
 
         return view('job_orders.assigned', compact('jobOrders'));
+    }
+
+    /** Mark the job order as started */
+    public function start(Request $request, JobOrder $jobOrder)
+    {
+        abort_unless($jobOrder->assigned_to_id === $request->user()->id, Response::HTTP_FORBIDDEN);
+
+        $data = $request->validate([
+            'notes' => 'nullable|string',
+        ]);
+
+        $jobOrder->update([
+            'status' => JobOrder::STATUS_IN_PROGRESS,
+            'started_at' => now(),
+            'start_notes' => $data['notes'] ?? null,
+        ]);
+
+        return redirect()->route('job-orders.assigned');
+    }
+
+    /** Mark the job order as completed */
+    public function finish(Request $request, JobOrder $jobOrder)
+    {
+        abort_unless($jobOrder->assigned_to_id === $request->user()->id, Response::HTTP_FORBIDDEN);
+
+        $data = $request->validate([
+            'notes' => 'nullable|string',
+        ]);
+
+        $jobOrder->update([
+            'status' => JobOrder::STATUS_COMPLETED,
+            'completed_at' => now(),
+            'completion_notes' => $data['notes'] ?? null,
+        ]);
+
+        return redirect()->route('job-orders.assigned');
     }
 
     private function authorizeApproval(JobOrder $jobOrder): void

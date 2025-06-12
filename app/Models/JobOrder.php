@@ -17,6 +17,8 @@ class JobOrder extends Model
     public const STATUS_PENDING_FINANCE = 'pending_finance';
     public const STATUS_APPROVED = 'approved';
     public const STATUS_ASSIGNED = 'assigned';
+    public const STATUS_IN_PROGRESS = 'in_progress';
+    public const STATUS_COMPLETED = 'completed';
 
     protected $fillable = [
         'user_id',
@@ -28,7 +30,9 @@ class JobOrder extends Model
         'assigned_to_id',
         'approved_at',
         'started_at',
+        'start_notes',
         'completed_at',
+        'completion_notes',
     ];
 
     protected function casts(): array

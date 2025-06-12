@@ -54,6 +54,8 @@ Route::middleware('auth')->group(function () {
     Route::get('job-orders/assignments', [JobOrderController::class, 'assignments'])->name('job-orders.assignments')->middleware('role:itrc,admin');
     Route::put('job-orders/{jobOrder}/assign', [JobOrderController::class, 'assign'])->name('job-orders.assign')->middleware('role:itrc,admin');
     Route::get('job-orders/assigned', [JobOrderController::class, 'assigned'])->name('job-orders.assigned')->middleware('role:staff,itrc');
+    Route::put('job-orders/{jobOrder}/start', [JobOrderController::class, 'start'])->name('job-orders.start');
+    Route::put('job-orders/{jobOrder}/finish', [JobOrderController::class, 'finish'])->name('job-orders.finish');
     Route::resource('requisitions', RequisitionController::class)->except('show');
     Route::resource('inventory', InventoryItemController::class)->except('show');
     Route::post('inventory/{inventory}/issue', [InventoryItemController::class, 'issue'])->name('inventory.issue');
