@@ -87,7 +87,8 @@ Route::middleware('auth')->group(function () {
     Route::get('kpi-dashboard', [KpiAuditDashboardController::class, 'index'])
         ->name('kpi.dashboard');
     Route::get('kpi-dashboard/export', [KpiAuditDashboardController::class, 'export'])
-        ->name('kpi.dashboard.export');
+        ->name('kpi.dashboard.export')
+        ->middleware('role:admin');
     Route::get('audit-trails', [AuditTrailController::class, 'index'])->name('audit-trails.index');
 
     Route::middleware('role:admin')->prefix('settings')->group(function () {

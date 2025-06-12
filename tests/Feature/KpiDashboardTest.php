@@ -31,3 +31,10 @@ it('displays metrics and audit logs', function () {
     $response->assertSee('Requisitions');
     $response->assertSee('created');
 });
+
+it('prevents non-admin users from exporting audit logs', function () {
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $this->get('/kpi-dashboard/export')->assertForbidden();
+});
