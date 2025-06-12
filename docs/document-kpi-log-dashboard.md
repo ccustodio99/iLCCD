@@ -66,6 +66,6 @@ For more guides visit the [documentation index](README.md).
 ---
 
 ## 🚀 Navigation
-- Previous: [Document Management Module](document-management-module.md)
+- Previous: [Document Tracking Module](document-tracking-module.md)
 - Next: [KPI & Audit Dashboard](kpi-audit-log-dashboard.md)
 - [Documentation Index](README.md)
