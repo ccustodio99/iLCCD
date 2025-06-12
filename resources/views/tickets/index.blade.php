@@ -61,28 +61,28 @@
                 <form action="{{ route('tickets.store') }}" method="POST" enctype="multipart/form-data" class="ticket-form">
                     @csrf
                     <div class="modal-body">
+                        @php
+                            $selectedModalSub = old('ticket_category_id');
+                            $selectedModalCat = null;
+                            foreach ($categories as $cat) {
+                                if ($cat->children->contains('id', $selectedModalSub)) {
+                                    $selectedModalCat = $cat->id;
+                                    break;
+                                }
+                            }
+                            $categoryData = $categories->mapWithKeys(function($cat) {
+                                return [$cat->id => $cat->children->map(fn($c) => ['id' => $c->id, 'name' => $c->name])];
+                            });
+                        @endphp
                         <div class="mb-3">
                             <label class="form-label">Category</label>
-                            <input type="hidden" name="ticket_category_id" id="modal_ticket_category_id" value="{{ old('ticket_category_id') }}" required>
-                            <div class="d-flex flex-wrap gap-2 mb-2">
+                            <select class="form-select category-select mb-2" data-categories='@json($categoryData)' required>
+                                <option value="">Select Category</option>
                                 @foreach($categories as $cat)
-                                    <button type="button" class="btn btn-outline-primary btn-lg category-btn" data-bs-toggle="collapse" data-bs-target="#new-cat-{{ $cat->id }}" aria-expanded="{{ $cat->children->contains('id', old('ticket_category_id')) ? 'true' : 'false' }}">
-                                        {{ $cat->name }}
-                                    </button>
+                                    <option value="{{ $cat->id }}" {{ (string)$selectedModalCat === (string)$cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
                                 @endforeach
-                            </div>
-                            @foreach($categories as $cat)
-                                <div id="new-cat-{{ $cat->id }}" class="collapse category-collapse mb-3 {{ $cat->children->contains('id', old('ticket_category_id')) ? 'show' : '' }}">
-                                    <div class="card card-body">
-                                        <select class="form-select subcategory-select" data-cat-id="{{ $cat->id }}">
-                                            <option value="">Select {{ $cat->name }} option</option>
-                                            @foreach($cat->children as $child)
-                                                <option value="{{ $child->id }}" {{ old('ticket_category_id') == $child->id ? 'selected' : '' }}>{{ $child->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            @endforeach
+                            </select>
+                            <select name="ticket_category_id" class="form-select subcategory-select" data-selected="{{ $selectedModalSub }}" required></select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Subject</label>
@@ -218,28 +218,28 @@
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
+                        @php
+                            $editSub = old('ticket_category_id', $ticket->ticket_category_id);
+                            $editCat = null;
+                            foreach ($categories as $cat) {
+                                if ($cat->children->contains('id', $editSub)) {
+                                    $editCat = $cat->id;
+                                    break;
+                                }
+                            }
+                            $categoryData = $categories->mapWithKeys(function($cat) {
+                                return [$cat->id => $cat->children->map(fn($c) => ['id' => $c->id, 'name' => $c->name])];
+                            });
+                        @endphp
                         <div class="mb-3">
                             <label class="form-label">Category</label>
-                            <input type="hidden" name="ticket_category_id" id="modal_ticket_category_id_edit{{ $ticket->id }}" value="{{ old('ticket_category_id', $ticket->ticket_category_id) }}" class="ticket_category_id_input" required>
-                            <div class="d-flex flex-wrap gap-2 mb-2">
+                            <select class="form-select category-select mb-2" data-categories='@json($categoryData)' required>
+                                <option value="">Select Category</option>
                                 @foreach($categories as $cat)
-                                    <button type="button" class="btn btn-outline-primary btn-lg category-btn" data-bs-toggle="collapse" data-bs-target="#edit{{ $ticket->id }}-cat-{{ $cat->id }}" aria-expanded="{{ $cat->children->contains('id', old('ticket_category_id', $ticket->ticket_category_id)) ? 'true' : 'false' }}">
-                                        {{ $cat->name }}
-                                    </button>
+                                    <option value="{{ $cat->id }}" {{ (string)$editCat === (string)$cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
                                 @endforeach
-                            </div>
-                            @foreach($categories as $cat)
-                                <div id="edit{{ $ticket->id }}-cat-{{ $cat->id }}" class="collapse category-collapse mb-3 {{ $cat->children->contains('id', old('ticket_category_id', $ticket->ticket_category_id)) ? 'show' : '' }}">
-                                    <div class="card card-body">
-                                        <select class="form-select subcategory-select" data-cat-id="{{ $cat->id }}">
-                                            <option value="">Select {{ $cat->name }} option</option>
-                                            @foreach($cat->children as $child)
-                                                <option value="{{ $child->id }}" {{ old('ticket_category_id', $ticket->ticket_category_id) == $child->id ? 'selected' : '' }}>{{ $child->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            @endforeach
+                            </select>
+                            <select name="ticket_category_id" class="form-select subcategory-select" data-selected="{{ $editSub }}" required></select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Subject</label>
@@ -298,6 +298,6 @@
         </div>
     </div>
     @endforeach
-    @include('partials.category-collapse-script')
+    @include('partials.category-dropdown-script')
 </div>
 @endsection
