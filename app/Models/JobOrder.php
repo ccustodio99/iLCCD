@@ -16,6 +16,7 @@ class JobOrder extends Model
         'ticket_id',
         'job_type',
         'description',
+        'attachment_path',
         'status',
         'assigned_to_id',
         'approved_at',
@@ -29,6 +30,7 @@ class JobOrder extends Model
             'approved_at' => 'datetime',
             'started_at' => 'datetime',
             'completed_at' => 'datetime',
+            'attachment_path' => 'string',
         ];
     }
 

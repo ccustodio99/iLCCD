@@ -60,6 +60,9 @@
                     <p><strong>Approved At:</strong> {{ $jobOrder->approved_at?->format('Y-m-d H:i') ?? '-' }}</p>
                     <p><strong>Started At:</strong> {{ $jobOrder->started_at?->format('Y-m-d H:i') ?? '-' }}</p>
                     <p><strong>Completed At:</strong> {{ $jobOrder->completed_at?->format('Y-m-d H:i') ?? '-' }}</p>
+                    @if($jobOrder->attachment_path)
+                        <p><strong>Attachment:</strong> <a href="{{ route('job-orders.attachment', $jobOrder) }}" target="_blank">Download</a></p>
+                    @endif
                     @if($jobOrder->requisitions->count())
                         <h6>Requisitions</h6>
                         <ul>
@@ -83,7 +86,7 @@
                     <h5 class="modal-title">Edit Job Order</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('job-orders.update', $jobOrder) }}" method="POST">
+                <form action="{{ route('job-orders.update', $jobOrder) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
@@ -94,6 +97,13 @@
                         <div class="mb-3">
                             <label class="form-label">Description</label>
                             <textarea name="description" class="form-control" rows="4" required>{{ old('description', $jobOrder->description) }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Attachment</label>
+                            <input type="file" name="attachment" class="form-control">
+                            @if($jobOrder->attachment_path)
+                                <small class="text-muted">Current: <a href="{{ route('job-orders.attachment', $jobOrder) }}" target="_blank">Download</a></small>
+                            @endif
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Status</label>
@@ -122,7 +132,7 @@
                     <h5 class="modal-title" id="newJobOrderModalLabel">New Job Order</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('job-orders.store') }}" method="POST">
+                <form action="{{ route('job-orders.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3">
@@ -132,6 +142,10 @@
                         <div class="mb-3">
                             <label class="form-label">Description</label>
                             <textarea name="description" class="form-control" rows="4" required>{{ old('description') }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Attachment</label>
+                            <input type="file" name="attachment" class="form-control">
                         </div>
                     </div>
                     <div class="modal-footer">

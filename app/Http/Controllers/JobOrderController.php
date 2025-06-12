@@ -28,9 +28,14 @@ class JobOrderController extends Controller
         $data = $request->validate([
             'job_type' => 'required|string|max:255',
             'description' => 'required|string',
+            'attachment' => 'nullable|file|max:2048',
         ]);
         $data['user_id'] = $request->user()->id;
         $data['status'] = 'new';
+        if ($request->hasFile('attachment')) {
+            $data['attachment_path'] = $request->file('attachment')
+                ->store('job_order_attachments', 'public');
+        }
         JobOrder::create($data);
         return redirect()->route('job-orders.index');
     }
@@ -52,7 +57,15 @@ class JobOrderController extends Controller
             'job_type' => 'required|string|max:255',
             'description' => 'required|string',
             'status' => 'required|string',
+            'attachment' => 'nullable|file|max:2048',
         ]);
+        if ($request->hasFile('attachment')) {
+            if ($jobOrder->attachment_path) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($jobOrder->attachment_path);
+            }
+            $data['attachment_path'] = $request->file('attachment')
+                ->store('job_order_attachments', 'public');
+        }
         $jobOrder->update($data);
         if ($data['status'] === 'completed' && $jobOrder->completed_at === null) {
             $jobOrder->completed_at = now();
@@ -123,5 +136,19 @@ class JobOrderController extends Controller
         }
 
         return redirect()->route('job-orders.index');
+    }
+
+    public function downloadAttachment(JobOrder $jobOrder)
+    {
+        if ($jobOrder->attachment_path === null) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        if ($jobOrder->user_id !== auth()->id()) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+
+        return \Illuminate\Support\Facades\Storage::disk('public')
+            ->download($jobOrder->attachment_path);
     }
 }
