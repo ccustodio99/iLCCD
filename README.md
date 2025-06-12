@@ -159,7 +159,7 @@ Every action is traceable; every step is value-aligned.
 - **RBAC:** Strict, granular permission by role & department
 - **Middleware:** `role` middleware protects sensitive routes
 - **Secure login:** HTTPS, bcrypt/Argon2 hashing
-- **Sessions:** Auto-logout (15 min inactivity), ID regeneration
+- **Sessions:** Auto-logout after 15 minutes (configurable via `SESSION_LIFETIME`), ID regeneration
 - **CSRF protection:** On all sensitive forms
 - **Audit logs:** Every action, permission change, and access attempt is tracked
 

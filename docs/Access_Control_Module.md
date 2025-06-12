@@ -29,7 +29,7 @@ The Access Control module is the core of security and data integrity in the syst
 
 ### 3. Session Management and Timeout
 - Each login creates a secure PHP session.
-- **Automatic logout** after a configurable period of inactivity (e.g., 15 minutes).
+- **Automatic logout** after 15 minutes of inactivity (configurable via `SESSION_LIFETIME`).
 - **Manual logout** option on every page.
 - Session tokens are regenerated on privilege change and logout.
 - Session storage and handling prevent session hijacking (store session ID in HTTP-only, secure cookies).
@@ -51,7 +51,7 @@ The Access Control module is the core of security and data integrity in the syst
 - Role-based middleware restricts access to routes.
 - Passwords are hashed and sessions regenerate on login/logout.
 - Accounts are locked for 15 minutes after five failed login attempts and audit logs capture these events.
-- Features like two-factor auth and automatic session timeout are not yet implemented.
+- Two-factor auth is not yet implemented. Automatic session timeout logs users out after 15 minutes of inactivity.
 
 ---
 
