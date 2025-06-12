@@ -50,3 +50,16 @@ it('prevents others from downloading purchase order attachment', function () {
     $this->get("/purchase-orders/{$order->id}/attachment")->assertForbidden();
 });
 
+it('allows admin to download any purchase order attachment', function () {
+    Storage::fake('public');
+    $owner = User::factory()->create(['role' => 'finance']);
+    $admin = User::factory()->create(['role' => 'admin']);
+    $path = UploadedFile::fake()->create('file.txt', 1)->store('purchase_order_attachments', 'public');
+    $order = PurchaseOrder::factory()->for($owner)->create(['attachment_path' => $path]);
+
+    $this->actingAs($admin);
+    $this->get("/purchase-orders/{$order->id}/attachment")
+        ->assertOk()
+        ->assertDownload(basename($path));
+});
+

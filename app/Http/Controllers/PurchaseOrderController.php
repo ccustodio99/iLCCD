@@ -18,10 +18,13 @@ class PurchaseOrderController extends Controller
     {
         $perPage = $this->getPerPage($request);
 
-        $orders = PurchaseOrder::where('user_id', auth()->id())
-            ->with('auditTrails.user')
-            ->paginate($perPage)
-            ->withQueryString();
+        $query = PurchaseOrder::with('auditTrails.user');
+
+        if (!in_array(auth()->user()->role, ['finance', 'admin'], true)) {
+            $query->where('user_id', auth()->id());
+        }
+
+        $orders = $query->paginate($perPage)->withQueryString();
 
         return view('purchase_orders.index', compact('orders'));
     }
@@ -58,7 +61,8 @@ class PurchaseOrderController extends Controller
 
     public function edit(PurchaseOrder $purchaseOrder)
     {
-        if ($purchaseOrder->user_id !== auth()->id()) {
+        $user = auth()->user();
+        if ($purchaseOrder->user_id !== $user->id && !in_array($user->role, ['finance', 'admin'], true)) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $purchaseOrder->load('auditTrails.user');
@@ -67,7 +71,8 @@ class PurchaseOrderController extends Controller
 
     public function update(Request $request, PurchaseOrder $purchaseOrder)
     {
-        if ($purchaseOrder->user_id !== auth()->id()) {
+        $user = auth()->user();
+        if ($purchaseOrder->user_id !== $user->id && !in_array($user->role, ['finance', 'admin'], true)) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $data = $request->validate([
@@ -107,7 +112,8 @@ class PurchaseOrderController extends Controller
 
     public function destroy(PurchaseOrder $purchaseOrder)
     {
-        if ($purchaseOrder->user_id !== auth()->id()) {
+        $user = auth()->user();
+        if ($purchaseOrder->user_id !== $user->id && !in_array($user->role, ['finance', 'admin'], true)) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $purchaseOrder->delete();
@@ -120,7 +126,8 @@ class PurchaseOrderController extends Controller
             abort(Response::HTTP_NOT_FOUND);
         }
 
-        if ($purchaseOrder->user_id !== auth()->id()) {
+        $user = auth()->user();
+        if ($purchaseOrder->user_id !== $user->id && !in_array($user->role, ['finance', 'admin'], true)) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
