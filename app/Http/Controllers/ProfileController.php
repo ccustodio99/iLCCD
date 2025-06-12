@@ -20,7 +20,7 @@ class ProfileController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|confirmed|min:8',
+            'password' => ['nullable', 'confirmed', 'min:8', 'regex:/[A-Za-z]/', 'regex:/[0-9]/', 'regex:/[^A-Za-z0-9]/'],
         ]);
 
         $user->name = $data['name'];

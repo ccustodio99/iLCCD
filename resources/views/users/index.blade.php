@@ -5,6 +5,7 @@
 @section('content')
 <div class="container">
     <h1 class="mb-4">Users</h1>
+    <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary mb-3">Add User</a>
     <div class="table-responsive">
     <table class="table table-striped">
         <thead>
