@@ -5,6 +5,7 @@
 @section('content')
 <div class="container">
     <h1 class="mb-4">My Documents</h1>
+    @include('components.per-page-selector')
     <a href="{{ route('documents.create') }}" class="btn btn-primary mb-3">Upload Document</a>
     <div class="table-responsive">
     <table class="table table-striped">

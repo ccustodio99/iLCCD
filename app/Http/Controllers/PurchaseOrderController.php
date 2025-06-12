@@ -13,11 +13,15 @@ class PurchaseOrderController extends Controller
     {
         $this->middleware('role:finance,admin')->except(['index', 'downloadAttachment']);
     }
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = $this->getPerPage($request);
+
         $orders = PurchaseOrder::where('user_id', auth()->id())
             ->with('auditTrails.user')
-            ->paginate(10);
+            ->paginate($perPage)
+            ->withQueryString();
+
         return view('purchase_orders.index', compact('orders'));
     }
 

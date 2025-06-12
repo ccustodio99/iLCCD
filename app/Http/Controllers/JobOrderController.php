@@ -11,15 +11,19 @@ use Symfony\Component\HttpFoundation\Response;
 
 class JobOrderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = $this->getPerPage($request);
+
         $jobOrders = JobOrder::with(['requisitions', 'ticket', 'auditTrails.user'])
             ->where(function ($q) {
                 $q->where('user_id', auth()->id())
                     ->orWhere('assigned_to_id', auth()->id());
             })
-            ->paginate(10);
-        return view('job_orders.index', compact('jobOrders')); 
+            ->paginate($perPage)
+            ->withQueryString();
+
+        return view('job_orders.index', compact('jobOrders'));
     }
 
     public function create()
@@ -164,8 +168,9 @@ class JobOrderController extends Controller
     }
 
     /** Show job orders awaiting the logged-in approver */
-    public function approvals()
+    public function approvals(Request $request)
     {
+        $perPage = $this->getPerPage($request);
         $role = auth()->user()->role;
         $statusMap = [
             'head' => JobOrder::STATUS_PENDING_HEAD,
@@ -178,7 +183,8 @@ class JobOrderController extends Controller
 
         $jobOrders = JobOrder::with('user')
             ->where('status', $status)
-            ->paginate(10);
+            ->paginate($perPage)
+            ->withQueryString();
 
         return view('job_orders.approvals', compact('jobOrders'));
     }
@@ -220,10 +226,13 @@ class JobOrderController extends Controller
     }
 
     /** Show approved job orders for assignment */
-    public function assignments()
+    public function assignments(Request $request)
     {
+        $perPage = $this->getPerPage($request);
+
         $jobOrders = JobOrder::where('status', JobOrder::STATUS_APPROVED)
-            ->paginate(10);
+            ->paginate($perPage)
+            ->withQueryString();
 
         $staff = \App\Models\User::where('role', 'staff')->pluck('name', 'id');
 
@@ -255,11 +264,14 @@ class JobOrderController extends Controller
     }
 
     /** Show job orders assigned to the logged in user */
-    public function assigned()
+    public function assigned(Request $request)
     {
+        $perPage = $this->getPerPage($request);
+
         $jobOrders = JobOrder::where('assigned_to_id', auth()->id())
             ->whereIn('status', [JobOrder::STATUS_ASSIGNED, JobOrder::STATUS_IN_PROGRESS])
-            ->paginate(10);
+            ->paginate($perPage)
+            ->withQueryString();
 
         return view('job_orders.assigned', compact('jobOrders'));
     }

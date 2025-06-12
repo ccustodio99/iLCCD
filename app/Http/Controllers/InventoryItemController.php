@@ -9,11 +9,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class InventoryItemController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = $this->getPerPage($request);
+
         $items = InventoryItem::where('user_id', auth()->id())
             ->with(['auditTrails.user', 'transactions.user'])
-            ->paginate(10);
+            ->paginate($perPage)
+            ->withQueryString();
+
         return view('inventory.index', compact('items'));
     }
 

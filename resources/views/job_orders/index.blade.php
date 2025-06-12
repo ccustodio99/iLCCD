@@ -5,6 +5,7 @@
 @section('content')
 <div class="container">
     <h1 class="mb-4">My Job Orders</h1>
+    @include('components.per-page-selector')
     <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#newJobOrderModal">New Job Order</button>
     <div class="table-responsive">
     <table class="table table-striped">
