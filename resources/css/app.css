@@ -10,10 +10,3 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
-/* Smaller icons for pagination controls */
-.pagination .page-link[rel="prev"],
-.pagination .page-link[rel="next"],
-.pagination .page-link[aria-hidden="true"] {
-    font-size: 0.75rem;
-    line-height: 1;
-}
