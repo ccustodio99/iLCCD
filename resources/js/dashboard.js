@@ -78,6 +78,10 @@ async function loadDashboardData() {
             });
             renderTableBody('for-approval-body', rows);
         }
+        const statusEl = document.getElementById('dashboard-status');
+        if (statusEl) {
+            statusEl.textContent = 'Dashboard updated';
+        }
     } catch (e) {
         console.error(e);
     }
