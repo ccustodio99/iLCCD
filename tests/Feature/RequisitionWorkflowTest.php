@@ -1,0 +1,52 @@
+<?php
+
+use App\Models\Requisition;
+use App\Models\User;
+
+it('enforces approval chain and displays remarks', function () {
+    $requester = User::factory()->create(['role' => 'staff']);
+    $head = User::factory()->create(['role' => 'head']);
+    $president = User::factory()->create(['role' => 'president']);
+    $finance = User::factory()->create(['role' => 'finance']);
+
+    $this->actingAs($requester);
+    $this->post('/requisitions', [
+        'item' => ['Paper'],
+        'quantity' => [1],
+        'specification' => ['A4'],
+        'purpose' => 'Office',
+        'remarks' => 'For approval chain',
+    ])->assertRedirect('/requisitions');
+
+    $req = Requisition::first();
+    expect($req->status)->toBe(Requisition::STATUS_PENDING_HEAD);
+    expect($req->remarks)->toBe('For approval chain');
+
+    $this->get('/requisitions')->assertSee('For approval chain');
+
+    $this->actingAs($head);
+    $this->get('/requisitions/approvals')->assertSee('For approval chain');
+    $this->put("/requisitions/{$req->id}/approve")
+        ->assertRedirect('/requisitions/approvals');
+
+    $req->refresh();
+    expect($req->status)->toBe(Requisition::STATUS_PENDING_PRESIDENT);
+
+    $this->actingAs($head);
+    $this->put("/requisitions/{$req->id}/approve")
+        ->assertForbidden();
+
+    $this->actingAs($president);
+    $this->put("/requisitions/{$req->id}/approve");
+
+    $req->refresh();
+    expect($req->status)->toBe(Requisition::STATUS_PENDING_FINANCE);
+
+    $this->actingAs($finance);
+    $this->put("/requisitions/{$req->id}/approve");
+
+    $req->refresh();
+    expect($req->status)->toBe(Requisition::STATUS_APPROVED);
+    expect($req->approved_by_id)->toBe($finance->id);
+});
+
