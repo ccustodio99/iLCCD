@@ -58,7 +58,7 @@
                     <h5 class="modal-title">New Ticket</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('tickets.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('tickets.store') }}" method="POST" enctype="multipart/form-data" class="ticket-form">
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3">
@@ -214,7 +214,7 @@
                     <h5 class="modal-title">Edit Ticket</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('tickets.update', $ticket) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('tickets.update', $ticket) }}" method="POST" enctype="multipart/form-data" class="ticket-form">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
@@ -298,26 +298,6 @@
         </div>
     </div>
     @endforeach
-    <script>
-        document.querySelectorAll('.category-btn').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                var modal = btn.closest('.modal');
-                modal.querySelectorAll('.category-collapse').forEach(function (col) {
-                    if (col.id !== btn.dataset.bsTarget.substring(1)) {
-                        bootstrap.Collapse.getOrCreateInstance(col).hide();
-                    }
-                });
-            });
-        });
-        document.querySelectorAll('.subcategory-select').forEach(function (sel) {
-            sel.addEventListener('change', function () {
-                var modal = sel.closest('.modal');
-                var hiddenInput = modal.querySelector('input[name="ticket_category_id"]');
-                if (hiddenInput) {
-                    hiddenInput.value = this.value;
-                }
-            });
-        });
-    </script>
+    @include('partials.category-collapse-script')
 </div>
 @endsection
