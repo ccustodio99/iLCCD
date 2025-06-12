@@ -10,7 +10,7 @@ it('allows authenticated user to create ticket', function () {
     $this->actingAs($user);
 
     $response = $this->post('/tickets', [
-        'category' => $category->name,
+        'ticket_category_id' => $category->id,
         'subject' => 'Broken PC',
         'description' => 'My computer is not working',
         'due_at' => now()->addDay()->format('Y-m-d'),
@@ -26,12 +26,12 @@ it('rejects inactive ticket categories', function () {
     $this->actingAs($user);
 
     $response = $this->from('/tickets/create')->post('/tickets', [
-        'category' => $category->name,
+        'ticket_category_id' => $category->id,
         'subject' => 'Broken PC',
         'description' => 'My computer is not working',
     ]);
 
-    $response->assertSessionHasErrors('category');
+    $response->assertSessionHasErrors('ticket_category_id');
     expect(Ticket::count())->toBe(0);
 });
 
@@ -61,7 +61,7 @@ it('converts ticket to job order', function () {
     $this->actingAs($user);
 
     $ticket = Ticket::factory()->for($user)->create([
-        'category' => $cat->name,
+        'ticket_category_id' => $cat->id,
         'description' => 'Fix door',
     ]);
 
@@ -83,7 +83,7 @@ it('converts ticket to requisition', function () {
 
     $catSup = TicketCategory::factory()->create(['name' => 'Supplies']);
     $ticket = Ticket::factory()->for($user)->create([
-        'category' => $catSup->name,
+        'ticket_category_id' => $catSup->id,
         'subject' => 'Projector Bulb',
         'description' => 'Need replacement bulb',
     ]);
@@ -109,7 +109,7 @@ it('adds watchers on ticket creation', function () {
 
     $catIt = TicketCategory::factory()->create(['name' => 'IT']);
     $this->post('/tickets', [
-        'category' => $catIt->name,
+        'ticket_category_id' => $catIt->id,
         'subject' => 'Printer',
         'description' => 'Broken',
     ]);
@@ -126,7 +126,7 @@ it('shows job order on ticket details after conversion', function () {
 
     $catFac = TicketCategory::factory()->create(['name' => 'Facilities']);
     $ticket = Ticket::factory()->for($user)->create([
-        'category' => $catFac->name,
+        'ticket_category_id' => $catFac->id,
         'description' => 'Door repair',
     ]);
 
@@ -146,7 +146,7 @@ it('shows requisition on ticket details after conversion', function () {
 
     $catSup2 = TicketCategory::factory()->create(['name' => 'Supplies']);
     $ticket = Ticket::factory()->for($user)->create([
-        'category' => $catSup2->name,
+        'ticket_category_id' => $catSup2->id,
         'subject' => 'Laptop Charger',
         'description' => 'Need extra charger',
     ]);

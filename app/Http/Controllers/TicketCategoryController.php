@@ -10,20 +10,27 @@ class TicketCategoryController extends Controller
     public function index(Request $request)
     {
         $perPage = $this->getPerPage($request);
-        $categories = TicketCategory::paginate($perPage)->withQueryString();
+        $categories = TicketCategory::with('parent')
+            ->paginate($perPage)
+            ->withQueryString();
 
         return view('settings.ticket-categories.index', compact('categories'));
     }
 
     public function create()
     {
-        return view('settings.ticket-categories.create');
+        $parents = TicketCategory::whereNull('parent_id')
+            ->orderBy('name')
+            ->get();
+
+        return view('settings.ticket-categories.create', compact('parents'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
+            'parent_id' => 'nullable|exists:ticket_categories,id',
             'is_active' => 'boolean',
         ]);
         $data['is_active'] = $data['is_active'] ?? false;
@@ -35,13 +42,19 @@ class TicketCategoryController extends Controller
 
     public function edit(TicketCategory $ticketCategory)
     {
-        return view('settings.ticket-categories.edit', compact('ticketCategory'));
+        $parents = TicketCategory::whereNull('parent_id')
+            ->where('id', '!=', $ticketCategory->id)
+            ->orderBy('name')
+            ->get();
+
+        return view('settings.ticket-categories.edit', compact('ticketCategory', 'parents'));
     }
 
     public function update(Request $request, TicketCategory $ticketCategory)
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
+            'parent_id' => 'nullable|exists:ticket_categories,id',
             'is_active' => 'boolean',
         ]);
         $data['is_active'] = $data['is_active'] ?? false;

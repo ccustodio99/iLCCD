@@ -15,6 +15,7 @@ class TicketCategoryFactory extends Factory
     public function definition(): array
     {
         return [
+            'parent_id' => null,
             'name' => $this->faker->word(),
             'is_active' => true,
         ];

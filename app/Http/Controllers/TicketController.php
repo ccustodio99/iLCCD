@@ -24,7 +24,11 @@ class TicketController extends Controller
             ->withQueryString();
 
         $users = User::orderBy('name')->get();
-        $categories = TicketCategory::where('is_active', true)->orderBy('name')->get();
+        $categories = TicketCategory::whereNull('parent_id')
+            ->with('children')
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
 
         return view('tickets.index', compact('tickets', 'users', 'categories'));
     }
@@ -32,18 +36,20 @@ class TicketController extends Controller
     public function create()
     {
         $users = User::orderBy('name')->get();
-        $categories = TicketCategory::where('is_active', true)->orderBy('name')->get();
+        $categories = TicketCategory::whereNull('parent_id')
+            ->with('children')
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
         return view('tickets.create', compact('users', 'categories'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'category' => [
+            'ticket_category_id' => [
                 'required',
-                'string',
-                'max:255',
-                Rule::exists('ticket_categories', 'name')->where('is_active', true),
+                Rule::exists('ticket_categories', 'id')->where('is_active', true),
             ],
             'subject' => 'required|string|max:255',
             'description' => 'required|string',
@@ -114,7 +120,11 @@ class TicketController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $users = User::orderBy('name')->get();
-        $categories = TicketCategory::where('is_active', true)->orderBy('name')->get();
+        $categories = TicketCategory::whereNull('parent_id')
+            ->with('children')
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
         return view('tickets.edit', compact('ticket', 'users', 'categories'));
     }
 
@@ -124,11 +134,9 @@ class TicketController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $data = $request->validate([
-            'category' => [
+            'ticket_category_id' => [
                 'required',
-                'string',
-                'max:255',
-                Rule::exists('ticket_categories', 'name')->where('is_active', true),
+                Rule::exists('ticket_categories', 'id')->where('is_active', true),
             ],
             'subject' => 'required|string|max:255',
             'description' => 'required|string',
@@ -251,7 +259,7 @@ class TicketController extends Controller
         JobOrder::create([
             'user_id' => $ticket->user_id,
             'ticket_id' => $ticket->id,
-            'job_type' => $ticket->category,
+            'job_type' => $ticket->ticketCategory->name,
             'description' => $ticket->description,
             'status' => JobOrder::STATUS_PENDING_HEAD,
         ]);
