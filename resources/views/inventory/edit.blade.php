@@ -51,7 +51,12 @@
         <div class="mb-3">
             <label class="form-label">Status</label>
             <select name="status" class="form-select" required>
-                @php($statuses = ['available' => 'Available', 'reserved' => 'Reserved', 'maintenance' => 'Maintenance', 'retired' => 'Retired'])
+                @php($statuses = [
+                    \App\Models\InventoryItem::STATUS_AVAILABLE => 'Available',
+                    \App\Models\InventoryItem::STATUS_RESERVED => 'Reserved',
+                    \App\Models\InventoryItem::STATUS_MAINTENANCE => 'Maintenance',
+                    \App\Models\InventoryItem::STATUS_RETIRED => 'Retired',
+                ])
                 @foreach($statuses as $value => $label)
                     <option value="{{ $value }}" {{ old('status', $inventoryItem->status) === $value ? 'selected' : '' }}>{{ $label }}</option>
                 @endforeach

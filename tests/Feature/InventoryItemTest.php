@@ -22,7 +22,7 @@ it('allows authorized user to create inventory item', function () {
         'purchase_date' => now()->format('Y-m-d'),
         'quantity' => 5,
         'minimum_stock' => 1,
-        'status' => 'available',
+        'status' => InventoryItem::STATUS_AVAILABLE,
     ]);
 
     $response->assertRedirect('/inventory');

@@ -27,7 +27,7 @@ class InventoryItemFactory extends Factory
             'purchase_date' => now()->subDays(random_int(1, 365)),
             'quantity' => fake()->numberBetween(1, 50),
             'minimum_stock' => fake()->numberBetween(1, 5),
-            'status' => 'available',
+            'status' => InventoryItem::STATUS_AVAILABLE,
         ];
     }
 }
