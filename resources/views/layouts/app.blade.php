@@ -123,6 +123,7 @@
                     <li class="nav-item"><a class="nav-link @if(request()->routeIs('inventory.*')) active @endif" href="{{ route('inventory.index') }}" @if(request()->routeIs('inventory.*')) aria-current="page" @endif>Inventory</a></li>
                     <li class="nav-item"><a class="nav-link @if(request()->routeIs('purchase-orders.*')) active @endif" href="{{ route('purchase-orders.index') }}" @if(request()->routeIs('purchase-orders.*')) aria-current="page" @endif>Purchase Orders</a></li>
                     <li class="nav-item"><a class="nav-link @if(request()->routeIs('documents.*')) active @endif" href="{{ route('documents.index') }}" @if(request()->routeIs('documents.*')) aria-current="page" @endif>Documents</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('kpi.dashboard')) active @endif" href="{{ route('kpi.dashboard') }}" @if(request()->routeIs('kpi.dashboard')) aria-current="page" @endif>KPI Dashboard</a></li>
                     <li class="nav-item"><a class="nav-link @if(request()->routeIs('audit-trails.*')) active @endif" href="{{ route('audit-trails.index') }}" @if(request()->routeIs('audit-trails.*')) aria-current="page" @endif>Audit Trail</a></li>
                     @if(auth()->user()->role === 'admin')
                         <li class="nav-item"><a class="nav-link @if(request()->routeIs('users.*')) active @endif" href="{{ route('users.index') }}" @if(request()->routeIs('users.*')) aria-current="page" @endif>Users</a></li>

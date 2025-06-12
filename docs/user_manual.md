@@ -35,7 +35,7 @@ Each module has status indicators so you can track approvals and fulfillment. Se
 - The **My Tickets** or **My Requests** pages list everything you have submitted with their current status.
 - Email notifications are sent when your request is approved, denied, or needs more information.
 - For managers, the dashboard highlights pending approvals with quick links to review them.
-- The **KPI & Audit Dashboard** aggregates performance metrics like response times and completion rates.
+- The **KPI & Audit Dashboard** aggregates performance metrics like response times and completion rates. Access it via the **KPI Dashboard** link or by visiting `/kpi-dashboard`.
 
 ### Ticket Watchers
 When you create a ticket, the system automatically adds watchers so the right people stay informed. These include your department head (or head of office) and IT administrators. You may add more users as watchers if they need visibility on the issue. The ticket owner and the assigned user can update and close the ticket. Watchers receive email updates and can comment, but cannot modify or close the ticket.
