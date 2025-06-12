@@ -13,12 +13,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TicketController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = $this->getPerPage($request);
         $tickets = Ticket::where('user_id', auth()->id())
             ->with(['auditTrails.user', 'watchers', 'assignedTo', 'comments.user'])
-            ->paginate(10);
+            ->paginate($perPage)
+            ->withQueryString();
+
         $users = User::orderBy('name')->get();
+
         return view('tickets.index', compact('tickets', 'users'));
     }
 

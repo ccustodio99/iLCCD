@@ -11,11 +11,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RequisitionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = $this->getPerPage($request);
+
         $requisitions = Requisition::where('user_id', auth()->id())
             ->with(['items', 'auditTrails.user'])
-            ->paginate(10);
+            ->paginate($perPage)
+            ->withQueryString();
+
         return view('requisitions.index', compact('requisitions'));
     }
 
@@ -131,8 +135,9 @@ class RequisitionController extends Controller
     }
 
     /** Show requisitions awaiting the logged-in approver */
-    public function approvals()
+    public function approvals(Request $request)
     {
+        $perPage = $this->getPerPage($request);
         $role = auth()->user()->role;
         $statusMap = [
             'head' => Requisition::STATUS_PENDING_HEAD,
@@ -145,7 +150,8 @@ class RequisitionController extends Controller
 
         $requisitions = Requisition::with('user')
             ->where('status', $status)
-            ->paginate(10);
+            ->paginate($perPage)
+            ->withQueryString();
 
         return view('requisitions.approvals', compact('requisitions'));
     }

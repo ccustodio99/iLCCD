@@ -11,11 +11,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DocumentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = $this->getPerPage($request);
+
         $documents = Document::where('user_id', auth()->id())
             ->with('auditTrails.user')
-            ->paginate(10);
+            ->paginate($perPage)
+            ->withQueryString();
+
         return view('documents.index', compact('documents'));
     }
 
