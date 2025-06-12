@@ -235,4 +235,5 @@
     {{ $forApprovalDocuments->appends(request()->except('for_approval_docs_page'))->links() }}
     <div id="dashboard-status" class="visually-hidden" aria-live="polite"></div>
 </div>
+@vite('resources/js/dashboard.js')
 @endsection
