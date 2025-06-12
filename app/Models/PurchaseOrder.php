@@ -15,9 +15,11 @@ class PurchaseOrder extends Model
         'user_id',
         'requisition_id',
         'inventory_item_id',
+        'supplier',
         'item',
         'quantity',
         'status',
+        'attachment_path',
         'ordered_at',
         'received_at',
     ];
@@ -27,6 +29,7 @@ class PurchaseOrder extends Model
         return [
             'ordered_at' => 'datetime',
             'received_at' => 'datetime',
+            'attachment_path' => 'string',
         ];
     }
 

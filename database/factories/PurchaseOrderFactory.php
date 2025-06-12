@@ -21,9 +21,11 @@ class PurchaseOrderFactory extends Factory
             'user_id' => User::factory(),
             'requisition_id' => Requisition::factory(),
             'inventory_item_id' => InventoryItem::factory(),
+            'supplier' => $this->faker->company(),
             'item' => $this->faker->words(2, true),
             'quantity' => $this->faker->numberBetween(1, 5),
             'status' => 'draft',
+            'attachment_path' => null,
             'ordered_at' => null,
             'received_at' => null,
         ];

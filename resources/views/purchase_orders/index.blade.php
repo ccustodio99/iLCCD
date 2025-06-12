@@ -12,6 +12,7 @@
             <tr>
                 <th>Item</th>
                 <th>Qty</th>
+                <th>Supplier</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -21,6 +22,7 @@
             <tr>
                 <td>{{ $order->item }}</td>
                 <td>{{ $order->quantity }}</td>
+                <td>{{ $order->supplier }}</td>
                 <td>{{ ucfirst($order->status) }}</td>
                 <td>
                     <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#purchaseOrderModal{{ $order->id }}">Details</button>
@@ -49,11 +51,15 @@
                 <div class="modal-body">
                     <p><strong>Item:</strong> {{ $order->item }}</p>
                     <p><strong>Quantity:</strong> {{ $order->quantity }}</p>
+                    <p><strong>Supplier:</strong> {{ $order->supplier }}</p>
                     <p><strong>Status:</strong> {{ ucfirst($order->status) }}</p>
                     <p><strong>Requisition ID:</strong> {{ $order->requisition_id }}</p>
                     <p><strong>Inventory Item ID:</strong> {{ $order->inventory_item_id }}</p>
                     <p><strong>Ordered At:</strong> {{ optional($order->ordered_at)->format('Y-m-d H:i') }}</p>
                     <p><strong>Received At:</strong> {{ optional($order->received_at)->format('Y-m-d H:i') }}</p>
+                    @if($order->attachment_path)
+                        <p><a href="{{ route('purchase-orders.attachment', $order) }}" target="_blank">Download Attachment</a></p>
+                    @endif
                     @include('audit_trails._list', ['logs' => $order->auditTrails])
                 </div>
                 <div class="modal-footer">
