@@ -13,6 +13,7 @@
                 <th>Items</th>
                 <th>Status</th>
                 <th>Ticket</th>
+                <th>Remarks</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -34,6 +35,7 @@
                         -
                     @endif
                 </td>
+                <td>{{ Str::limit($requisition->remarks, 50) }}</td>
                 <td>
                     <a href="{{ route('requisitions.edit', $requisition) }}" class="btn btn-sm btn-primary">Edit</a>
                     <form action="{{ route('requisitions.destroy', $requisition) }}" method="POST" class="d-inline">

@@ -11,6 +11,7 @@
             <tr>
                 <th>Items</th>
                 <th>Purpose</th>
+                <th>Remarks</th>
                 <th>Requester</th>
                 <th>Actions</th>
             </tr>
@@ -26,6 +27,7 @@
                     </ul>
                 </td>
                 <td>{{ Str::limit($req->purpose, 50) }}</td>
+                <td>{{ Str::limit($req->remarks, 50) }}</td>
                 <td>{{ $req->user->name }}</td>
                 <td>
                     <form action="{{ route('requisitions.approve', $req) }}" method="POST" class="d-inline">
@@ -36,7 +38,7 @@
                 </td>
             </tr>
             @empty
-            <tr><td colspan="4" class="text-center">No requisitions</td></tr>
+            <tr><td colspan="5" class="text-center">No requisitions</td></tr>
             @endforelse
         </tbody>
     </table>
