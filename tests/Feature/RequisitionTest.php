@@ -61,3 +61,20 @@ it('creates purchase order when approved and item missing', function () {
 
     expect(App\Models\PurchaseOrder::where('requisition_id', $req->id)->exists())->toBeTrue();
 });
+
+it('shows ticket reference on requisition list', function () {
+    $user = User::factory()->create(['department' => 'IT']);
+    $this->actingAs($user);
+
+    $ticket = App\Models\Ticket::factory()->for($user)->create([
+        'category' => 'Supplies',
+        'subject' => 'Keyboard',
+        'description' => 'Need new keyboard',
+    ]);
+
+    $this->post("/tickets/{$ticket->id}/requisition");
+
+    $response = $this->get('/requisitions');
+
+    $response->assertSee((string) $ticket->id);
+});
