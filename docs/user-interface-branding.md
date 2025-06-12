@@ -8,16 +8,22 @@ between modules is quick and intuitive.
 
 ### UX Design Principles
 
-The interface embraces seven core UX pillars:
+The interface embraces seven core UX principles:
 
-1. **User-centricity** – every page uses a clear title and retains form input on validation errors.
-2. **Consistency** – shared colors, fonts and layouts make each module feel familiar.
-   Administrators can choose their preferred fonts and colors from the **Theme Settings** screen.
-3. **Hierarchy** – the active sidebar link highlights your current location.
-4. **Context** – descriptive titles and headings keep you oriented within the workflow.
-5. **User control** – cancel buttons and a collapsible menu allow easy navigation.
-6. **Accessibility** – skip links, ARIA labels and keyboard-friendly toggles support all users.
-7. **Usability** – responsive design and clear feedback keep tasks straightforward.
+1. **User-centricity** – forms preserve input and highlight required fields while
+   confirmation messages guide each step.
+2. **Consistency** – all modules share the same palette and fonts. Administrators
+   customize these in the **Theme Settings** screen.
+3. **Hierarchy** – the active sidebar link and clear headings reveal where you
+   are within the system.
+4. **Context** – breadcrumbs and page titles maintain orientation in multi-step
+   workflows.
+5. **User control** – cancel buttons and a collapsible menu let you easily back
+   out or explore.
+6. **Accessibility** – alt text, ARIA labels, skip links and keyboard-friendly
+   toggles support every user.
+7. **Usability** – responsive layouts and quick AJAX updates keep tasks simple
+   and fast.
 
 ### Improved Navigation
 
