@@ -287,11 +287,17 @@ class DemoSeeder extends Seeder
             ]);
         });
 
-        $docCategories = collect(['Policy', 'Syllabus', 'Report'])->map(function ($name) {
-            return DocumentCategory::create([
-                'name' => $name,
-                'is_active' => true,
-            ]);
+        $docCategoryNames = [
+            'Policies & Procedures',
+            'Forms & Templates',
+            'Course Materials',
+        ];
+
+        $docCategories = collect($docCategoryNames)->map(function ($name) {
+            return DocumentCategory::firstOrCreate(
+                ['name' => $name],
+                ['is_active' => true]
+            );
         });
 
         // Documents with versions, logs and audit trails
