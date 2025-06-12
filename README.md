@@ -151,6 +151,8 @@ Every action is traceable; every step is value-aligned.
 - **UI:** Mobile-first, Bootstrap 5, intuitive role-based menus, quick actions, breadcrumbs
 - **Accessibility:** WCAG 2.1 color contrast, keyboard navigation, screen reader friendly, alt text everywhere
 - **Feedback:** Clear alerts, success/error icons, always inform next steps
+- **Performance:** Dashboard tables load via AJAX to keep page transitions quick
+  and responsive.
 
 ---
 

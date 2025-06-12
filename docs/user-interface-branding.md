@@ -38,6 +38,12 @@ The interface embraces seven core UX pillars:
 - Requisitions automatically check Inventory and may create Purchase Orders.
 - Documents and audit logs track every approval step.
 
+### Dashboard Performance
+
+Data on the dashboard is now requested via AJAX from the `dashboard.data`
+endpoint. This minimizes initial load time and keeps the interface responsive,
+supporting the project's emphasis on user-centric feedback.
+
 ---
 
 ## 🚀 Navigation

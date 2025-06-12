@@ -14,6 +14,18 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        $data = $this->getDashboardData($request);
+
+        return view('dashboard', $data);
+    }
+
+    public function data(Request $request)
+    {
+        return response()->json($this->getDashboardData($request));
+    }
+
+    protected function getDashboardData(Request $request): array
+    {
         $perPage = $this->getPerPage($request, 5);
 
         $announcements = Announcement::where('is_active', true)
@@ -66,7 +78,7 @@ class DashboardController extends Controller
             ->paginate($perPage, ['*'], 'for_approval_docs_page')
             ->withQueryString();
 
-        return view('dashboard', compact(
+        return compact(
             'announcements',
             'tickets',
             'jobOrders',
@@ -75,6 +87,6 @@ class DashboardController extends Controller
             'incomingDocuments',
             'outgoingDocuments',
             'forApprovalDocuments'
-        ));
+        );
     }
 }
