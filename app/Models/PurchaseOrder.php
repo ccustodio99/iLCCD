@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Traits\LogsAudit;
+use App\Traits\ClearsDashboardCache;
 
 class PurchaseOrder extends Model
 {
-    use HasFactory, LogsAudit;
+    use HasFactory, LogsAudit, ClearsDashboardCache;
 
     protected $fillable = [
         'user_id',
