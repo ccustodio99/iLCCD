@@ -20,6 +20,21 @@ it('allows authenticated user to create ticket', function () {
     expect(Ticket::where('subject', 'Broken PC')->exists())->toBeTrue();
 });
 
+it('rejects inactive ticket categories', function () {
+    $user = User::factory()->create();
+    $category = TicketCategory::factory()->create(['is_active' => false]);
+    $this->actingAs($user);
+
+    $response = $this->from('/tickets/create')->post('/tickets', [
+        'category' => $category->name,
+        'subject' => 'Broken PC',
+        'description' => 'My computer is not working',
+    ]);
+
+    $response->assertSessionHasErrors('category');
+    expect(Ticket::count())->toBe(0);
+});
+
 it('shows user tickets', function () {
     $user = User::factory()->create();
     $ticket = Ticket::factory()->for($user)->create(['subject' => 'Network issue']);

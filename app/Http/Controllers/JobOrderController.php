@@ -8,6 +8,7 @@ use App\Models\JobOrderType;
 use App\Models\Requisition;
 use App\Models\InventoryTransaction;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
 class JobOrderController extends Controller
@@ -38,7 +39,12 @@ class JobOrderController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'job_type' => 'required|string|max:255',
+            'job_type' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::exists('job_order_types', 'name')->where('is_active', true),
+            ],
             'description' => 'required|string',
             'attachment' => 'nullable|file|max:2048',
         ]);
@@ -68,7 +74,12 @@ class JobOrderController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $data = $request->validate([
-            'job_type' => 'required|string|max:255',
+            'job_type' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::exists('job_order_types', 'name')->where('is_active', true),
+            ],
             'description' => 'required|string',
             'status' => 'required|string',
             'attachment' => 'nullable|file|max:2048',
