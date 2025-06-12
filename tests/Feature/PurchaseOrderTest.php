@@ -61,11 +61,35 @@ it('tracks status transitions when updated by finance', function () {
         'supplier' => $order->supplier,
         'item' => $order->item,
         'quantity' => $order->quantity,
-        'status' => 'ordered',
+        'status' => PurchaseOrder::STATUS_PENDING_APPROVAL,
     ])->assertRedirect('/purchase-orders');
 
     $order->refresh();
-    expect($order->status)->toBe('ordered');
+    expect($order->status)->toBe(PurchaseOrder::STATUS_PENDING_APPROVAL);
+
+    $this->put("/purchase-orders/{$order->id}", [
+        'requisition_id' => $order->requisition_id,
+        'inventory_item_id' => $order->inventory_item_id,
+        'supplier' => $order->supplier,
+        'item' => $order->item,
+        'quantity' => $order->quantity,
+        'status' => PurchaseOrder::STATUS_APPROVED,
+    ]);
+
+    $order->refresh();
+    expect($order->status)->toBe(PurchaseOrder::STATUS_APPROVED);
+
+    $this->put("/purchase-orders/{$order->id}", [
+        'requisition_id' => $order->requisition_id,
+        'inventory_item_id' => $order->inventory_item_id,
+        'supplier' => $order->supplier,
+        'item' => $order->item,
+        'quantity' => $order->quantity,
+        'status' => PurchaseOrder::STATUS_ORDERED,
+    ]);
+
+    $order->refresh();
+    expect($order->status)->toBe(PurchaseOrder::STATUS_ORDERED);
     expect($order->ordered_at)->not->toBeNull();
 
     $this->put("/purchase-orders/{$order->id}", [
@@ -74,10 +98,34 @@ it('tracks status transitions when updated by finance', function () {
         'supplier' => $order->supplier,
         'item' => $order->item,
         'quantity' => $order->quantity,
-        'status' => 'received',
+        'status' => PurchaseOrder::STATUS_RECEIVED,
     ]);
 
     $order->refresh();
-    expect($order->status)->toBe('received');
+    expect($order->status)->toBe(PurchaseOrder::STATUS_RECEIVED);
     expect($order->received_at)->not->toBeNull();
+
+    $this->put("/purchase-orders/{$order->id}", [
+        'requisition_id' => $order->requisition_id,
+        'inventory_item_id' => $order->inventory_item_id,
+        'supplier' => $order->supplier,
+        'item' => $order->item,
+        'quantity' => $order->quantity,
+        'status' => PurchaseOrder::STATUS_CLOSED,
+    ]);
+
+    $order->refresh();
+    expect($order->status)->toBe(PurchaseOrder::STATUS_CLOSED);
+
+    $this->put("/purchase-orders/{$order->id}", [
+        'requisition_id' => $order->requisition_id,
+        'inventory_item_id' => $order->inventory_item_id,
+        'supplier' => $order->supplier,
+        'item' => $order->item,
+        'quantity' => $order->quantity,
+        'status' => PurchaseOrder::STATUS_CANCELLED,
+    ]);
+
+    $order->refresh();
+    expect($order->status)->toBe(PurchaseOrder::STATUS_CANCELLED);
 });
