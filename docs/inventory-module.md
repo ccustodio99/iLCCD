@@ -66,12 +66,21 @@ The **Inventory Module** enables real-time tracking and management of all instit
 
 ## ✨ Augustinian Value Alignment
 
-|-----------------|------------------------------------------------------------|
-| Unity           | Centralized, transparent inventory for all departments     |
-| Truth           | Real-time, accurate reporting of item movement             |
-| Competence      | Automated, error-reducing stock management                 |
-| Charity         | Fast and fair resource allocation across the community     |
-| Stewardship     | Proactive restocking, loss prevention, and accountability  |
-| Service         | Easy access and rapid fulfillment for legitimate needs     |
-| Christ-Centeredness | Ethical and responsible use of school resources         |
+| Value               | Implementation Example                                   |
+|---------------------|----------------------------------------------------------|
+| Unity               | Centralized, transparent inventory for all departments   |
+| Truth               | Real-time, accurate reporting of item movement           |
+| Competence          | Automated, error-reducing stock management               |
+| Charity             | Fast and fair resource allocation across the community   |
+| Stewardship         | Proactive restocking, loss prevention, and accountability|
+| Service             | Easy access and rapid fulfillment for legitimate needs   |
+| Christ-Centeredness | Ethical and responsible use of school resources          |
+
 For more guides visit the [documentation index](README.md).
+
+---
+
+## 🚀 Navigation
+- Previous: [Requisition Management Module](requisition-management-module.md)
+- Next: [Purchase Order System](purchase-order-module.md)
+- [Documentation Index](README.md)
