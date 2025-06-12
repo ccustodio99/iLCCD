@@ -19,6 +19,18 @@ class Requisition extends Model
     public const STATUS_PENDING_FINANCE = 'pending_finance';
     public const STATUS_APPROVED = 'approved';
 
+    /**
+     * All possible requisition statuses in workflow order.
+     *
+     * @var string[]
+     */
+    public const STATUSES = [
+        self::STATUS_PENDING_HEAD,
+        self::STATUS_PENDING_PRESIDENT,
+        self::STATUS_PENDING_FINANCE,
+        self::STATUS_APPROVED,
+    ];
+
     protected $fillable = [
         'user_id',
         'ticket_id',

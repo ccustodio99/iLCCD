@@ -54,7 +54,7 @@ it('creates purchase order when approved and item missing', function () {
         'quantity' => [1],
         'specification' => [$req->items->first()->specification],
         'purpose' => $req->purpose,
-        'status' => 'approved',
+        'status' => Requisition::STATUS_APPROVED,
     ]);
 
     $response->assertRedirect('/requisitions');

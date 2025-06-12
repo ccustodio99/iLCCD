@@ -76,7 +76,7 @@
     <form method="GET" class="mb-2">
         <select name="requisition_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
             <option value="">All Statuses</option>
-            @foreach(['pending_head' => 'Pending Head', 'approved' => 'Approved'] as $val => $label)
+            @foreach([\App\Models\Requisition::STATUS_PENDING_HEAD => 'Pending Head', \App\Models\Requisition::STATUS_APPROVED => 'Approved'] as $val => $label)
                 <option value="{{ $val }}" {{ request('requisition_status') === $val ? 'selected' : '' }}>{{ $label }}</option>
             @endforeach
         </select>
