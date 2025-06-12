@@ -40,7 +40,8 @@
             <label for="home_tagline" class="form-label">Home Page Tagline</label>
             <textarea id="home_tagline" name="home_tagline" rows="3" class="form-control">{{ $home_tagline }}</textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary me-2">Save</button>
+        <a href="{{ route('settings.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 @endsection
