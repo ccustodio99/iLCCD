@@ -170,6 +170,7 @@ class JobOrderController extends Controller
                 'job_order_id' => $jobOrder->id,
                 'action' => 'issue',
                 'quantity' => $data['quantity'],
+                'purpose' => $data['purpose'],
             ]);
         } else {
             $requisition = Requisition::create([

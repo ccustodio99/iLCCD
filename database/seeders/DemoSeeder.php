@@ -253,14 +253,14 @@ class DemoSeeder extends Seeder
                     ->for($item)
                     ->for($user)
                     ->for($jobOrders[$index])
-                    ->state(['action' => 'issue', 'quantity' => 1])
+                    ->state(['action' => 'issue', 'quantity' => 1, 'purpose' => 'Demo issue'])
                     ->create();
 
                 InventoryTransaction::factory()
                     ->for($item)
                     ->for($user)
                     ->for($jobOrders[$index])
-                    ->state(['action' => 'return', 'quantity' => 1])
+                    ->state(['action' => 'return', 'quantity' => 1, 'purpose' => 'Demo return'])
                     ->create();
             }
         });

@@ -95,7 +95,9 @@ it('deducts inventory if materials available', function () {
     $item->refresh();
     expect($item->quantity)->toBe(2);
     expect(InventoryTransaction::where('job_order_id', $order->id)
-        ->where('action', 'issue')->exists())->toBeTrue();
+        ->where('action', 'issue')
+        ->where('purpose', 'Setup network')
+        ->exists())->toBeTrue();
 });
 
 it('creates requisition when materials not in stock', function () {

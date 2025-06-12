@@ -100,6 +100,7 @@ class InventoryItemController extends Controller
 
         $data = $request->validate([
             'quantity' => 'required|integer|min:1',
+            'purpose' => 'nullable|string',
         ]);
 
         if ($inventoryItem->quantity < $data['quantity']) {
@@ -113,6 +114,7 @@ class InventoryItemController extends Controller
             'user_id' => $request->user()->id,
             'action' => 'issue',
             'quantity' => $data['quantity'],
+            'purpose' => $data['purpose'] ?? null,
         ]);
 
         return redirect()->route('inventory.index');
@@ -129,6 +131,7 @@ class InventoryItemController extends Controller
 
         $data = $request->validate([
             'quantity' => 'required|integer|min:1',
+            'purpose' => 'nullable|string',
         ]);
 
         $inventoryItem->increment('quantity', $data['quantity']);
@@ -138,6 +141,7 @@ class InventoryItemController extends Controller
             'user_id' => $request->user()->id,
             'action' => 'return',
             'quantity' => $data['quantity'],
+            'purpose' => $data['purpose'] ?? null,
         ]);
 
         return redirect()->route('inventory.index');

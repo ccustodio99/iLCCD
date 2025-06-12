@@ -143,6 +143,7 @@ class RequisitionController extends Controller
                         'requisition_id' => $requisition->id,
                         'action' => 'issue',
                         'quantity' => $reqItem->quantity,
+                        'purpose' => $requisition->purpose,
                     ]);
                 }
             }
