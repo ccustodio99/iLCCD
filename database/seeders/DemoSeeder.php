@@ -228,14 +228,14 @@ class DemoSeeder extends Seeder
             ->count(8)
             ->for($admin)
             ->state(new Sequence(
-                ['status' => 'available'],
-                ['status' => 'reserved'],
-                ['status' => 'available'],
-                ['status' => 'maintenance'],
-                ['status' => 'available'],
-                ['status' => 'available'],
-                ['status' => 'reserved'],
-                ['status' => 'available'],
+                ['status' => InventoryItem::STATUS_AVAILABLE],
+                ['status' => InventoryItem::STATUS_RESERVED],
+                ['status' => InventoryItem::STATUS_AVAILABLE],
+                ['status' => InventoryItem::STATUS_MAINTENANCE],
+                ['status' => InventoryItem::STATUS_AVAILABLE],
+                ['status' => InventoryItem::STATUS_AVAILABLE],
+                ['status' => InventoryItem::STATUS_RESERVED],
+                ['status' => InventoryItem::STATUS_AVAILABLE],
             ))
             ->create();
 

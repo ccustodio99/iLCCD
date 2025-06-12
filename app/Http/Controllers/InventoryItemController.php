@@ -45,7 +45,7 @@ class InventoryItemController extends Controller
             'purchase_date' => 'nullable|date',
             'quantity' => 'required|integer|min:0',
             'minimum_stock' => 'required|integer|min:0',
-            'status' => 'required|string|max:255',
+            'status' => ['required', Rule::in(InventoryItem::STATUSES)],
         ]);
         $data['user_id'] = $request->user()->id;
         InventoryItem::create($data);
@@ -81,7 +81,7 @@ class InventoryItemController extends Controller
             'purchase_date' => 'nullable|date',
             'quantity' => 'required|integer|min:0',
             'minimum_stock' => 'required|integer|min:0',
-            'status' => 'required|string|max:255',
+            'status' => ['required', Rule::in(InventoryItem::STATUSES)],
         ]);
         $inventoryItem->update($data);
         return redirect()->route('inventory.index');

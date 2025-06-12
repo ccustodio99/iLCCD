@@ -15,6 +15,24 @@ class InventoryItem extends Model
     /** @use HasFactory<\\Database\\Factories\\InventoryItemFactory> */
     use HasFactory, LogsAudit;
 
+    /** Inventory item status values */
+    public const STATUS_AVAILABLE = 'available';
+    public const STATUS_RESERVED = 'reserved';
+    public const STATUS_MAINTENANCE = 'maintenance';
+    public const STATUS_RETIRED = 'retired';
+
+    /**
+     * All valid inventory item statuses.
+     *
+     * @var string[]
+     */
+    public const STATUSES = [
+        self::STATUS_AVAILABLE,
+        self::STATUS_RESERVED,
+        self::STATUS_MAINTENANCE,
+        self::STATUS_RETIRED,
+    ];
+
     protected $fillable = [
         'user_id',
         'name',
