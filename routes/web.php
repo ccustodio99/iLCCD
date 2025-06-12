@@ -66,6 +66,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('inventory', InventoryItemController::class)->except('show');
     Route::post('inventory/{inventory}/issue', [InventoryItemController::class, 'issue'])->name('inventory.issue');
     Route::post('inventory/{inventory}/return', [InventoryItemController::class, 'return'])->name('inventory.return');
+    Route::get('purchase-orders/{purchaseOrder}/attachment', [PurchaseOrderController::class, 'downloadAttachment'])->name('purchase-orders.attachment');
     Route::resource('purchase-orders', PurchaseOrderController::class)->except('show');
     Route::resource('documents', DocumentController::class)->except('show');
     Route::get('documents-dashboard', [DocumentDashboardController::class, 'index'])->name('documents.dashboard');
