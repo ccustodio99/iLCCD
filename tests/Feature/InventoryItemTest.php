@@ -15,7 +15,7 @@ it('allows authenticated user to create inventory item', function () {
     $response = $this->post('/inventory', [
         'name' => 'Laptop',
         'description' => 'Dell',
-        'category' => $category->name,
+        'inventory_category_id' => $category->id,
         'department' => 'IT',
         'location' => 'Office',
         'supplier' => 'Supplier',

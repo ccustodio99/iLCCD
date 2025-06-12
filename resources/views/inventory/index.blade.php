@@ -59,7 +59,7 @@
                 <div class="modal-body">
                     <p><strong>Name:</strong> {{ $item->name }}</p>
                     <p><strong>Description:</strong> {{ $item->description }}</p>
-                    <p><strong>Category:</strong> {{ $item->category }}</p>
+                    <p><strong>Category:</strong> {{ optional($item->inventoryCategory)->name }}</p>
                     <p><strong>Department:</strong> {{ $item->department }}</p>
                     <p><strong>Location:</strong> {{ $item->location }}</p>
                     <p><strong>Supplier:</strong> {{ $item->supplier }}</p>
