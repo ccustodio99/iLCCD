@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Requisition;
 use App\Models\InventoryItem;
 use App\Models\PurchaseOrder;
+use App\Models\InventoryTransaction;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -107,6 +108,13 @@ class RequisitionController extends Controller
                     ]);
                 } else {
                     $item->decrement('quantity', $reqItem->quantity);
+                    InventoryTransaction::create([
+                        'inventory_item_id' => $item->id,
+                        'user_id' => auth()->id(),
+                        'requisition_id' => $requisition->id,
+                        'action' => 'issue',
+                        'quantity' => $reqItem->quantity,
+                    ]);
                 }
             }
         }

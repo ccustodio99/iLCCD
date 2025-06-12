@@ -19,6 +19,8 @@ class InventoryTransactionFactory extends Factory
         return [
             'inventory_item_id' => InventoryItem::factory(),
             'user_id' => User::factory(),
+            'requisition_id' => null,
+            'job_order_id' => null,
             'action' => $this->faker->randomElement(['issue', 'return']),
             'quantity' => $this->faker->numberBetween(1, 5),
         ];

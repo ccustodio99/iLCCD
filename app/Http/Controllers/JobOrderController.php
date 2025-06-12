@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\JobOrder;
 use App\Models\InventoryItem;
 use App\Models\Requisition;
+use App\Models\InventoryTransaction;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -122,6 +123,13 @@ class JobOrderController extends Controller
         $item = InventoryItem::where('name', $data['item'])->first();
         if ($item && $item->quantity >= $data['quantity']) {
             $item->decrement('quantity', $data['quantity']);
+            InventoryTransaction::create([
+                'inventory_item_id' => $item->id,
+                'user_id' => $request->user()->id,
+                'job_order_id' => $jobOrder->id,
+                'action' => 'issue',
+                'quantity' => $data['quantity'],
+            ]);
         } else {
             $requisition = Requisition::create([
                 'user_id' => $request->user()->id,

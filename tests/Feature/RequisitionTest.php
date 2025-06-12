@@ -2,6 +2,8 @@
 
 use App\Models\Requisition;
 use App\Models\User;
+use App\Models\InventoryItem;
+use App\Models\InventoryTransaction;
 
 it('allows authenticated user to create requisition', function () {
     $user = User::factory()->create();
@@ -60,6 +62,35 @@ it('creates purchase order when approved and item missing', function () {
     $response->assertRedirect('/requisitions');
 
     expect(App\Models\PurchaseOrder::where('requisition_id', $req->id)->exists())->toBeTrue();
+});
+
+it('deducts inventory when approved and stock available', function () {
+    $user = User::factory()->create(['department' => 'IT']);
+    $this->actingAs($user);
+
+    $req = Requisition::factory()->for($user)->create();
+    $req->items()->update([
+        'item' => 'Cable',
+        'quantity' => 2,
+    ]);
+
+    $item = InventoryItem::factory()->for($user)->create([
+        'name' => 'Cable',
+        'quantity' => 5,
+    ]);
+
+    $this->put("/requisitions/{$req->id}", [
+        'item' => ['Cable'],
+        'quantity' => [2],
+        'specification' => [$req->items->first()->specification],
+        'purpose' => $req->purpose,
+        'status' => Requisition::STATUS_APPROVED,
+    ])->assertRedirect('/requisitions');
+
+    $item->refresh();
+    expect($item->quantity)->toBe(3);
+    expect(InventoryTransaction::where('requisition_id', $req->id)
+        ->where('action', 'issue')->exists())->toBeTrue();
 });
 
 it('shows ticket reference on requisition list', function () {
