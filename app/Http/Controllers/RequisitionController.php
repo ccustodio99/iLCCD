@@ -9,6 +9,7 @@ use App\Models\InventoryTransaction;
 use App\Models\JobOrder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
 class RequisitionController extends Controller
@@ -86,7 +87,7 @@ class RequisitionController extends Controller
             'specification.*' => 'nullable|string',
             'purpose' => 'required|string',
             'remarks' => 'nullable|string',
-            'status' => 'required|string',
+            'status' => ['required', 'string', Rule::in(Requisition::STATUSES)],
             'attachment' => 'nullable|file|max:2048',
         ]);
 
