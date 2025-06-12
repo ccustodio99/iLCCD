@@ -145,3 +145,39 @@ it('blocks unauthorized roles from inventory actions', function () {
 
     $this->get('/inventory')->assertForbidden();
 });
+
+it('filters items by category', function () {
+    $user = User::factory()->create(['role' => 'admin']);
+    $catA = InventoryCategory::factory()->create();
+    $catB = InventoryCategory::factory()->create();
+    InventoryItem::factory()->for($user)->for($catA)->create(['name' => 'Cat A']);
+    InventoryItem::factory()->for($user)->for($catB)->create(['name' => 'Cat B']);
+    $this->actingAs($user);
+
+    $response = $this->get('/inventory?category=' . $catA->id);
+    $response->assertStatus(200);
+    $response->assertSee('Cat A');
+    $response->assertDontSee('Cat B');
+});
+
+it('filters items by status', function () {
+    $user = User::factory()->create(['role' => 'admin']);
+    InventoryItem::factory()->for($user)->create(['name' => 'Avail', 'status' => 'available']);
+    InventoryItem::factory()->for($user)->create(['name' => 'Hidden Item', 'status' => 'reserved']);
+    $this->actingAs($user);
+
+    $response = $this->get('/inventory?status=available');
+    $response->assertSee('Avail');
+    $response->assertDontSee('Hidden Item');
+});
+
+it('searches items by name', function () {
+    $user = User::factory()->create(['role' => 'admin']);
+    InventoryItem::factory()->for($user)->create(['name' => 'Projector']);
+    InventoryItem::factory()->for($user)->create(['name' => 'Laptop']);
+    $this->actingAs($user);
+
+    $response = $this->get('/inventory?search=Lap');
+    $response->assertSee('Laptop');
+    $response->assertDontSee('Projector');
+});

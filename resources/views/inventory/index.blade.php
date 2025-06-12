@@ -6,6 +6,35 @@
 <div class="container">
     <h1 class="mb-4">My Inventory Items</h1>
     @include('components.per-page-selector')
+    <div class="mb-3">
+        <form method="GET" class="row row-cols-lg-auto g-2 align-items-end">
+            <div class="col">
+                <label for="filter-category" class="form-label">Category</label>
+                <select id="filter-category" name="category" class="form-select">
+                    <option value="">All</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" @selected((string) request('category') === (string) $category->id)>{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-status" class="form-label">Status</label>
+                <select id="filter-status" name="status" class="form-select">
+                    <option value="">Any</option>
+                    @foreach($statuses as $status)
+                        <option value="{{ $status }}" @selected(request('status') === $status)>{{ ucfirst($status) }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-search" class="form-label">Search</label>
+                <input id="filter-search" type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Name">
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-secondary">Filter</button>
+            </div>
+        </form>
+    </div>
     <a href="{{ route('inventory.create') }}" class="btn btn-primary mb-3">Add Item</a>
     <div class="table-responsive">
     <table class="table table-striped">
