@@ -12,7 +12,7 @@ class InventoryItemController extends Controller
     public function index()
     {
         $items = InventoryItem::where('user_id', auth()->id())
-            ->with('auditTrails.user')
+            ->with(['auditTrails.user', 'transactions.user'])
             ->paginate(10);
         return view('inventory.index', compact('items'));
     }
