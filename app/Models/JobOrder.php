@@ -11,16 +11,28 @@ class JobOrder extends Model
 {
     use HasFactory, LogsAudit;
 
+    /** Job order status values */
+    public const STATUS_PENDING_HEAD = 'pending_head';
+    public const STATUS_PENDING_PRESIDENT = 'pending_president';
+    public const STATUS_PENDING_FINANCE = 'pending_finance';
+    public const STATUS_APPROVED = 'approved';
+    public const STATUS_ASSIGNED = 'assigned';
+    public const STATUS_IN_PROGRESS = 'in_progress';
+    public const STATUS_COMPLETED = 'completed';
+
     protected $fillable = [
         'user_id',
         'ticket_id',
         'job_type',
         'description',
+        'attachment_path',
         'status',
         'assigned_to_id',
         'approved_at',
         'started_at',
+        'start_notes',
         'completed_at',
+        'completion_notes',
     ];
 
     protected function casts(): array
@@ -29,6 +41,7 @@ class JobOrder extends Model
             'approved_at' => 'datetime',
             'started_at' => 'datetime',
             'completed_at' => 'datetime',
+            'attachment_path' => 'string',
         ];
     }
 

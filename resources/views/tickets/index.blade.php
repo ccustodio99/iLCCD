@@ -120,7 +120,7 @@
                     <p><strong>Subject:</strong> {{ $ticket->formatted_subject }}</p>
                     <p><strong>Description:</strong> {{ $ticket->description }}</p>
                     @if($ticket->attachment_path)
-                        <p><strong>Attachment:</strong> <a href="{{ Storage::url($ticket->attachment_path) }}" target="_blank">Download</a></p>
+                        <p><strong>Attachment:</strong> <a href="{{ route('tickets.attachment', $ticket) }}" target="_blank">Download</a></p>
                     @endif
                     <p><strong>Status:</strong> {{ ucfirst($ticket->status) }}</p>
                     <p><strong>Assigned To:</strong> {{ optional($ticket->assignedTo)->name ?? 'Unassigned' }}</p>
@@ -213,7 +213,7 @@
                             <label class="form-label">Attachment</label>
                             <input type="file" name="attachment" class="form-control">
                             @if($ticket->attachment_path)
-                                <small class="text-muted">Current: <a href="{{ Storage::url($ticket->attachment_path) }}" target="_blank">Download</a></small>
+                                <small class="text-muted">Current: <a href="{{ route('tickets.attachment', $ticket) }}" target="_blank">Download</a></small>
                             @endif
                         </div>
                         <div class="mb-3">

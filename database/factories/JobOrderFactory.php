@@ -19,11 +19,14 @@ class JobOrderFactory extends Factory
             'user_id' => User::factory(),
             'job_type' => fake()->randomElement(['Repair', 'Installation', 'Setup']),
             'description' => fake()->paragraph(),
-            'status' => 'new',
+            'attachment_path' => null,
+            'status' => JobOrder::STATUS_PENDING_HEAD,
             'assigned_to_id' => null,
             'approved_at' => null,
             'started_at' => null,
+            'start_notes' => null,
             'completed_at' => null,
+            'completion_notes' => null,
         ];
     }
 }

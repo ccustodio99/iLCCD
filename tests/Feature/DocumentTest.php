@@ -43,3 +43,47 @@ it('prevents editing others documents', function () {
     $response = $this->get("/documents/{$doc->id}/edit");
     $response->assertForbidden();
 });
+
+it('shows document details with versions', function () {
+    Storage::fake('local');
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $this->post('/documents', [
+        'title' => 'Handbook',
+        'description' => 'Desc',
+        'category' => 'policy',
+        'file' => UploadedFile::fake()->create('file.pdf', 10),
+    ]);
+
+    $document = Document::first();
+    $response = $this->get("/documents/{$document->id}");
+    $response->assertStatus(200);
+    $response->assertSee('Versions');
+});
+
+it('prevents viewing documents from other departments', function () {
+    $user = User::factory()->create(['department' => 'CCS']);
+    $other = User::factory()->create(['department' => 'HR']);
+    $doc = Document::factory()->for($other)->create(['department' => 'HR']);
+
+    $this->actingAs($user);
+    $this->get("/documents/{$doc->id}")->assertForbidden();
+});
+
+it('allows downloading document versions', function () {
+    Storage::fake('local');
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $this->post('/documents', [
+        'title' => 'Policy',
+        'description' => 'Important',
+        'category' => 'policy',
+        'file' => UploadedFile::fake()->create('policy.pdf', 100),
+    ]);
+
+    $version = DocumentVersion::first();
+    $response = $this->get("/documents/{$version->document_id}/versions/{$version->id}/download");
+    $response->assertStatus(200);
+});

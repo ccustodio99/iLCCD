@@ -44,15 +44,33 @@ Route::middleware('auth')->group(function () {
     Route::post('tickets/{ticket}/convert', [TicketController::class, 'convertToJobOrder'])->name('tickets.convert');
     Route::post('tickets/{ticket}/requisition', [TicketController::class, 'convertToRequisition'])->name('tickets.requisition');
     Route::post('tickets/{ticket}/comments', [TicketController::class, 'storeComment'])->name('tickets.comment');
+    Route::get('tickets/{ticket}/attachment', [TicketController::class, 'downloadAttachment'])->name('tickets.attachment');
     Route::resource('job-orders', JobOrderController::class)->except('show');
+    Route::get('job-orders/{jobOrder}/attachment', [JobOrderController::class, 'downloadAttachment'])->name('job-orders.attachment');
     Route::put('job-orders/{jobOrder}/complete', [JobOrderController::class, 'complete'])->name('job-orders.complete');
     Route::post('job-orders/{jobOrder}/materials', [JobOrderController::class, 'requestMaterials'])->name('job-orders.materials');
+    Route::get('job-orders/approvals', [JobOrderController::class, 'approvals'])->name('job-orders.approvals')->middleware('role:head,president,finance');
+    Route::put('job-orders/{jobOrder}/approve', [JobOrderController::class, 'approve'])->name('job-orders.approve')->middleware('role:head,president,finance');
+    Route::get('job-orders/assignments', [JobOrderController::class, 'assignments'])->name('job-orders.assignments')->middleware('role:itrc,admin');
+    Route::put('job-orders/{jobOrder}/assign', [JobOrderController::class, 'assign'])->name('job-orders.assign')->middleware('role:itrc,admin');
+    Route::get('job-orders/assigned', [JobOrderController::class, 'assigned'])->name('job-orders.assigned')->middleware('role:staff,itrc');
+    Route::put('job-orders/{jobOrder}/start', [JobOrderController::class, 'start'])->name('job-orders.start');
+    Route::put('job-orders/{jobOrder}/finish', [JobOrderController::class, 'finish'])->name('job-orders.finish');
+    Route::get('requisitions/approvals', [RequisitionController::class,'approvals'])
+        ->middleware('role:head,president,finance')
+        ->name('requisitions.approvals');
+    Route::put('requisitions/{requisition}/approve', [RequisitionController::class,'approve'])
+        ->middleware('role:head,president,finance')
+        ->name('requisitions.approve');
     Route::resource('requisitions', RequisitionController::class)->except('show');
     Route::resource('inventory', InventoryItemController::class)->except('show');
     Route::post('inventory/{inventory}/issue', [InventoryItemController::class, 'issue'])->name('inventory.issue');
     Route::post('inventory/{inventory}/return', [InventoryItemController::class, 'return'])->name('inventory.return');
+    Route::get('purchase-orders/{purchaseOrder}/attachment', [PurchaseOrderController::class, 'downloadAttachment'])->name('purchase-orders.attachment');
     Route::resource('purchase-orders', PurchaseOrderController::class)->except('show');
-    Route::resource('documents', DocumentController::class)->except('show');
+    Route::resource('documents', DocumentController::class);
+    Route::get('documents/{document}/versions/{version}/download', [DocumentController::class, 'download'])
+        ->name('documents.download');
     Route::get('documents-dashboard', [DocumentDashboardController::class, 'index'])->name('documents.dashboard');
     Route::get('audit-trails', [AuditTrailController::class, 'index'])->name('audit-trails.index');
     Route::prefix('document-tracking')->group(function () {

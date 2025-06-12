@@ -18,23 +18,25 @@ The **Requisition Management Module** enables LCCD stakeholders to request mater
   - Item/service details (type, quantity, specifications)
   - Purpose/justification
   - Department and requester auto-filled
-  - Optional attachment (quotation, supporting document)
+  - Optional attachments (quotations, specification sheets) stored with the request
 
 ### 2. Multi-Level Approval Workflows
-- The system enforces structured approval chains depending on the requestor’s role:
+- The system enforces a structured chain depending on the requester’s role:
   - **Staff**: Head → President → Finance
   - **Department Head**: President → Finance
   - **President**: Finance only
-- Each approval stage:
-  - Reviewer can **approve**, **modify** (quantity, item), **return**, or **reject** the request.
-  - **Remarks** field is available at every stage for context and transparency.
-  - All actions are logged in the audit trail.
+- Each approval stage records **remarks** from the reviewer and is logged in the audit trail.
+- Approvers simply advance the request to the next stage; the Finance office’s approval finalizes the requisition.
 
-### 3. Automated Routing and Status Tracking
-- Workflow engine automatically routes requests to the next required approver based on defined rules.
-- Notifications sent to next approver and original requester at each step.
-- Real-time status tracking: “Pending,” “In Review,” “Approved,” “Modified,” “Rejected,” or “Returned for Clarification.”
-- Requesters can monitor their requisitions at all stages via dashboard.
+### 3. Automated Routing, Statuses, and Notifications
+- Workflow engine automatically routes requests to the next required approver.
+- Email notifications are sent to the next approver and to the requester whenever the status changes.
+- Real-time status tracking uses these workflow states:
+  - **pending_head** – awaiting department head review
+  - **pending_president** – awaiting president approval
+  - **pending_finance** – awaiting finance approval
+  - **approved** – fully approved and ready for fulfillment
+- Requesters can monitor their requisitions and remarks via their dashboard.
 
 ### 4. Integration with Other Modules
 - **Job Order Module**: Created automatically when a job order needs materials not in stock.

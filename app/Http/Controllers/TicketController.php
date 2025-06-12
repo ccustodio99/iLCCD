@@ -8,6 +8,7 @@ use App\Models\Requisition;
 use App\Models\User;
 use App\Models\AuditTrail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 class TicketController extends Controller
@@ -198,6 +199,21 @@ class TicketController extends Controller
         return back();
     }
 
+    public function downloadAttachment(Ticket $ticket)
+    {
+        if ($ticket->attachment_path === null) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        if ($ticket->user_id !== auth()->id() &&
+            $ticket->assigned_to_id !== auth()->id() &&
+            ! $ticket->watchers->contains(auth()->id())) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+
+        return Storage::disk('public')->download($ticket->attachment_path);
+    }
+
     public function destroy(Ticket $ticket)
     {
         if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
@@ -218,7 +234,7 @@ class TicketController extends Controller
             'ticket_id' => $ticket->id,
             'job_type' => $ticket->category,
             'description' => $ticket->description,
-            'status' => 'new',
+            'status' => JobOrder::STATUS_PENDING_HEAD,
         ]);
 
         $ticket->update(['status' => 'converted']);

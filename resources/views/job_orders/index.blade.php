@@ -13,6 +13,7 @@
                 <th>Type</th>
                 <th>Description</th>
                 <th>Status</th>
+                <th>Role</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -22,6 +23,7 @@
                 <td>{{ $jobOrder->job_type }}</td>
                 <td>{{ Str::limit($jobOrder->description, 50) }}</td>
                 <td>{{ ucfirst($jobOrder->status) }}</td>
+                <td>{{ $jobOrder->user_id === auth()->id() ? 'Requester' : 'Assignee' }}</td>
                 <td>
                     <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#jobOrderModal{{ $jobOrder->id }}">View</button>
                     <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editJobOrderModal{{ $jobOrder->id }}">Edit</button>
@@ -50,6 +52,7 @@
                     <p><strong>Type:</strong> {{ $jobOrder->job_type }}</p>
                     <p><strong>Description:</strong> {{ $jobOrder->description }}</p>
                     <p><strong>Status:</strong> {{ ucfirst($jobOrder->status) }}</p>
+                    <p><strong>Role:</strong> {{ $jobOrder->user_id === auth()->id() ? 'Requester' : 'Assignee' }}</p>
                     @if($jobOrder->ticket_id)
                         <p><strong>Ticket ID:</strong>
                             <a href="{{ route('tickets.index') }}#ticketModal{{ $jobOrder->ticket_id }}">
@@ -60,6 +63,9 @@
                     <p><strong>Approved At:</strong> {{ $jobOrder->approved_at?->format('Y-m-d H:i') ?? '-' }}</p>
                     <p><strong>Started At:</strong> {{ $jobOrder->started_at?->format('Y-m-d H:i') ?? '-' }}</p>
                     <p><strong>Completed At:</strong> {{ $jobOrder->completed_at?->format('Y-m-d H:i') ?? '-' }}</p>
+                    @if($jobOrder->attachment_path)
+                        <p><strong>Attachment:</strong> <a href="{{ route('job-orders.attachment', $jobOrder) }}" target="_blank">Download</a></p>
+                    @endif
                     @if($jobOrder->requisitions->count())
                         <h6>Requisitions</h6>
                         <ul>
@@ -83,7 +89,7 @@
                     <h5 class="modal-title">Edit Job Order</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('job-orders.update', $jobOrder) }}" method="POST">
+                <form action="{{ route('job-orders.update', $jobOrder) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
@@ -96,9 +102,25 @@
                             <textarea name="description" class="form-control" rows="4" required>{{ old('description', $jobOrder->description) }}</textarea>
                         </div>
                         <div class="mb-3">
+                            <label class="form-label">Attachment</label>
+                            <input type="file" name="attachment" class="form-control">
+                            @if($jobOrder->attachment_path)
+                                <small class="text-muted">Current: <a href="{{ route('job-orders.attachment', $jobOrder) }}" target="_blank">Download</a></small>
+                            @endif
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label">Status</label>
                             <select name="status" class="form-select" required>
-                                @php($statuses = ['new' => 'New', 'approved' => 'Approved', 'assigned' => 'Assigned', 'in_progress' => 'In Progress', 'completed' => 'Completed', 'closed' => 'Closed'])
+                                @php($statuses = [
+                                    'pending_head' => 'Pending Head',
+                                    'pending_president' => 'Pending President',
+                                    'pending_finance' => 'Pending Finance',
+                                    'approved' => 'Approved',
+                                    'assigned' => 'Assigned',
+                                    'in_progress' => 'In Progress',
+                                    'completed' => 'Completed',
+                                    'closed' => 'Closed'
+                                ])
                                 @foreach($statuses as $value => $label)
                                     <option value="{{ $value }}" {{ old('status', $jobOrder->status) === $value ? 'selected' : '' }}>{{ $label }}</option>
                                 @endforeach
@@ -122,7 +144,7 @@
                     <h5 class="modal-title" id="newJobOrderModalLabel">New Job Order</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('job-orders.store') }}" method="POST">
+                <form action="{{ route('job-orders.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3">
@@ -132,6 +154,10 @@
                         <div class="mb-3">
                             <label class="form-label">Description</label>
                             <textarea name="description" class="form-control" rows="4" required>{{ old('description') }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Attachment</label>
+                            <input type="file" name="attachment" class="form-control">
                         </div>
                     </div>
                     <div class="modal-footer">

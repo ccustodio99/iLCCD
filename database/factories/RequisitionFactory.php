@@ -19,7 +19,7 @@ class RequisitionFactory extends Factory
             'user_id' => User::factory(),
             'department' => $this->faker->randomElement(['IT', 'HR', 'Admin']),
             'purpose' => $this->faker->sentence(),
-            'status' => 'pending_head',
+            'status' => Requisition::STATUS_PENDING_HEAD,
             'remarks' => null,
             'approved_by_id' => null,
             'approved_at' => null,

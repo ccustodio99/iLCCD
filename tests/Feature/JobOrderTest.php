@@ -4,6 +4,7 @@ use App\Models\JobOrder;
 use App\Models\User;
 use App\Models\InventoryItem;
 use App\Models\Requisition;
+use App\Models\InventoryTransaction;
 
 it('allows authenticated user to create job order', function () {
     $user = User::factory()->create();
@@ -26,6 +27,23 @@ it('shows user job orders', function () {
     $response = $this->get('/job-orders');
     $response->assertStatus(200);
     $response->assertSee('Setup');
+});
+
+it('shows job orders assigned to user', function () {
+    $user = User::factory()->create();
+    $requester = User::factory()->create();
+    JobOrder::factory()->for($requester)->create([
+        'job_type' => 'Repair',
+        'assigned_to_id' => $user->id,
+        'status' => JobOrder::STATUS_ASSIGNED,
+    ]);
+
+    $this->actingAs($user);
+
+    $response = $this->get('/job-orders');
+    $response->assertStatus(200);
+    $response->assertSee('Repair');
+    $response->assertSee('Assignee');
 });
 
 it('prevents editing others job orders', function () {
@@ -57,6 +75,8 @@ it('deducts inventory if materials available', function () {
     $response->assertRedirect('/job-orders');
     $item->refresh();
     expect($item->quantity)->toBe(2);
+    expect(InventoryTransaction::where('job_order_id', $order->id)
+        ->where('action', 'issue')->exists())->toBeTrue();
 });
 
 it('creates requisition when materials not in stock', function () {
