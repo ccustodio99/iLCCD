@@ -21,7 +21,7 @@ The Access Control module is the core of security and data integrity in the syst
 ### 2. Secure Login Mechanisms
 - **Login page** is accessible over HTTPS (recommended).
 - Passwords are hashed with a secure algorithm (bcrypt or Argon2).
-- **Account lockout** after several failed login attempts (brute-force prevention).
+- **Account lockout** after five failed login attempts for 15 minutes (brute-force prevention).
 - **Optional Two-Factor Authentication (2FA):**
   - Can be enabled for privileged users/roles (e.g., President, Finance, Admin).
   - Sends a time-based OTP (One Time Password) to email or SMS upon login.
@@ -29,7 +29,7 @@ The Access Control module is the core of security and data integrity in the syst
 
 ### 3. Session Management and Timeout
 - Each login creates a secure PHP session.
-- **Automatic logout** after a configurable period of inactivity (e.g., 15 minutes).
+- **Automatic logout** after 15 minutes of inactivity (configurable via `SESSION_LIFETIME`).
 - **Manual logout** option on every page.
 - Session tokens are regenerated on privilege change and logout.
 - Session storage and handling prevent session hijacking (store session ID in HTTP-only, secure cookies).
@@ -50,7 +50,8 @@ The Access Control module is the core of security and data integrity in the syst
 ### Current Implementation
 - Role-based middleware restricts access to routes.
 - Passwords are hashed and sessions regenerate on login/logout.
-- Features like account lockout, two-factor auth, and automatic session timeout are not yet implemented.
+- Accounts are locked for 15 minutes after five failed login attempts and audit logs capture these events.
+- Two-factor auth is not yet implemented. Automatic session timeout logs users out after 15 minutes of inactivity.
 
 ---
 

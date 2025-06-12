@@ -54,7 +54,8 @@
                 @endforeach
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary me-2">Save</button>
+        <a href="{{ route('requisitions.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
     @include('audit_trails._list', ['logs' => $requisition->auditTrails])
 </div>
