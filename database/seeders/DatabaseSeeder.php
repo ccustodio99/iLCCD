@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Database\Seeders\DocumentCategorySeeder;
+use Database\Seeders\TicketCategorySeeder;
+use Database\Seeders\InventoryCategorySeeder;
+use Database\Seeders\JobOrderTypeSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -14,7 +17,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(DocumentCategorySeeder::class);
+        $this->call([
+            TicketCategorySeeder::class,
+            InventoryCategorySeeder::class,
+            JobOrderTypeSeeder::class,
+            DocumentCategorySeeder::class,
+        ]);
         // Populate demo data
         $this->call(DemoSeeder::class);
     }

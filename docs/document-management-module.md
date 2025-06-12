@@ -13,6 +13,7 @@ The **Document Management Module** provides a secure, organized, and version-con
 - Old versions remain accessible for reference and compliance.
 - Supports multiple file types: PDF, DOCX, XLSX, images, etc.
 - Metadata: title, description, category (policy, syllabus, report, etc.), department, author, upload date, version number.
+- Document categories are managed by admins under **Settings → Document Categories**.
 
 ### 2. Secure, Role-Based Access
 - Documents are categorized and access is controlled by user roles (e.g., faculty, student, admin) and department.

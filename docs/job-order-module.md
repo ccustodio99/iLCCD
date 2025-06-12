@@ -18,6 +18,7 @@ begins.
      facilities needs, or event setups.
    - The form captures job type, description, optional attachments, and
      auto-fills the requester and department.
+   - Job order types are managed under **Settings → Job Order Types**.
 
 2. **Post-Approval Assignment**
    - After multi-level approval (Head → President → Finance when
