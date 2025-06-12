@@ -39,6 +39,10 @@
             <textarea name="purpose" class="form-control" rows="3" required>{{ old('purpose', $requisition->purpose) }}</textarea>
         </div>
         <div class="mb-3">
+            <label class="form-label">Remarks</label>
+            <textarea name="remarks" class="form-control" rows="2">{{ old('remarks', $requisition->remarks) }}</textarea>
+        </div>
+        <div class="mb-3">
             <label class="form-label">Status</label>
             <select name="status" class="form-select" required>
                 @php($statuses = ['pending_head' => 'Pending Head', 'approved' => 'Approved'])

@@ -30,12 +30,14 @@ class RequisitionController extends Controller
             'quantity.*' => 'required|integer|min:1',
             'specification.*' => 'nullable|string',
             'purpose' => 'required|string',
+            'remarks' => 'nullable|string',
         ]);
 
         $requisition = Requisition::create([
             'user_id' => $request->user()->id,
             'department' => $request->user()->department,
             'purpose' => $data['purpose'],
+            'remarks' => $data['remarks'] ?? null,
             'status' => Requisition::STATUS_PENDING_HEAD,
         ]);
 
@@ -68,11 +70,13 @@ class RequisitionController extends Controller
             'quantity.*' => 'required|integer|min:1',
             'specification.*' => 'nullable|string',
             'purpose' => 'required|string',
+            'remarks' => 'nullable|string',
             'status' => 'required|string',
         ]);
 
         $requisition->update([
             'purpose' => $data['purpose'],
+            'remarks' => $data['remarks'] ?? null,
             'status' => $data['status'],
         ]);
 
