@@ -24,6 +24,21 @@ class DocumentController extends Controller
         return view('documents.create');
     }
 
+    public function show(Document $document)
+    {
+        $user = auth()->user();
+        if (
+            $user->role !== 'admin' &&
+            $user->department !== $document->department &&
+            $document->user_id !== $user->id
+        ) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+
+        $document->load(['versions.uploader', 'auditTrails.user']);
+        return view('documents.show', compact('document'));
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -91,12 +106,11 @@ class DocumentController extends Controller
         return redirect()->route('documents.index');
     }
 
-    public function destroy(Document $document)
+    public function destroy(Request $request, Document $document)
     {
         if ($document->user_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
-        // delete files
         foreach ($document->versions as $version) {
             Storage::delete($version->path);
         }
@@ -107,5 +121,29 @@ class DocumentController extends Controller
             'action' => 'delete',
         ]);
         return redirect()->route('documents.index');
+    }
+
+    public function download(Document $document, DocumentVersion $version)
+    {
+        if ($version->document_id !== $document->id) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        $user = auth()->user();
+        if (
+            $user->role !== 'admin' &&
+            $user->department !== $document->department &&
+            $document->user_id !== $user->id
+        ) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+
+        DocumentLog::create([
+            'document_id' => $document->id,
+            'user_id' => $user->id,
+            'action' => 'download',
+        ]);
+
+        return Storage::download($version->path);
     }
 }
