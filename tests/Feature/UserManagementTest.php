@@ -27,6 +27,27 @@ it('allows admin to create a user', function () {
     expect(User::where('email', 'new@example.com')->exists())->toBeTrue();
 });
 
+it('allows admin to create users with every role', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+    $this->actingAs($admin);
+
+    foreach (User::ROLES as $role) {
+        $email = $role.'@example.com';
+        $response = $this->post('/users', [
+            'name' => 'Role '.$role,
+            'email' => $email,
+            'password' => 'Password1!',
+            'password_confirmation' => 'Password1!',
+            'role' => $role,
+            'department' => 'Demo',
+            'is_active' => true,
+        ]);
+
+        $response->assertRedirect('/users');
+        expect(User::where('email', $email)->where('role', $role)->exists())->toBeTrue();
+    }
+});
+
 it('allows admin to edit a user', function () {
     $admin = User::factory()->create(['role' => 'admin']);
     $user = User::factory()->create();
