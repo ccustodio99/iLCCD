@@ -91,3 +91,20 @@ it('marks job order complete', function () {
     expect($order->status)->toBe('completed');
     expect($order->completed_at)->not->toBeNull();
 });
+
+it('shows ticket reference in job order details', function () {
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $ticket = App\Models\Ticket::factory()->for($user)->create([
+        'category' => 'Facilities',
+        'description' => 'Aircon issue',
+    ]);
+
+    $this->post("/tickets/{$ticket->id}/convert");
+
+    $response = $this->get('/job-orders');
+
+    $response->assertSee('Ticket ID');
+    $response->assertSee((string) $ticket->id);
+});
