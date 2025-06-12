@@ -15,11 +15,13 @@ it('routes job order through approval and assignment workflow', function () {
     $finance = User::factory()->create(['role' => 'finance']);
     $assigner = User::factory()->create(['role' => 'itrc']);
     $technician = User::factory()->create(['role' => 'staff']);
-    $type = JobOrderType::factory()->create(['name' => 'Repair']);
+    $parent = JobOrderType::factory()->create(['name' => 'Maintenance']);
+    $type = JobOrderType::factory()->create(['name' => 'Repair', 'parent_id' => $parent->id]);
 
     // requester creates job order
     $this->actingAs($requester);
     $this->post('/job-orders', [
+        'type_parent' => $parent->id,
         'job_type' => $type->name,
         'description' => 'Fix PC',
     ])->assertRedirect('/job-orders');

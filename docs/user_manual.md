@@ -23,7 +23,7 @@ The User Manual provides a step-by-step guide for everyday actions in the LCCD I
 
 ## ✍️ Creating Requests
 1. **Tickets** – Report issues or service needs. Fill in the category, subject, description, and optional due date. Attach files if necessary. Ticket subjects display as `[Category] - [Issue Summary] - Ticket ID`.
-2. **Job Orders** – Request repairs or installations. Provide job details and upload supporting documents.
+2. **Job Orders** – Request repairs or installations. First pick a **Type**, then choose a **Sub Type** from the list that appears. Provide job details and upload supporting documents.
 3. **Requisitions** – Request supplies or equipment from Inventory. Enter item names, quantities, and justification.
 4. **Purchase Orders** – Finance staff convert approved requisitions into purchase orders for out‑of‑stock items.
 

@@ -77,4 +77,15 @@ class JobOrderTypeController extends Controller
 
         return redirect()->route('job-order-types.index');
     }
+
+    /**
+     * Return active child types for the given parent.
+     */
+    public function children(JobOrderType $parent)
+    {
+        return $parent->children()
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
+    }
 }

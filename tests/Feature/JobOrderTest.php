@@ -11,9 +11,11 @@ use App\Models\TicketCategory;
 it('allows authenticated user to create job order', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
-    $type = JobOrderType::factory()->create(['name' => 'Repair']);
+    $parent = JobOrderType::factory()->create(['name' => 'Maintenance']);
+    $type = JobOrderType::factory()->create(['name' => 'Repair', 'parent_id' => $parent->id]);
 
     $response = $this->post('/job-orders', [
+        'type_parent' => $parent->id,
         'job_type' => $type->name,
         'description' => 'Fix projector',
     ]);
@@ -25,9 +27,11 @@ it('allows authenticated user to create job order', function () {
 it('rejects inactive job order types', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
-    $type = JobOrderType::factory()->create(['is_active' => false]);
+    $parent = JobOrderType::factory()->create(['name' => 'Main']);
+    $type = JobOrderType::factory()->create(['is_active' => false, 'parent_id' => $parent->id]);
 
     $response = $this->from('/job-orders/create')->post('/job-orders', [
+        'type_parent' => $parent->id,
         'job_type' => $type->name,
         'description' => 'Fix projector',
     ]);
