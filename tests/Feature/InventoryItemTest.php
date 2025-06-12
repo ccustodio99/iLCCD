@@ -7,8 +7,8 @@ use App\Models\InventoryCategory;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\LowStockNotification;
 
-it('allows authenticated user to create inventory item', function () {
-    $user = User::factory()->create();
+it('allows authorized user to create inventory item', function () {
+    $user = User::factory()->create(['role' => 'admin']);
     $category = InventoryCategory::factory()->create(['name' => 'IT']);
     $this->actingAs($user);
 
@@ -30,7 +30,7 @@ it('allows authenticated user to create inventory item', function () {
 });
 
 it('shows user inventory items', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['role' => 'admin']);
     $item = InventoryItem::factory()->for($user)->create(['name' => 'Projector']);
     $this->actingAs($user);
 
@@ -40,7 +40,7 @@ it('shows user inventory items', function () {
 });
 
 it('prevents editing others inventory items', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['role' => 'admin']);
     $other = User::factory()->create();
     $item = InventoryItem::factory()->for($other)->create();
     $this->actingAs($user);
@@ -51,7 +51,7 @@ it('prevents editing others inventory items', function () {
 
 it('updates quantity and records transaction when item is issued', function () {
     $this->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class);
-    $user = User::factory()->create();
+    $user = User::factory()->create(['role' => 'admin']);
     $item = InventoryItem::factory()->for($user)->create(['quantity' => 5]);
     $this->actingAs($user);
 
@@ -71,7 +71,7 @@ it('updates quantity and records transaction when item is issued', function () {
 
 it('updates quantity and records transaction when item is returned', function () {
     $this->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class);
-    $user = User::factory()->create();
+    $user = User::factory()->create(['role' => 'admin']);
     $item = InventoryItem::factory()->for($user)->create(['quantity' => 5]);
     $this->actingAs($user);
 
@@ -90,7 +90,7 @@ it('updates quantity and records transaction when item is returned', function ()
 });
 
 it('highlights low stock items on index', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['role' => 'admin']);
     InventoryItem::factory()->for($user)->create([
         'quantity' => 1,
         'minimum_stock' => 5,
@@ -103,7 +103,7 @@ it('highlights low stock items on index', function () {
 });
 
 it('highlights out of stock items on index', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['role' => 'admin']);
     InventoryItem::factory()->for($user)->create([
         'quantity' => 0,
         'minimum_stock' => 5,
@@ -118,7 +118,7 @@ it('highlights out of stock items on index', function () {
 it('dispatches low stock notification when issuing causes quantity to drop below minimum', function () {
     Notification::fake();
 
-    $user = User::factory()->create(['department' => 'IT']);
+    $user = User::factory()->create(['role' => 'admin', 'department' => 'IT']);
     $head = User::factory()->create(['role' => 'head', 'department' => 'IT']);
     $custodian = User::factory()->create(['department' => 'IT']);
 
@@ -137,4 +137,11 @@ it('dispatches low stock notification when issuing causes quantity to drop below
 
     Notification::assertSentTimes(LowStockNotification::class, 2);
     Notification::assertSentTo([$head, $custodian], LowStockNotification::class);
+});
+
+it('blocks unauthorized roles from inventory actions', function () {
+    $staff = User::factory()->create(['role' => 'staff']);
+    $this->actingAs($staff);
+
+    $this->get('/inventory')->assertForbidden();
 });
