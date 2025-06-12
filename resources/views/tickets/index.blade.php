@@ -62,7 +62,7 @@
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label">Category</label>
+                            <label class="form-label" for="modal_ticket_category_id">Category</label>
                             <input type="hidden" name="ticket_category_id" id="modal_ticket_category_id" value="{{ old('ticket_category_id') }}" required>
                             <div class="d-flex flex-wrap gap-2 mb-2">
                                 @foreach($categories as $cat)
@@ -74,7 +74,7 @@
                             @foreach($categories as $cat)
                                 <div id="new-cat-{{ $cat->id }}" class="collapse category-collapse mb-3 {{ $cat->children->contains('id', old('ticket_category_id')) ? 'show' : '' }}">
                                     <div class="card card-body">
-                                        <select class="form-select subcategory-select" data-cat-id="{{ $cat->id }}">
+                                        <select id="new_subcategory_select_{{ $cat->id }}" class="form-select subcategory-select" data-cat-id="{{ $cat->id }}">
                                             <option value="">Select {{ $cat->name }} option</option>
                                             @foreach($cat->children as $child)
                                                 <option value="{{ $child->id }}" {{ old('ticket_category_id') == $child->id ? 'selected' : '' }}>{{ $child->name }}</option>
@@ -85,20 +85,20 @@
                             @endforeach
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Subject</label>
-                            <input type="text" name="subject" class="form-control" value="{{ old('subject') }}" required>
+                            <label class="form-label" for="new_subject">Subject</label>
+                            <input id="new_subject" type="text" name="subject" class="form-control" value="{{ old('subject') }}" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Description</label>
-                            <textarea name="description" class="form-control" rows="4" required>{{ old('description') }}</textarea>
+                            <label class="form-label" for="new_description">Description</label>
+                            <textarea id="new_description" name="description" class="form-control" rows="4" required>{{ old('description') }}</textarea>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Attachment</label>
-                            <input type="file" name="attachment" class="form-control">
+                            <label class="form-label" for="new_attachment">Attachment</label>
+                            <input id="new_attachment" type="file" name="attachment" class="form-control">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Assign To</label>
-                            <select name="assigned_to_id" class="form-select">
+                            <label class="form-label" for="new_assigned_to_id">Assign To</label>
+                            <select id="new_assigned_to_id" name="assigned_to_id" class="form-select">
                                 <option value="">Unassigned</option>
                                 @foreach($users as $u)
                                     <option value="{{ $u->id }}" {{ old('assigned_to_id') == $u->id ? 'selected' : '' }}>{{ $u->name }}</option>
@@ -106,8 +106,8 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Watchers</label>
-                            <select name="watchers[]" class="form-select" multiple>
+                            <label class="form-label" for="new_watchers">Watchers</label>
+                            <select id="new_watchers" name="watchers[]" class="form-select" multiple>
                                 @foreach($users as $u)
                                     <option value="{{ $u->id }}" {{ collect(old('watchers'))->contains($u->id) ? 'selected' : '' }}>{{ $u->name }}</option>
                                 @endforeach
@@ -115,8 +115,8 @@
                             <small class="text-muted">Hold Ctrl or Command to select multiple users</small>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Due Date</label>
-                            <input type="date" name="due_at" class="form-control" value="{{ old('due_at') }}">
+                            <label class="form-label" for="new_due_at">Due Date</label>
+                            <input id="new_due_at" type="date" name="due_at" class="form-control" value="{{ old('due_at') }}">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -196,7 +196,7 @@
                     @if(auth()->id() === $ticket->user_id || auth()->id() === $ticket->assigned_to_id || $ticket->watchers->contains(auth()->id()))
                         <form action="{{ route('tickets.comment', $ticket) }}" method="POST" class="mb-3">
                             @csrf
-                            <textarea name="comment" class="form-control mb-2" rows="2" required></textarea>
+                            <textarea id="comment{{ $ticket->id }}" name="comment" class="form-control mb-2" rows="2" required></textarea>
                             <button type="submit" class="btn btn-primary btn-sm">Add Comment</button>
                         </form>
                     @endif
@@ -219,7 +219,7 @@
                     @method('PUT')
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label">Category</label>
+                            <label class="form-label" for="modal_ticket_category_id_edit{{ $ticket->id }}">Category</label>
                             <input type="hidden" name="ticket_category_id" id="modal_ticket_category_id_edit{{ $ticket->id }}" value="{{ old('ticket_category_id', $ticket->ticket_category_id) }}" class="ticket_category_id_input" required>
                             <div class="d-flex flex-wrap gap-2 mb-2">
                                 @foreach($categories as $cat)
@@ -231,7 +231,7 @@
                             @foreach($categories as $cat)
                                 <div id="edit{{ $ticket->id }}-cat-{{ $cat->id }}" class="collapse category-collapse mb-3 {{ $cat->children->contains('id', old('ticket_category_id', $ticket->ticket_category_id)) ? 'show' : '' }}">
                                     <div class="card card-body">
-                                        <select class="form-select subcategory-select" data-cat-id="{{ $cat->id }}">
+                                        <select id="edit_subcategory_select_{{ $ticket->id }}_{{ $cat->id }}" class="form-select subcategory-select" data-cat-id="{{ $cat->id }}">
                                             <option value="">Select {{ $cat->name }} option</option>
                                             @foreach($cat->children as $child)
                                                 <option value="{{ $child->id }}" {{ old('ticket_category_id', $ticket->ticket_category_id) == $child->id ? 'selected' : '' }}>{{ $child->name }}</option>
@@ -242,23 +242,23 @@
                             @endforeach
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Subject</label>
-                            <input type="text" name="subject" class="form-control" value="{{ old('subject', $ticket->subject) }}" required>
+                            <label class="form-label" for="subject_edit{{ $ticket->id }}">Subject</label>
+                            <input id="subject_edit{{ $ticket->id }}" type="text" name="subject" class="form-control" value="{{ old('subject', $ticket->subject) }}" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Description</label>
-                            <textarea name="description" class="form-control" rows="4" required>{{ old('description', $ticket->description) }}</textarea>
+                            <label class="form-label" for="description_edit{{ $ticket->id }}">Description</label>
+                            <textarea id="description_edit{{ $ticket->id }}" name="description" class="form-control" rows="4" required>{{ old('description', $ticket->description) }}</textarea>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Attachment</label>
-                            <input type="file" name="attachment" class="form-control">
+                            <label class="form-label" for="attachment_edit{{ $ticket->id }}">Attachment</label>
+                            <input id="attachment_edit{{ $ticket->id }}" type="file" name="attachment" class="form-control">
                             @if($ticket->attachment_path)
                                 <small class="text-muted">Current: <a href="{{ route('tickets.attachment', $ticket) }}" target="_blank">Download</a></small>
                             @endif
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Assign To</label>
-                            <select name="assigned_to_id" class="form-select">
+                            <label class="form-label" for="assigned_to_id_edit{{ $ticket->id }}">Assign To</label>
+                            <select id="assigned_to_id_edit{{ $ticket->id }}" name="assigned_to_id" class="form-select">
                                 <option value="">Unassigned</option>
                                 @foreach($users as $u)
                                     <option value="{{ $u->id }}" {{ old('assigned_to_id', $ticket->assigned_to_id) == $u->id ? 'selected' : '' }}>{{ $u->name }}</option>
@@ -266,8 +266,8 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Watchers</label>
-                            <select name="watchers[]" class="form-select" multiple>
+                            <label class="form-label" for="watchers_edit{{ $ticket->id }}">Watchers</label>
+                            <select id="watchers_edit{{ $ticket->id }}" name="watchers[]" class="form-select" multiple>
                                 @php($selected = old('watchers', $ticket->watchers->pluck('id')->toArray()))
                                 @foreach($users as $u)
                                     <option value="{{ $u->id }}" {{ in_array($u->id, $selected) ? 'selected' : '' }}>{{ $u->name }}</option>
@@ -276,8 +276,8 @@
                             <small class="text-muted">Hold Ctrl or Command to select multiple users</small>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Status</label>
-                            <select name="status" class="form-select" required>
+                            <label class="form-label" for="status_edit{{ $ticket->id }}">Status</label>
+                            <select id="status_edit{{ $ticket->id }}" name="status" class="form-select" required>
                                 @php($statuses = ['open' => 'Open', 'escalated' => 'Escalated', 'converted' => 'Converted', 'closed' => 'Closed'])
                                 @foreach($statuses as $value => $label)
                                     <option value="{{ $value }}" {{ old('status', $ticket->status) === $value ? 'selected' : '' }}>{{ $label }}</option>
@@ -285,8 +285,8 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Due Date</label>
-                            <input type="date" name="due_at" class="form-control" value="{{ old('due_at', optional($ticket->due_at)->format('Y-m-d')) }}">
+                            <label class="form-label" for="due_at_edit{{ $ticket->id }}">Due Date</label>
+                            <input id="due_at_edit{{ $ticket->id }}" type="date" name="due_at" class="form-control" value="{{ old('due_at', optional($ticket->due_at)->format('Y-m-d')) }}">
                         </div>
                     </div>
                     <div class="modal-footer">
