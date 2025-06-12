@@ -91,7 +91,9 @@ it('deducts inventory when approved and stock available', function () {
     $item->refresh();
     expect($item->quantity)->toBe(3);
     expect(InventoryTransaction::where('requisition_id', $req->id)
-        ->where('action', 'issue')->exists())->toBeTrue();
+        ->where('action', 'issue')
+        ->where('purpose', $req->purpose)
+        ->exists())->toBeTrue();
 });
 
 it('shows ticket reference on requisition list', function () {

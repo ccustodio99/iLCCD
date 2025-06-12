@@ -53,7 +53,7 @@ it('updates quantity and records transaction when item is issued', function () {
     $item = InventoryItem::factory()->for($user)->create(['quantity' => 5]);
     $this->actingAs($user);
 
-    $request = Illuminate\Http\Request::create('/', 'POST', ['quantity' => 2]);
+    $request = Illuminate\Http\Request::create('/', 'POST', ['quantity' => 2, 'purpose' => 'Maintenance']);
     $request->setUserResolver(fn () => $user);
     $controller = new App\Http\Controllers\InventoryItemController();
     $response = $controller->issue($request, $item);
@@ -63,6 +63,7 @@ it('updates quantity and records transaction when item is issued', function () {
     expect($item->quantity)->toBe(3);
     expect(InventoryTransaction::where('inventory_item_id', $item->id)
         ->where('action', 'issue')
+        ->where('purpose', 'Maintenance')
         ->exists())->toBeTrue();
 });
 
@@ -72,7 +73,7 @@ it('updates quantity and records transaction when item is returned', function ()
     $item = InventoryItem::factory()->for($user)->create(['quantity' => 5]);
     $this->actingAs($user);
 
-    $request = Illuminate\Http\Request::create('/', 'POST', ['quantity' => 2]);
+    $request = Illuminate\Http\Request::create('/', 'POST', ['quantity' => 2, 'purpose' => 'Return']);
     $request->setUserResolver(fn () => $user);
     $controller = new App\Http\Controllers\InventoryItemController();
     $response = $controller->return($request, $item);
@@ -82,6 +83,7 @@ it('updates quantity and records transaction when item is returned', function ()
     expect($item->quantity)->toBe(7);
     expect(InventoryTransaction::where('inventory_item_id', $item->id)
         ->where('action', 'return')
+        ->where('purpose', 'Return')
         ->exists())->toBeTrue();
 });
 

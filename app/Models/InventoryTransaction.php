@@ -19,6 +19,7 @@ class InventoryTransaction extends Model
         'job_order_id',
         'action',
         'quantity',
+        'purpose',
     ];
 
     public function inventoryItem(): BelongsTo

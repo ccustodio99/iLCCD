@@ -71,7 +71,10 @@
                     <form action="{{ route('inventory.issue', $item) }}" method="POST" class="row g-2 mb-2">
                         @csrf
                         <div class="col-auto">
-                            <input type="number" name="quantity" min="1" value="1" class="form-control form-control-sm">
+                            <input type="number" name="quantity" min="1" value="1" class="form-control form-control-sm" aria-label="Quantity to issue">
+                        </div>
+                        <div class="col-auto">
+                            <input type="text" name="purpose" class="form-control form-control-sm" placeholder="Purpose" aria-label="Purpose">
                         </div>
                         <div class="col-auto">
                             <button type="submit" class="btn btn-warning btn-sm">Issue</button>
@@ -80,7 +83,10 @@
                     <form action="{{ route('inventory.return', $item) }}" method="POST" class="row g-2">
                         @csrf
                         <div class="col-auto">
-                            <input type="number" name="quantity" min="1" value="1" class="form-control form-control-sm">
+                            <input type="number" name="quantity" min="1" value="1" class="form-control form-control-sm" aria-label="Quantity to return">
+                        </div>
+                        <div class="col-auto">
+                            <input type="text" name="purpose" class="form-control form-control-sm" placeholder="Purpose" aria-label="Purpose">
                         </div>
                         <div class="col-auto">
                             <button type="submit" class="btn btn-success btn-sm">Return</button>
