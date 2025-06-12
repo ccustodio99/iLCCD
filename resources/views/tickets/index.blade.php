@@ -51,11 +51,11 @@
 
     {{ $tickets->links() }}
 
-    <div class="modal fade" id="newTicketModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="newTicketModal" tabindex="-1" aria-labelledby="newTicketModalLabel" aria-hidden="true" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">New Ticket</h5>
+                    <h5 id="newTicketModalLabel" class="modal-title">New Ticket</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="{{ route('tickets.store') }}" method="POST" enctype="multipart/form-data" class="ticket-form">
@@ -129,11 +129,11 @@
     </div>
 
     @foreach ($tickets as $ticket)
-    <div class="modal fade" id="ticketModal{{ $ticket->id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="ticketModal{{ $ticket->id }}" tabindex="-1" aria-labelledby="ticketModalLabel{{ $ticket->id }}" aria-hidden="true" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Ticket Details</h5>
+                    <h5 id="ticketModalLabel{{ $ticket->id }}" class="modal-title">Ticket Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -207,11 +207,11 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="editTicketModal{{ $ticket->id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="editTicketModal{{ $ticket->id }}" tabindex="-1" aria-labelledby="editTicketModalLabel{{ $ticket->id }}" aria-hidden="true" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Ticket</h5>
+                    <h5 id="editTicketModalLabel{{ $ticket->id }}" class="modal-title">Edit Ticket</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="{{ route('tickets.update', $ticket) }}" method="POST" enctype="multipart/form-data" class="ticket-form">
