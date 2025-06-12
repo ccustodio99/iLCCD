@@ -2,14 +2,16 @@
 
 use App\Models\Ticket;
 use App\Models\User;
+use App\Models\TicketCategory;
 
 it('allows adding watchers on ticket creation', function () {
     $user = User::factory()->create();
+    $category = TicketCategory::factory()->create(['name' => 'IT']);
     $watcher = User::factory()->create();
     $this->actingAs($user);
 
     $this->post('/tickets', [
-        'category' => 'IT',
+        'category' => $category->name,
         'subject' => 'Printer',
         'description' => 'Broken',
         'watchers' => [$watcher->id],

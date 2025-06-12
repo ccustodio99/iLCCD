@@ -5,13 +5,15 @@ use App\Models\User;
 use App\Models\InventoryItem;
 use App\Models\Requisition;
 use App\Models\InventoryTransaction;
+use App\Models\JobOrderType;
 
 it('allows authenticated user to create job order', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
+    $type = JobOrderType::factory()->create(['name' => 'Repair']);
 
     $response = $this->post('/job-orders', [
-        'job_type' => 'Repair',
+        'job_type' => $type->name,
         'description' => 'Fix projector',
     ]);
 
@@ -21,7 +23,8 @@ it('allows authenticated user to create job order', function () {
 
 it('shows user job orders', function () {
     $user = User::factory()->create();
-    $order = JobOrder::factory()->for($user)->create(['job_type' => 'Setup']);
+    $type = JobOrderType::factory()->create(['name' => 'Setup']);
+    $order = JobOrder::factory()->for($user)->create(['job_type' => $type->name]);
     $this->actingAs($user);
 
     $response = $this->get('/job-orders');
@@ -32,8 +35,9 @@ it('shows user job orders', function () {
 it('shows job orders assigned to user', function () {
     $user = User::factory()->create();
     $requester = User::factory()->create();
+    $type = JobOrderType::factory()->create(['name' => 'Repair']);
     JobOrder::factory()->for($requester)->create([
-        'job_type' => 'Repair',
+        'job_type' => $type->name,
         'assigned_to_id' => $user->id,
         'status' => JobOrder::STATUS_ASSIGNED,
     ]);
