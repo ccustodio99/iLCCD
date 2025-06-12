@@ -38,6 +38,7 @@ use App\Http\Controllers\JobOrderTypeController;
 use App\Http\Controllers\InventoryCategoryController;
 use App\Http\Controllers\DocumentCategoryController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\AnnouncementController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -95,6 +96,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('inventory-categories', InventoryCategoryController::class)->except('show');
         Route::put('job-order-types/{jobOrderType}/disable', [JobOrderTypeController::class, 'disable'])->name('job-order-types.disable');
         Route::resource('job-order-types', JobOrderTypeController::class)->except('show');
+
+        Route::resource('announcements', AnnouncementController::class)->except('show');
     });
     Route::prefix('document-tracking')->group(function () {
         Route::get('incoming', [DocumentTrackingController::class, 'incoming'])->name('document-tracking.incoming');

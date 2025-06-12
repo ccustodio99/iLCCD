@@ -1,10 +1,26 @@
 @extends('layouts.app')
 
+@php use Illuminate\Support\Str; @endphp
+
 @section('title', 'Dashboard')
 
 @section('content')
 <div class="container">
     <h1 class="mb-4 text-center">Dashboard</h1>
+
+    @if($announcements->count())
+    <div class="mb-4">
+        <h2>Announcements</h2>
+        <ul class="list-group">
+            @foreach($announcements as $announce)
+                <li class="list-group-item">
+                    <strong>{{ $announce->title }}</strong><br>
+                    <span class="small text-muted">{{ Str::limit($announce->content, 100) }}</span>
+                </li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
 
     <h2 class="mt-4">Pending Tickets</h2>
     <form method="GET" class="mb-2">

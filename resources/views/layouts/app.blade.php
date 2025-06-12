@@ -15,7 +15,7 @@
             --color-primary: {{ setting('color_primary', '#1B2660') }};
             --color-accent: {{ setting('color_accent', '#FFCD38') }};
         }
-        body { font-family: 'Poppins', 'Roboto', 'Montserrat', sans-serif; background-color: #f8f9fa; }
+        body { font-family: '{{ setting('font_primary', 'Poppins') }}', '{{ setting('font_secondary', 'Roboto') }}', 'Montserrat', sans-serif; background-color: #f8f9fa; }
         .sidebar {
             width: 200px;
             min-height: 100vh;
@@ -154,7 +154,7 @@
                 @yield('content')
             </main>
             <footer class="text-center">
-                &copy; {{ date('Y') }} La Consolacion College Daet
+                &copy; {{ date('Y') }} La Consolacion College Daet CMS
             </footer>
         </div>
     </div>

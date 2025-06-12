@@ -12,6 +12,7 @@ The interface embraces seven core UX pillars:
 
 1. **User-centricity** – every page uses a clear title and retains form input on validation errors.
 2. **Consistency** – shared colors, fonts and layouts make each module feel familiar.
+   Administrators can choose their preferred fonts and colors from the **Theme Settings** screen.
 3. **Hierarchy** – the active sidebar link highlights your current location.
 4. **Context** – descriptive titles and headings keep you oriented within the workflow.
 5. **User control** – cancel buttons and a collapsible menu allow easy navigation.

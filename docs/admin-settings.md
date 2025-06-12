@@ -9,3 +9,5 @@ Administrators can manage baseline values used across the modules from the **Set
 - **Document Categories:** Policy, Syllabus, Report
 
 These defaults are seeded by `php artisan migrate --seed` and can be modified or expanded using the settings screens.
+
+Additional tools include **Theme Settings** where administrators can pick primary and accent colors, select fonts, and edit the home page text. The new **Announcements** manager lets admins post messages that appear on the dashboard.
