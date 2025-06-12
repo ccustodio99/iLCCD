@@ -162,7 +162,7 @@ class RequisitionController extends Controller
         $requisition->save();
 
         // notify requester
-        $requisition->user->notify(new \App\Notifications\JobOrderStatusNotification(
+        $requisition->user->notify(new \App\Notifications\RequisitionStatusNotification(
             "Your requisition #{$requisition->id} status is now " . str_replace('_', ' ', $requisition->status)
         ));
 
@@ -170,7 +170,7 @@ class RequisitionController extends Controller
         if ($nextRole) {
             $approver = \App\Models\User::where('role', $nextRole)->first();
             if ($approver) {
-                $approver->notify(new \App\Notifications\JobOrderStatusNotification(
+                $approver->notify(new \App\Notifications\RequisitionStatusNotification(
                     "Requisition #{$requisition->id} requires your approval."
                 ));
             }
