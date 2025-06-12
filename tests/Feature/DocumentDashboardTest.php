@@ -3,6 +3,7 @@
 use App\Models\User;
 use App\Models\Document;
 use App\Models\DocumentLog;
+use App\Models\DocumentCategory;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,10 +12,11 @@ it('logs document actions', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
 
+    $category = DocumentCategory::factory()->create();
     $this->post('/documents', [
         'title' => 'Handbook',
         'description' => 'Desc',
-        'category' => 'policy',
+        'document_category_id' => $category->id,
         'file' => UploadedFile::fake()->create('file.pdf', 10),
     ]);
 

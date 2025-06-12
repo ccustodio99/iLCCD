@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Document;
 use App\Models\DocumentVersion;
 use App\Models\DocumentLog;
+use App\Models\DocumentCategory;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +18,7 @@ class DocumentController extends Controller
         $perPage = $this->getPerPage($request);
 
         $documents = Document::where('user_id', auth()->id())
-            ->with('auditTrails.user')
+            ->with(['auditTrails.user', 'documentCategory'])
             ->paginate($perPage)
             ->withQueryString();
 
@@ -25,7 +27,8 @@ class DocumentController extends Controller
 
     public function create()
     {
-        return view('documents.create');
+        $categories = DocumentCategory::where('is_active', true)->get();
+        return view('documents.create', compact('categories'));
     }
 
     public function show(Document $document)
@@ -48,7 +51,10 @@ class DocumentController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'category' => 'required|string|max:255',
+            'document_category_id' => [
+                'required',
+                Rule::exists('document_categories', 'id')->where('is_active', true),
+            ],
             'file' => 'required|file',
         ]);
         $data['user_id'] = $request->user()->id;
@@ -75,7 +81,8 @@ class DocumentController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $document->load('auditTrails.user');
-        return view('documents.edit', compact('document'));
+        $categories = DocumentCategory::where('is_active', true)->get();
+        return view('documents.edit', compact('document', 'categories'));
     }
 
     public function update(Request $request, Document $document)
@@ -86,7 +93,10 @@ class DocumentController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'category' => 'required|string|max:255',
+            'document_category_id' => [
+                'required',
+                Rule::exists('document_categories', 'id')->where('is_active', true),
+            ],
             'file' => 'nullable|file',
         ]);
         $document->update($data);

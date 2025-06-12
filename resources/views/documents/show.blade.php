@@ -5,7 +5,7 @@
 @section('content')
 <div class="container">
     <h1 class="mb-4">{{ $document->title }}</h1>
-    <p><strong>Category:</strong> {{ $document->category }}</p>
+    <p><strong>Category:</strong> {{ $document->documentCategory->name }}</p>
     <p><strong>Description:</strong> {{ $document->description }}</p>
     <p><strong>Department:</strong> {{ $document->department }}</p>
 

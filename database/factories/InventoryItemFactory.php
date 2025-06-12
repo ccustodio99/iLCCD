@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\InventoryItem;
 use App\Models\User;
+use App\Models\InventoryCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +20,7 @@ class InventoryItemFactory extends Factory
             'user_id' => User::factory(),
             'name' => fake()->words(2, true),
             'description' => fake()->sentence(),
-            'category' => fake()->randomElement(['IT', 'Office', 'Facility']),
+            'category' => InventoryCategory::factory()->create()->name,
             'department' => fake()->randomElement(['IT', 'HR', 'Admin']),
             'location' => fake()->city(),
             'supplier' => fake()->company(),

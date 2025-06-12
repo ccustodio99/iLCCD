@@ -21,6 +21,20 @@ it('allows authenticated user to create job order', function () {
     expect(JobOrder::where('description', 'Fix projector')->exists())->toBeTrue();
 });
 
+it('rejects inactive job order types', function () {
+    $user = User::factory()->create();
+    $this->actingAs($user);
+    $type = JobOrderType::factory()->create(['is_active' => false]);
+
+    $response = $this->from('/job-orders/create')->post('/job-orders', [
+        'job_type' => $type->name,
+        'description' => 'Fix projector',
+    ]);
+
+    $response->assertSessionHasErrors('job_type');
+    expect(JobOrder::count())->toBe(0);
+});
+
 it('shows user job orders', function () {
     $user = User::factory()->create();
     $type = JobOrderType::factory()->create(['name' => 'Setup']);

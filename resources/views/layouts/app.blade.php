@@ -11,11 +11,15 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        :root {
+            --color-primary: {{ setting('color_primary', '#1B2660') }};
+            --color-accent: {{ setting('color_accent', '#FFCD38') }};
+        }
         body { font-family: 'Poppins', 'Roboto', 'Montserrat', sans-serif; background-color: #f8f9fa; }
         .sidebar {
             width: 200px;
             min-height: 100vh;
-            background-color: #1B2660;
+            background-color: var(--color-primary);
             position: fixed;
             top: 0;
             left: 0;
@@ -25,7 +29,7 @@
             display: none;
             background: transparent;
             border: none;
-            color: #1B2660;
+            color: var(--color-primary);
             font-size: 1.5rem;
             position: fixed;
             top: 10px;
@@ -39,13 +43,13 @@
             padding: 0.75rem 1rem;
         }
         .nav-link.active {
-            background-color: #FFCD38;
-            color: #1B2660;
+            background-color: var(--color-accent);
+            color: var(--color-primary);
             font-weight: 600;
         }
         .sidebar a:hover {
-            background-color: #FFCD38;
-            color: #1B2660;
+            background-color: var(--color-accent);
+            color: var(--color-primary);
         }
         .content-wrapper {
             margin-left: 200px;
@@ -69,8 +73,8 @@
                 display: block;
             }
         }
-        .cta { background-color: #FFCD38; color: #1B2660; }
-        footer { background-color: #1B2660; color: #ffffff; padding: 1rem 0; }
+        .cta { background-color: var(--color-accent); color: var(--color-primary); }
+        footer { background-color: var(--color-primary); color: #ffffff; padding: 1rem 0; }
         #back-to-top {
             position: fixed;
             bottom: 1rem;
@@ -82,7 +86,7 @@
             position: absolute;
             top: -40px;
             left: 0;
-            background: #1B2660;
+            background: var(--color-primary);
             color: #ffffff;
             padding: 0.5rem;
             z-index: 100;
@@ -101,7 +105,7 @@
         }
         .card-quick .material-symbols-outlined {
             font-size: 2.5rem;
-            color: #1B2660;
+            color: var(--color-primary);
         }
     </style>
 </head>

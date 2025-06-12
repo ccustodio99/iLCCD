@@ -18,7 +18,11 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Category</label>
-            <input type="text" name="category" class="form-control" value="{{ old('category', $document->category) }}" required>
+            <select name="document_category_id" class="form-select" required>
+                @foreach($categories as $cat)
+                    <option value="{{ $cat->id }}" {{ old('document_category_id', $document->document_category_id) == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                @endforeach
+            </select>
         </div>
         <div class="mb-3">
             <label class="form-label">Replace File</label>

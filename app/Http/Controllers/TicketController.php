@@ -10,6 +10,7 @@ use App\Models\AuditTrail;
 use App\Models\TicketCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
 class TicketController extends Controller
@@ -38,7 +39,12 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'category' => 'required|string|max:255',
+            'category' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::exists('ticket_categories', 'name')->where('is_active', true),
+            ],
             'subject' => 'required|string|max:255',
             'description' => 'required|string',
             'assigned_to_id' => 'nullable|exists:users,id',
@@ -118,7 +124,12 @@ class TicketController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $data = $request->validate([
-            'category' => 'required|string|max:255',
+            'category' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::exists('ticket_categories', 'name')->where('is_active', true),
+            ],
             'subject' => 'required|string|max:255',
             'description' => 'required|string',
             'assigned_to_id' => 'nullable|exists:users,id',
