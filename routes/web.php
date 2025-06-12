@@ -9,6 +9,10 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 
 Route::view('/', 'landing')->name('home');
 
+Route::view('/app/{any?}', 'spa')
+    ->where('any', '.*')
+    ->name('spa');
+
 
 Route::get('/login', [LoginController::class, 'show'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate']);
