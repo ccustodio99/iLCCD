@@ -30,6 +30,18 @@ Tickets can be assigned to another user for resolution in addition to the ticket
 - IT or system administrators
 
 Additional users may be included as watchers to collaborate on the issue. Watchers can follow progress and comment, but only the ticket owner and the assigned user can modify or close the ticket.
+
+### Email Alerts
+The system emails stakeholders whenever a ticket is created, assigned, updated, escalated, closed, or when a new comment is posted. Alerts go to the ticket owner, the assigned user, and all watchers so everyone stays on the same page.
+
+Example email:
+
+```
+Subject: Ticket #42 updated
+
+The ticket "Printer not working" has been escalated.
+View it in the portal to see details.
+```
 ---
 ## 🚀 Navigation
 - Previous: [User Interface & Branding](user-interface-branding.md)
