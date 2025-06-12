@@ -108,6 +108,20 @@ class InventoryItemController extends Controller
         }
 
         $inventoryItem->decrement('quantity', $data['quantity']);
+        $inventoryItem->refresh();
+
+        if ($inventoryItem->quantity <= $inventoryItem->minimum_stock) {
+            $recipients = \App\Models\User::where('department', $inventoryItem->department)
+                ->whereIn('role', ['staff', 'head'])
+                ->where('id', '<>', $request->user()->id)
+                ->get();
+            foreach ($recipients as $recipient) {
+                $recipient->notify(new \App\Notifications\LowStockNotification(
+                    $inventoryItem->name,
+                    $inventoryItem->quantity
+                ));
+            }
+        }
 
         InventoryTransaction::create([
             'inventory_item_id' => $inventoryItem->id,
@@ -135,6 +149,20 @@ class InventoryItemController extends Controller
         ]);
 
         $inventoryItem->increment('quantity', $data['quantity']);
+        $inventoryItem->refresh();
+
+        if ($inventoryItem->quantity <= $inventoryItem->minimum_stock) {
+            $recipients = \App\Models\User::where('department', $inventoryItem->department)
+                ->whereIn('role', ['staff', 'head'])
+                ->where('id', '<>', $request->user()->id)
+                ->get();
+            foreach ($recipients as $recipient) {
+                $recipient->notify(new \App\Notifications\LowStockNotification(
+                    $inventoryItem->name,
+                    $inventoryItem->quantity
+                ));
+            }
+        }
 
         InventoryTransaction::create([
             'inventory_item_id' => $inventoryItem->id,
