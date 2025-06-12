@@ -85,6 +85,8 @@
                         </div>
                     </form>
 
+                    @include('inventory_transactions._list', ['transactions' => $item->transactions])
+
                     @include('audit_trails._list', ['logs' => $item->auditTrails])
                 </div>
                 <div class="modal-footer">
