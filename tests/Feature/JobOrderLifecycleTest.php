@@ -86,4 +86,29 @@ it('shows assigned orders to assignee only', function () {
     $response->assertDontSee('Repair');
 });
 
+it('allows requester to close completed job order', function () {
+    $requester = User::factory()->create();
+    $order = JobOrder::factory()->for($requester)->create([
+        'status' => JobOrder::STATUS_COMPLETED,
+    ]);
+
+    $this->actingAs($requester);
+    $this->put("/job-orders/{$order->id}/close")->assertRedirect('/job-orders');
+
+    $order->refresh();
+    expect($order->status)->toBe(JobOrder::STATUS_CLOSED);
+    expect($order->closed_at)->not->toBeNull();
+});
+
+it('prevents others from closing job order', function () {
+    $requester = User::factory()->create();
+    $other = User::factory()->create();
+    $order = JobOrder::factory()->for($requester)->create([
+        'status' => JobOrder::STATUS_COMPLETED,
+    ]);
+
+    $this->actingAs($other);
+    $this->put("/job-orders/{$order->id}/close")->assertForbidden();
+});
+
 

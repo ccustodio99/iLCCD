@@ -20,6 +20,7 @@ class JobOrder extends Model
     public const STATUS_ASSIGNED = 'assigned';
     public const STATUS_IN_PROGRESS = 'in_progress';
     public const STATUS_COMPLETED = 'completed';
+    public const STATUS_CLOSED = 'closed';
 
     protected $fillable = [
         'user_id',
@@ -34,6 +35,7 @@ class JobOrder extends Model
         'start_notes',
         'completed_at',
         'completion_notes',
+        'closed_at',
     ];
 
     protected function casts(): array
@@ -42,6 +44,7 @@ class JobOrder extends Model
             'approved_at' => 'datetime',
             'started_at' => 'datetime',
             'completed_at' => 'datetime',
+            'closed_at' => 'datetime',
             'attachment_path' => 'string',
         ];
     }

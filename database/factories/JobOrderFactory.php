@@ -28,6 +28,7 @@ class JobOrderFactory extends Factory
             'start_notes' => null,
             'completed_at' => null,
             'completion_notes' => null,
+            'closed_at' => null,
         ];
     }
 }
