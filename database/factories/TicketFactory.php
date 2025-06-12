@@ -21,6 +21,7 @@ class TicketFactory extends Factory
             'category' => fake()->randomElement(['IT', 'Facilities', 'Documents']),
             'subject' => fake()->sentence(4),
             'description' => fake()->paragraph(),
+            'attachment_path' => null,
             'status' => 'open',
             'due_at' => now()->addDays(3),
             'escalated_at' => null,

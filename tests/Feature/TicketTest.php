@@ -99,3 +99,42 @@ it('adds watchers on ticket creation', function () {
     expect($ticket->watchers->pluck('id')->sort()->values()->all())
         ->toBe($expected);
 });
+
+it('shows job order on ticket details after conversion', function () {
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $ticket = Ticket::factory()->for($user)->create([
+        'category' => 'Facilities',
+        'description' => 'Door repair',
+    ]);
+
+    $this->post("/tickets/{$ticket->id}/convert");
+
+    $jobOrderId = $ticket->fresh()->jobOrder->id;
+
+    $response = $this->get('/tickets');
+
+    $response->assertSee('Job Order ID');
+    $response->assertSee((string) $jobOrderId);
+});
+
+it('shows requisition on ticket details after conversion', function () {
+    $user = User::factory()->create(['department' => 'IT']);
+    $this->actingAs($user);
+
+    $ticket = Ticket::factory()->for($user)->create([
+        'category' => 'Supplies',
+        'subject' => 'Laptop Charger',
+        'description' => 'Need extra charger',
+    ]);
+
+    $this->post("/tickets/{$ticket->id}/requisition");
+
+    $reqId = $ticket->fresh()->requisitions->first()->id;
+
+    $response = $this->get('/tickets');
+
+    $response->assertSee('Requisitions');
+    $response->assertSee((string) $reqId);
+});

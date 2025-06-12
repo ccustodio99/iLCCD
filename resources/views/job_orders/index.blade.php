@@ -51,7 +51,11 @@
                     <p><strong>Description:</strong> {{ $jobOrder->description }}</p>
                     <p><strong>Status:</strong> {{ ucfirst($jobOrder->status) }}</p>
                     @if($jobOrder->ticket_id)
-                        <p><strong>Ticket ID:</strong> {{ $jobOrder->ticket_id }}</p>
+                        <p><strong>Ticket ID:</strong>
+                            <a href="{{ route('tickets.index') }}#ticketModal{{ $jobOrder->ticket_id }}">
+                                {{ $jobOrder->ticket_id }}
+                            </a>
+                        </p>
                     @endif
                     <p><strong>Approved At:</strong> {{ $jobOrder->approved_at?->format('Y-m-d H:i') ?? '-' }}</p>
                     <p><strong>Started At:</strong> {{ $jobOrder->started_at?->format('Y-m-d H:i') ?? '-' }}</p>

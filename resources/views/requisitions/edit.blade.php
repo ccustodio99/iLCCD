@@ -5,6 +5,13 @@
 @section('content')
 <div class="container">
     <h1 class="mb-4">Edit Requisition</h1>
+    @if($requisition->ticket_id)
+        <p><strong>Ticket ID:</strong>
+            <a href="{{ route('tickets.index') }}#ticketModal{{ $requisition->ticket_id }}">
+                {{ $requisition->ticket_id }}
+            </a>
+        </p>
+    @endif
     <form action="{{ route('requisitions.update', $requisition) }}" method="POST">
         @csrf
         @method('PUT')

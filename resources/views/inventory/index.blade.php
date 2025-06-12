@@ -18,9 +18,17 @@
         </thead>
         <tbody>
             @foreach ($items as $item)
-            <tr>
+            <tr class="{{ $item->quantity == 0 ? 'table-danger' : ($item->quantity <= $item->minimum_stock ? 'table-warning' : '') }}">
                 <td>{{ $item->name }}</td>
-                <td>{{ $item->quantity }}</td>
+                <td>
+                    @if($item->quantity == 0)
+                        <span class="badge bg-danger">0</span>
+                    @elseif($item->quantity <= $item->minimum_stock)
+                        <span class="badge bg-warning text-dark">{{ $item->quantity }}</span>
+                    @else
+                        {{ $item->quantity }}
+                    @endif
+                </td>
                 <td>{{ ucfirst($item->status) }}</td>
                 <td>
                     <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#inventoryItemModal{{ $item->id }}">Details</button>
@@ -57,6 +65,28 @@
                     <p><strong>Quantity:</strong> {{ $item->quantity }}</p>
                     <p><strong>Minimum Stock:</strong> {{ $item->minimum_stock }}</p>
                     <p><strong>Status:</strong> {{ ucfirst($item->status) }}</p>
+
+                    <form action="{{ route('inventory.issue', $item) }}" method="POST" class="row g-2 mb-2">
+                        @csrf
+                        <div class="col-auto">
+                            <input type="number" name="quantity" min="1" value="1" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-warning btn-sm">Issue</button>
+                        </div>
+                    </form>
+                    <form action="{{ route('inventory.return', $item) }}" method="POST" class="row g-2">
+                        @csrf
+                        <div class="col-auto">
+                            <input type="number" name="quantity" min="1" value="1" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-success btn-sm">Return</button>
+                        </div>
+                    </form>
+
+                    @include('inventory_transactions._list', ['transactions' => $item->transactions])
+
                     @include('audit_trails._list', ['logs' => $item->auditTrails])
                 </div>
                 <div class="modal-footer">
