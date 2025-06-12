@@ -15,6 +15,8 @@ The Ticketing System is the all-in-one portal for reporting issues and requestin
 The interface uses Bootstrap 5 with official LCCD branding and is secured through the Access Control module. For more information on other modules, see the [documentation index](README.md).
 ### Current Implementation
 - Users can create, edit, and archive their own tickets with category, subject, description, and due date. Categories are selected using large buttons that reveal subcategories once chosen.
+- A screenshot of the category picker is available in the ITRC Dropbox.
+
 - Ticket subjects display as `[Category] - [Issue Summary] - Ticket ID` for easy reference.
 - Tickets are listed on the My Tickets page.
 - Automatic SLA monitoring escalates overdue tickets every minute.
