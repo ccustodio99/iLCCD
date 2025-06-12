@@ -69,3 +69,10 @@ Running the seeders will create demo accounts for all major roles and sample rec
 - Emphasize branding elements (logos, colors, fonts) during the walkthrough.
 - Keep the `.env` file out of version control and never expose real credentials.
 
+
+---
+
+## 🚀 Navigation
+- Previous: [Inventory Module](inventory-module.md)
+- Next: [Purchase Order System](purchase-order-module.md)
+- [Documentation Index](README.md)

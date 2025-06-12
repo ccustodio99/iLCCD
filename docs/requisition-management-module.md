@@ -75,14 +75,22 @@ The **Requisition Management Module** enables LCCD stakeholders to request mater
 
 ## ✨ Augustinian Value Alignment
 
-| Value           | Implementation Example                                      |
-|-----------------|------------------------------------------------------------|
-| Unity           | Shared, transparent approval process involving all levels   |
-| Truth           | Full remarks, audit logs, and status tracking              |
-| Competence      | Role-aware, automated routing and workflow efficiency       |
-| Charity         | Serving needs across departments and roles                  |
-| Stewardship     | Resource request discipline and budget accountability       |
-| Service         | Timely, visible, and fair handling of all requests          |
-| Christ-Centeredness | Ethical, inclusive access to resources                  |
+| Value               | Implementation Example                                   |
+|---------------------|----------------------------------------------------------|
+| Unity               | Shared, transparent approval process involving all levels|
+| Truth               | Full remarks, audit logs, and status tracking            |
+| Competence          | Role-aware, automated routing and workflow efficiency    |
+| Charity             | Serving needs across departments and roles               |
+| Stewardship         | Resource request discipline and budget accountability    |
+| Service             | Timely, visible, and fair handling of all requests       |
+| Christ-Centeredness | Ethical, inclusive access to resources                   |
+
 For more guides visit the [documentation index](README.md).
+
+---
+
+## 🚀 Navigation
+- Previous: [Job Order Module](job-order-module.md)
+- Next: [Inventory Module](inventory-module.md)
+- [Documentation Index](README.md)
 

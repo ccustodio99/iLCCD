@@ -205,6 +205,7 @@ Every action is traceable; every step is value-aligned.
 - [User Interface & Branding](docs/user-interface-branding.md)
 - [Ticketing System Module](docs/Ticketing_System_Module.md)
 - [Document Management Module](docs/document-management-module.md)
+- [Document KPI & Log Dashboard](docs/document-kpi-log-dashboard.md)
 - [KPI & Audit Dashboard](docs/kpi-audit-log-dashboard.md)
 - [Job Order Module](docs/job-order-module.md)
 - [Requisition Management Module](docs/requisition-management-module.md)
