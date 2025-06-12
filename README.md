@@ -64,6 +64,7 @@ Deliver a holistic, faith-driven digital backbone for LCCD, empowering every use
 1. Copy `.env.example` to `.env` (see `.env` in the [Directory Structure](#directory-structure-laravel)).
 2. Run `php artisan key:generate` to create the application encryption key.
 3. Configure database settings in `.env` then run `php artisan migrate` to create the tables.
+4. Run `php artisan storage:link` so uploaded attachments are accessible.
 
 ---
 
