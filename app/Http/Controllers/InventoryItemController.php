@@ -15,12 +15,29 @@ class InventoryItemController extends Controller
     {
         $perPage = $this->getPerPage($request);
 
-        $items = InventoryItem::where('user_id', auth()->id())
-            ->with(['auditTrails.user', 'transactions.user', 'inventoryCategory'])
+        $query = InventoryItem::where('user_id', auth()->id());
+
+        if ($request->filled('category')) {
+            $query->where('inventory_category_id', $request->input('category'));
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $items = $query->with(['auditTrails.user', 'transactions.user', 'inventoryCategory'])
             ->paginate($perPage)
             ->withQueryString();
 
-        return view('inventory.index', compact('items'));
+        $categories = InventoryCategory::where('is_active', true)->orderBy('name')->get();
+        $statuses = InventoryItem::select('status')->distinct()->pluck('status');
+
+        return view('inventory.index', compact('items', 'categories', 'statuses'));
     }
 
     public function create()
