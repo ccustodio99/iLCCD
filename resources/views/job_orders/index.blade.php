@@ -80,7 +80,14 @@
                         <h6>Requisitions</h6>
                         <ul>
                             @foreach($jobOrder->requisitions as $req)
-                                <li>{{ $req->item }} - {{ $req->quantity }} ({{ ucfirst($req->status) }})</li>
+                                <li>
+                                    <ul class="mb-0">
+                                        @foreach($req->items as $item)
+                                            <li>{{ $item->item }} ({{ $item->quantity }})</li>
+                                        @endforeach
+                                    </ul>
+                                    <span class="ms-2">({{ ucfirst($req->status) }})</span>
+                                </li>
                             @endforeach
                         </ul>
                     @endif
