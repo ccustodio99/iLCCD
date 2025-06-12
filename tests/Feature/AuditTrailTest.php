@@ -10,7 +10,7 @@ it('records audit trail on ticket creation', function () {
     $this->actingAs($user);
 
     $this->post('/tickets', [
-        'category' => $category->name,
+        'ticket_category_id' => $category->id,
         'subject' => 'Printer',
         'description' => 'Broken',
     ])->assertRedirect('/tickets');
@@ -25,7 +25,7 @@ it('stores changed fields on update', function () {
     $ticket = App\Models\Ticket::factory()->for($user)->create(['subject' => 'Old']);
 
     $this->put("/tickets/{$ticket->id}", [
-        'category' => $ticket->category,
+        'ticket_category_id' => $ticket->ticket_category_id,
         'subject' => 'New',
         'description' => $ticket->description,
         'status' => $ticket->status,
@@ -78,7 +78,7 @@ it('logs watchers update and assignment actions', function () {
     $this->actingAs($user);
 
     $this->post('/tickets', [
-        'category' => $category->name,
+        'ticket_category_id' => $category->id,
         'subject' => 'Printer',
         'description' => 'Broken',
         'watchers' => [$watcher->id],
@@ -90,7 +90,7 @@ it('logs watchers update and assignment actions', function () {
         ->where('action', 'watchers_updated')->exists())->toBeTrue();
 
     $this->put("/tickets/{$ticket->id}", [
-        'category' => $ticket->category,
+        'ticket_category_id' => $ticket->ticket_category_id,
         'subject' => $ticket->subject,
         'description' => $ticket->description,
         'status' => $ticket->status,

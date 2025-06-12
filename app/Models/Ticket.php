@@ -20,7 +20,7 @@ class Ticket extends Model
     protected $fillable = [
         'user_id',
         'assigned_to_id',
-        'category',
+        'ticket_category_id',
         'subject',
         'description',
         'attachment_path',
@@ -70,11 +70,16 @@ class Ticket extends Model
         return $this->hasMany(TicketComment::class);
     }
 
+    public function ticketCategory(): BelongsTo
+    {
+        return $this->belongsTo(TicketCategory::class);
+    }
+
     /**
      * Get the formatted subject in "Category - Issue Summary - ID" form.
      */
     public function getFormattedSubjectAttribute(): string
     {
-        return $this->category.' - '.$this->subject.' - '.$this->id;
+        return $this->ticketCategory->name.' - '.$this->subject.' - '.$this->id;
     }
 }

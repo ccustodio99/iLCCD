@@ -13,7 +13,7 @@ it('stores attachment when creating ticket', function () {
     $this->actingAs($user);
 
     $response = $this->post('/tickets', [
-        'category' => $category->name,
+        'ticket_category_id' => $category->id,
         'subject' => 'Broken',
         'description' => 'desc',
         'attachment' => UploadedFile::fake()->create('test.txt', 10),

@@ -6,6 +6,7 @@ use App\Models\InventoryItem;
 use App\Models\Requisition;
 use App\Models\InventoryTransaction;
 use App\Models\JobOrderType;
+use App\Models\TicketCategory;
 
 it('allows authenticated user to create job order', function () {
     $user = User::factory()->create();
@@ -134,8 +135,9 @@ it('shows ticket reference in job order details', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
 
+    $fac = TicketCategory::factory()->create(['name' => 'Facilities']);
     $ticket = App\Models\Ticket::factory()->for($user)->create([
-        'category' => 'Facilities',
+        'ticket_category_id' => $fac->id,
         'description' => 'Aircon issue',
     ]);
 

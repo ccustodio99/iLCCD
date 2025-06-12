@@ -14,6 +14,7 @@ class TicketCategory extends Model
     const DELETED_AT = 'archived_at';
 
     protected $fillable = [
+        'parent_id',
         'name',
         'is_active',
     ];
@@ -24,5 +25,15 @@ class TicketCategory extends Model
             'is_active' => 'boolean',
             'archived_at' => 'datetime',
         ];
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(self::class, 'parent_id');
     }
 }

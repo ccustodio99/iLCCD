@@ -4,6 +4,7 @@ use App\Models\Requisition;
 use App\Models\User;
 use App\Models\InventoryItem;
 use App\Models\InventoryTransaction;
+use App\Models\TicketCategory;
 
 it('allows authenticated user to create requisition', function () {
     $user = User::factory()->create();
@@ -97,8 +98,9 @@ it('shows ticket reference on requisition list', function () {
     $user = User::factory()->create(['department' => 'IT']);
     $this->actingAs($user);
 
+    $catSup = TicketCategory::factory()->create(['name' => 'Supplies']);
     $ticket = App\Models\Ticket::factory()->for($user)->create([
-        'category' => 'Supplies',
+        'ticket_category_id' => $catSup->id,
         'subject' => 'Keyboard',
         'description' => 'Need new keyboard',
     ]);

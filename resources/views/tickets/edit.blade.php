@@ -10,9 +10,12 @@
         @method('PUT')
         <div class="mb-3">
             <label class="form-label">Category</label>
-            <select name="category" class="form-select" required>
+            <select name="ticket_category_id" class="form-select" required>
                 @foreach($categories as $cat)
-                    <option value="{{ $cat->name }}" {{ old('category', $ticket->category) == $cat->name ? 'selected' : '' }}>{{ $cat->name }}</option>
+                    <option value="{{ $cat->id }}" {{ old('ticket_category_id', $ticket->ticket_category_id) == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                    @foreach($cat->children as $child)
+                        <option value="{{ $child->id }}" {{ old('ticket_category_id', $ticket->ticket_category_id) == $child->id ? 'selected' : '' }}>&nbsp;&nbsp;{{ $child->name }}</option>
+                    @endforeach
                 @endforeach
             </select>
         </div>
