@@ -49,6 +49,11 @@ Route::middleware('auth')->group(function () {
     Route::get('job-orders/{jobOrder}/attachment', [JobOrderController::class, 'downloadAttachment'])->name('job-orders.attachment');
     Route::put('job-orders/{jobOrder}/complete', [JobOrderController::class, 'complete'])->name('job-orders.complete');
     Route::post('job-orders/{jobOrder}/materials', [JobOrderController::class, 'requestMaterials'])->name('job-orders.materials');
+    Route::get('job-orders/approvals', [JobOrderController::class, 'approvals'])->name('job-orders.approvals')->middleware('role:head,president,finance');
+    Route::put('job-orders/{jobOrder}/approve', [JobOrderController::class, 'approve'])->name('job-orders.approve')->middleware('role:head,president,finance');
+    Route::get('job-orders/assignments', [JobOrderController::class, 'assignments'])->name('job-orders.assignments')->middleware('role:itrc,admin');
+    Route::put('job-orders/{jobOrder}/assign', [JobOrderController::class, 'assign'])->name('job-orders.assign')->middleware('role:itrc,admin');
+    Route::get('job-orders/assigned', [JobOrderController::class, 'assigned'])->name('job-orders.assigned')->middleware('role:staff,itrc');
     Route::resource('requisitions', RequisitionController::class)->except('show');
     Route::resource('inventory', InventoryItemController::class)->except('show');
     Route::post('inventory/{inventory}/issue', [InventoryItemController::class, 'issue'])->name('inventory.issue');

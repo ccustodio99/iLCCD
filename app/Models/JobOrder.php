@@ -11,6 +11,13 @@ class JobOrder extends Model
 {
     use HasFactory, LogsAudit;
 
+    /** Job order status values */
+    public const STATUS_PENDING_HEAD = 'pending_head';
+    public const STATUS_PENDING_PRESIDENT = 'pending_president';
+    public const STATUS_PENDING_FINANCE = 'pending_finance';
+    public const STATUS_APPROVED = 'approved';
+    public const STATUS_ASSIGNED = 'assigned';
+
     protected $fillable = [
         'user_id',
         'ticket_id',
