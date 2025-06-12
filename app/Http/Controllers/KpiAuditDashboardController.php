@@ -6,6 +6,8 @@ use App\Models\AuditTrail;
 use App\Models\Ticket;
 use App\Models\JobOrder;
 use App\Models\Requisition;
+use App\Exports\AuditTrailExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class KpiAuditDashboardController extends Controller
 {
@@ -28,5 +30,15 @@ class KpiAuditDashboardController extends Controller
             'requisitionsCount',
             'logs'
         ));
+    }
+
+    /**
+     * Export audit logs to Excel.
+     */
+    public function export()
+    {
+        $logs = AuditTrail::with('user')->latest()->get();
+
+        return Excel::download(new AuditTrailExport($logs), 'kpi_audit_logs.xlsx');
     }
 }
