@@ -37,6 +37,8 @@ begins.
 4. **Evaluation and Execution Logging**
    - Jobs move through clear statuses: New → Approved → Assigned → In
      Progress → Completed → Closed.
+   - Requesters close the job order once work is verified done. The system
+     records the `closed_at` time for reporting.
    - Assigned personnel log start and finish times, actions taken, and
      any feedback from the requester.
    - All activity is recorded in the audit trail for transparency.

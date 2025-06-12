@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('job-orders', JobOrderController::class)->except('show');
     Route::get('job-orders/{jobOrder}/attachment', [JobOrderController::class, 'downloadAttachment'])->name('job-orders.attachment');
     Route::put('job-orders/{jobOrder}/complete', [JobOrderController::class, 'complete'])->name('job-orders.complete');
+    Route::put('job-orders/{jobOrder}/close', [JobOrderController::class, 'close'])->name('job-orders.close');
     Route::post('job-orders/{jobOrder}/materials', [JobOrderController::class, 'requestMaterials'])->name('job-orders.materials');
     Route::get('job-orders/approvals', [JobOrderController::class, 'approvals'])->name('job-orders.approvals')->middleware('role:head,president,finance');
     Route::put('job-orders/{jobOrder}/approve', [JobOrderController::class, 'approve'])->name('job-orders.approve')->middleware('role:head,president,finance');

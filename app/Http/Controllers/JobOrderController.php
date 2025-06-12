@@ -92,8 +92,12 @@ class JobOrderController extends Controller
                 ->store('job_order_attachments', 'public');
         }
         $jobOrder->update($data);
-        if ($data['status'] === 'completed' && $jobOrder->completed_at === null) {
+        if ($data['status'] === JobOrder::STATUS_COMPLETED && $jobOrder->completed_at === null) {
             $jobOrder->completed_at = now();
+            $jobOrder->save();
+        }
+        if ($data['status'] === JobOrder::STATUS_CLOSED && $jobOrder->closed_at === null) {
+            $jobOrder->closed_at = now();
             $jobOrder->save();
         }
         return redirect()->route('job-orders.index');
@@ -109,6 +113,22 @@ class JobOrderController extends Controller
             $jobOrder->update([
                 'status' => 'completed',
                 'completed_at' => now(),
+            ]);
+        }
+
+        return redirect()->route('job-orders.index');
+    }
+
+    public function close(JobOrder $jobOrder)
+    {
+        if ($jobOrder->user_id !== auth()->id()) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+
+        if ($jobOrder->status === JobOrder::STATUS_COMPLETED) {
+            $jobOrder->update([
+                'status' => JobOrder::STATUS_CLOSED,
+                'closed_at' => now(),
             ]);
         }
 
