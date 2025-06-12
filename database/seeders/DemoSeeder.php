@@ -11,6 +11,9 @@ use App\Models\JobOrder;
 use App\Models\PurchaseOrder;
 use App\Models\Requisition;
 use App\Models\Ticket;
+use App\Models\TicketComment;
+use App\Models\RequisitionItem;
+use App\Models\InventoryTransaction;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
@@ -132,8 +135,16 @@ class DemoSeeder extends Seeder
 
         $watchers = [$admin->id, $itrc->id, $head->id];
 
-        $tickets->each(function (Ticket $ticket) use ($watchers) {
+        $tickets->each(function (Ticket $ticket) use ($watchers, $admin) {
             $ticket->watchers()->sync($watchers);
+
+            TicketComment::factory()->for($ticket)->for($ticket->user)->create([
+                'comment' => 'Initial issue details',
+            ]);
+
+            TicketComment::factory()->for($ticket)->for($admin)->create([
+                'comment' => 'Acknowledged by admin',
+            ]);
 
             AuditTrail::factory()->create([
                 'auditable_id' => $ticket->id,
@@ -191,6 +202,8 @@ class DemoSeeder extends Seeder
                 'ip_address' => '127.0.0.1',
                 'action' => 'created',
             ]);
+
+            RequisitionItem::factory()->count(2)->for($req)->create();
         });
 
         // Additional requisition not tied to job order
@@ -206,6 +219,8 @@ class DemoSeeder extends Seeder
             'ip_address' => '127.0.0.1',
             'action' => 'created',
         ]);
+
+        RequisitionItem::factory()->count(2)->for($extraReq)->create();
 
         // Inventory items
         $items = InventoryItem::factory()
@@ -223,7 +238,7 @@ class DemoSeeder extends Seeder
             ))
             ->create();
 
-        $items->each(function (InventoryItem $item) use ($admin) {
+        $items->each(function (InventoryItem $item, $index) use ($admin, $user, $jobOrders) {
             AuditTrail::factory()->create([
                 'auditable_id' => $item->id,
                 'auditable_type' => InventoryItem::class,
@@ -231,6 +246,22 @@ class DemoSeeder extends Seeder
                 'ip_address' => '127.0.0.1',
                 'action' => 'created',
             ]);
+
+            if ($index < 2) {
+                InventoryTransaction::factory()
+                    ->for($item)
+                    ->for($user)
+                    ->for($jobOrders[$index])
+                    ->state(['action' => 'issue', 'quantity' => 1])
+                    ->create();
+
+                InventoryTransaction::factory()
+                    ->for($item)
+                    ->for($user)
+                    ->for($jobOrders[$index])
+                    ->state(['action' => 'return', 'quantity' => 1])
+                    ->create();
+            }
         });
 
         // Purchase orders referencing requisitions and inventory
