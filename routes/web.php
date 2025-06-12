@@ -34,6 +34,7 @@ use App\Http\Controllers\DocumentTrackingController;
 use App\Http\Controllers\AuditTrailController;
 use App\Http\Controllers\KpiAuditDashboardController;
 use App\Http\Controllers\TicketCategoryController;
+use App\Http\Controllers\JobOrderTypeController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -82,6 +83,8 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:admin')->prefix('settings')->group(function () {
         Route::resource('ticket-categories', TicketCategoryController::class)->except('show');
+        Route::put('job-order-types/{jobOrderType}/disable', [JobOrderTypeController::class, 'disable'])->name('job-order-types.disable');
+        Route::resource('job-order-types', JobOrderTypeController::class)->except('show');
     });
     Route::prefix('document-tracking')->group(function () {
         Route::get('incoming', [DocumentTrackingController::class, 'incoming'])->name('document-tracking.incoming');
