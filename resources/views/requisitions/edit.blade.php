@@ -45,7 +45,10 @@
         <div class="mb-3">
             <label class="form-label">Status</label>
             <select name="status" class="form-select" required>
-                @php($statuses = ['pending_head' => 'Pending Head', 'approved' => 'Approved'])
+                @php($statuses = [
+                    \App\Models\Requisition::STATUS_PENDING_HEAD => 'Pending Head',
+                    \App\Models\Requisition::STATUS_APPROVED => 'Approved',
+                ])
                 @foreach($statuses as $value => $label)
                     <option value="{{ $value }}" {{ old('status', $requisition->status) === $value ? 'selected' : '' }}>{{ $label }}</option>
                 @endforeach
