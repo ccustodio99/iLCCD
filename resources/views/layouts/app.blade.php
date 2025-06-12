@@ -136,7 +136,11 @@
                     <li class="nav-item"><a class="nav-link @if(request()->routeIs('audit-trails.*')) active @endif" href="{{ route('audit-trails.index') }}" @if(request()->routeIs('audit-trails.*')) aria-current="page" @endif>Audit Trail</a></li>
                     @if(auth()->user()->role === 'admin')
                         <li class="nav-item"><a class="nav-link @if(request()->routeIs('users.*')) active @endif" href="{{ route('users.index') }}" @if(request()->routeIs('users.*')) aria-current="page" @endif>Users</a></li>
-                        <li class="nav-item"><a class="nav-link @if(request()->routeIs('settings.*')) active @endif" href="{{ route('settings.index') }}" @if(request()->routeIs('settings.*')) aria-current="page" @endif>Settings</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link @if(request()->routeIs('settings.*')) active @endif" href="{{ route('settings.index') }}" data-bs-toggle="modal" data-bs-target="#settingsModal" @if(request()->routeIs('settings.*')) aria-current="page" @endif>
+                                Settings
+                            </a>
+                        </li>
                     @endif
                     <li class="nav-item"><a class="nav-link @if(request()->routeIs('profile.*')) active @endif" href="{{ route('profile.edit') }}" @if(request()->routeIs('profile.*')) aria-current="page" @endif>Profile</a></li>
                     <li class="nav-item">
@@ -159,6 +163,7 @@
             </footer>
         </div>
     </div>
+    @include('settings.partials.settings-modal')
 <button id="back-to-top" class="btn btn-secondary" aria-label="Back to top">&uarr;</button>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
