@@ -75,6 +75,8 @@ Route::middleware('auth')->group(function () {
     Route::get('documents-dashboard', [DocumentDashboardController::class, 'index'])->name('documents.dashboard');
     Route::get('kpi-dashboard', [KpiAuditDashboardController::class, 'index'])
         ->name('kpi.dashboard');
+    Route::get('kpi-dashboard/export', [KpiAuditDashboardController::class, 'export'])
+        ->name('kpi.dashboard.export');
     Route::get('audit-trails', [AuditTrailController::class, 'index'])->name('audit-trails.index');
     Route::prefix('document-tracking')->group(function () {
         Route::get('incoming', [DocumentTrackingController::class, 'incoming'])->name('document-tracking.incoming');

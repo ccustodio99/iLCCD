@@ -20,6 +20,7 @@ Access the dashboard at `/kpi-dashboard` once logged in.
 
 ### 2. Export Functionality to Excel for Analytics
 - All KPI data, logs, and summaries can be exported to Excel format (.xlsx).
+- Trigger export via the **Export** button or visit `/kpi-dashboard/export`.
 - Export supports filters by date, department, module, user/role, and status.
 - Enables further analysis by administration, finance, QA, or external auditors.
 
