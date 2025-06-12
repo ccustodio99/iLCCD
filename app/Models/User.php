@@ -14,7 +14,24 @@ use App\Models\TicketComment;
 
 class User extends Authenticatable
 {
-    public const ROLES = ['admin', 'staff', 'head', 'president', 'finance', 'itrc'];
+    /**
+     * List of valid user roles.
+     *
+     * @var array<int, string>
+     */
+    public const ROLES = [
+        'admin',
+        'staff',
+        'head',
+        'president',
+        'finance',
+        'itrc',
+        'registrar',
+        'hr',
+        'clinic',
+        'user',
+        'academic',
+    ];
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, LogsAudit;
 
