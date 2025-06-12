@@ -35,8 +35,9 @@ begins.
      materials arrive or are approved for purchase.
 
 4. **Evaluation and Execution Logging**
-   - Jobs move through clear statuses: New → Approved → Assigned → In
-     Progress → Completed → Closed.
+   - Jobs move through clear statuses:
+     Pending Head → Pending President → Pending Finance → Approved →
+     Assigned → In Progress → Completed → Closed.
    - Requesters close the job order once work is verified done. The system
      records the `closed_at` time for reporting.
    - Assigned personnel log start and finish times, actions taken, and

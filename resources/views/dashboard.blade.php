@@ -66,7 +66,16 @@
         @endforeach
         <select name="job_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
             <option value="">All Statuses</option>
-            @foreach(['new' => 'New', 'approved' => 'Approved', 'assigned' => 'Assigned', 'in_progress' => 'In Progress'] as $val => $label)
+            @foreach([
+                'pending_head' => 'Pending Head',
+                'pending_president' => 'Pending President',
+                'pending_finance' => 'Pending Finance',
+                'approved' => 'Approved',
+                'assigned' => 'Assigned',
+                'in_progress' => 'In Progress',
+                'completed' => 'Completed',
+                'closed' => 'Closed'
+            ] as $val => $label)
                 <option value="{{ $val }}" {{ request('job_status') === $val ? 'selected' : '' }}>{{ $label }}</option>
             @endforeach
         </select>
