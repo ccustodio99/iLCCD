@@ -35,6 +35,7 @@
     @include('components.per-page-selector')
     <div class="table-responsive">
     <table class="table table-striped">
+    <caption class="visually-hidden">Recent Audit Logs</caption>
         <thead>
             <tr>
                 <th>Date</th>
