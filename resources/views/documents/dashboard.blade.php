@@ -26,6 +26,7 @@
     <h3>Recent Activity</h3>
     <div class="table-responsive">
     <table class="table table-striped">
+    <caption class="visually-hidden">Recent Document Activity</caption>
         <thead>
             <tr>
                 <th>Document</th>

@@ -9,6 +9,7 @@
     <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary mb-3">Add User</a>
     <div class="table-responsive">
     <table class="table table-striped">
+    <caption class="visually-hidden">Users</caption>
         <thead>
             <tr>
                 <th>Name</th>

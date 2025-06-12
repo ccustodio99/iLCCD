@@ -12,6 +12,7 @@
     <h3 class="mt-4">Versions</h3>
     <div class="table-responsive">
     <table class="table table-striped">
+    <caption class="visually-hidden">Document Versions</caption>
         <thead>
             <tr>
                 <th>Version</th>

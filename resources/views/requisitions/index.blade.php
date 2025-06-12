@@ -9,6 +9,7 @@
     <a href="{{ route('requisitions.create') }}" class="btn btn-primary mb-3">New Requisition</a>
     <div class="table-responsive">
     <table class="table table-striped">
+    <caption class="visually-hidden">My Requisitions</caption>
         <thead>
             <tr>
                 <th>Items</th>

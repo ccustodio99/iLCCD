@@ -8,6 +8,7 @@
     @include('components.per-page-selector')
     <div class="table-responsive">
     <table class="table table-striped">
+    <caption class="visually-hidden">Assigned Job Orders</caption>
         <thead>
             <tr>
                 <th>Type</th>

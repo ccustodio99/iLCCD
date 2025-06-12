@@ -9,6 +9,7 @@
     <a href="{{ route('inventory.create') }}" class="btn btn-primary mb-3">Add Item</a>
     <div class="table-responsive">
     <table class="table table-striped">
+    <caption class="visually-hidden">Inventory Items</caption>
         <thead>
             <tr>
                 <th>Name</th>

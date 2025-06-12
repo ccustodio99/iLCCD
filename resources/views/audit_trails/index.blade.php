@@ -8,6 +8,7 @@
     @include('components.per-page-selector', ['default' => 20])
     <div class="table-responsive">
     <table class="table table-striped">
+    <caption class="visually-hidden">Audit Trail</caption>
         <thead>
             <tr>
                 <th>Date</th>
