@@ -127,6 +127,27 @@
                     <p><strong>Escalated:</strong> {{ optional($ticket->escalated_at)->format('Y-m-d H:i') }}</p>
                     <p><strong>Resolved:</strong> {{ optional($ticket->resolved_at)->format('Y-m-d H:i') }}</p>
                     <p><strong>Due:</strong> {{ optional($ticket->due_at)->format('Y-m-d H:i') }}</p>
+
+                    @if($ticket->jobOrder)
+                        <p><strong>Job Order ID:</strong>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#jobOrderModal{{ $ticket->jobOrder->id }}">
+                                {{ $ticket->jobOrder->id }}
+                            </a>
+                        </p>
+                    @endif
+
+                    @if($ticket->requisitions->count())
+                        <h6>Requisitions</h6>
+                        <ul>
+                            @foreach($ticket->requisitions as $req)
+                                <li>
+                                    <a href="{{ route('requisitions.edit', $req) }}">#{{ $req->id }}</a>
+                                    - {{ ucfirst(str_replace('_', ' ', $req->status)) }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+
                     @include('audit_trails._list', ['logs' => $ticket->auditTrails])
 
                     @if($ticket->comments->isNotEmpty())
