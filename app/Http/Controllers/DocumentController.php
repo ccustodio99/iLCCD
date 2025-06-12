@@ -6,6 +6,7 @@ use App\Models\Document;
 use App\Models\DocumentVersion;
 use App\Models\DocumentLog;
 use App\Models\DocumentCategory;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,7 +51,10 @@ class DocumentController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'document_category_id' => 'required|exists:document_categories,id',
+            'document_category_id' => [
+                'required',
+                Rule::exists('document_categories', 'id')->where('is_active', true),
+            ],
             'file' => 'required|file',
         ]);
         $data['user_id'] = $request->user()->id;
@@ -89,7 +93,10 @@ class DocumentController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'document_category_id' => 'required|exists:document_categories,id',
+            'document_category_id' => [
+                'required',
+                Rule::exists('document_categories', 'id')->where('is_active', true),
+            ],
             'file' => 'nullable|file',
         ]);
         $document->update($data);

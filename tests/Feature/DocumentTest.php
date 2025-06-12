@@ -27,6 +27,24 @@ it('allows authenticated user to upload document', function () {
     Storage::disk('local')->assertExists($version->path);
 });
 
+it('rejects inactive document categories', function () {
+    Storage::fake('local');
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $category = DocumentCategory::factory()->create(['is_active' => false]);
+
+    $response = $this->from('/documents/create')->post('/documents', [
+        'title' => 'Policy',
+        'description' => 'Important',
+        'document_category_id' => $category->id,
+        'file' => UploadedFile::fake()->create('policy.pdf', 100),
+    ]);
+
+    $response->assertSessionHasErrors('document_category_id');
+    expect(Document::count())->toBe(0);
+});
+
 it('shows user documents', function () {
     $user = User::factory()->create();
     $doc = Document::factory()->for($user)->create(['title' => 'Handbook']);
