@@ -111,3 +111,32 @@ it('shows ticket reference on requisition list', function () {
 
     $response->assertSee((string) $ticket->id);
 });
+
+it('forbids updating approved requisition', function () {
+    $user = User::factory()->create();
+    $req = Requisition::factory()->for($user)->create([
+        'status' => Requisition::STATUS_APPROVED,
+    ]);
+    $item = $req->items->first();
+
+    $this->actingAs($user);
+
+    $this->put("/requisitions/{$req->id}", [
+        'item' => [$item->item],
+        'quantity' => [$item->quantity],
+        'specification' => [$item->specification],
+        'purpose' => $req->purpose,
+        'status' => $req->status,
+    ])->assertForbidden();
+});
+
+it('forbids deleting approved requisition', function () {
+    $user = User::factory()->create();
+    $req = Requisition::factory()->for($user)->create([
+        'status' => Requisition::STATUS_APPROVED,
+    ]);
+
+    $this->actingAs($user);
+
+    $this->delete("/requisitions/{$req->id}")->assertForbidden();
+});
