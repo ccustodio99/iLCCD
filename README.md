@@ -1,4 +1,4 @@
-# 📚 LCCD Integrated Information System
+# 📚 LCCD Integrated Information System (CMS)
 
 > *Empowering Christ-centered digital transformation for La Consolacion College Daet—where technology, transparency, and service unite.*
 

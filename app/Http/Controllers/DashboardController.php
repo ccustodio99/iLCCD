@@ -8,12 +8,17 @@ use App\Models\JobOrder;
 use App\Models\Requisition;
 use App\Models\PurchaseOrder;
 use App\Models\DocumentLog;
+use App\Models\Announcement;
 
 class DashboardController extends Controller
 {
     public function index(Request $request)
     {
         $perPage = $this->getPerPage($request, 5);
+
+        $announcements = Announcement::where('is_active', true)
+            ->latest()
+            ->get();
 
         $tickets = Ticket::query()
             ->where('status', '!=', 'closed')
@@ -62,6 +67,7 @@ class DashboardController extends Controller
             ->withQueryString();
 
         return view('dashboard', compact(
+            'announcements',
             'tickets',
             'jobOrders',
             'requisitions',

@@ -10,6 +10,7 @@
         <li class="list-group-item"><a href="{{ route('job-order-types.index') }}">Job Order Types</a></li>
         <li class="list-group-item"><a href="{{ route('inventory-categories.index') }}">Inventory Categories</a></li>
         <li class="list-group-item"><a href="{{ route('document-categories.index') }}">Document Categories</a></li>
+        <li class="list-group-item"><a href="{{ route('announcements.index') }}">Announcements</a></li>
         <li class="list-group-item"><a href="{{ route('settings.theme') }}">Theme</a></li>
     </ul>
 </div>
