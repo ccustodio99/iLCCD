@@ -34,13 +34,13 @@ class InventoryCategorySeeder extends Seeder
             // Laboratory Equipment
             'Laboratory Equipment',
             'Instruments & Sensors',
-            'Calibration Tools',
+            'Calibration Tools (links Calibration & Testing)',
             'Safety Gear (Goggles, Gloves)',
 
             // Educational Materials
             'Educational Materials',
             'Textbooks & Reference Books',
-            'AV Media (DVDs, Projector Slides)',
+            'AV Media (DVDs, Slides)',
             'Teaching Aids (Models, Charts)',
 
             // Maintenance & Cleaning
@@ -51,8 +51,8 @@ class InventoryCategorySeeder extends Seeder
 
             // Safety & First Aid
             'Safety & First Aid',
-            'Fire Extinguishers',
-            'First-Aid Kits & Consumables',
+            'Fire Extinguishers (cross-links Safety Audits)',
+            'First-Aid Kits',
             'Emergency Signage',
 
             // Vehicles & Grounds
