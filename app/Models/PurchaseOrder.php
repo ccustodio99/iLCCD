@@ -12,6 +12,30 @@ class PurchaseOrder extends Model
 {
     use HasFactory, LogsAudit, ClearsDashboardCache;
 
+    /** Purchase order status values */
+    public const STATUS_DRAFT = 'draft';
+    public const STATUS_PENDING_APPROVAL = 'pending_approval';
+    public const STATUS_APPROVED = 'approved';
+    public const STATUS_ORDERED = 'ordered';
+    public const STATUS_RECEIVED = 'received';
+    public const STATUS_CLOSED = 'closed';
+    public const STATUS_CANCELLED = 'cancelled';
+
+    /**
+     * All possible purchase order statuses in workflow order.
+     *
+     * @var string[]
+     */
+    public const STATUSES = [
+        self::STATUS_DRAFT,
+        self::STATUS_PENDING_APPROVAL,
+        self::STATUS_APPROVED,
+        self::STATUS_ORDERED,
+        self::STATUS_RECEIVED,
+        self::STATUS_CLOSED,
+        self::STATUS_CANCELLED,
+    ];
+
     protected $fillable = [
         'user_id',
         'requisition_id',

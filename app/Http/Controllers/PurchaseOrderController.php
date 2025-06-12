@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PurchaseOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
 class PurchaseOrderController extends Controller
@@ -38,11 +39,12 @@ class PurchaseOrderController extends Controller
             'supplier' => 'nullable|string|max:255',
             'item' => 'required|string|max:255',
             'quantity' => 'required|integer|min:1',
+            'status' => ['sometimes', 'string', Rule::in(PurchaseOrder::STATUSES)],
             'attachment' => 'nullable|file|max:2048',
         ]);
 
         $data['user_id'] = $request->user()->id;
-        $data['status'] = 'draft';
+        $data['status'] = $data['status'] ?? PurchaseOrder::STATUS_DRAFT;
 
         if ($request->hasFile('attachment')) {
             $data['attachment_path'] = $request->file('attachment')
@@ -74,7 +76,7 @@ class PurchaseOrderController extends Controller
             'supplier' => 'nullable|string|max:255',
             'item' => 'required|string|max:255',
             'quantity' => 'required|integer|min:1',
-            'status' => 'required|string',
+            'status' => ['required', 'string', Rule::in(PurchaseOrder::STATUSES)],
             'attachment' => 'nullable|file|max:2048',
         ]);
 
@@ -88,11 +90,11 @@ class PurchaseOrderController extends Controller
 
         $purchaseOrder->update($data);
 
-        if ($data['status'] === 'ordered' && $purchaseOrder->ordered_at === null) {
+        if ($data['status'] === PurchaseOrder::STATUS_ORDERED && $purchaseOrder->ordered_at === null) {
             $purchaseOrder->ordered_at = now();
             $purchaseOrder->save();
         }
-        if ($data['status'] === 'received' && $purchaseOrder->received_at === null) {
+        if ($data['status'] === PurchaseOrder::STATUS_RECEIVED && $purchaseOrder->received_at === null) {
             $purchaseOrder->received_at = now();
             if ($purchaseOrder->inventoryItem) {
                 $purchaseOrder->inventoryItem->increment('quantity', $purchaseOrder->quantity);

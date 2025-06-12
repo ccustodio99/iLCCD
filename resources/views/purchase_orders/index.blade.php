@@ -25,7 +25,7 @@
                 <td>{{ $order->item }}</td>
                 <td>{{ $order->quantity }}</td>
                 <td>{{ $order->supplier }}</td>
-                <td>{{ ucfirst($order->status) }}</td>
+                <td>{{ ucfirst(str_replace('_', ' ', $order->status)) }}</td>
                 <td>
                     <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#purchaseOrderModal{{ $order->id }}">Details</button>
                     <a href="{{ route('purchase-orders.edit', $order) }}" class="btn btn-sm btn-primary">Edit</a>
@@ -54,7 +54,7 @@
                     <p><strong>Item:</strong> {{ $order->item }}</p>
                     <p><strong>Quantity:</strong> {{ $order->quantity }}</p>
                     <p><strong>Supplier:</strong> {{ $order->supplier }}</p>
-                    <p><strong>Status:</strong> {{ ucfirst($order->status) }}</p>
+                    <p><strong>Status:</strong> {{ ucfirst(str_replace('_', ' ', $order->status)) }}</p>
                     <p><strong>Requisition ID:</strong> {{ $order->requisition_id }}</p>
                     <p><strong>Inventory Item ID:</strong> {{ $order->inventory_item_id }}</p>
                     <p><strong>Ordered At:</strong> {{ optional($order->ordered_at)->format('Y-m-d H:i') }}</p>

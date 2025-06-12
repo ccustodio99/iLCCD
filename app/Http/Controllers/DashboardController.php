@@ -78,7 +78,7 @@ class DashboardController extends Controller
                 ->withQueryString();
 
             $purchaseOrders = PurchaseOrder::query()
-                ->where('status', '!=', 'received')
+                ->where('status', '!=', PurchaseOrder::STATUS_RECEIVED)
                 ->when($request->po_status, fn($q) => $q->where('status', $request->po_status))
                 ->latest()
                 ->paginate($perPage, ['*'], 'purchase_orders_page')
