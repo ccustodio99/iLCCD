@@ -2,6 +2,7 @@
 
 use App\Models\JobOrder;
 use App\Models\User;
+use App\Models\JobOrderType;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\JobOrderStatusNotification;
 
@@ -14,11 +15,12 @@ it('routes job order through approval and assignment workflow', function () {
     $finance = User::factory()->create(['role' => 'finance']);
     $assigner = User::factory()->create(['role' => 'itrc']);
     $technician = User::factory()->create(['role' => 'staff']);
+    $type = JobOrderType::factory()->create(['name' => 'Repair']);
 
     // requester creates job order
     $this->actingAs($requester);
     $this->post('/job-orders', [
-        'job_type' => 'Repair',
+        'job_type' => $type->name,
         'description' => 'Fix PC',
     ])->assertRedirect('/job-orders');
     $order = JobOrder::first();

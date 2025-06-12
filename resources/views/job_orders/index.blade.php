@@ -96,7 +96,11 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Type</label>
-                            <input type="text" name="job_type" class="form-control" value="{{ old('job_type', $jobOrder->job_type) }}" required>
+                            <select name="job_type" class="form-select" required>
+                                @foreach($types as $type)
+                                    <option value="{{ $type }}" {{ old('job_type', $jobOrder->job_type) === $type ? 'selected' : '' }}>{{ $type }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Description</label>
@@ -150,7 +154,11 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Type</label>
-                            <input type="text" name="job_type" class="form-control" value="{{ old('job_type') }}" required>
+                            <select name="job_type" class="form-select" required>
+                                @foreach($types as $type)
+                                    <option value="{{ $type }}" {{ old('job_type') === $type ? 'selected' : '' }}>{{ $type }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Description</label>

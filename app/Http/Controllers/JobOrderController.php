@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\JobOrder;
 use App\Models\InventoryItem;
+use App\Models\JobOrderType;
 use App\Models\Requisition;
 use App\Models\InventoryTransaction;
 use Illuminate\Http\Request;
@@ -22,13 +23,16 @@ class JobOrderController extends Controller
             })
             ->paginate($perPage)
             ->withQueryString();
+        $types = JobOrderType::where('is_active', true)->orderBy('name')->pluck('name');
 
-        return view('job_orders.index', compact('jobOrders'));
+        return view('job_orders.index', compact('jobOrders', 'types'));
     }
 
     public function create()
     {
-        return view('job_orders.create');
+        $types = JobOrderType::where('is_active', true)->orderBy('name')->pluck('name');
+
+        return view('job_orders.create', compact('types'));
     }
 
     public function store(Request $request)
@@ -53,7 +57,9 @@ class JobOrderController extends Controller
         if ($jobOrder->user_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
-        return view('job_orders.edit', compact('jobOrder'));
+        $types = JobOrderType::where('is_active', true)->orderBy('name')->pluck('name');
+
+        return view('job_orders.edit', compact('jobOrder', 'types'));
     }
 
     public function update(Request $request, JobOrder $jobOrder)

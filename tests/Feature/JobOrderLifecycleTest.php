@@ -3,6 +3,7 @@
 use App\Models\JobOrder;
 use App\Models\User;
 use App\Models\AuditTrail;
+use App\Models\JobOrderType;
 
 it('allows assignee to start and finish job order', function () {
     $assignee = User::factory()->create();
@@ -66,13 +67,15 @@ it('logs start and finish actions', function () {
 it('shows assigned orders to assignee only', function () {
     $assignee = User::factory()->create();
     $other = User::factory()->create();
+    $install = JobOrderType::factory()->create(['name' => 'Install']);
+    $repair = JobOrderType::factory()->create(['name' => 'Repair']);
     $order = JobOrder::factory()->create([
-        'job_type' => 'Install',
+        'job_type' => $install->name,
         'status' => JobOrder::STATUS_ASSIGNED,
         'assigned_to_id' => $assignee->id,
     ]);
     $otherOrder = JobOrder::factory()->create([
-        'job_type' => 'Repair',
+        'job_type' => $repair->name,
         'status' => JobOrder::STATUS_ASSIGNED,
         'assigned_to_id' => $other->id,
     ]);
