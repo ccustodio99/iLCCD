@@ -42,6 +42,7 @@ use App\Http\Controllers\AnnouncementController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/data', [DashboardController::class, 'data'])->name('dashboard.data');
     Route::resource('users', UserController::class)
         ->except(['show'])
         ->middleware('role:admin');
