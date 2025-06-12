@@ -5,7 +5,7 @@
 @section('content')
 <div class="container">
     <h1 class="mb-4">Edit Job Order</h1>
-    <form action="{{ route('job-orders.update', $jobOrder) }}" method="POST">
+    <form action="{{ route('job-orders.update', $jobOrder) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="mb-3">
@@ -15,6 +15,13 @@
         <div class="mb-3">
             <label class="form-label">Description</label>
             <textarea name="description" class="form-control" rows="4" required>{{ old('description', $jobOrder->description) }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Attachment</label>
+            <input type="file" name="attachment" class="form-control">
+            @if($jobOrder->attachment_path)
+                <small class="text-muted">Current: <a href="{{ route('job-orders.attachment', $jobOrder) }}" target="_blank">Download</a></small>
+            @endif
         </div>
         <div class="mb-3">
             <label class="form-label">Status</label>
