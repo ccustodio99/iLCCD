@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\InventoryItem;
 use App\Models\InventoryTransaction;
+use App\Models\InventoryCategory;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,7 +24,9 @@ class InventoryItemController extends Controller
 
     public function create()
     {
-        return view('inventory.create');
+        $categories = InventoryCategory::where('is_active', true)->orderBy('name')->pluck('name');
+
+        return view('inventory.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -51,7 +54,9 @@ class InventoryItemController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $inventoryItem->load('auditTrails.user');
-        return view('inventory.edit', compact('inventoryItem'));
+        $categories = InventoryCategory::where('is_active', true)->orderBy('name')->pluck('name');
+
+        return view('inventory.edit', compact('inventoryItem', 'categories'));
     }
 
     public function update(Request $request, InventoryItem $inventoryItem)
