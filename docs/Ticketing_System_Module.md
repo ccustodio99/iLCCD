@@ -2,6 +2,8 @@
 
 The Ticketing System is the all-in-one portal for reporting issues and requesting services across LCCD. Students, faculty, and staff can log IT troubles, facility concerns, or document access needs from a single page. Each ticket auto-fills department details from the user profile and accepts optional attachments.
 
+> **Setup note:** Run `php artisan storage:link` after migrations so ticket attachments can be served.
+
 👉 **Smart routing:** Categories like IT, Facilities, or Documents send the ticket straight to the correct team. Department heads are notified instantly so nothing gets overlooked.
 
 ⏱️ **SLA monitoring:** Timers track how long tickets stay open. Critical requests escalate if they pass their deadline, ensuring urgent problems receive attention.
