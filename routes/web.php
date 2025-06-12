@@ -68,7 +68,9 @@ Route::middleware('auth')->group(function () {
     Route::post('inventory/{inventory}/return', [InventoryItemController::class, 'return'])->name('inventory.return');
     Route::get('purchase-orders/{purchaseOrder}/attachment', [PurchaseOrderController::class, 'downloadAttachment'])->name('purchase-orders.attachment');
     Route::resource('purchase-orders', PurchaseOrderController::class)->except('show');
-    Route::resource('documents', DocumentController::class)->except('show');
+    Route::resource('documents', DocumentController::class);
+    Route::get('documents/{document}/versions/{version}/download', [DocumentController::class, 'download'])
+        ->name('documents.download');
     Route::get('documents-dashboard', [DocumentDashboardController::class, 'index'])->name('documents.dashboard');
     Route::get('audit-trails', [AuditTrailController::class, 'index'])->name('audit-trails.index');
     Route::prefix('document-tracking')->group(function () {
