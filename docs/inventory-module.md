@@ -11,6 +11,7 @@ The **Inventory Module** enables real-time tracking and management of all instit
 ### 1. Tracking of Item Quantities
 - All supplies, equipment, and assets are catalogued in the inventory system.
 - Key details: item name, description, category, department, location, supplier, purchase date, quantity on hand.
+- Inventory categories are configurable under **Settings → Inventory Categories**.
 - Item status: available, reserved, under maintenance, retired/disposed.
 
 ### 2. Logging of Issuances and Returns
