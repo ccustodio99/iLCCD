@@ -100,6 +100,27 @@ it('converts ticket to requisition', function () {
     expect($ticket->requisitions->first()->id)->toBe($req->id);
 });
 
+it('uses ticket owners department when converted by assignee', function () {
+    $owner = User::factory()->create(['department' => 'IT']);
+    $assignee = User::factory()->create(['department' => 'HR']);
+    $this->actingAs($assignee);
+
+    $catSup = TicketCategory::factory()->create(['name' => 'Supplies']);
+    $ticket = Ticket::factory()->for($owner)->create([
+        'ticket_category_id' => $catSup->id,
+        'assigned_to_id' => $assignee->id,
+        'subject' => 'Whiteboard Marker',
+        'description' => 'Need new marker',
+    ]);
+
+    $this->post("/tickets/{$ticket->id}/requisition")
+        ->assertRedirect('/requisitions');
+
+    $req = App\Models\Requisition::where('ticket_id', $ticket->id)->first();
+    expect($req)->not->toBeNull();
+    expect($req->department)->toBe($owner->department);
+});
+
 it('adds watchers on ticket creation', function () {
     $user = User::factory()->create(['department' => 'CCS']);
     $head = User::factory()->create(['role' => 'head', 'department' => 'CCS']);
