@@ -13,6 +13,12 @@ class Requisition extends Model
 {
     use HasFactory, LogsAudit;
 
+    /** Requisition status values */
+    public const STATUS_PENDING_HEAD = 'pending_head';
+    public const STATUS_PENDING_PRESIDENT = 'pending_president';
+    public const STATUS_PENDING_FINANCE = 'pending_finance';
+    public const STATUS_APPROVED = 'approved';
+
     protected $fillable = [
         'user_id',
         'ticket_id',

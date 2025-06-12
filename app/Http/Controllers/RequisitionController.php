@@ -36,7 +36,7 @@ class RequisitionController extends Controller
             'user_id' => $request->user()->id,
             'department' => $request->user()->department,
             'purpose' => $data['purpose'],
-            'status' => 'pending_head',
+            'status' => Requisition::STATUS_PENDING_HEAD,
         ]);
 
         foreach ($data['item'] as $i => $name) {
@@ -85,7 +85,7 @@ class RequisitionController extends Controller
             ]);
         }
 
-        if ($data['status'] === 'approved' && $requisition->approved_at === null) {
+        if ($data['status'] === Requisition::STATUS_APPROVED && $requisition->approved_at === null) {
             $requisition->approved_at = now();
             $requisition->approved_by_id = auth()->id();
             $requisition->save();
@@ -116,5 +116,74 @@ class RequisitionController extends Controller
         }
         $requisition->delete();
         return redirect()->route('requisitions.index');
+    }
+
+    /** Show requisitions awaiting the logged-in approver */
+    public function approvals()
+    {
+        $role = auth()->user()->role;
+        $statusMap = [
+            'head' => Requisition::STATUS_PENDING_HEAD,
+            'president' => Requisition::STATUS_PENDING_PRESIDENT,
+            'finance' => Requisition::STATUS_PENDING_FINANCE,
+        ];
+
+        $status = $statusMap[$role] ?? null;
+        abort_if(!$status, Response::HTTP_FORBIDDEN, 'Access denied');
+
+        $requisitions = Requisition::with('user')
+            ->where('status', $status)
+            ->paginate(10);
+
+        return view('requisitions.approvals', compact('requisitions'));
+    }
+
+    /** Approve the given requisition and move to next stage */
+    public function approve(Requisition $requisition)
+    {
+        $this->authorizeApproval($requisition);
+
+        $nextRole = null;
+        if ($requisition->status === Requisition::STATUS_PENDING_HEAD) {
+            $requisition->status = Requisition::STATUS_PENDING_PRESIDENT;
+            $nextRole = 'president';
+        } elseif ($requisition->status === Requisition::STATUS_PENDING_PRESIDENT) {
+            $requisition->status = Requisition::STATUS_PENDING_FINANCE;
+            $nextRole = 'finance';
+        } elseif ($requisition->status === Requisition::STATUS_PENDING_FINANCE) {
+            $requisition->status = Requisition::STATUS_APPROVED;
+            $requisition->approved_at = now();
+            $requisition->approved_by_id = auth()->id();
+        }
+        $requisition->save();
+
+        // notify requester
+        $requisition->user->notify(new \App\Notifications\JobOrderStatusNotification(
+            "Your requisition #{$requisition->id} status is now " . str_replace('_', ' ', $requisition->status)
+        ));
+
+        // notify next approver
+        if ($nextRole) {
+            $approver = \App\Models\User::where('role', $nextRole)->first();
+            if ($approver) {
+                $approver->notify(new \App\Notifications\JobOrderStatusNotification(
+                    "Requisition #{$requisition->id} requires your approval."
+                ));
+            }
+        }
+
+        return redirect()->route('requisitions.approvals');
+    }
+
+    private function authorizeApproval(Requisition $requisition): void
+    {
+        $role = auth()->user()->role;
+        $allowed = (
+            ($role === 'head' && $requisition->status === Requisition::STATUS_PENDING_HEAD) ||
+            ($role === 'president' && $requisition->status === Requisition::STATUS_PENDING_PRESIDENT) ||
+            ($role === 'finance' && $requisition->status === Requisition::STATUS_PENDING_FINANCE)
+        );
+
+        abort_unless($allowed, Response::HTTP_FORBIDDEN, 'Access denied');
     }
 }
