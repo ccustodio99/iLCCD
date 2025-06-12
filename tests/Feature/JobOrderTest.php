@@ -4,6 +4,7 @@ use App\Models\JobOrder;
 use App\Models\User;
 use App\Models\InventoryItem;
 use App\Models\Requisition;
+use App\Models\InventoryTransaction;
 
 it('allows authenticated user to create job order', function () {
     $user = User::factory()->create();
@@ -74,6 +75,8 @@ it('deducts inventory if materials available', function () {
     $response->assertRedirect('/job-orders');
     $item->refresh();
     expect($item->quantity)->toBe(2);
+    expect(InventoryTransaction::where('job_order_id', $order->id)
+        ->where('action', 'issue')->exists())->toBeTrue();
 });
 
 it('creates requisition when materials not in stock', function () {
