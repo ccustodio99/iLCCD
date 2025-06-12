@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('job_type');
             $table->text('description');
-            $table->string('status')->default('new');
+            $table->string('status')->default('pending_head');
             $table->foreignId('assigned_to_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamp('approved_at')->nullable();
             $table->timestamp('started_at')->nullable();

@@ -228,14 +228,14 @@ class DemoSeeder extends Seeder
             ->count(8)
             ->for($admin)
             ->state(new Sequence(
-                ['status' => 'available'],
-                ['status' => 'reserved'],
-                ['status' => 'available'],
-                ['status' => 'maintenance'],
-                ['status' => 'available'],
-                ['status' => 'available'],
-                ['status' => 'reserved'],
-                ['status' => 'available'],
+                ['status' => InventoryItem::STATUS_AVAILABLE],
+                ['status' => InventoryItem::STATUS_RESERVED],
+                ['status' => InventoryItem::STATUS_AVAILABLE],
+                ['status' => InventoryItem::STATUS_MAINTENANCE],
+                ['status' => InventoryItem::STATUS_AVAILABLE],
+                ['status' => InventoryItem::STATUS_AVAILABLE],
+                ['status' => InventoryItem::STATUS_RESERVED],
+                ['status' => InventoryItem::STATUS_AVAILABLE],
             ))
             ->create();
 
@@ -253,14 +253,14 @@ class DemoSeeder extends Seeder
                     ->for($item)
                     ->for($user)
                     ->for($jobOrders[$index])
-                    ->state(['action' => 'issue', 'quantity' => 1])
+                    ->state(['action' => 'issue', 'quantity' => 1, 'purpose' => 'Demo issue'])
                     ->create();
 
                 InventoryTransaction::factory()
                     ->for($item)
                     ->for($user)
                     ->for($jobOrders[$index])
-                    ->state(['action' => 'return', 'quantity' => 1])
+                    ->state(['action' => 'return', 'quantity' => 1, 'purpose' => 'Demo return'])
                     ->create();
             }
         });
@@ -287,11 +287,17 @@ class DemoSeeder extends Seeder
             ]);
         });
 
-        $docCategories = collect(['Policy', 'Syllabus', 'Report'])->map(function ($name) {
-            return DocumentCategory::create([
-                'name' => $name,
-                'is_active' => true,
-            ]);
+        $docCategoryNames = [
+            'Policies & Procedures',
+            'Forms & Templates',
+            'Course Materials',
+        ];
+
+        $docCategories = collect($docCategoryNames)->map(function ($name) {
+            return DocumentCategory::firstOrCreate(
+                ['name' => $name],
+                ['is_active' => true]
+            );
         });
 
         // Documents with versions, logs and audit trails

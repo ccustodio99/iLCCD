@@ -9,12 +9,23 @@ class DocumentCategorySeeder extends Seeder
 {
     public function run(): void
     {
-        $categories = ['Policy', 'Syllabus', 'Report'];
+        $categories = [
+            'Policies & Procedures',
+            'Forms & Templates',
+            'Course Materials',
+            'Student Records',
+            'Financial & Accounting',
+            'Research & Publications',
+            'Marketing & Communications',
+            'Meeting Minutes & Reports',
+            'Archives & Historical',
+            'Miscellaneous',
+        ];
         foreach ($categories as $name) {
-            DocumentCategory::create([
-                'name' => $name,
-                'is_active' => true,
-            ]);
+            DocumentCategory::firstOrCreate(
+                ['name' => $name],
+                ['is_active' => true]
+            );
         }
     }
 }

@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('job-orders', JobOrderController::class)->except('show');
     Route::get('job-orders/{jobOrder}/attachment', [JobOrderController::class, 'downloadAttachment'])->name('job-orders.attachment');
     Route::put('job-orders/{jobOrder}/complete', [JobOrderController::class, 'complete'])->name('job-orders.complete');
+    Route::put('job-orders/{jobOrder}/close', [JobOrderController::class, 'close'])->name('job-orders.close');
     Route::post('job-orders/{jobOrder}/materials', [JobOrderController::class, 'requestMaterials'])->name('job-orders.materials');
     Route::get('job-orders/approvals', [JobOrderController::class, 'approvals'])->name('job-orders.approvals')->middleware('role:head,president,finance');
     Route::put('job-orders/{jobOrder}/approve', [JobOrderController::class, 'approve'])->name('job-orders.approve')->middleware('role:head,president,finance');
@@ -74,10 +75,13 @@ Route::middleware('auth')->group(function () {
     Route::put('requisitions/{requisition}/approve', [RequisitionController::class,'approve'])
         ->middleware('role:head,president,finance')
         ->name('requisitions.approve');
+    Route::get('requisitions/{requisition}/attachment', [RequisitionController::class, 'downloadAttachment'])->name('requisitions.attachment');
     Route::resource('requisitions', RequisitionController::class)->except('show');
-    Route::resource('inventory', InventoryItemController::class)->except('show');
-    Route::post('inventory/{inventory}/issue', [InventoryItemController::class, 'issue'])->name('inventory.issue');
-    Route::post('inventory/{inventory}/return', [InventoryItemController::class, 'return'])->name('inventory.return');
+    Route::middleware('role:admin,itrc')->group(function () {
+        Route::resource('inventory', InventoryItemController::class)->except('show');
+        Route::post('inventory/{inventory}/issue', [InventoryItemController::class, 'issue'])->name('inventory.issue');
+        Route::post('inventory/{inventory}/return', [InventoryItemController::class, 'return'])->name('inventory.return');
+    });
     Route::get('purchase-orders/{purchaseOrder}/attachment', [PurchaseOrderController::class, 'downloadAttachment'])->name('purchase-orders.attachment');
     Route::resource('purchase-orders', PurchaseOrderController::class)->except('show');
     Route::resource('documents', DocumentController::class);
@@ -87,7 +91,8 @@ Route::middleware('auth')->group(function () {
     Route::get('kpi-dashboard', [KpiAuditDashboardController::class, 'index'])
         ->name('kpi.dashboard');
     Route::get('kpi-dashboard/export', [KpiAuditDashboardController::class, 'export'])
-        ->name('kpi.dashboard.export');
+        ->name('kpi.dashboard.export')
+        ->middleware('role:admin');
     Route::get('audit-trails', [AuditTrailController::class, 'index'])->name('audit-trails.index');
 
     Route::middleware('role:admin')->prefix('settings')->group(function () {

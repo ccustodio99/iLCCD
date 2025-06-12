@@ -29,11 +29,19 @@
                 <td>
                     <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#jobOrderModal{{ $jobOrder->id }}">View</button>
                     <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editJobOrderModal{{ $jobOrder->id }}">Edit</button>
-                    <form action="{{ route('job-orders.complete', $jobOrder) }}" method="POST" class="d-inline">
-                        @csrf
-                        @method('PUT')
-                        <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Mark this job order as complete?')">Job Complete</button>
-                    </form>
+                    @if($jobOrder->status === \App\Models\JobOrder::STATUS_COMPLETED)
+                        <form action="{{ route('job-orders.close', $jobOrder) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Close this job order?')">Close</button>
+                        </form>
+                    @elseif($jobOrder->user_id === auth()->id())
+                        <form action="{{ route('job-orders.complete', $jobOrder) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Mark this job order as complete?')">Job Complete</button>
+                        </form>
+                    @endif
                 </td>
             </tr>
             @endforeach
@@ -72,7 +80,14 @@
                         <h6>Requisitions</h6>
                         <ul>
                             @foreach($jobOrder->requisitions as $req)
-                                <li>{{ $req->item }} - {{ $req->quantity }} ({{ ucfirst($req->status) }})</li>
+                                <li>
+                                    <ul class="mb-0">
+                                        @foreach($req->items as $item)
+                                            <li>{{ $item->item }} ({{ $item->quantity }})</li>
+                                        @endforeach
+                                    </ul>
+                                    <span class="ms-2">({{ ucfirst($req->status) }})</span>
+                                </li>
                             @endforeach
                         </ul>
                     @endif

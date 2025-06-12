@@ -33,12 +33,20 @@ Each module has status indicators so you can track approvals and fulfillment. Se
 
 ## 📊 Tracking Progress
 - The **My Tickets** or **My Requests** pages list everything you have submitted with their current status.
-- Email notifications are sent when your request is approved, denied, or needs more information.
+- Email alerts are sent whenever a ticket is created, assigned, updated, escalated, closed, or when someone comments. These notifications go to the ticket owner, the assigned user, and all watchers so everyone stays informed.
 - For managers, the dashboard highlights pending approvals with quick links to review them.
 - The **KPI & Audit Dashboard** aggregates performance metrics like response times and completion rates. Access it via the **KPI Dashboard** link or by visiting `/kpi-dashboard`.
 
 ### Ticket Watchers
-When you create a ticket, the system automatically adds watchers so the right people stay informed. These include your department head (or head of office) and IT administrators. You may add more users as watchers if they need visibility on the issue. The ticket owner and the assigned user can update and close the ticket. Watchers receive email updates and can comment, but cannot modify or close the ticket.
+When you create a ticket, the system automatically adds watchers so the right people stay informed. These include your department head (or head of office) and IT administrators. You may add more users as watchers if they need visibility on the issue. The ticket owner and the assigned user can update and close the ticket. Watchers receive the same email notifications as the owner, and they can comment but cannot modify or close the ticket.
+
+Example email:
+
+```
+Subject: Ticket #42 updated
+
+The ticket "Printer not working" has been escalated.
+```
 
 ---
 

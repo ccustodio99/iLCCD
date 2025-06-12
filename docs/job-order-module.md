@@ -13,9 +13,9 @@ begins.
 
 ## 🧩 Core Features
 
-1. **Requests for Repairs, Installations, and Setups**
-   - Faculty, staff, and heads submit job orders for IT issues,
-     facilities needs, or event setups.
+1. **Requests for Various Job Types**
+   - Faculty, staff, and heads submit job orders for installations,
+     maintenance, audits, emergencies, and other needs.
    - The form captures job type, description, optional attachments, and
      auto-fills the requester and department.
    - Job order types are managed under **Settings → Job Order Types**.
@@ -29,14 +29,15 @@ begins.
 3. **Requesting Materials**
    - When a job requires supplies, the system first checks **Inventory**.
    - Available stock is deducted immediately and noted on the job order.
-   - If items are missing, a linked **Requisition** is created so the
-     materials can be procured.
-   - Job status syncs with the requisition so work only begins once
-     materials arrive or are approved for purchase.
+   - If items are missing, a linked **Requisition** is created so the materials can be procured.
+   - The job order remains in its current approval stage until the requisition is approved.
+   - Once the requisition reaches **approved** and items are issued, the job order automatically advances to **approved** so it can be assigned.
 
 4. **Evaluation and Execution Logging**
-   - Jobs move through clear statuses: New → Approved → Assigned → In
-     Progress → Completed → Closed.
+   - Jobs move through these workflow states:
+     `pending_head` → `pending_president` → `pending_finance` → `approved` → `assigned` → `in_progress` → `completed` → `closed`.
+   - Requesters close the job order once work is verified done. The system
+     records the `closed_at` time for reporting.
    - Assigned personnel log start and finish times, actions taken, and
      any feedback from the requester.
    - All activity is recorded in the audit trail for transparency.

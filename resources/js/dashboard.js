@@ -90,5 +90,6 @@ async function loadDashboardData() {
 document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('tickets-table')) {
         loadDashboardData();
+        setInterval(loadDashboardData, 300000);
     }
 });

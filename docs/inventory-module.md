@@ -10,7 +10,7 @@ The **Inventory Module** enables real-time tracking and management of all instit
 
 ### 1. Tracking of Item Quantities
 - All supplies, equipment, and assets are catalogued in the inventory system.
-- Key details: item name, description, category, department, location, supplier, purchase date, quantity on hand.
+- Key details: item name, description, category (`inventory_category_id`), department, location, supplier, purchase date, quantity on hand.
 - Inventory categories are configurable under **Settings → Inventory Categories**.
 - Item status: available, reserved, under maintenance, retired/disposed.
 
@@ -19,6 +19,14 @@ The **Inventory Module** enables real-time tracking and management of all instit
   - Requestor, department, date/time, quantity issued, purpose.
 - Returns (full/partial) are likewise logged, updating available quantity and item status.
 - Each transaction is linked to the relevant module (Requisition, Job Order) for full traceability.
+**Steps to issue an item:**
+1. Open the item's **Details** modal and fill the **Issue** form.
+2. Submit to deduct stock and record an `issue` transaction.
+
+**Steps to return an item:**
+1. Use the **Return** form in the item modal.
+2. Submit to add back stock and record a `return` transaction.
+
 
 ### 3. Automatic Deduction Upon Approved Requisitions
 - When a requisition is approved, the corresponding items are auto-deducted from inventory.
@@ -34,6 +42,13 @@ The **Inventory Module** enables real-time tracking and management of all instit
   - Flags out-of-stock items (red alert)
   - Sends notifications to custodians/department heads and, optionally, the purchasing office
 - Dashboards and reports feature visual alerts and quick links to restock or reorder.
+- Rows on the dashboard turn yellow for low stock and red when items are depleted.
+- Email alerts are sent automatically when stock drops to or below the minimum level.
+
+### 5. Managing Inventory Categories
+- Categories are created and edited under **Settings → Inventory Categories**.
+- Only **Admin** users can add, disable, or delete categories.
+- Items link to a category via the `inventory_category_id` field, and only active categories show in forms.
 
 ---
 
@@ -41,7 +56,7 @@ The **Inventory Module** enables real-time tracking and management of all instit
 
 - Branded with LCCD/CCS logos and official colors; Bootstrap 5-based responsive tables and cards.
 - Central inventory dashboard shows item categories, stock status, alerts.
-- Filters/search by item name, category, department, status.
+- Filters at the top of the list let you search by name and narrow by category or status. Low stock filters surface items needing attention.
 - “Add Item,” “Issue Item,” and “Return Item” actions are prominent for authorized roles.
 - Visual badges for item status (in stock, low, out, reserved, maintenance).
 
@@ -49,7 +64,8 @@ The **Inventory Module** enables real-time tracking and management of all instit
 
 ## 🔒 Security & Audit Considerations
 
-- Only authenticated and authorized users can add, edit, issue, or return items.
+- Only users with the **Admin** or **ITRC** role may manage inventory items and perform issuing or returning.
+- Inventory categories are maintained by **Admin** users only.
 - All transactions (issuance, return, edit, disposal) are audit-logged.
 - Item history is immutable and accessible for compliance and review.
 - Permission checks for sensitive/expensive items or critical equipment.

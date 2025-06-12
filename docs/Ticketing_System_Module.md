@@ -4,7 +4,7 @@ The Ticketing System is the all-in-one portal for reporting issues and requestin
 
 > **Setup note:** Run `php artisan storage:link` after migrations so ticket attachments can be served.
 
-👉 **Smart routing:** Tickets start with large buttons for categories such as IT, Facilities, Documents, Supplies, Finance, HR, Registrar, Clinic, and Security. Selecting a button reveals its subcategories (progressive disclosure) so the request is routed to the right team. Department heads are notified instantly so nothing gets overlooked.
+👉 **Smart routing:** Tickets start with large buttons for categories such as **Computers & Devices**, **Software & Apps**, **Network & Access**, **User Accounts & Access**, **Printing & Scanning**, **Procurement & Inventory**, **Facilities & Maintenance**, **Security & Safety**, **Training & Support**, **Feedback & Improvement**, and **Other / General Inquiry**. Selecting a button reveals its subcategories (progressive disclosure) so the request is routed to the right team. Department heads are notified instantly so nothing gets overlooked. Ticket categories are stored with parent → child relationships using a `parent_id` field.
 
 ⏱️ **SLA monitoring:** Timers track how long tickets stay open. Critical requests escalate if they pass their deadline, ensuring urgent problems receive attention.
 
@@ -15,6 +15,8 @@ The Ticketing System is the all-in-one portal for reporting issues and requestin
 The interface uses Bootstrap 5 with official LCCD branding and is secured through the Access Control module. For more information on other modules, see the [documentation index](README.md).
 ### Current Implementation
 - Users can create, edit, and archive their own tickets with category, subject, description, and due date. Categories are selected using large buttons that reveal subcategories once chosen.
+- A screenshot of the category picker is available in the ITRC Dropbox.
+
 - Ticket subjects display as `[Category] - [Issue Summary] - Ticket ID` for easy reference.
 - Tickets are listed on the My Tickets page.
 - Automatic SLA monitoring escalates overdue tickets every minute.
@@ -28,6 +30,18 @@ Tickets can be assigned to another user for resolution in addition to the ticket
 - IT or system administrators
 
 Additional users may be included as watchers to collaborate on the issue. Watchers can follow progress and comment, but only the ticket owner and the assigned user can modify or close the ticket.
+
+### Email Alerts
+The system emails stakeholders whenever a ticket is created, assigned, updated, escalated, closed, or when a new comment is posted. Alerts go to the ticket owner, the assigned user, and all watchers so everyone stays on the same page.
+
+Example email:
+
+```
+Subject: Ticket #42 updated
+
+The ticket "Printer not working" has been escalated.
+View it in the portal to see details.
+```
 ---
 ## 🚀 Navigation
 - Previous: [User Interface & Branding](user-interface-branding.md)

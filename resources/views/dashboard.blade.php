@@ -24,6 +24,9 @@
 
     <h2 class="mt-4">Pending Tickets</h2>
     <form method="GET" class="mb-2">
+        @foreach(request()->except(['ticket_status','tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']) as $name => $value)
+            <input type="hidden" name="{{ $name }}" value="{{ $value }}">
+        @endforeach
         <select name="ticket_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
             <option value="">All Statuses</option>
             @foreach(['open' => 'Open', 'escalated' => 'Escalated', 'converted' => 'Converted'] as $val => $label)
@@ -54,13 +57,25 @@
         </tbody>
     </table>
     </div>
-    {{ $tickets->appends(request()->except('tickets_page'))->links() }}
+    {{ $tickets->appends(request()->except(['tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']))->links() }}
 
     <h2 class="mt-5">Pending Job Orders</h2>
     <form method="GET" class="mb-2">
+        @foreach(request()->except(['job_status','tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']) as $name => $value)
+            <input type="hidden" name="{{ $name }}" value="{{ $value }}">
+        @endforeach
         <select name="job_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
             <option value="">All Statuses</option>
-            @foreach(['new' => 'New', 'approved' => 'Approved', 'assigned' => 'Assigned', 'in_progress' => 'In Progress'] as $val => $label)
+            @foreach([
+                'pending_head' => 'Pending Head',
+                'pending_president' => 'Pending President',
+                'pending_finance' => 'Pending Finance',
+                'approved' => 'Approved',
+                'assigned' => 'Assigned',
+                'in_progress' => 'In Progress',
+                'completed' => 'Completed',
+                'closed' => 'Closed'
+            ] as $val => $label)
                 <option value="{{ $val }}" {{ request('job_status') === $val ? 'selected' : '' }}>{{ $label }}</option>
             @endforeach
         </select>
@@ -88,10 +103,13 @@
         </tbody>
     </table>
     </div>
-    {{ $jobOrders->appends(request()->except('job_orders_page'))->links() }}
+    {{ $jobOrders->appends(request()->except(['tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']))->links() }}
 
     <h2 class="mt-5">Pending Requisitions</h2>
     <form method="GET" class="mb-2">
+        @foreach(request()->except(['requisition_status','tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']) as $name => $value)
+            <input type="hidden" name="{{ $name }}" value="{{ $value }}">
+        @endforeach
         <select name="requisition_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
             <option value="">All Statuses</option>
             @foreach([\App\Models\Requisition::STATUS_PENDING_HEAD => 'Pending Head', \App\Models\Requisition::STATUS_APPROVED => 'Approved'] as $val => $label)
@@ -120,10 +138,13 @@
         </tbody>
     </table>
     </div>
-    {{ $requisitions->appends(request()->except('requisitions_page'))->links() }}
+    {{ $requisitions->appends(request()->except(['tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']))->links() }}
 
     <h2 class="mt-5">Pending Purchase Orders</h2>
     <form method="GET" class="mb-2">
+        @foreach(request()->except(['po_status','tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']) as $name => $value)
+            <input type="hidden" name="{{ $name }}" value="{{ $value }}">
+        @endforeach
         <select name="po_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
             <option value="">All Statuses</option>
             @foreach(['draft' => 'Draft', 'ordered' => 'Ordered'] as $val => $label)
@@ -154,7 +175,7 @@
         </tbody>
     </table>
     </div>
-    {{ $purchaseOrders->appends(request()->except('purchase_orders_page'))->links() }}
+    {{ $purchaseOrders->appends(request()->except(['tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']))->links() }}
 
     <h2 class="mt-5">Incoming &amp; Outgoing Documents</h2>
     <div class="row">
@@ -181,7 +202,7 @@
                 </tbody>
             </table>
             </div>
-            {{ $incomingDocuments->appends(request()->except('incoming_docs_page'))->links() }}
+            {{ $incomingDocuments->appends(request()->except(['tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']))->links() }}
         </div>
         <div class="col-md-6">
             <h5>Outgoing</h5>
@@ -206,7 +227,7 @@
                 </tbody>
             </table>
             </div>
-            {{ $outgoingDocuments->appends(request()->except('outgoing_docs_page'))->links() }}
+            {{ $outgoingDocuments->appends(request()->except(['tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']))->links() }}
         </div>
     </div>
 
@@ -232,7 +253,8 @@
         </tbody>
     </table>
     </div>
-    {{ $forApprovalDocuments->appends(request()->except('for_approval_docs_page'))->links() }}
+    {{ $forApprovalDocuments->appends(request()->except(['tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']))->links() }}
     <div id="dashboard-status" class="visually-hidden" aria-live="polite"></div>
 </div>
+@vite('resources/js/dashboard.js')
 @endsection

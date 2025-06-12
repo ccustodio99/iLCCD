@@ -5,7 +5,7 @@
 @section('content')
 <div class="container">
     <h1 class="mb-4">New Requisition</h1>
-    <form action="{{ route('requisitions.store') }}" method="POST">
+    <form action="{{ route('requisitions.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div id="items-container">
             <div class="row g-2 mb-3 item-row">
@@ -31,6 +31,10 @@
         <div class="mb-3">
             <label class="form-label">Remarks</label>
             <textarea name="remarks" class="form-control" rows="2">{{ old('remarks') }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Attachment</label>
+            <input type="file" name="attachment" class="form-control">
         </div>
         <button type="submit" class="btn btn-primary me-2">Submit</button>
         <a href="{{ route('requisitions.index') }}" class="btn btn-secondary">Cancel</a>

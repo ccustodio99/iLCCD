@@ -3,11 +3,15 @@
 Administrators can manage baseline values used across the modules from the **Settings** section of the sidebar. Each record includes an `is_active` flag so items may be disabled without deletion. The Settings link is visible only for users with the **admin** role.
 
 ## Default Records
-- **Ticket Categories:** IT, Facilities, Documents, Supplies, Finance, HR, Registrar, Clinic, Security (each category includes its own subcategories, e.g., IT → Hardware/Software)
-- **Job Order Types:** Repair, Installation, Setup
-- **Inventory Categories:** Electronics, Supplies, Furniture
-- **Document Categories:** Policy, Syllabus, Report
+The seeders populate several baseline records used throughout the system.
 
-These defaults are seeded by `php artisan migrate --seed` and can be modified or expanded using the settings screens.
+- **Ticket Categories:** Computers & Devices, Software & Apps, Network & Access, User Accounts & Access, Printing & Scanning, Procurement & Inventory, Facilities & Maintenance, Security & Safety, Training & Support, Feedback & Improvement, Other / General Inquiry (each parent has its own subcategories; see [Ticket Categories](ticket-categories.md))
+- **Job Order Types:** Installation & Deployment, IT Equipment Setup (matches Computers & Devices), Software Deployment (matches Software & Apps), Classroom AV Installation (matches Classroom AV), Maintenance, Preventative Maintenance (links Facilities & Maintenance), Corrective Repairs (Doors, Plumbing, HVAC), Inspection & Audit, Safety & Compliance Audits (e.g. Fire Extinguisher Tests), Inventory Spot-Checks (cross-links Inventory Management), Emergency Response, Power Outages (matches Electrical Outages), Critical Network/Server Downtime (matches Network Outages), Upgrades & Updates, Hardware Upgrades (RAM, Storage), Software Patching & Version Updates, Calibration & Testing, Lab Equipment Calibration (links Laboratory Equipment), Printer/Scanner Accuracy Checks (cross-links Printing & Scanning), Decommissioning & Removal, Cleaning & Housekeeping, Other Job Request
+- **Inventory Categories:** Electronics, Computers & Laptops, Tablets & Chromebooks, Smartphones & Mobile Devices, Networking Gear (Routers, Switches), AV Equipment (Projectors, Microphones), Furniture & Fixtures, Desks & Chairs, Cabinets & Shelving, Laboratory Benches, Classroom Fixtures (Podiums, Whiteboards), Office Supplies, Paper & Stationery, Printing Consumables (Toner, Ink), Desk Accessories (Pens, Clips), Laboratory Equipment, Instruments & Sensors, Calibration Tools (links Calibration & Testing), Safety Gear (Goggles, Gloves), Educational Materials, Textbooks & Reference Books, AV Media (DVDs, Slides), Teaching Aids (Models, Charts), Maintenance & Cleaning, HVAC & Electrical Parts, Plumbing Supplies, Cleaning Chemicals & Tools, Safety & First Aid, Fire Extinguishers (cross-links Safety Audits), First-Aid Kits, Emergency Signage, Vehicles & Grounds, Campus Vehicles, Grounds Equipment (Mowers, Trimmers), Outdoor Furniture, Consumables & Perishables, Lab Reagents & Chemicals, Printer Paper Rolls, Batteries & Bulbs, Miscellaneous
+- **Document Categories:** Policies & Procedures, Forms & Templates, Course Materials, Student Records, Financial & Accounting, Research & Publications, Marketing & Communications, Meeting Minutes & Reports, Archives & Historical, Miscellaneous
+
+Ticket categories already use a parent → child hierarchy with a `parent_id` field. Additional category types may adopt similar relationships in future versions.
+
+These defaults come from **`Database\Seeders\DocumentCategorySeeder`** and are created when running `php artisan migrate --seed`. Demo data from **`DemoSeeder`** reuses these records so no duplicates are created. You can modify or expand them later using the settings screens.
 
 Additional tools include **Theme Settings** where administrators can pick primary and accent colors, select fonts, and edit the home page text. The new **Announcements** manager lets admins post messages that appear on the dashboard.

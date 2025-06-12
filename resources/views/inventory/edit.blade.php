@@ -18,9 +18,9 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Category</label>
-            <select name="category" class="form-select">
+            <select name="inventory_category_id" class="form-select">
                 @foreach($categories as $cat)
-                    <option value="{{ $cat }}" {{ old('category', $inventoryItem->category) === $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                    <option value="{{ $cat->id }}" {{ old('inventory_category_id', $inventoryItem->inventory_category_id) == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
                 @endforeach
             </select>
         </div>
@@ -51,7 +51,12 @@
         <div class="mb-3">
             <label class="form-label">Status</label>
             <select name="status" class="form-select" required>
-                @php($statuses = ['available' => 'Available', 'reserved' => 'Reserved', 'maintenance' => 'Maintenance', 'retired' => 'Retired'])
+                @php($statuses = [
+                    \App\Models\InventoryItem::STATUS_AVAILABLE => 'Available',
+                    \App\Models\InventoryItem::STATUS_RESERVED => 'Reserved',
+                    \App\Models\InventoryItem::STATUS_MAINTENANCE => 'Maintenance',
+                    \App\Models\InventoryItem::STATUS_RETIRED => 'Retired',
+                ])
                 @foreach($statuses as $value => $label)
                     <option value="{{ $value }}" {{ old('status', $inventoryItem->status) === $value ? 'selected' : '' }}>{{ $label }}</option>
                 @endforeach

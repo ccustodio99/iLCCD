@@ -10,14 +10,26 @@
         @method('PUT')
         <div class="mb-3">
             <label class="form-label">Category</label>
-            <select name="ticket_category_id" class="form-select" required>
+            <input type="hidden" name="ticket_category_id" id="ticket_category_id" value="{{ old('ticket_category_id', $ticket->ticket_category_id) }}" required>
+            <div class="d-flex flex-wrap gap-2 mb-2">
                 @foreach($categories as $cat)
-                    <option value="{{ $cat->id }}" {{ old('ticket_category_id', $ticket->ticket_category_id) == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
-                    @foreach($cat->children as $child)
-                        <option value="{{ $child->id }}" {{ old('ticket_category_id', $ticket->ticket_category_id) == $child->id ? 'selected' : '' }}>&nbsp;&nbsp;{{ $child->name }}</option>
-                    @endforeach
+                    <button type="button" class="btn btn-outline-primary btn-lg category-btn" data-bs-toggle="collapse" data-bs-target="#cat-{{ $cat->id }}" aria-expanded="{{ $cat->children->contains('id', old('ticket_category_id', $ticket->ticket_category_id)) ? 'true' : 'false' }}">
+                        {{ $cat->name }}
+                    </button>
                 @endforeach
-            </select>
+            </div>
+            @foreach($categories as $cat)
+                <div id="cat-{{ $cat->id }}" class="collapse category-collapse mb-3 {{ $cat->children->contains('id', old('ticket_category_id', $ticket->ticket_category_id)) ? 'show' : '' }}">
+                    <div class="card card-body">
+                        <select class="form-select subcategory-select" data-cat-id="{{ $cat->id }}">
+                            <option value="">Select {{ $cat->name }} option</option>
+                            @foreach($cat->children as $child)
+                                <option value="{{ $child->id }}" {{ old('ticket_category_id', $ticket->ticket_category_id) == $child->id ? 'selected' : '' }}>{{ $child->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            @endforeach
         </div>
         <div class="mb-3">
             <label class="form-label">Subject</label>
@@ -62,5 +74,21 @@
         <button type="submit" class="btn btn-primary me-2">Save</button>
         <a href="{{ route('tickets.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
+    <script>
+        document.querySelectorAll('.category-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.category-collapse').forEach(function (col) {
+                    if (col.id !== btn.dataset.bsTarget.substring(1)) {
+                        bootstrap.Collapse.getOrCreateInstance(col).hide();
+                    }
+                });
+            });
+        });
+        document.querySelectorAll('.subcategory-select').forEach(function (sel) {
+            sel.addEventListener('change', function () {
+                document.getElementById('ticket_category_id').value = this.value;
+            });
+        });
+    </script>
 </div>
 @endsection

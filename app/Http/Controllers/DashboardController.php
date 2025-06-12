@@ -47,7 +47,11 @@ class DashboardController extends Controller
         ksort($params);
         $cacheKey = 'dashboard:' . md5(json_encode($params));
 
-        return Cache::remember($cacheKey, 300, function () use ($request, $perPage) {
+        $repository = Cache::getStore() instanceof \Illuminate\Contracts\Cache\TaggableStore
+            ? Cache::tags('dashboard')
+            : Cache::store();
+
+        return $repository->remember($cacheKey, 300, function () use ($request, $perPage) {
             $announcements = Announcement::where('is_active', true)
                 ->latest()
                 ->get();

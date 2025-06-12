@@ -8,6 +8,7 @@ use App\Models\Requisition;
 use App\Models\User;
 use App\Models\AuditTrail;
 use App\Models\TicketCategory;
+use App\Notifications\TicketStatusNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -15,6 +16,20 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TicketController extends Controller
 {
+    private function notifyStakeholders(Ticket $ticket, string $message): void
+    {
+        $recipients = collect([$ticket->user]);
+
+        if ($ticket->assignedTo) {
+            $recipients->push($ticket->assignedTo);
+        }
+
+        $recipients = $recipients->merge($ticket->watchers)->unique('id');
+
+        foreach ($recipients as $user) {
+            $user->notify(new TicketStatusNotification($message));
+        }
+    }
     public function index(Request $request)
     {
         $perPage = $this->getPerPage($request);
@@ -111,6 +126,16 @@ class TicketController extends Controller
             ]);
         }
 
+        $ticket->load('watchers', 'assignedTo', 'user');
+        $this->notifyStakeholders($ticket, "Ticket #{$ticket->id} has been created.");
+
+        if ($ticket->assigned_to_id) {
+            $this->notifyStakeholders(
+                $ticket,
+                "Ticket #{$ticket->id} has been assigned to {$ticket->assignedTo->name}."
+            );
+        }
+
         return redirect()->route('tickets.index');
     }
 
@@ -203,6 +228,25 @@ class TicketController extends Controller
                 ],
             ]);
         }
+
+        $ticket->load('watchers', 'assignedTo', 'user');
+
+        if ($ticket->wasChanged('assigned_to_id')) {
+            $this->notifyStakeholders(
+                $ticket,
+                "Ticket #{$ticket->id} has been assigned to {$ticket->assignedTo->name}."
+            );
+        }
+
+        if ($ticket->wasChanged('status') && $ticket->status === 'escalated') {
+            if ($ticket->escalated_at === null) {
+                $ticket->escalated_at = now();
+                $ticket->save();
+            }
+            $this->notifyStakeholders($ticket, "Ticket #{$ticket->id} has been escalated.");
+        } else {
+            $this->notifyStakeholders($ticket, "Ticket #{$ticket->id} has been updated.");
+        }
         return redirect()->route('tickets.index');
     }
 
@@ -222,6 +266,9 @@ class TicketController extends Controller
             'user_id' => $request->user()->id,
             'comment' => $data['comment'],
         ]);
+
+        $ticket->load('watchers', 'assignedTo', 'user');
+        $this->notifyStakeholders($ticket, "New comment on ticket #{$ticket->id}.");
 
         return back();
     }
@@ -278,7 +325,7 @@ class TicketController extends Controller
         $requisition = Requisition::create([
             'user_id' => $ticket->user_id,
             'ticket_id' => $ticket->id,
-            'department' => auth()->user()->department,
+            'department' => $ticket->user->department,
             'purpose' => $ticket->description,
             'status' => 'pending_head',
         ]);

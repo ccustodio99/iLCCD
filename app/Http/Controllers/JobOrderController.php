@@ -81,7 +81,7 @@ class JobOrderController extends Controller
                 Rule::exists('job_order_types', 'name')->where('is_active', true),
             ],
             'description' => 'required|string',
-            'status' => 'required|string',
+            'status' => ['required', 'string', Rule::in(JobOrder::STATUSES)],
             'attachment' => 'nullable|file|max:2048',
         ]);
         if ($request->hasFile('attachment')) {
@@ -92,8 +92,12 @@ class JobOrderController extends Controller
                 ->store('job_order_attachments', 'public');
         }
         $jobOrder->update($data);
-        if ($data['status'] === 'completed' && $jobOrder->completed_at === null) {
+        if ($data['status'] === JobOrder::STATUS_COMPLETED && $jobOrder->completed_at === null) {
             $jobOrder->completed_at = now();
+            $jobOrder->save();
+        }
+        if ($data['status'] === JobOrder::STATUS_CLOSED && $jobOrder->closed_at === null) {
+            $jobOrder->closed_at = now();
             $jobOrder->save();
         }
         return redirect()->route('job-orders.index');
@@ -109,6 +113,22 @@ class JobOrderController extends Controller
             $jobOrder->update([
                 'status' => 'completed',
                 'completed_at' => now(),
+            ]);
+        }
+
+        return redirect()->route('job-orders.index');
+    }
+
+    public function close(JobOrder $jobOrder)
+    {
+        if ($jobOrder->user_id !== auth()->id()) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+
+        if ($jobOrder->status === JobOrder::STATUS_COMPLETED) {
+            $jobOrder->update([
+                'status' => JobOrder::STATUS_CLOSED,
+                'closed_at' => now(),
             ]);
         }
 
@@ -150,6 +170,7 @@ class JobOrderController extends Controller
                 'job_order_id' => $jobOrder->id,
                 'action' => 'issue',
                 'quantity' => $data['quantity'],
+                'purpose' => $data['purpose'],
             ]);
         } else {
             $requisition = Requisition::create([
@@ -297,6 +318,7 @@ class JobOrderController extends Controller
     public function start(Request $request, JobOrder $jobOrder)
     {
         abort_unless($jobOrder->assigned_to_id === $request->user()->id, Response::HTTP_FORBIDDEN);
+        abort_if($jobOrder->status !== JobOrder::STATUS_ASSIGNED, Response::HTTP_FORBIDDEN);
 
         $data = $request->validate([
             'notes' => 'nullable|string',
@@ -315,6 +337,7 @@ class JobOrderController extends Controller
     public function finish(Request $request, JobOrder $jobOrder)
     {
         abort_unless($jobOrder->assigned_to_id === $request->user()->id, Response::HTTP_FORBIDDEN);
+        abort_if($jobOrder->status !== JobOrder::STATUS_IN_PROGRESS, Response::HTTP_FORBIDDEN);
 
         $data = $request->validate([
             'notes' => 'nullable|string',

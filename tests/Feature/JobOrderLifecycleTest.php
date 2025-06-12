@@ -86,4 +86,51 @@ it('shows assigned orders to assignee only', function () {
     $response->assertDontSee('Repair');
 });
 
+it('allows requester to close completed job order', function () {
+    $requester = User::factory()->create();
+    $order = JobOrder::factory()->for($requester)->create([
+        'status' => JobOrder::STATUS_COMPLETED,
+    ]);
+
+    $this->actingAs($requester);
+    $this->put("/job-orders/{$order->id}/close")->assertRedirect('/job-orders');
+
+    $order->refresh();
+    expect($order->status)->toBe(JobOrder::STATUS_CLOSED);
+    expect($order->closed_at)->not->toBeNull();
+});
+
+it('prevents others from closing job order', function () {
+    $requester = User::factory()->create();
+    $other = User::factory()->create();
+    $order = JobOrder::factory()->for($requester)->create([
+        'status' => JobOrder::STATUS_COMPLETED,
+    ]);
+
+    $this->actingAs($other);
+    $this->put("/job-orders/{$order->id}/close")->assertForbidden();
+});
+
+it('rejects starting when not assigned', function () {
+    $assignee = User::factory()->create();
+    $order = JobOrder::factory()->create([
+        'status' => JobOrder::STATUS_IN_PROGRESS,
+        'assigned_to_id' => $assignee->id,
+    ]);
+
+    $this->actingAs($assignee);
+    $this->put("/job-orders/{$order->id}/start")->assertForbidden();
+});
+
+it('rejects finishing when not in progress', function () {
+    $assignee = User::factory()->create();
+    $order = JobOrder::factory()->create([
+        'status' => JobOrder::STATUS_ASSIGNED,
+        'assigned_to_id' => $assignee->id,
+    ]);
+
+    $this->actingAs($assignee);
+    $this->put("/job-orders/{$order->id}/finish")->assertForbidden();
+});
+
 
