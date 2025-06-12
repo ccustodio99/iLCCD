@@ -4,7 +4,7 @@ Administrators can manage baseline values used across the modules from the **Set
 
 ## Default Records
 - **Ticket Categories:** Computers & Devices, Network & Access, Facilities & Maintenance, Procurement & Inventory, Academics & Systems, Security & Safety, Support & Training, Feedback & Improvement, Other / General Inquiry (each category includes its own subcategories)
-- **Job Order Types:** Repair, Installation, Setup
+- **Job Order Types:** Installation & Deployment, Maintenance, Inspection & Audit, Emergency Response, Upgrades & Updates, Calibration & Testing, Decommissioning & Removal, Cleaning & Housekeeping, Other Job Request
 - **Inventory Categories:** Electronics, Supplies, Furniture
 - **Document Categories:** Policy, Syllabus, Report
 

@@ -13,9 +13,9 @@ begins.
 
 ## 🧩 Core Features
 
-1. **Requests for Repairs, Installations, and Setups**
-   - Faculty, staff, and heads submit job orders for IT issues,
-     facilities needs, or event setups.
+1. **Requests for Various Job Types**
+   - Faculty, staff, and heads submit job orders for installations,
+     maintenance, audits, emergencies, and other needs.
    - The form captures job type, description, optional attachments, and
      auto-fills the requester and department.
    - Job order types are managed under **Settings → Job Order Types**.
