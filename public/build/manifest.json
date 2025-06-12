@@ -1,18 +1,38 @@
 {
+  "_bootstrap-T1DpEqax.js": {
+    "file": "assets/bootstrap-T1DpEqax.js",
+    "name": "bootstrap"
+  },
   "resources/css/app.css": {
-    "file": "assets/app-BTCPd6Kc.css",
+    "file": "assets/app-BbTrW6qs.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-BxLD0crG.js",
+    "file": "assets/app-CH6PfHwj.js",
     "name": "app",
     "src": "resources/js/app.js",
-    "isEntry": true
+    "isEntry": true,
+    "imports": [
+      "_bootstrap-T1DpEqax.js"
+    ]
+  },
+  "resources/js/category-dropdown.js": {
+    "file": "assets/category-dropdown-SUoNSrOu.js",
+    "name": "category-dropdown",
+    "src": "resources/js/category-dropdown.js",
+    "isEntry": true,
+    "imports": [
+      "_bootstrap-T1DpEqax.js"
+    ]
   },
   "resources/js/dashboard.js": {
-    "file": "assets/dashboard-516cdd1f.js",
+    "file": "assets/dashboard-D8FuzM47.js",
+    "name": "dashboard",
     "src": "resources/js/dashboard.js",
-    "isEntry": true
+    "isEntry": true,
+    "imports": [
+      "_bootstrap-T1DpEqax.js"
+    ]
   }
 }
