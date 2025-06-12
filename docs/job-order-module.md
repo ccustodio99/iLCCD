@@ -33,6 +33,8 @@ begins.
      materials can be procured.
    - Job status syncs with the requisition so work only begins once
      materials arrive or are approved for purchase.
+   - When the requisition reaches **approved**, the job order's status
+     is automatically set to **approved** and the approval time is saved.
 
 4. **Evaluation and Execution Logging**
    - Jobs move through clear statuses:
