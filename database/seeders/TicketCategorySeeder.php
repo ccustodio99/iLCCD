@@ -64,17 +64,16 @@ class TicketCategorySeeder extends Seeder
         ];
 
         foreach ($categories as $parent => $children) {
-            $parentCategory = TicketCategory::create([
-                'name' => $parent,
-                'is_active' => true,
-            ]);
+            $parentCategory = TicketCategory::firstOrCreate(
+                ['name' => $parent],
+                ['is_active' => true]
+            );
 
             foreach ($children as $child) {
-                TicketCategory::create([
-                    'name' => $child,
-                    'parent_id' => $parentCategory->id,
-                    'is_active' => true,
-                ]);
+                TicketCategory::firstOrCreate(
+                    ['name' => $child],
+                    ['parent_id' => $parentCategory->id, 'is_active' => true]
+                );
             }
         }
     }

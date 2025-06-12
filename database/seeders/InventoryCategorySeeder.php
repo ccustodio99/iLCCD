@@ -71,10 +71,10 @@ class InventoryCategorySeeder extends Seeder
             'Miscellaneous',
         ];
         foreach ($categories as $name) {
-            InventoryCategory::create([
-                'name' => $name,
-                'is_active' => true,
-            ]);
+            InventoryCategory::firstOrCreate(
+                ['name' => $name],
+                ['is_active' => true]
+            );
         }
     }
 }
