@@ -62,7 +62,11 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Category</label>
-                            <input type="text" name="category" class="form-control" value="{{ old('category') }}" required>
+                            <select name="category" class="form-select" required>
+                                @foreach($categories as $cat)
+                                    <option value="{{ $cat->name }}" {{ old('category') == $cat->name ? 'selected' : '' }}>{{ $cat->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Subject</label>
@@ -200,7 +204,11 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Category</label>
-                            <input type="text" name="category" class="form-control" value="{{ old('category', $ticket->category) }}" required>
+                            <select name="category" class="form-select" required>
+                                @foreach($categories as $cat)
+                                    <option value="{{ $cat->name }}" {{ old('category', $ticket->category) == $cat->name ? 'selected' : '' }}>{{ $cat->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Subject</label>

@@ -7,6 +7,7 @@ use App\Models\JobOrder;
 use App\Models\Requisition;
 use App\Models\User;
 use App\Models\AuditTrail;
+use App\Models\TicketCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,14 +23,16 @@ class TicketController extends Controller
             ->withQueryString();
 
         $users = User::orderBy('name')->get();
+        $categories = TicketCategory::where('is_active', true)->orderBy('name')->get();
 
-        return view('tickets.index', compact('tickets', 'users'));
+        return view('tickets.index', compact('tickets', 'users', 'categories'));
     }
 
     public function create()
     {
         $users = User::orderBy('name')->get();
-        return view('tickets.create', compact('users'));
+        $categories = TicketCategory::where('is_active', true)->orderBy('name')->get();
+        return view('tickets.create', compact('users', 'categories'));
     }
 
     public function store(Request $request)
@@ -105,7 +108,8 @@ class TicketController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $users = User::orderBy('name')->get();
-        return view('tickets.edit', compact('ticket', 'users'));
+        $categories = TicketCategory::where('is_active', true)->orderBy('name')->get();
+        return view('tickets.edit', compact('ticket', 'users', 'categories'));
     }
 
     public function update(Request $request, Ticket $ticket)

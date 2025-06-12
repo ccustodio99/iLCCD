@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Ticket;
 use App\Models\User;
+use App\Models\TicketCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,7 @@ class TicketFactory extends Factory
         return [
             'user_id' => User::factory(),
             'assigned_to_id' => null,
-            'category' => fake()->randomElement(['IT', 'Facilities', 'Documents']),
+            'category' => fn () => TicketCategory::factory()->create()->name,
             'subject' => fake()->sentence(4),
             'description' => fake()->paragraph(),
             'attachment_path' => null,
