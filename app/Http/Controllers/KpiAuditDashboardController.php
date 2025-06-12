@@ -6,6 +6,7 @@ use App\Models\AuditTrail;
 use App\Models\Ticket;
 use App\Models\JobOrder;
 use App\Models\Requisition;
+use Illuminate\Http\Request;
 use App\Exports\AuditTrailExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -14,15 +15,17 @@ class KpiAuditDashboardController extends Controller
     /**
      * Display KPI metrics and recent audit logs.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = $this->getPerPage($request);
         $ticketsCount = Ticket::count();
         $jobOrdersCount = JobOrder::count();
         $requisitionsCount = Requisition::count();
 
         $logs = AuditTrail::with('user')
             ->latest()
-            ->paginate(10);
+            ->paginate($perPage)
+            ->withQueryString();
 
         return view('kpi.dashboard', compact(
             'ticketsCount',

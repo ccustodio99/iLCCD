@@ -32,6 +32,7 @@
         </div>
     </div>
     <h3>Recent Audit Logs</h3>
+    @include('components.per-page-selector')
     <div class="table-responsive">
     <table class="table table-striped">
         <thead>

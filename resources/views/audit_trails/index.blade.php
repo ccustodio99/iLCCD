@@ -5,6 +5,7 @@
 @section('content')
 <div class="container">
     <h1 class="mb-4">Audit Trail</h1>
+    @include('components.per-page-selector', ['default' => 20])
     <div class="table-responsive">
     <table class="table table-striped">
         <thead>
