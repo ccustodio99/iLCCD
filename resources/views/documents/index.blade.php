@@ -9,6 +9,7 @@
     <a href="{{ route('documents.create') }}" class="btn btn-primary mb-3">Upload Document</a>
     <div class="table-responsive">
     <table class="table table-striped">
+    <caption class="visually-hidden">My Documents</caption>
         <thead>
             <tr>
                 <th>Title</th>

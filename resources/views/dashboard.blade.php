@@ -33,6 +33,7 @@
     </form>
     <div class="table-responsive">
     <table class="table table-striped" id="tickets-table">
+    <caption class="visually-hidden">Pending Tickets</caption>
         <thead>
             <tr>
                 <th>Subject</th>
@@ -66,6 +67,7 @@
     </form>
     <div class="table-responsive">
     <table class="table table-striped" id="job-orders-table">
+    <caption class="visually-hidden">Pending Job Orders</caption>
         <thead>
             <tr>
                 <th>Type</th>
@@ -99,6 +101,7 @@
     </form>
     <div class="table-responsive">
     <table class="table table-striped" id="requisitions-table">
+    <caption class="visually-hidden">Pending Requisitions</caption>
         <thead>
             <tr>
                 <th>Purpose</th>
@@ -130,6 +133,7 @@
     </form>
     <div class="table-responsive">
     <table class="table table-striped" id="purchase-orders-table">
+    <caption class="visually-hidden">Pending Purchase Orders</caption>
         <thead>
             <tr>
                 <th>Item</th>
@@ -158,6 +162,7 @@
             <h5>Incoming</h5>
             <div class="table-responsive">
             <table class="table table-striped" id="incoming-docs-table">
+                <caption class="visually-hidden">Incoming Documents</caption>
                 <thead>
                     <tr>
                         <th>Document</th>
@@ -182,6 +187,7 @@
             <h5>Outgoing</h5>
             <div class="table-responsive">
             <table class="table table-striped" id="outgoing-docs-table">
+                <caption class="visually-hidden">Outgoing Documents</caption>
                 <thead>
                     <tr>
                         <th>Document</th>
@@ -205,6 +211,7 @@
     </div>
 
     <h2 class="mt-5">For Approval/Checking</h2>
+    <caption class="visually-hidden">Documents for Approval</caption>
     <div class="table-responsive">
     <table class="table table-striped" id="for-approval-table">
         <thead>

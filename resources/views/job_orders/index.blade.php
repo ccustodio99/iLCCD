@@ -9,6 +9,7 @@
     <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#newJobOrderModal">New Job Order</button>
     <div class="table-responsive">
     <table class="table table-striped">
+    <caption class="visually-hidden">Job Orders</caption>
         <thead>
             <tr>
                 <th>Type</th>

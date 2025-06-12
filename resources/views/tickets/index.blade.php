@@ -9,6 +9,7 @@
     <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#newTicketModal">New Ticket</button>
     <div class="table-responsive">
     <table class="table table-striped">
+    <caption class="visually-hidden">Tickets</caption>
         <thead>
             <tr>
                 <th>Category</th>

@@ -9,6 +9,7 @@
     <a href="{{ route('inventory-categories.create') }}" class="btn btn-sm btn-primary mb-3">Add Category</a>
     <div class="table-responsive">
     <table class="table table-striped">
+    <caption class="visually-hidden">Inventory Categories</caption>
         <thead>
             <tr>
                 <th>Name</th>

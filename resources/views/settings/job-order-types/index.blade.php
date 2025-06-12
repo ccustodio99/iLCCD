@@ -9,6 +9,7 @@
     <a href="{{ route('job-order-types.create') }}" class="btn btn-sm btn-primary mb-3">Add Type</a>
     <div class="table-responsive">
     <table class="table table-striped">
+    <caption class="visually-hidden">Job Order Types</caption>
         <thead>
             <tr>
                 <th>Name</th>

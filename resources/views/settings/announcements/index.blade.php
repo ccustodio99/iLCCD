@@ -9,6 +9,7 @@
     <a href="{{ route('announcements.create') }}" class="btn btn-sm btn-primary mb-3">Add Announcement</a>
     <div class="table-responsive">
     <table class="table table-striped">
+    <caption class="visually-hidden">Announcements</caption>
         <thead>
             <tr>
                 <th>Title</th>

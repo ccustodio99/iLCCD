@@ -9,6 +9,7 @@
     <a href="{{ route('ticket-categories.create') }}" class="btn btn-sm btn-primary mb-3">Add Category</a>
     <div class="table-responsive">
     <table class="table table-striped">
+    <caption class="visually-hidden">Ticket Categories</caption>
         <thead>
             <tr>
                 <th>Name</th>
