@@ -20,3 +20,19 @@ it('stores attachment when creating job order', function () {
     $order = JobOrder::first();
     Storage::disk('public')->assertExists($order->attachment_path);
 });
+
+it('rejects invalid attachment file', function () {
+    Storage::fake('public');
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $response = $this->post('/job-orders', [
+        'job_type' => 'Repair',
+        'description' => 'Invalid',
+        'attachment' => 'not-a-file',
+    ]);
+
+    $response->assertSessionHasErrors('attachment');
+});
+
+
