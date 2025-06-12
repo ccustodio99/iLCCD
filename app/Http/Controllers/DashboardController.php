@@ -78,7 +78,11 @@ class DashboardController extends Controller
                 ->withQueryString();
 
             $purchaseOrders = PurchaseOrder::query()
-                ->where('status', '!=', PurchaseOrder::STATUS_RECEIVED)
+                ->whereNotIn('status', [
+                    PurchaseOrder::STATUS_RECEIVED,
+                    PurchaseOrder::STATUS_CLOSED,
+                    PurchaseOrder::STATUS_CANCELLED,
+                ])
                 ->when($request->po_status, fn($q) => $q->where('status', $request->po_status))
                 ->latest()
                 ->paginate($perPage, ['*'], 'purchase_orders_page')
