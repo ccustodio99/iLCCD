@@ -10,20 +10,27 @@ class JobOrderTypeController extends Controller
     public function index(Request $request)
     {
         $perPage = $this->getPerPage($request);
-        $types = JobOrderType::paginate($perPage)->withQueryString();
+        $types = JobOrderType::with('parent')
+            ->paginate($perPage)
+            ->withQueryString();
 
         return view('settings.job-order-types.index', compact('types'));
     }
 
     public function create()
     {
-        return view('settings.job-order-types.create');
+        $parents = JobOrderType::whereNull('parent_id')
+            ->orderBy('name')
+            ->get();
+
+        return view('settings.job-order-types.create', compact('parents'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
+            'parent_id' => 'nullable|exists:job_order_types,id',
             'is_active' => 'boolean',
         ]);
         $data['is_active'] = $data['is_active'] ?? false;
@@ -35,13 +42,19 @@ class JobOrderTypeController extends Controller
 
     public function edit(JobOrderType $jobOrderType)
     {
-        return view('settings.job-order-types.edit', compact('jobOrderType'));
+        $parents = JobOrderType::whereNull('parent_id')
+            ->where('id', '!=', $jobOrderType->id)
+            ->orderBy('name')
+            ->get();
+
+        return view('settings.job-order-types.edit', compact('jobOrderType', 'parents'));
     }
 
     public function update(Request $request, JobOrderType $jobOrderType)
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
+            'parent_id' => 'nullable|exists:job_order_types,id',
             'is_active' => 'boolean',
         ]);
         $data['is_active'] = $data['is_active'] ?? false;

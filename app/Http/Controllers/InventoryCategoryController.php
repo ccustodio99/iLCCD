@@ -10,20 +10,27 @@ class InventoryCategoryController extends Controller
     public function index(Request $request)
     {
         $perPage = $this->getPerPage($request);
-        $categories = InventoryCategory::paginate($perPage)->withQueryString();
+        $categories = InventoryCategory::with('parent')
+            ->paginate($perPage)
+            ->withQueryString();
 
         return view('settings.inventory-categories.index', compact('categories'));
     }
 
     public function create()
     {
-        return view('settings.inventory-categories.create');
+        $parents = InventoryCategory::whereNull('parent_id')
+            ->orderBy('name')
+            ->get();
+
+        return view('settings.inventory-categories.create', compact('parents'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
+            'parent_id' => 'nullable|exists:inventory_categories,id',
             'is_active' => 'boolean',
         ]);
         $data['is_active'] = $data['is_active'] ?? false;
@@ -35,13 +42,19 @@ class InventoryCategoryController extends Controller
 
     public function edit(InventoryCategory $inventoryCategory)
     {
-        return view('settings.inventory-categories.edit', compact('inventoryCategory'));
+        $parents = InventoryCategory::whereNull('parent_id')
+            ->where('id', '!=', $inventoryCategory->id)
+            ->orderBy('name')
+            ->get();
+
+        return view('settings.inventory-categories.edit', compact('inventoryCategory', 'parents'));
     }
 
     public function update(Request $request, InventoryCategory $inventoryCategory)
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
+            'parent_id' => 'nullable|exists:inventory_categories,id',
             'is_active' => 'boolean',
         ]);
         $data['is_active'] = $data['is_active'] ?? false;

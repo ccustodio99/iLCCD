@@ -13,6 +13,7 @@ class InventoryCategory extends Model
     use HasFactory, LogsAudit;
 
     protected $fillable = [
+        'parent_id',
         'name',
         'is_active',
     ];
@@ -22,6 +23,16 @@ class InventoryCategory extends Model
         return [
             'is_active' => 'boolean',
         ];
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(self::class, 'parent_id');
     }
 
     public function inventoryItems(): HasMany
