@@ -80,7 +80,7 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
 - Logs are immutable and monitored by ITRC.
 ### Current Implementation
 - Users can register and log in with hashed passwords.
-- Admins manage roles, departments, and activation status.
+- Admins manage roles, departments, activation status, and can create accounts directly from the Users page.
 - 2FA, password expiry, account lockout, and auto-logout are planned features.
 
 ### Password Policy & Session Management

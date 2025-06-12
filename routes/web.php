@@ -37,7 +37,7 @@ use App\Http\Controllers\KpiAuditDashboardController;
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('users', UserController::class)
-        ->except(['show', 'create', 'store'])
+        ->except(['show'])
         ->middleware('role:admin');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
