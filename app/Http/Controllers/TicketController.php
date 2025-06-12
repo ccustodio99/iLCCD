@@ -35,11 +35,16 @@ class TicketController extends Controller
             'description' => 'required|string',
             'assigned_to_id' => 'nullable|exists:users,id',
             'due_at' => 'nullable|date',
+            'attachment' => 'nullable|file|max:2048',
             'watchers' => 'array',
             'watchers.*' => 'exists:users,id',
         ]);
         $data['user_id'] = $request->user()->id;
         $data['status'] = 'open';
+        if ($request->hasFile('attachment')) {
+            $data['attachment_path'] = $request->file('attachment')->store('ticket_attachments', 'public');
+        }
+
         $ticket = Ticket::create($data);
 
         $watcherIds = User::whereIn('role', ['admin', 'itrc'])->pluck('id')->toArray();
@@ -110,9 +115,17 @@ class TicketController extends Controller
             'assigned_to_id' => 'nullable|exists:users,id',
             'status' => 'required|string',
             'due_at' => 'nullable|date',
+            'attachment' => 'nullable|file|max:2048',
             'watchers' => 'array',
             'watchers.*' => 'exists:users,id',
         ]);
+        if ($request->hasFile('attachment')) {
+            if ($ticket->attachment_path) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($ticket->attachment_path);
+            }
+            $data['attachment_path'] = $request->file('attachment')->store('ticket_attachments', 'public');
+        }
+
         $ticket->update($data);
         if ($ticket->wasChanged('assigned_to_id')) {
             AuditTrail::create([
