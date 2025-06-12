@@ -99,20 +99,24 @@ Deliver a holistic, faith-driven digital backbone for LCCD, empowering every use
 - Versioned uploads of all key docs (policies, syllabi, reports)
 - Role-based, secure access; links to requests; immutable audit logs
 
-### 7. 📊 KPI & Audit Log Dashboard
+### 7. 🚚 Document Tracking
+- Incoming, outgoing, for-approval, and tracking pages
+- Provides quick visibility into document flow across departments
+
+### 8. 📊 KPI & Audit Log Dashboard
 - Tracks performance metrics: response, approval, fulfillment rates, bottlenecks
 - Drill-down audit logs for every action; exports to Excel; role-based views
 
-### 8. 👥 User Management
+### 9. 👥 User Management
 - Full account lifecycle: create, edit, activate/deactivate, bulk import
 - Department & role assignment, permission matrix, audit trails
 - Integrated with all workflows and dashboards
 
-### 9. 🔐 Access Control
+### 10. 🔐 Access Control
 - Role-based security at UI & backend; session management, password policy
 - Immutable logs, data encryption in transit & at rest
 
-### 10. 🖥️ User Interface & Branding
+### 11. 🖥️ User Interface & Branding
 - Unified LCCD/CCS identity, mobile-first, accessible, role-tailored navigation
 - Consistent colors, fonts, logos, and feedback—all Gen Z ready
 
@@ -207,6 +211,7 @@ Every action is traceable; every step is value-aligned.
 - [User Interface & Branding](docs/user-interface-branding.md)
 - [Ticketing System Module](docs/Ticketing_System_Module.md)
 - [Document Management Module](docs/document-management-module.md)
+- [Document Tracking Module](docs/document-tracking-module.md)
 - [Document KPI & Log Dashboard](docs/document-kpi-log-dashboard.md)
 - [KPI & Audit Dashboard](docs/kpi-audit-log-dashboard.md)
 - [Job Order Module](docs/job-order-module.md)

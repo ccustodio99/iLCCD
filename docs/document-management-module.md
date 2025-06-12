@@ -76,5 +76,5 @@ For more guides visit the [documentation index](README.md).
 
 ## 🚀 Navigation
 - Previous: [Ticketing System Module](Ticketing_System_Module.md)
-- Next: [Document KPI & Log Dashboard](document-kpi-log-dashboard.md)
+- Next: [Document Tracking Module](document-tracking-module.md)
 - [Documentation Index](README.md)
