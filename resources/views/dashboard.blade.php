@@ -147,16 +147,10 @@
         @endforeach
         <select name="po_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
             <option value="">All Statuses</option>
-            @foreach([
-                \App\Models\PurchaseOrder::STATUS_DRAFT => 'Draft',
-                \App\Models\PurchaseOrder::STATUS_PENDING_APPROVAL => 'Pending Approval',
-                \App\Models\PurchaseOrder::STATUS_APPROVED => 'Approved',
-                \App\Models\PurchaseOrder::STATUS_ORDERED => 'Ordered',
-                \App\Models\PurchaseOrder::STATUS_RECEIVED => 'Received',
-                \App\Models\PurchaseOrder::STATUS_CLOSED => 'Closed',
-                \App\Models\PurchaseOrder::STATUS_CANCELLED => 'Cancelled'
-            ] as $val => $label)
-                <option value="{{ $val }}" {{ request('po_status') === $val ? 'selected' : '' }}>{{ $label }}</option>
+            @foreach(\App\Models\PurchaseOrder::STATUSES as $status)
+                <option value="{{ $status }}" {{ request('po_status') === $status ? 'selected' : '' }}>
+                    {{ ucfirst(str_replace('_', ' ', $status)) }}
+                </option>
             @endforeach
         </select>
     </form>
