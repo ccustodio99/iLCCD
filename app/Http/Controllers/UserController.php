@@ -14,12 +14,41 @@ class UserController extends Controller
         return view('users.index', compact('users'));
     }
 
+    public function create()
+    {
+        $roles = User::ROLES;
+        return view('users.create', compact('roles'));
+    }
+
     public function edit(User $user)
     {
+        $roles = User::ROLES;
+        return view('users.edit', compact('user', 'roles'));
+    }
 
+    public function store(Request $request)
+    {
         $roles = User::ROLES;
 
-        return view('users.edit', compact('user', 'roles'));
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => ['required', 'confirmed', 'min:8', 'regex:/[A-Za-z]/', 'regex:/[0-9]/', 'regex:/[^A-Za-z0-9]/'],
+            'role' => 'required|in:' . implode(',', $roles),
+            'department' => 'nullable|string|max:255',
+            'is_active' => 'boolean',
+        ]);
+
+        User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role' => $data['role'],
+            'department' => $data['department'] ?? null,
+            'is_active' => $data['is_active'] ?? false,
+        ]);
+
+        return redirect()->route('users.index');
     }
 
     public function update(Request $request, User $user)
@@ -29,11 +58,8 @@ class UserController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|confirmed|min:8',
-
-
+            'password' => ['nullable', 'confirmed', 'min:8', 'regex:/[A-Za-z]/', 'regex:/[0-9]/', 'regex:/[^A-Za-z0-9]/'],
             'role' => 'required|in:' . implode(',', $roles),
-
             'department' => 'nullable|string|max:255',
             'is_active' => 'boolean',
         ]);

@@ -3,6 +3,8 @@
 ## 🎯 Purpose
 The **KPI & Audit Log Dashboard** provides actionable insights and transparent records of all critical processes within LCCD. By tracking key performance indicators (KPIs) and maintaining comprehensive audit logs, this module supports accountability, data-driven improvement, and compliance with institutional standards and policies.
 
+Access the dashboard at `/kpi-dashboard` once logged in.
+
 ---
 
 ## 🧩 Core Features
@@ -18,6 +20,7 @@ The **KPI & Audit Log Dashboard** provides actionable insights and transparent r
 
 ### 2. Export Functionality to Excel for Analytics
 - All KPI data, logs, and summaries can be exported to Excel format (.xlsx).
+- Trigger export via the **Export** button or visit `/kpi-dashboard/export`.
 - Export supports filters by date, department, module, user/role, and status.
 - Enables further analysis by administration, finance, QA, or external auditors.
 

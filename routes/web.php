@@ -32,11 +32,12 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DocumentDashboardController;
 use App\Http\Controllers\DocumentTrackingController;
 use App\Http\Controllers\AuditTrailController;
+use App\Http\Controllers\KpiAuditDashboardController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('users', UserController::class)
-        ->except(['show', 'create', 'store'])
+        ->except(['show'])
         ->middleware('role:admin');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -72,6 +73,10 @@ Route::middleware('auth')->group(function () {
     Route::get('documents/{document}/versions/{version}/download', [DocumentController::class, 'download'])
         ->name('documents.download');
     Route::get('documents-dashboard', [DocumentDashboardController::class, 'index'])->name('documents.dashboard');
+    Route::get('kpi-dashboard', [KpiAuditDashboardController::class, 'index'])
+        ->name('kpi.dashboard');
+    Route::get('kpi-dashboard/export', [KpiAuditDashboardController::class, 'export'])
+        ->name('kpi.dashboard.export');
     Route::get('audit-trails', [AuditTrailController::class, 'index'])->name('audit-trails.index');
     Route::prefix('document-tracking')->group(function () {
         Route::get('incoming', [DocumentTrackingController::class, 'incoming'])->name('document-tracking.incoming');
