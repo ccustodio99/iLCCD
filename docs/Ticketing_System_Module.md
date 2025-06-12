@@ -4,7 +4,7 @@ The Ticketing System is the all-in-one portal for reporting issues and requestin
 
 > **Setup note:** Run `php artisan storage:link` after migrations so ticket attachments can be served.
 
-👉 **Smart routing:** Tickets start with large buttons for categories such as **Computers & Devices**, **Network & Access**, **Facilities & Maintenance**, **Procurement & Inventory**, **Academics & Systems**, **Security & Safety**, **Support & Training**, **Feedback & Improvement**, and **Other / General Inquiry**. Selecting a button reveals its subcategories (progressive disclosure) so the request is routed to the right team. Department heads are notified instantly so nothing gets overlooked.
+👉 **Smart routing:** Tickets start with large buttons for categories such as **Computers & Devices**, **Software & Apps**, **Network & Access**, **User Accounts & Access**, **Printing & Scanning**, **Procurement & Inventory**, **Facilities & Maintenance**, **Security & Safety**, **Training & Support**, **Feedback & Improvement**, and **Other / General Inquiry**. Selecting a button reveals its subcategories (progressive disclosure) so the request is routed to the right team. Department heads are notified instantly so nothing gets overlooked. Ticket categories are stored with parent → child relationships using a `parent_id` field.
 
 ⏱️ **SLA monitoring:** Timers track how long tickets stay open. Critical requests escalate if they pass their deadline, ensuring urgent problems receive attention.
 

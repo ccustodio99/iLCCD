@@ -22,10 +22,10 @@ class DocumentCategorySeeder extends Seeder
             'Miscellaneous',
         ];
         foreach ($categories as $name) {
-            DocumentCategory::create([
-                'name' => $name,
-                'is_active' => true,
-            ]);
+            DocumentCategory::firstOrCreate(
+                ['name' => $name],
+                ['is_active' => true]
+            );
         }
     }
 }
