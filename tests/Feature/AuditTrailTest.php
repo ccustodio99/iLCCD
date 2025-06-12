@@ -2,13 +2,15 @@
 
 use App\Models\AuditTrail;
 use App\Models\User;
+use App\Models\TicketCategory;
 
 it('records audit trail on ticket creation', function () {
     $user = User::factory()->create();
+    $category = TicketCategory::factory()->create(['name' => 'IT']);
     $this->actingAs($user);
 
     $this->post('/tickets', [
-        'category' => 'IT',
+        'category' => $category->name,
         'subject' => 'Printer',
         'description' => 'Broken',
     ])->assertRedirect('/tickets');
@@ -70,12 +72,13 @@ it('logs failed login attempts', function () {
 
 it('logs watchers update and assignment actions', function () {
     $user = User::factory()->create();
+    $category = TicketCategory::factory()->create(['name' => 'IT']);
     $assignee = User::factory()->create();
     $watcher = User::factory()->create();
     $this->actingAs($user);
 
     $this->post('/tickets', [
-        'category' => 'IT',
+        'category' => $category->name,
         'subject' => 'Printer',
         'description' => 'Broken',
         'watchers' => [$watcher->id],
