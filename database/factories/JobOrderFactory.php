@@ -24,7 +24,9 @@ class JobOrderFactory extends Factory
             'assigned_to_id' => null,
             'approved_at' => null,
             'started_at' => null,
+            'start_notes' => null,
             'completed_at' => null,
+            'completion_notes' => null,
         ];
     }
 }
