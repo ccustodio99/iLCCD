@@ -34,10 +34,10 @@ class JobOrderTypeSeeder extends Seeder
             'Other Job Request',
         ];
         foreach ($types as $name) {
-            JobOrderType::create([
-                'name' => $name,
-                'is_active' => true,
-            ]);
+            JobOrderType::firstOrCreate(
+                ['name' => $name],
+                ['is_active' => true]
+            );
         }
     }
 }
