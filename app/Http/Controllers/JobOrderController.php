@@ -130,9 +130,9 @@ class JobOrderController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
-        if ($jobOrder->status !== 'completed') {
+        if ($jobOrder->status !== JobOrder::STATUS_COMPLETED) {
             $jobOrder->update([
-                'status' => 'completed',
+                'status' => JobOrder::STATUS_COMPLETED,
                 'completed_at' => now(),
             ]);
         }
@@ -199,7 +199,7 @@ class JobOrderController extends Controller
                 'job_order_id' => $jobOrder->id,
                 'department' => $request->user()->department,
                 'purpose' => $data['purpose'],
-                'status' => 'pending_head',
+                'status' => Requisition::STATUS_PENDING_HEAD,
             ]);
 
             $requisition->items()->create([
