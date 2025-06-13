@@ -50,6 +50,9 @@ begins.
   requisitions.
 - Role-based views ensure requesters, approvers, and staff see only the
   actions relevant to them.
+- The index page provides filters for status, job type, assigned staff,
+  and a search box that matches words in the description. Closed job
+  orders can be included via a checkbox.
 
 ## 🔒 Security & Audit Considerations
 

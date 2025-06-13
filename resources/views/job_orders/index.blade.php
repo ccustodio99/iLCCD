@@ -6,6 +6,48 @@
 <div class="container">
     <h1 class="mb-4">My Job Orders</h1>
     @include('components.per-page-selector')
+    <div class="mb-3">
+        <form method="GET" class="row row-cols-lg-auto g-2 align-items-end">
+            <div class="col">
+                <label for="filter-status" class="form-label">Status</label>
+                <select id="filter-status" name="status" class="form-select">
+                    <option value="">Any</option>
+                    @foreach($statuses as $status)
+                        <option value="{{ $status }}" @selected(request('status') === $status)>{{ ucfirst(str_replace('_', ' ', $status)) }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-type" class="form-label">Type</label>
+                <select id="filter-type" name="type_parent" class="form-select">
+                    <option value="">Any</option>
+                    @foreach($types as $type)
+                        <option value="{{ $type->id }}" @selected((string)request('type_parent') === (string)$type->id)>{{ $type->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-assigned" class="form-label">Assigned To</label>
+                <select id="filter-assigned" name="assigned_to_id" class="form-select">
+                    <option value="">Any</option>
+                    @foreach($users as $u)
+                        <option value="{{ $u->id }}" @selected((string)request('assigned_to_id') === (string)$u->id)>{{ $u->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-search" class="form-label">Search</label>
+                <input id="filter-search" type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Description">
+            </div>
+            <div class="col form-check mt-4">
+                <input class="form-check-input" type="checkbox" value="1" id="filter-closed" name="closed" {{ request('closed') ? 'checked' : '' }}>
+                <label class="form-check-label" for="filter-closed">Include Closed</label>
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-secondary">Filter</button>
+            </div>
+        </form>
+    </div>
     <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#newJobOrderModal">New Job Order</button>
     <div class="table-responsive">
     <table class="table table-striped">
