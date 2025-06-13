@@ -343,24 +343,44 @@ class TicketController extends Controller
         return redirect()->route('job-orders.index');
     }
 
-    public function convertToRequisition(Ticket $ticket)
+    public function convertToRequisition(Request $request, Ticket $ticket)
     {
         if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
-        $requisition = Requisition::create([
+        $data = $request->validate([
+            'item.*' => 'required|string|max:255',
+            'quantity.*' => 'required|integer|min:1',
+            'specification.*' => 'nullable|string',
+            'purpose' => 'required|string',
+            'remarks' => 'nullable|string',
+            'attachment' => 'nullable|file|max:2048',
+        ]);
+
+        $requisitionData = [
             'user_id' => $ticket->user_id,
             'ticket_id' => $ticket->id,
             'department' => $ticket->user->department,
-            'purpose' => $ticket->description,
+            'purpose' => $data['purpose'],
+            'remarks' => $data['remarks'] ?? null,
             'status' => Requisition::STATUS_PENDING_HEAD,
-        ]);
+        ];
 
-        $requisition->items()->create([
-            'item' => $ticket->subject,
-            'quantity' => 1,
-        ]);
+        if ($request->hasFile('attachment')) {
+            $requisitionData['attachment_path'] = $request->file('attachment')
+                ->store('requisition_attachments', 'public');
+        }
+
+        $requisition = Requisition::create($requisitionData);
+
+        foreach ($data['item'] as $i => $name) {
+            $requisition->items()->create([
+                'item' => $name,
+                'quantity' => $data['quantity'][$i] ?? 1,
+                'specification' => $data['specification'][$i] ?? null,
+            ]);
+        }
 
         $ticket->update(['status' => 'converted']);
 

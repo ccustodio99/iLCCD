@@ -30,10 +30,7 @@
                     <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#ticketModal{{ $ticket->id }}">Details</button>
                     <button type="button" class="btn btn-sm btn-primary ms-1" data-bs-toggle="modal" data-bs-target="#editTicketModal{{ $ticket->id }}">Edit</button>
                     <button type="button" class="btn btn-sm btn-secondary ms-1" data-bs-toggle="modal" data-bs-target="#convertJobOrderModal{{ $ticket->id }}">Job Order</button>
-                    <form action="{{ route('tickets.requisition', $ticket) }}" method="POST" class="d-inline ms-1">
-                        @csrf
-                        <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Convert to Requisition?')">Requisition</button>
-                    </form>
+                    <button type="button" class="btn btn-sm btn-warning ms-1" data-bs-toggle="modal" data-bs-target="#convertRequisitionModal{{ $ticket->id }}">Requisition</button>
                     <form action="{{ route('tickets.destroy', $ticket) }}" method="POST" class="d-inline ms-1">
                         @csrf
                         @method('DELETE')
@@ -360,6 +357,68 @@
 
                     parent{{ $ticket->id }}.addEventListener('change', () => loadChildren{{ $ticket->id }}(parent{{ $ticket->id }}.value));
                     loadChildren{{ $ticket->id }}(parent{{ $ticket->id }}.value, '{{ old('job_type') }}');
+                });
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="convertRequisitionModal{{ $ticket->id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Requisition</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('tickets.requisition', $ticket) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div id="items-container-{{ $ticket->id }}">
+                            <div class="row g-2 mb-3 item-row">
+                                <div class="col-md-5">
+                                    <label class="form-label">Item</label>
+                                    <input type="text" name="item[]" class="form-control" value="{{ $ticket->subject }}" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Quantity</label>
+                                    <input type="number" name="quantity[]" class="form-control" value="1" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Specification</label>
+                                    <input type="text" name="specification[]" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" id="add-item-{{ $ticket->id }}" class="btn btn-secondary mb-3">Add Item</button>
+                        <div class="mb-3">
+                            <label class="form-label">Purpose</label>
+                            <textarea name="purpose" class="form-control" rows="3" required>{{ 'Ticket #' . $ticket->id . ' - ' . $ticket->subject . "\n" . $ticket->description }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Remarks</label>
+                            <textarea name="remarks" class="form-control" rows="2"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Attachment</label>
+                            <input type="file" name="attachment" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+                <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const container{{ $ticket->id }} = document.getElementById('items-container-{{ $ticket->id }}');
+                    const add{{ $ticket->id }} = document.getElementById('add-item-{{ $ticket->id }}');
+                    add{{ $ticket->id }}.addEventListener('click', function () {
+                        const row = container{{ $ticket->id }}.querySelector('.item-row').cloneNode(true);
+                        row.querySelectorAll('input').forEach(input => {
+                            if (input.name.includes('item')) input.value = '';
+                            if (input.type === 'number') input.value = 1;
+                        });
+                        container{{ $ticket->id }}.appendChild(row);
+                    });
                 });
                 </script>
             </div>
