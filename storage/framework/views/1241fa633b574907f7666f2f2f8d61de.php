@@ -5,7 +5,20 @@
     <h1 class="mb-4">My Tickets</h1>
     <?php echo $__env->make('components.per-page-selector', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <div class="mb-3">
-        <form method="GET" class="row row-cols-lg-auto g-2 align-items-end">
+        <?php
+            $filterSub = request('ticket_category_id');
+            $filterCat = null;
+            foreach ($categories as $cat) {
+                if ($cat->children->contains('id', $filterSub)) {
+                    $filterCat = $cat->id;
+                    break;
+                }
+            }
+            $categoryData = $categories->mapWithKeys(fn($c) => [
+                $c->id => $c->children->map(fn($s) => ['id' => $s->id, 'name' => $s->name])
+            ]);
+        ?>
+        <form method="GET" class="row row-cols-lg-auto g-2 align-items-end ticket-form">
             <div class="col">
                 <label for="filter-status" class="form-label">Status</label>
                 <select id="filter-status" name="status" class="form-select">
@@ -16,8 +29,33 @@
                 </select>
             </div>
             <div class="col">
+                <label class="form-label">Category</label>
+                <select class="form-select category-select mb-2" data-categories='<?php echo json_encode($categoryData, 15, 512) ?>'>
+                    <option value="">Any</option>
+                    <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($cat->id); ?>" <?php echo e((string)$filterCat === (string)$cat->id ? 'selected' : ''); ?>><?php echo e($cat->name); ?></option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </select>
+                <select id="filter-subcategory" name="ticket_category_id" class="form-select subcategory-select" data-selected="<?php echo e($filterSub); ?>">
+                    <option value="">Any</option>
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-assigned" class="form-label">Assigned To</label>
+                <select id="filter-assigned" name="assigned_to_id" class="form-select">
+                    <option value="">Any</option>
+                    <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $u): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($u->id); ?>" <?php if((string)request('assigned_to_id') === (string)$u->id): echo 'selected'; endif; ?>><?php echo e($u->name); ?></option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </select>
+            </div>
+            <div class="col">
                 <label for="filter-search" class="form-label">Search</label>
-                <input id="filter-search" type="text" name="search" value="<?php echo e(request('search')); ?>" class="form-control" placeholder="Subject">
+                <input id="filter-search" type="text" name="search" value="<?php echo e(request('search')); ?>" class="form-control" placeholder="Subject or description">
+            </div>
+            <div class="col form-check mt-4">
+                <input class="form-check-input" type="checkbox" value="1" id="filter-archived" name="archived" <?php echo e(request('archived') ? 'checked' : ''); ?>>
+                <label class="form-check-label" for="filter-archived">Include Archived</label>
             </div>
             <div class="col">
                 <button type="submit" class="btn btn-secondary">Filter</button>
