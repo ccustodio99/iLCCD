@@ -6,6 +6,34 @@
 <div class="container">
     <h1 class="mb-4">My Requisitions</h1>
     @include('components.per-page-selector')
+    <div class="mb-3">
+        <form method="GET" class="row row-cols-lg-auto g-2 align-items-end">
+            <div class="col">
+                <label for="filter-status" class="form-label">Status</label>
+                <select id="filter-status" name="status" class="form-select">
+                    <option value="">Any</option>
+                    @isset($statuses)
+                        @foreach($statuses as $status)
+                            <option value="{{ $status }}" @selected(request('status') === $status)>
+                                {{ ucfirst(str_replace('_', ' ', $status)) }}
+                            </option>
+                        @endforeach
+                    @endisset
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-ticket" class="form-label">Ticket ID</label>
+                <input id="filter-ticket" type="number" name="ticket_id" value="{{ request('ticket_id') }}" class="form-control">
+            </div>
+            <div class="col">
+                <label for="filter-search" class="form-label">Search</label>
+                <input id="filter-search" type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Purpose, remarks or item">
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-secondary">Filter</button>
+            </div>
+        </form>
+    </div>
     <a href="{{ route('requisitions.create') }}" class="btn btn-primary mb-3">New Requisition</a>
     <div class="table-responsive">
     <table class="table table-striped">

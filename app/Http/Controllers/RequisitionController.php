@@ -18,12 +18,36 @@ class RequisitionController extends Controller
     {
         $perPage = $this->getPerPage($request);
 
-        $requisitions = Requisition::where('user_id', auth()->id())
+        $query = Requisition::where('user_id', auth()->id());
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        if ($request->filled('ticket_id')) {
+            $query->where('ticket_id', $request->input('ticket_id'));
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('purpose', 'like', "%{$search}%")
+                    ->orWhere('remarks', 'like', "%{$search}%")
+                    ->orWhereHas('items', function ($iq) use ($search) {
+                        $iq->where('item', 'like', "%{$search}%")
+                            ->orWhere('specification', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $requisitions = $query
             ->with(['items', 'auditTrails.user'])
             ->paginate($perPage)
             ->withQueryString();
 
-        return view('requisitions.index', compact('requisitions'));
+        $statuses = Requisition::select('status')->distinct()->pluck('status');
+
+        return view('requisitions.index', compact('requisitions', 'statuses'));
     }
 
     public function create()
