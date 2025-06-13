@@ -19,6 +19,7 @@ The interface uses Bootstrap 5 with official LCCD branding and is secured throug
 
 - Ticket subjects display as `[Category] - [Issue Summary] - Ticket ID` for easy reference.
 - Tickets are listed on the My Tickets page.
+- Users can filter tickets by status and search by subject using the controls at the top of the list.
 - Automatic SLA monitoring escalates overdue tickets every minute.
 - Ticket categories are configurable under **Settings → Ticket Categories**.
 - KPI logs capture escalation timestamps for dashboard reporting.
