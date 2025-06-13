@@ -28,10 +28,7 @@
                     <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#ticketModal<?php echo e($ticket->id); ?>">Details</button>
                     <button type="button" class="btn btn-sm btn-primary ms-1" data-bs-toggle="modal" data-bs-target="#editTicketModal<?php echo e($ticket->id); ?>">Edit</button>
                     <button type="button" class="btn btn-sm btn-secondary ms-1" data-bs-toggle="modal" data-bs-target="#convertJobOrderModal<?php echo e($ticket->id); ?>">Job Order</button>
-                    <form action="<?php echo e(route('tickets.requisition', $ticket)); ?>" method="POST" class="d-inline ms-1">
-                        <?php echo csrf_field(); ?>
-                        <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Convert to Requisition?')">Requisition</button>
-                    </form>
+                    <button type="button" class="btn btn-sm btn-warning ms-1" data-bs-toggle="modal" data-bs-target="#convertRequisitionModal<?php echo e($ticket->id); ?>">Requisition</button>
                     <form action="<?php echo e(route('tickets.destroy', $ticket)); ?>" method="POST" class="d-inline ms-1">
                         <?php echo csrf_field(); ?>
                         <?php echo method_field('DELETE'); ?>
@@ -361,6 +358,68 @@
 
                     parent<?php echo e($ticket->id); ?>.addEventListener('change', () => loadChildren<?php echo e($ticket->id); ?>(parent<?php echo e($ticket->id); ?>.value));
                     loadChildren<?php echo e($ticket->id); ?>(parent<?php echo e($ticket->id); ?>.value, '<?php echo e(old('job_type')); ?>');
+                });
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="convertRequisitionModal<?php echo e($ticket->id); ?>" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Requisition</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="<?php echo e(route('tickets.requisition', $ticket)); ?>" method="POST" enctype="multipart/form-data">
+                    <?php echo csrf_field(); ?>
+                    <div class="modal-body">
+                        <div id="items-container-<?php echo e($ticket->id); ?>">
+                            <div class="row g-2 mb-3 item-row">
+                                <div class="col-md-5">
+                                    <label class="form-label">Item</label>
+                                    <input type="text" name="item[]" class="form-control" value="<?php echo e($ticket->subject); ?>" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Quantity</label>
+                                    <input type="number" name="quantity[]" class="form-control" value="1" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Specification</label>
+                                    <input type="text" name="specification[]" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" id="add-item-<?php echo e($ticket->id); ?>" class="btn btn-secondary mb-3">Add Item</button>
+                        <div class="mb-3">
+                            <label class="form-label">Purpose</label>
+                            <textarea name="purpose" class="form-control" rows="3" required><?php echo e('Ticket #' . $ticket->id . ' - ' . $ticket->subject . "\n" . $ticket->description); ?></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Remarks</label>
+                            <textarea name="remarks" class="form-control" rows="2"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Attachment</label>
+                            <input type="file" name="attachment" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+                <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const container<?php echo e($ticket->id); ?> = document.getElementById('items-container-<?php echo e($ticket->id); ?>');
+                    const add<?php echo e($ticket->id); ?> = document.getElementById('add-item-<?php echo e($ticket->id); ?>');
+                    add<?php echo e($ticket->id); ?>.addEventListener('click', function () {
+                        const row = container<?php echo e($ticket->id); ?>.querySelector('.item-row').cloneNode(true);
+                        row.querySelectorAll('input').forEach(input => {
+                            if (input.name.includes('item')) input.value = '';
+                            if (input.type === 'number') input.value = 1;
+                        });
+                        container<?php echo e($ticket->id); ?>.appendChild(row);
+                    });
                 });
                 </script>
             </div>
