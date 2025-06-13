@@ -7,7 +7,20 @@
     <h1 class="mb-4">My Tickets</h1>
     @include('components.per-page-selector')
     <div class="mb-3">
-        <form method="GET" class="row row-cols-lg-auto g-2 align-items-end">
+        @php
+            $filterSub = request('ticket_category_id');
+            $filterCat = null;
+            foreach ($categories as $cat) {
+                if ($cat->children->contains('id', $filterSub)) {
+                    $filterCat = $cat->id;
+                    break;
+                }
+            }
+            $categoryData = $categories->mapWithKeys(fn($c) => [
+                $c->id => $c->children->map(fn($s) => ['id' => $s->id, 'name' => $s->name])
+            ]);
+        @endphp
+        <form method="GET" class="row row-cols-lg-auto g-2 align-items-end ticket-form">
             <div class="col">
                 <label for="filter-status" class="form-label">Status</label>
                 <select id="filter-status" name="status" class="form-select">
@@ -18,8 +31,33 @@
                 </select>
             </div>
             <div class="col">
+                <label class="form-label">Category</label>
+                <select class="form-select category-select mb-2" data-categories='@json($categoryData)'>
+                    <option value="">Any</option>
+                    @foreach($categories as $cat)
+                        <option value="{{ $cat->id }}" {{ (string)$filterCat === (string)$cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                    @endforeach
+                </select>
+                <select id="filter-subcategory" name="ticket_category_id" class="form-select subcategory-select" data-selected="{{ $filterSub }}">
+                    <option value="">Any</option>
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-assigned" class="form-label">Assigned To</label>
+                <select id="filter-assigned" name="assigned_to_id" class="form-select">
+                    <option value="">Any</option>
+                    @foreach($users as $u)
+                        <option value="{{ $u->id }}" @selected((string)request('assigned_to_id') === (string)$u->id)>{{ $u->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col">
                 <label for="filter-search" class="form-label">Search</label>
-                <input id="filter-search" type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Subject">
+                <input id="filter-search" type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Subject or description">
+            </div>
+            <div class="col form-check mt-4">
+                <input class="form-check-input" type="checkbox" value="1" id="filter-archived" name="archived" {{ request('archived') ? 'checked' : '' }}>
+                <label class="form-check-label" for="filter-archived">Include Archived</label>
             </div>
             <div class="col">
                 <button type="submit" class="btn btn-secondary">Filter</button>

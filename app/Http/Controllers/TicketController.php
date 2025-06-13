@@ -35,15 +35,30 @@ class TicketController extends Controller
     {
         $perPage = $this->getPerPage($request);
 
-        $query = Ticket::where('user_id', auth()->id());
+        $query = Ticket::query()->where('user_id', auth()->id());
+
+        if ($request->boolean('archived')) {
+            $query->withTrashed();
+        }
 
         if ($request->filled('status')) {
             $query->where('status', $request->input('status'));
         }
 
+        if ($request->filled('ticket_category_id')) {
+            $query->where('ticket_category_id', $request->input('ticket_category_id'));
+        }
+
+        if ($request->filled('assigned_to_id')) {
+            $query->where('assigned_to_id', $request->input('assigned_to_id'));
+        }
+
         if ($request->filled('search')) {
             $search = $request->input('search');
-            $query->where('subject', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->where('subject', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
         }
 
         $tickets = $query
