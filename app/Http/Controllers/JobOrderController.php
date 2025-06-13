@@ -24,7 +24,11 @@ class JobOrderController extends Controller
             })
             ->paginate($perPage)
             ->withQueryString();
-        $types = JobOrderType::where('is_active', true)->orderBy('name')->pluck('name');
+        $types = JobOrderType::whereNull('parent_id')
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->with('children')
+            ->get();
 
         return view('job_orders.index', compact('jobOrders', 'types'));
     }
