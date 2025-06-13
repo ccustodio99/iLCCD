@@ -99,6 +99,8 @@
             </div>
         </div>
     </div>
+    <?php ($child = \App\Models\JobOrderType::where('name', $jobOrder->job_type)->first()); ?>
+    <?php ($parentIdCurrent = $child?->parent_id); ?>
     <div class="modal fade" id="editJobOrderModal<?php echo e($jobOrder->id); ?>" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -112,10 +114,17 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Type</label>
-                            <select name="job_type" class="form-select" required>
+                            <select name="type_parent" id="type_parent_<?php echo e($jobOrder->id); ?>" class="form-select" required>
+                                <option value="">Select Type</option>
                                 <?php $__currentLoopData = $types; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($type); ?>" <?php echo e(old('job_type', $jobOrder->job_type) === $type ? 'selected' : ''); ?>><?php echo e($type); ?></option>
+                                    <option value="<?php echo e($type->id); ?>" <?php echo e(old('type_parent', $parentIdCurrent) == $type->id ? 'selected' : ''); ?>><?php echo e($type->name); ?></option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Sub Type</label>
+                            <select name="job_type" id="job_type_<?php echo e($jobOrder->id); ?>" class="form-select" required disabled>
+                                <option value="">Select Sub Type</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -153,6 +162,35 @@
                         <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
+                <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const parent<?php echo e($jobOrder->id); ?> = document.getElementById('type_parent_<?php echo e($jobOrder->id); ?>');
+                    const child<?php echo e($jobOrder->id); ?> = document.getElementById('job_type_<?php echo e($jobOrder->id); ?>');
+
+                    function loadChildren<?php echo e($jobOrder->id); ?>(id, selected) {
+                        child<?php echo e($jobOrder->id); ?>.innerHTML = '<option value="">Select Sub Type</option>';
+                        if (!id) {
+                            child<?php echo e($jobOrder->id); ?>.disabled = true;
+                            return;
+                        }
+                        child<?php echo e($jobOrder->id); ?>.disabled = false;
+                        fetch(`/job-order-types/${id}/children`)
+                            .then(r => r.json())
+                            .then(data => {
+                                data.forEach(c => {
+                                    const opt = document.createElement('option');
+                                    opt.value = c.name;
+                                    opt.textContent = c.name;
+                                    if (selected === c.name) opt.selected = true;
+                                    child<?php echo e($jobOrder->id); ?>.appendChild(opt);
+                                });
+                            });
+                    }
+
+                    parent<?php echo e($jobOrder->id); ?>.addEventListener('change', () => loadChildren<?php echo e($jobOrder->id); ?>(parent<?php echo e($jobOrder->id); ?>.value));
+                    loadChildren<?php echo e($jobOrder->id); ?>(parent<?php echo e($jobOrder->id); ?>.value, '<?php echo e(old('job_type', $jobOrder->job_type)); ?>');
+                });
+                </script>
             </div>
         </div>
     </div>
@@ -170,10 +208,17 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Type</label>
-                            <select name="job_type" class="form-select" required>
+                            <select name="type_parent" id="new_type_parent" class="form-select" required>
+                                <option value="">Select Type</option>
                                 <?php $__currentLoopData = $types; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($type); ?>" <?php echo e(old('job_type') === $type ? 'selected' : ''); ?>><?php echo e($type); ?></option>
+                                    <option value="<?php echo e($type->id); ?>" <?php echo e(old('type_parent') == $type->id ? 'selected' : ''); ?>><?php echo e($type->name); ?></option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Sub Type</label>
+                            <select name="job_type" id="new_job_type" class="form-select" required disabled>
+                                <option value="">Select Sub Type</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -194,6 +239,35 @@
         </div>
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const parent = document.getElementById('new_type_parent');
+    const child = document.getElementById('new_job_type');
+
+    function loadChildren(id, selected) {
+        child.innerHTML = '<option value="">Select Sub Type</option>';
+        if (!id) {
+            child.disabled = true;
+            return;
+        }
+        child.disabled = false;
+        fetch(`/job-order-types/${id}/children`)
+            .then(r => r.json())
+            .then(data => {
+                data.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.name;
+                    opt.textContent = c.name;
+                    if (selected === c.name) opt.selected = true;
+                    child.appendChild(opt);
+                });
+            });
+    }
+
+    parent.addEventListener('change', () => loadChildren(parent.value));
+    loadChildren(parent.value, '<?php echo e(old('job_type')); ?>');
+});
+</script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH E:\SynologyDrive\MIT Studies\xampp\htdocs\iLCCD\resources\views/job_orders/index.blade.php ENDPATH**/ ?>
