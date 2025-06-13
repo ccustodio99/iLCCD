@@ -4,6 +4,35 @@
 <div class="container">
     <h1 class="mb-4">My Inventory Items</h1>
     <?php echo $__env->make('components.per-page-selector', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <div class="mb-3">
+        <form method="GET" class="row row-cols-lg-auto g-2 align-items-end">
+            <div class="col">
+                <label for="filter-category" class="form-label">Category</label>
+                <select id="filter-category" name="category" class="form-select">
+                    <option value="">All</option>
+                    <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($category->id); ?>" <?php if((string) request('category') === (string) $category->id): echo 'selected'; endif; ?>><?php echo e($category->name); ?></option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-status" class="form-label">Status</label>
+                <select id="filter-status" name="status" class="form-select">
+                    <option value="">Any</option>
+                    <?php $__currentLoopData = $statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($status); ?>" <?php if(request('status') === $status): echo 'selected'; endif; ?>><?php echo e(ucfirst($status)); ?></option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-search" class="form-label">Search</label>
+                <input id="filter-search" type="text" name="search" value="<?php echo e(request('search')); ?>" class="form-control" placeholder="Name">
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-secondary">Filter</button>
+            </div>
+        </form>
+    </div>
     <a href="<?php echo e(route('inventory.create')); ?>" class="btn btn-primary mb-3">Add Item</a>
     <div class="table-responsive">
     <table class="table table-striped">
@@ -59,7 +88,7 @@
                 <div class="modal-body">
                     <p><strong>Name:</strong> <?php echo e($item->name); ?></p>
                     <p><strong>Description:</strong> <?php echo e($item->description); ?></p>
-                    <p><strong>Category:</strong> <?php echo e($item->category); ?></p>
+                    <p><strong>Category:</strong> <?php echo e(optional($item->inventoryCategory)->name); ?></p>
                     <p><strong>Department:</strong> <?php echo e($item->department); ?></p>
                     <p><strong>Location:</strong> <?php echo e($item->location); ?></p>
                     <p><strong>Supplier:</strong> <?php echo e($item->supplier); ?></p>
@@ -71,7 +100,10 @@
                     <form action="<?php echo e(route('inventory.issue', $item)); ?>" method="POST" class="row g-2 mb-2">
                         <?php echo csrf_field(); ?>
                         <div class="col-auto">
-                            <input type="number" name="quantity" min="1" value="1" class="form-control form-control-sm">
+                            <input type="number" name="quantity" min="1" value="1" class="form-control form-control-sm" aria-label="Quantity to issue">
+                        </div>
+                        <div class="col-auto">
+                            <input type="text" name="purpose" class="form-control form-control-sm" placeholder="Purpose" aria-label="Purpose">
                         </div>
                         <div class="col-auto">
                             <button type="submit" class="btn btn-warning btn-sm">Issue</button>
@@ -80,7 +112,10 @@
                     <form action="<?php echo e(route('inventory.return', $item)); ?>" method="POST" class="row g-2">
                         <?php echo csrf_field(); ?>
                         <div class="col-auto">
-                            <input type="number" name="quantity" min="1" value="1" class="form-control form-control-sm">
+                            <input type="number" name="quantity" min="1" value="1" class="form-control form-control-sm" aria-label="Quantity to return">
+                        </div>
+                        <div class="col-auto">
+                            <input type="text" name="purpose" class="form-control form-control-sm" placeholder="Purpose" aria-label="Purpose">
                         </div>
                         <div class="col-auto">
                             <button type="submit" class="btn btn-success btn-sm">Return</button>

@@ -15,9 +15,9 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Category</label>
-            <select name="category" class="form-select">
+            <select name="inventory_category_id" class="form-select">
                 <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <option value="<?php echo e($cat); ?>" <?php echo e(old('category') === $cat ? 'selected' : ''); ?>><?php echo e($cat); ?></option>
+                    <option value="<?php echo e($cat->id); ?>" <?php echo e(old('inventory_category_id') == $cat->id ? 'selected' : ''); ?>><?php echo e($cat->name); ?></option>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
         </div>
@@ -48,9 +48,14 @@
         <div class="mb-3">
             <label class="form-label">Status</label>
             <select name="status" class="form-select" required>
-                <?php ($statuses = ['available' => 'Available', 'reserved' => 'Reserved', 'maintenance' => 'Maintenance', 'retired' => 'Retired']); ?>
+                <?php ($statuses = [
+                    \App\Models\InventoryItem::STATUS_AVAILABLE => 'Available',
+                    \App\Models\InventoryItem::STATUS_RESERVED => 'Reserved',
+                    \App\Models\InventoryItem::STATUS_MAINTENANCE => 'Maintenance',
+                    \App\Models\InventoryItem::STATUS_RETIRED => 'Retired',
+                ]); ?>
                 <?php $__currentLoopData = $statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <option value="<?php echo e($value); ?>" <?php echo e(old('status', 'available') === $value ? 'selected' : ''); ?>><?php echo e($label); ?></option>
+                    <option value="<?php echo e($value); ?>" <?php echo e(old('status', \App\Models\InventoryItem::STATUS_AVAILABLE) === $value ? 'selected' : ''); ?>><?php echo e($label); ?></option>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
         </div>

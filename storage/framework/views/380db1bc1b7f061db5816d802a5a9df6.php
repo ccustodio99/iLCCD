@@ -23,7 +23,7 @@
                 <td><?php echo e($order->item); ?></td>
                 <td><?php echo e($order->quantity); ?></td>
                 <td><?php echo e($order->supplier); ?></td>
-                <td><?php echo e(ucfirst($order->status)); ?></td>
+                <td><?php echo e(ucfirst(str_replace('_', ' ', $order->status))); ?></td>
                 <td>
                     <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#purchaseOrderModal<?php echo e($order->id); ?>">Details</button>
                     <a href="<?php echo e(route('purchase-orders.edit', $order)); ?>" class="btn btn-sm btn-primary">Edit</a>
@@ -53,7 +53,7 @@
                     <p><strong>Item:</strong> <?php echo e($order->item); ?></p>
                     <p><strong>Quantity:</strong> <?php echo e($order->quantity); ?></p>
                     <p><strong>Supplier:</strong> <?php echo e($order->supplier); ?></p>
-                    <p><strong>Status:</strong> <?php echo e(ucfirst($order->status)); ?></p>
+                    <p><strong>Status:</strong> <?php echo e(ucfirst(str_replace('_', ' ', $order->status))); ?></p>
                     <p><strong>Requisition ID:</strong> <?php echo e($order->requisition_id); ?></p>
                     <p><strong>Inventory Item ID:</strong> <?php echo e($order->inventory_item_id); ?></p>
                     <p><strong>Ordered At:</strong> <?php echo e(optional($order->ordered_at)->format('Y-m-d H:i')); ?></p>
