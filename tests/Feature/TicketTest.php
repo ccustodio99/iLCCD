@@ -194,3 +194,44 @@ it('archives ticket and marks it closed', function () {
     expect($archived->status)->toBe('closed');
     expect($archived->resolved_at)->not->toBeNull();
 });
+
+it('filters tickets by status', function () {
+    $user = User::factory()->create();
+    Ticket::factory()->for($user)->create(['subject' => 'Subject A', 'status' => 'open']);
+    Ticket::factory()->for($user)->create(['subject' => 'Subject B', 'status' => 'closed']);
+    $this->actingAs($user);
+
+    $response = $this->get('/tickets?status=closed');
+    $response->assertStatus(200);
+    $response->assertSee('Subject B');
+    $response->assertDontSee('Subject A');
+});
+
+it('searches tickets by subject', function () {
+    $user = User::factory()->create();
+    Ticket::factory()->for($user)->create(['subject' => 'Laptop problem']);
+    Ticket::factory()->for($user)->create(['subject' => 'Printer issue']);
+    $this->actingAs($user);
+
+    $response = $this->get('/tickets?search=Laptop');
+    $response->assertStatus(200);
+    $response->assertSee('Laptop problem');
+    $response->assertDontSee('Printer issue');
+});
+
+it('filters archived tickets', function () {
+    $user = User::factory()->create();
+    Ticket::factory()->for($user)->create([
+        'subject' => 'Old Ticket',
+        'status' => 'closed',
+        'archived_at' => now(),
+        'resolved_at' => now(),
+    ]);
+    Ticket::factory()->for($user)->create(['subject' => 'Active Ticket']);
+    $this->actingAs($user);
+
+    $response = $this->get('/tickets?status=archived');
+    $response->assertStatus(200);
+    $response->assertSee('Old Ticket');
+    $response->assertDontSee('Active Ticket');
+});

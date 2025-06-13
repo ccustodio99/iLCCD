@@ -34,7 +34,23 @@ class TicketController extends Controller
     public function index(Request $request)
     {
         $perPage = $this->getPerPage($request);
-        $tickets = Ticket::where('user_id', auth()->id())
+
+        $query = Ticket::where('user_id', auth()->id());
+
+        if ($request->filled('status')) {
+            if ($request->input('status') === 'archived') {
+                $query->onlyTrashed();
+            } else {
+                $query->where('status', $request->input('status'));
+            }
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('subject', 'like', "%{$search}%");
+        }
+
+        $tickets = $query
             ->with(['auditTrails.user', 'watchers', 'assignedTo', 'comments.user'])
             ->paginate($perPage)
             ->withQueryString();
@@ -52,7 +68,20 @@ class TicketController extends Controller
             ->with('children')
             ->get();
 
-        return view('tickets.index', compact('tickets', 'users', 'categories', 'types'));
+        $statuses = Ticket::withTrashed()
+            ->select('status')
+            ->distinct()
+            ->pluck('status')
+            ->merge(['archived'])
+            ->unique();
+
+        return view('tickets.index', compact(
+            'tickets',
+            'users',
+            'categories',
+            'types',
+            'statuses'
+        ));
     }
 
     public function create()
