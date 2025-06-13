@@ -29,10 +29,7 @@
                 <td>
                     <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#ticketModal{{ $ticket->id }}">Details</button>
                     <button type="button" class="btn btn-sm btn-primary ms-1" data-bs-toggle="modal" data-bs-target="#editTicketModal{{ $ticket->id }}">Edit</button>
-                    <form action="{{ route('tickets.convert', $ticket) }}" method="POST" class="d-inline ms-1">
-                        @csrf
-                        <button type="submit" class="btn btn-sm btn-secondary" onclick="return confirm('Convert to Job Order?')">Job Order</button>
-                    </form>
+                    <button type="button" class="btn btn-sm btn-secondary ms-1" data-bs-toggle="modal" data-bs-target="#convertJobOrderModal{{ $ticket->id }}">Job Order</button>
                     <form action="{{ route('tickets.requisition', $ticket) }}" method="POST" class="d-inline ms-1">
                         @csrf
                         <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Convert to Requisition?')">Requisition</button>
@@ -294,6 +291,77 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="convertJobOrderModal{{ $ticket->id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Job Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('tickets.convert', $ticket) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Type</label>
+                            <select name="type_parent" id="type_parent_convert_{{ $ticket->id }}" class="form-select" required>
+                                <option value="">Select Type</option>
+                                @foreach($types as $type)
+                                    <option value="{{ $type->id }}" {{ old('type_parent') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Sub Type</label>
+                            <select name="job_type" id="job_type_convert_{{ $ticket->id }}" class="form-select" required disabled>
+                                <option value="">Select Sub Type</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" class="form-control" rows="4" required>{{ 'Ticket #' . $ticket->id . ' - ' . $ticket->subject . "\n" . $ticket->description }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Attachment</label>
+                            <input type="file" name="attachment" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+                <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const parent{{ $ticket->id }} = document.getElementById('type_parent_convert_{{ $ticket->id }}');
+                    const child{{ $ticket->id }} = document.getElementById('job_type_convert_{{ $ticket->id }}');
+
+                    function loadChildren{{ $ticket->id }}(id, selected) {
+                        child{{ $ticket->id }}.innerHTML = '<option value="">Select Sub Type</option>';
+                        if (!id) {
+                            child{{ $ticket->id }}.disabled = true;
+                            return;
+                        }
+                        child{{ $ticket->id }}.disabled = false;
+                        fetch(`/job-order-types/${id}/children`)
+                            .then(r => r.json())
+                            .then(data => {
+                                data.forEach(c => {
+                                    const opt = document.createElement('option');
+                                    opt.value = c.name;
+                                    opt.textContent = c.name;
+                                    if (selected === c.name) opt.selected = true;
+                                    child{{ $ticket->id }}.appendChild(opt);
+                                });
+                            });
+                    }
+
+                    parent{{ $ticket->id }}.addEventListener('change', () => loadChildren{{ $ticket->id }}(parent{{ $ticket->id }}.value));
+                    loadChildren{{ $ticket->id }}(parent{{ $ticket->id }}.value, '{{ old('job_type') }}');
+                });
+                </script>
             </div>
         </div>
     </div>
