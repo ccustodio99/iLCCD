@@ -46,7 +46,10 @@ class TicketController extends Controller
         }
 
         if ($request->filled('ticket_category_id')) {
-            $query->where('ticket_category_id', $request->input('ticket_category_id'));
+            $categoryId = $request->input('ticket_category_id');
+            $query->whereHas('ticketCategory', function ($q) use ($categoryId) {
+                $q->where('id', $categoryId)->orWhere('parent_id', $categoryId);
+            });
         }
 
         if ($request->filled('assigned_to_id')) {

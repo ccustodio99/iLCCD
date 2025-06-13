@@ -15,9 +15,9 @@ it('filters tickets by category', function () {
 
     $this->actingAs($user);
 
-    $response = $this->get('/tickets?ticket_category_id=' . $subA->id);
+    $response = $this->get('/tickets?ticket_category_id=' . $parent->id);
     $response->assertSee('Sub A');
-    $response->assertDontSee('Sub B');
+    $response->assertSee('Sub B');
 });
 
 it('filters tickets by assigned user', function () {
