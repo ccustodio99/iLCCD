@@ -17,20 +17,51 @@ class JobOrderController extends Controller
     {
         $perPage = $this->getPerPage($request);
 
-        $jobOrders = JobOrder::with(['requisitions', 'ticket', 'auditTrails.user'])
+        $query = JobOrder::with(['requisitions', 'ticket', 'auditTrails.user'])
             ->where(function ($q) {
                 $q->where('user_id', auth()->id())
                     ->orWhere('assigned_to_id', auth()->id());
-            })
+            });
+
+        if (!$request->boolean('closed')) {
+            $query->where('status', '!=', JobOrder::STATUS_CLOSED);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        if ($request->filled('type_parent')) {
+            $typeIds = JobOrderType::where('parent_id', $request->input('type_parent'))
+                ->pluck('name');
+            $query->whereIn('job_type', $typeIds);
+        }
+
+        if ($request->filled('job_type')) {
+            $query->where('job_type', $request->input('job_type'));
+        }
+
+        if ($request->filled('assigned_to_id')) {
+            $query->where('assigned_to_id', $request->input('assigned_to_id'));
+        }
+
+        if ($request->filled('search')) {
+            $query->where('description', 'like', '%' . $request->input('search') . '%');
+        }
+
+        $jobOrders = $query
             ->paginate($perPage)
             ->withQueryString();
+
         $types = JobOrderType::whereNull('parent_id')
             ->where('is_active', true)
             ->orderBy('name')
-            ->with('children')
             ->get();
 
-        return view('job_orders.index', compact('jobOrders', 'types'));
+        $users = \App\Models\User::orderBy('name')->get();
+        $statuses = JobOrder::select('status')->distinct()->pluck('status');
+
+        return view('job_orders.index', compact('jobOrders', 'types', 'users', 'statuses'));
     }
 
     public function create()
