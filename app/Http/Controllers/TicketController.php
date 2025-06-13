@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use App\Models\JobOrder;
+use App\Models\JobOrderType;
 use App\Models\Requisition;
 use App\Models\User;
 use App\Models\AuditTrail;
@@ -45,7 +46,13 @@ class TicketController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('tickets.index', compact('tickets', 'users', 'categories'));
+        $types = JobOrderType::whereNull('parent_id')
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->with('children')
+            ->get();
+
+        return view('tickets.index', compact('tickets', 'users', 'categories', 'types'));
     }
 
     public function create()
@@ -297,19 +304,39 @@ class TicketController extends Controller
         return redirect()->route('tickets.index');
     }
 
-    public function convertToJobOrder(Ticket $ticket)
+    public function convertToJobOrder(Request $request, Ticket $ticket)
     {
         if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
-        JobOrder::create([
-            'user_id' => $ticket->user_id,
-            'ticket_id' => $ticket->id,
-            'job_type' => $ticket->ticketCategory->name,
-            'description' => $ticket->description,
-            'status' => JobOrder::STATUS_PENDING_HEAD,
+        $data = $request->validate([
+            'type_parent' => ['required', 'exists:job_order_types,id'],
+            'job_type' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::exists('job_order_types', 'name')->where(function ($q) use ($request) {
+                    $q->where('parent_id', $request->type_parent)
+                        ->where('is_active', true);
+                }),
+            ],
+            'description' => 'required|string',
+            'attachment' => 'nullable|file|max:2048',
         ]);
+
+        $data['user_id'] = $ticket->user_id;
+        $data['ticket_id'] = $ticket->id;
+        $data['status'] = JobOrder::STATUS_PENDING_HEAD;
+
+        if ($request->hasFile('attachment')) {
+            $data['attachment_path'] = $request->file('attachment')
+                ->store('job_order_attachments', 'public');
+        }
+
+        unset($data['type_parent']);
+
+        JobOrder::create($data);
 
         $ticket->update(['status' => 'converted']);
 
