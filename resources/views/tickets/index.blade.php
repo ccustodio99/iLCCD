@@ -31,7 +31,7 @@
                     <button type="button" class="btn btn-sm btn-primary ms-1" data-bs-toggle="modal" data-bs-target="#editTicketModal{{ $ticket->id }}">Edit</button>
                     <form action="{{ route('tickets.convert', $ticket) }}" method="POST" class="d-inline ms-1">
                         @csrf
-                        <button type="submit" class="btn btn-sm btn-secondary" onclick="return confirm('Convert to Job Order?')">Convert</button>
+                        <button type="submit" class="btn btn-sm btn-secondary" onclick="return confirm('Convert to Job Order?')">Job Order</button>
                     </form>
                     <form action="{{ route('tickets.requisition', $ticket) }}" method="POST" class="d-inline ms-1">
                         @csrf
