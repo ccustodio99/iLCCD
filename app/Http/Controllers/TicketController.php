@@ -300,6 +300,14 @@ class TicketController extends Controller
         if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
+        if ($ticket->status !== 'closed') {
+            $ticket->status = 'closed';
+            if ($ticket->resolved_at === null) {
+                $ticket->resolved_at = now();
+            }
+            $ticket->save();
+        }
+
         $ticket->delete();
         return redirect()->route('tickets.index');
     }

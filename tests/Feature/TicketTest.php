@@ -181,3 +181,16 @@ it('shows requisition on ticket details after conversion', function () {
     $response->assertSee('Requisitions');
     $response->assertSee((string) $reqId);
 });
+
+it('archives ticket and marks it closed', function () {
+    $user = User::factory()->create();
+    $ticket = Ticket::factory()->for($user)->create(['status' => 'open']);
+    $this->actingAs($user);
+
+    $this->delete("/tickets/{$ticket->id}")->assertRedirect('/tickets');
+
+    $archived = Ticket::withTrashed()->find($ticket->id);
+    expect($archived->archived_at)->not->toBeNull();
+    expect($archived->status)->toBe('closed');
+    expect($archived->resolved_at)->not->toBeNull();
+});

@@ -53,7 +53,7 @@ These commands assume a local development setup with PHP, Composer, Node.js, and
 ---
 
 ## 4️⃣ Demo Data
-Running the seeders will create demo accounts for all major roles and sample records for every module. The default dataset now includes **five tickets** *(one archived)*, **three job orders**, **four requisitions**, **eight inventory items**, **two purchase orders**, and **three documents with version history**. Each record also creates sample **ticket comments**, **requisition items**, and **inventory transactions** with matching audit logs. Modify `database/seeders/DemoSeeder.php` if you want to adjust the content.
+Running the seeders will create demo accounts for all major roles and sample records for every module. The default dataset now includes **five tickets** *(one archived and closed)*, **three job orders**, **four requisitions**, **eight inventory items**, **two purchase orders**, and **three documents with version history**. Each record also creates sample **ticket comments**, **requisition items**, and **inventory transactions** with matching audit logs. Modify `database/seeders/DemoSeeder.php` if you want to adjust the content.
 The demo seeder reuses the document categories seeded by `DocumentCategorySeeder` so demo documents fall under **Policies & Procedures**, **Forms & Templates**, and **Course Materials**.
 
 ---
