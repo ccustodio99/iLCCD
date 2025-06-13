@@ -27,10 +27,7 @@
                 <td>
                     <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#ticketModal<?php echo e($ticket->id); ?>">Details</button>
                     <button type="button" class="btn btn-sm btn-primary ms-1" data-bs-toggle="modal" data-bs-target="#editTicketModal<?php echo e($ticket->id); ?>">Edit</button>
-                    <form action="<?php echo e(route('tickets.convert', $ticket)); ?>" method="POST" class="d-inline ms-1">
-                        <?php echo csrf_field(); ?>
-                        <button type="submit" class="btn btn-sm btn-secondary" onclick="return confirm('Convert to Job Order?')">Job Order</button>
-                    </form>
+                    <button type="button" class="btn btn-sm btn-secondary ms-1" data-bs-toggle="modal" data-bs-target="#convertJobOrderModal<?php echo e($ticket->id); ?>">Job Order</button>
                     <form action="<?php echo e(route('tickets.requisition', $ticket)); ?>" method="POST" class="d-inline ms-1">
                         <?php echo csrf_field(); ?>
                         <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Convert to Requisition?')">Requisition</button>
@@ -295,6 +292,77 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="convertJobOrderModal<?php echo e($ticket->id); ?>" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Job Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="<?php echo e(route('tickets.convert', $ticket)); ?>" method="POST" enctype="multipart/form-data">
+                    <?php echo csrf_field(); ?>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Type</label>
+                            <select name="type_parent" id="type_parent_convert_<?php echo e($ticket->id); ?>" class="form-select" required>
+                                <option value="">Select Type</option>
+                                <?php $__currentLoopData = $types; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($type->id); ?>" <?php echo e(old('type_parent') == $type->id ? 'selected' : ''); ?>><?php echo e($type->name); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Sub Type</label>
+                            <select name="job_type" id="job_type_convert_<?php echo e($ticket->id); ?>" class="form-select" required disabled>
+                                <option value="">Select Sub Type</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" class="form-control" rows="4" required><?php echo e('Ticket #' . $ticket->id . ' - ' . $ticket->subject . "\n" . $ticket->description); ?></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Attachment</label>
+                            <input type="file" name="attachment" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+                <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const parent<?php echo e($ticket->id); ?> = document.getElementById('type_parent_convert_<?php echo e($ticket->id); ?>');
+                    const child<?php echo e($ticket->id); ?> = document.getElementById('job_type_convert_<?php echo e($ticket->id); ?>');
+
+                    function loadChildren<?php echo e($ticket->id); ?>(id, selected) {
+                        child<?php echo e($ticket->id); ?>.innerHTML = '<option value="">Select Sub Type</option>';
+                        if (!id) {
+                            child<?php echo e($ticket->id); ?>.disabled = true;
+                            return;
+                        }
+                        child<?php echo e($ticket->id); ?>.disabled = false;
+                        fetch(`/job-order-types/${id}/children`)
+                            .then(r => r.json())
+                            .then(data => {
+                                data.forEach(c => {
+                                    const opt = document.createElement('option');
+                                    opt.value = c.name;
+                                    opt.textContent = c.name;
+                                    if (selected === c.name) opt.selected = true;
+                                    child<?php echo e($ticket->id); ?>.appendChild(opt);
+                                });
+                            });
+                    }
+
+                    parent<?php echo e($ticket->id); ?>.addEventListener('change', () => loadChildren<?php echo e($ticket->id); ?>(parent<?php echo e($ticket->id); ?>.value));
+                    loadChildren<?php echo e($ticket->id); ?>(parent<?php echo e($ticket->id); ?>.value, '<?php echo e(old('job_type')); ?>');
+                });
+                </script>
             </div>
         </div>
     </div>
