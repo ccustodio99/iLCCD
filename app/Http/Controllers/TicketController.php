@@ -327,7 +327,7 @@ class TicketController extends Controller
             'ticket_id' => $ticket->id,
             'department' => $ticket->user->department,
             'purpose' => $ticket->description,
-            'status' => 'pending_head',
+            'status' => Requisition::STATUS_PENDING_HEAD,
         ]);
 
         $requisition->items()->create([
