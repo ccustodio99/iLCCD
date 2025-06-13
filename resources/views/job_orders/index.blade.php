@@ -99,6 +99,8 @@
             </div>
         </div>
     </div>
+    @php($child = \App\Models\JobOrderType::where('name', $jobOrder->job_type)->first())
+    @php($parentIdCurrent = $child?->parent_id)
     <div class="modal fade" id="editJobOrderModal{{ $jobOrder->id }}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -112,10 +114,17 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Type</label>
-                            <select name="job_type" class="form-select" required>
+                            <select name="type_parent" id="type_parent_{{ $jobOrder->id }}" class="form-select" required>
+                                <option value="">Select Type</option>
                                 @foreach($types as $type)
-                                    <option value="{{ $type }}" {{ old('job_type', $jobOrder->job_type) === $type ? 'selected' : '' }}>{{ $type }}</option>
+                                    <option value="{{ $type->id }}" {{ old('type_parent', $parentIdCurrent) == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
                                 @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Sub Type</label>
+                            <select name="job_type" id="job_type_{{ $jobOrder->id }}" class="form-select" required disabled>
+                                <option value="">Select Sub Type</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -153,6 +162,35 @@
                         <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
+                <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const parent{{ $jobOrder->id }} = document.getElementById('type_parent_{{ $jobOrder->id }}');
+                    const child{{ $jobOrder->id }} = document.getElementById('job_type_{{ $jobOrder->id }}');
+
+                    function loadChildren{{ $jobOrder->id }}(id, selected) {
+                        child{{ $jobOrder->id }}.innerHTML = '<option value="">Select Sub Type</option>';
+                        if (!id) {
+                            child{{ $jobOrder->id }}.disabled = true;
+                            return;
+                        }
+                        child{{ $jobOrder->id }}.disabled = false;
+                        fetch(`/job-order-types/${id}/children`)
+                            .then(r => r.json())
+                            .then(data => {
+                                data.forEach(c => {
+                                    const opt = document.createElement('option');
+                                    opt.value = c.name;
+                                    opt.textContent = c.name;
+                                    if (selected === c.name) opt.selected = true;
+                                    child{{ $jobOrder->id }}.appendChild(opt);
+                                });
+                            });
+                    }
+
+                    parent{{ $jobOrder->id }}.addEventListener('change', () => loadChildren{{ $jobOrder->id }}(parent{{ $jobOrder->id }}.value));
+                    loadChildren{{ $jobOrder->id }}(parent{{ $jobOrder->id }}.value, '{{ old('job_type', $jobOrder->job_type) }}');
+                });
+                </script>
             </div>
         </div>
     </div>
@@ -170,10 +208,17 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Type</label>
-                            <select name="job_type" class="form-select" required>
+                            <select name="type_parent" id="new_type_parent" class="form-select" required>
+                                <option value="">Select Type</option>
                                 @foreach($types as $type)
-                                    <option value="{{ $type }}" {{ old('job_type') === $type ? 'selected' : '' }}>{{ $type }}</option>
+                                    <option value="{{ $type->id }}" {{ old('type_parent') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
                                 @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Sub Type</label>
+                            <select name="job_type" id="new_job_type" class="form-select" required disabled>
+                                <option value="">Select Sub Type</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -194,4 +239,33 @@
         </div>
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const parent = document.getElementById('new_type_parent');
+    const child = document.getElementById('new_job_type');
+
+    function loadChildren(id, selected) {
+        child.innerHTML = '<option value="">Select Sub Type</option>';
+        if (!id) {
+            child.disabled = true;
+            return;
+        }
+        child.disabled = false;
+        fetch(`/job-order-types/${id}/children`)
+            .then(r => r.json())
+            .then(data => {
+                data.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.name;
+                    opt.textContent = c.name;
+                    if (selected === c.name) opt.selected = true;
+                    child.appendChild(opt);
+                });
+            });
+    }
+
+    parent.addEventListener('change', () => loadChildren(parent.value));
+    loadChildren(parent.value, '{{ old('job_type') }}');
+});
+</script>
 @endsection
