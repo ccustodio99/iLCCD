@@ -18,7 +18,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Sub Type</label>
-            <select name="job_type" id="job_type" class="form-select" required>
+            <select name="job_type" id="job_type" class="form-select" required disabled>
                 <option value="">Select Sub Type</option>
             </select>
         </div>
@@ -41,7 +41,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function loadChildren(id, selected) {
         child.innerHTML = '<option value="">Select Sub Type</option>';
-        if (!id) return;
+        if (!id) {
+            child.disabled = true;
+            return;
+        }
+        child.disabled = false;
         fetch(`/job-order-types/${id}/children`)
             .then(r => r.json())
             .then(data => {
@@ -56,9 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     parent.addEventListener('change', () => loadChildren(parent.value));
-    if (parent.value) {
-        loadChildren(parent.value, '{{ old('job_type') }}');
-    }
+    loadChildren(parent.value, '{{ old('job_type') }}');
 });
 </script>
 @endsection
