@@ -8,17 +8,7 @@
     @include('components.per-page-selector')
     <div class="mb-3">
         @php
-            $filterSub = request('ticket_category_id');
-            $filterCat = null;
-            foreach ($categories as $cat) {
-                if ($cat->children->contains('id', $filterSub)) {
-                    $filterCat = $cat->id;
-                    break;
-                }
-            }
-            $categoryData = $categories->mapWithKeys(fn($c) => [
-                $c->id => $c->children->map(fn($s) => ['id' => $s->id, 'name' => $s->name])
-            ]);
+            $filterCat = request('ticket_category_id');
         @endphp
         <form method="GET" class="row row-cols-lg-auto g-2 align-items-end ticket-form">
             <div class="col">
@@ -32,14 +22,11 @@
             </div>
             <div class="col">
                 <label class="form-label">Category</label>
-                <select class="form-select category-select mb-2" data-categories='@json($categoryData)'>
+                <select id="filter-category" name="ticket_category_id" class="form-select">
                     <option value="">Any</option>
                     @foreach($categories as $cat)
                         <option value="{{ $cat->id }}" {{ (string)$filterCat === (string)$cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
                     @endforeach
-                </select>
-                <select id="filter-subcategory" name="ticket_category_id" class="form-select subcategory-select" data-selected="{{ $filterSub }}">
-                    <option value="">Any</option>
                 </select>
             </div>
             <div class="col">
