@@ -4,6 +4,50 @@
 <div class="container">
     <h1 class="mb-4">Purchase Orders</h1>
     <?php echo $__env->make('components.per-page-selector', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <div class="mb-3">
+        <form method="GET" class="row row-cols-lg-auto g-2 align-items-end">
+            <div class="col">
+                <label for="filter-status" class="form-label">Status</label>
+                <select id="filter-status" name="status" class="form-select">
+                    <option value="">Any</option>
+                    <?php if(isset($statuses)): ?>
+                        <?php $__currentLoopData = $statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($status); ?>" <?php if(request('status') === $status): echo 'selected'; endif; ?>>
+                                <?php echo e(ucfirst(str_replace('_', ' ', $status))); ?>
+
+                            </option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-department" class="form-label">Department</label>
+                <select id="filter-department" name="department" class="form-select">
+                    <option value="">Any</option>
+                    <?php if(isset($departments)): ?>
+                        <?php $__currentLoopData = $departments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dept): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($dept); ?>" <?php if(request('department') === $dept): echo 'selected'; endif; ?>><?php echo e($dept); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-supplier" class="form-label">Supplier</label>
+                <input id="filter-supplier" type="text" name="supplier" value="<?php echo e(request('supplier')); ?>" class="form-control" placeholder="Supplier">
+            </div>
+            <div class="col">
+                <label for="filter-start-date" class="form-label">Start Date</label>
+                <input id="filter-start-date" type="date" name="start_date" value="<?php echo e(request('start_date')); ?>" class="form-control">
+            </div>
+            <div class="col">
+                <label for="filter-end-date" class="form-label">End Date</label>
+                <input id="filter-end-date" type="date" name="end_date" value="<?php echo e(request('end_date')); ?>" class="form-control">
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-secondary">Filter</button>
+            </div>
+        </form>
+    </div>
     <a href="<?php echo e(route('purchase-orders.create')); ?>" class="btn btn-primary mb-3">New Purchase Order</a>
     <div class="table-responsive">
     <table class="table table-striped">
