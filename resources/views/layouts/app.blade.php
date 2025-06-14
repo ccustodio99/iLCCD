@@ -37,7 +37,10 @@
             border: none;
             color: var(--color-primary);
             font-size: 1.5rem;
-            margin-right: 0.5rem;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1100;
         }
         .sidebar a {
             color: #ffffff;
@@ -59,9 +62,6 @@
             padding-left: 1rem;
             padding-bottom: 5rem;
         }
-        .content-wrapper.no-sidebar {
-            margin-left: 0;
-        }
 
         @media (max-width: 768px) {
             .sidebar {
@@ -78,6 +78,9 @@
             }
             #menu-toggle {
                 display: block;
+            }
+            header[role="banner"] {
+                margin-left: 0;
             }
         }
         .cta { background-color: var(--color-accent); color: var(--color-primary); }
@@ -128,13 +131,27 @@
             font-size: 2.5rem;
             color: var(--color-primary);
         }
+        header[role="banner"] {
+            background-color: var(--color-primary);
+            color: #ffffff;
+            border-bottom: 4px solid var(--color-accent);
+            font-family: var(--font-primary), var(--font-secondary), sans-serif;
+            padding: 0.5rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1090;
+            margin-left: 200px;
+        }
+        header[role="banner"] .notification-area {
+            color: var(--color-accent);
+        }
     </style>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    @include('layouts.header', ['showSidebar' => $showSidebar ?? true])
+    <button id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    @include('layouts.header')
     <div class="d-flex">
-        @if(!isset($showSidebar) || $showSidebar)
         <nav class="sidebar" aria-label="Main navigation">
             <a class="navbar-brand d-flex align-items-center mb-3" href="{{ route('home') }}">
                 <img src="{{ asset(setting('logo_path', 'assets/images/LCCD.jpg')) }}" alt="LCCD Logo" width="40" class="me-2">
@@ -175,12 +192,8 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
                 @endauth
             </ul>
-            <div id="breadcrumb-panel" class="bg-light p-2" style="display:none;">
-                @yield('breadcrumbs')
-            </div>
         </nav>
-        @endif
-        <div class="content-wrapper flex-grow-1{{ (isset($showSidebar) && !$showSidebar) ? ' no-sidebar' : '' }}">
+        <div class="content-wrapper flex-grow-1">
             <main id="main-content" class="py-5">
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -202,11 +215,10 @@
         </div>
     </div>
     @include('settings.partials.settings-modal')
-    @include('partials.notifications-modal')
 <button id="back-to-top" class="btn btn-secondary" aria-label="Back to top">&uarr;</button>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite('resources/js/app.js')
 @endif
 <script>
     const backToTop = document.getElementById('back-to-top');
@@ -215,6 +227,19 @@
     });
     backToTop.addEventListener('click', () => {
         window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+    const menuToggle = document.getElementById('menu-toggle');
+    const sidebar = document.querySelector('.sidebar');
+    menuToggle.addEventListener('click', () => {
+        const expanded = sidebar.classList.toggle('active');
+        menuToggle.setAttribute('aria-expanded', expanded);
+    });
+    const toggleFooterBtn = document.getElementById('toggle-footer');
+    const footer = document.getElementById('app-footer');
+    toggleFooterBtn.addEventListener('click', () => {
+        const visible = footer.style.display !== 'none';
+        footer.style.display = visible ? 'none' : 'block';
+        toggleFooterBtn.textContent = visible ? 'Show Footer' : 'Hide Footer';
     });
 </script>
 @stack('scripts')

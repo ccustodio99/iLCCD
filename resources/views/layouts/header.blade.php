@@ -1,1 +1,6 @@
-<x-site-header :title="setting('header_text')" :show-sidebar="$showSidebar ?? true" />
+<header role="banner" class="site-header">
+    <div class="header-text">{{ setting('header_text') }}</div>
+    <div class="notification-area">
+        @yield('header-notifications')
+    </div>
+</header>

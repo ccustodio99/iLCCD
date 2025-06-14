@@ -24,7 +24,6 @@ Route::post('/register', [RegisterController::class, 'store']);
 Route::get('/forgot-password', [ForgotPasswordController::class, 'show'])->name('password.request');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 
-
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
@@ -43,12 +42,7 @@ use App\Http\Controllers\JobOrderTypeController;
 use App\Http\Controllers\InventoryCategoryController;
 use App\Http\Controllers\DocumentCategoryController;
 use App\Http\Controllers\SettingController;
-use App\Http\Controllers\SearchController;
-use App\Http\Controllers\HelpController;
 use App\Http\Controllers\AnnouncementController;
-
-Route::get('/search', [SearchController::class, 'index'])->name('search.index');
-Route::get('/help', [HelpController::class, 'index'])->name('help');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
