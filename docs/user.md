@@ -19,8 +19,9 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
   - Department
   - Contact information (phone number or other details)
   - Account photo (optional, defaults to the value of `app.default_profile_photo`)
-- Passwords are hashed (e.g., bcrypt) and stored securely.
-- Optional: Bulk user registration (CSV import).
+  - Set `APP_DEFAULT_PROFILE_PHOTO` in `.env` to customize the fallback image for users without a picture
+  - Passwords are hashed (e.g., bcrypt) and stored securely.
+  - Optional: Bulk user registration (CSV import).
 
 ### 2. Role Assignments and Permission Settings
 - Roles are predefined and linked to system modules. Allowed roles are:
