@@ -32,7 +32,7 @@
             transition: left 0.3s ease;
         }
         #menu-toggle {
-            display: none;
+            display: block;
             background: transparent;
             border: none;
             color: var(--color-primary);
@@ -74,9 +74,6 @@
             }
             .content-wrapper {
                 margin-left: 0;
-            }
-            #menu-toggle {
-                display: block;
             }
             header[role="banner"] {
                 margin-left: 0;
