@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\HelpController;
 
 
 Route::view('/', 'landing')->name('home');
@@ -23,6 +25,9 @@ Route::post('/register', [RegisterController::class, 'store']);
 
 Route::get('/forgot-password', [ForgotPasswordController::class, 'show'])->name('password.request');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+Route::get('/search', [SearchController::class, 'index'])->name('search.index');
+Route::get('/help', [HelpController::class, 'index'])->name('help');
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
