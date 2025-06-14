@@ -4,27 +4,24 @@
 
 @push('styles')
 <style>
-    .hero-section {
+    .hero-left {
         background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
         color: #ffffff;
-        border-radius: 1rem;
     }
 </style>
 @endpush
 
 @section('content')
 
-<div class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-12 mb-4">
-            <section class="hero-section text-center p-5">
-                <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Logo" class="img-fluid mb-3" style="max-width:200px;">
-                <h1 class="display-5 fw-bold mb-3">{{ setting('home_heading', 'Welcome to the LCCD Integrated Information System (CMS)') }}</h1>
-                <p class="lead">{{ setting('home_tagline', 'Empowering Christ-centered digital transformation for La Consolacion College Daet—where technology, transparency, and service unite.') }}</p>
-            </section>
+<div class="container-fluid">
+    <div class="row g-0 min-vh-100">
+        <div class="col-md-6 d-flex flex-column justify-content-center align-items-center text-center p-5 hero-left">
+            <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Logo" class="img-fluid mb-4" style="max-width:200px;">
+            <h1 class="display-5 fw-bold mb-3">{{ setting('home_heading', 'Welcome to the LCCD Integrated Information System (CMS)') }}</h1>
+            <p class="lead">{{ setting('home_tagline', 'Empowering Christ-centered digital transformation for La Consolacion College Daet—where technology, transparency, and service unite.') }}</p>
         </div>
-        <div class="col-md-6 col-lg-4">
-            <div class="card shadow-sm">
+        <div class="col-md-6 d-flex align-items-center justify-content-center p-5">
+            <div class="card shadow-sm w-100" style="max-width: 400px;">
                 <div class="card-body">
                     <h2 class="mb-4 text-center">Login</h2>
                     @if ($errors->any())
