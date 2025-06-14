@@ -141,6 +141,9 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        if ($user->profile_photo_path) {
+            Storage::disk('public')->delete($user->profile_photo_path);
+        }
         $user->delete();
         return redirect()->route('users.index');
     }
