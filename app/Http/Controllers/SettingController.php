@@ -93,4 +93,28 @@ class SettingController extends Controller
 
         return redirect()->route('settings.institution')->with('success', 'Institution settings updated');
     }
+
+    public function editLocalization()
+    {
+        return view('settings.datetime', [
+            'timezone' => setting('timezone', config('app.timezone')),
+            'date_format' => setting('date_format', 'Y-m-d'),
+            'timezones' => \DateTimeZone::listIdentifiers(),
+        ]);
+    }
+
+    public function updateLocalization(Request $request)
+    {
+        $data = $request->validate([
+            'timezone' => 'required|timezone',
+            'date_format' => 'required|in:Y-m-d,d/m/Y',
+        ]);
+
+        \App\Models\Setting::set('timezone', $data['timezone']);
+        \App\Models\Setting::set('date_format', $data['date_format']);
+
+        config(['app.timezone' => setting('timezone')]);
+
+        return redirect()->route('settings.localization')->with('success', 'Localization settings updated');
+    }
 }

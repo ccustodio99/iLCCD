@@ -18,5 +18,7 @@ class SettingSeeder extends Seeder
         Setting::set('institution_address', 'Gov. Panotes Avenue, Daet, Camarines Norte 4600');
         Setting::set('institution_phone', '(054) 571-3456');
         Setting::set('helpdesk_email', 'helpdesk@lccd.edu.ph');
+        Setting::set('timezone', 'Asia/Manila');
+        Setting::set('date_format', 'Y-m-d');
     }
 }
