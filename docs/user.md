@@ -18,7 +18,7 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
   - Email / Username
   - Department
   - Contact information (phone number or other details)
-  - Account photo (optional)
+  - Account photo (optional, defaults to `https://via.placeholder.com/150`)
 - Passwords are hashed (e.g., bcrypt) and stored securely.
 - Optional: Bulk user registration (CSV import).
 
