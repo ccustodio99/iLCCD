@@ -20,6 +20,7 @@ class SettingSeeder extends Seeder
         Setting::set('helpdesk_email', 'helpdesk@lccd.edu.ph');
         Setting::set('header_text', 'La Consolacion College Daet');
         Setting::set('footer_text', 'Empowering Christ-centered digital transformation');
+        Setting::set('show_footer', true);
         Setting::set('timezone', 'Asia/Manila');
         Setting::set('date_format', 'Y-m-d');
         Setting::set('notify_ticket_updates', true);

@@ -12,6 +12,7 @@ it('allows admin to update institution settings', function () {
         'helpdesk_email' => 'new@example.com',
         'header_text' => 'Header',
         'footer_text' => 'Footer',
+        'show_footer' => false,
     ];
 
     $response = $this->put('/settings/institution', $data);

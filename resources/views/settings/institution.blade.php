@@ -28,6 +28,10 @@
             <label for="footer_text" class="form-label">Footer Text</label>
             <input type="text" id="footer_text" name="footer_text" value="{{ $footer_text }}" class="form-control" />
         </div>
+        <div class="form-check form-switch mb-3">
+            <input type="checkbox" id="show_footer" name="show_footer" value="1" class="form-check-input" {{ $show_footer ? 'checked' : '' }}>
+            <label for="show_footer" class="form-check-label">Show Footer</label>
+        </div>
         <button type="submit" class="btn btn-primary me-2">Save</button>
         <a href="{{ route('settings.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
