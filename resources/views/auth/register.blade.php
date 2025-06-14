@@ -16,6 +16,10 @@
             <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
         </div>
         <div class="mb-3">
+            <label for="contact_info" class="form-label">Contact Information</label>
+            <input id="contact_info" type="text" class="form-control" name="contact_info" value="{{ old('contact_info') }}">
+        </div>
+        <div class="mb-3">
             <label for="password" class="form-label">Password</label>
             <input id="password" type="password" class="form-control" name="password" required>
         </div>

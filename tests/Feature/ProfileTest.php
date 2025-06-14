@@ -17,11 +17,13 @@ it('allows user to update profile', function () {
     $response = $this->put('/profile', [
         'name' => 'Updated User',
         'email' => 'updated@example.com',
+        'contact_info' => '09171234567',
         'password' => 'Newpassword1!',
         'password_confirmation' => 'Newpassword1!',
     ]);
     $response->assertRedirect('/profile');
     $user->refresh();
     expect($user->name)->toBe('Updated User')
+        ->and($user->contact_info)->toBe('09171234567')
         ->and(Hash::check('Newpassword1!', $user->password))->toBeTrue();
 });
