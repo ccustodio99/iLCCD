@@ -18,7 +18,8 @@ class InventoryItemController extends Controller
         $query = InventoryItem::where('user_id', auth()->id());
 
         if ($request->filled('category')) {
-            $query->where('inventory_category_id', $request->input('category'));
+            $categoryId = $request->input('category');
+            $query->whereHas('inventoryCategory', fn($q) => $q->where('id', $categoryId));
         }
 
         if ($request->filled('status')) {
@@ -27,14 +28,21 @@ class InventoryItemController extends Controller
 
         if ($request->filled('search')) {
             $search = $request->input('search');
-            $query->where('name', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
         }
 
         $items = $query->with(['auditTrails.user', 'transactions.user', 'inventoryCategory'])
             ->paginate($perPage)
             ->withQueryString();
 
-        $categories = InventoryCategory::where('is_active', true)->orderBy('name')->get();
+        $categories = InventoryCategory::whereNull('parent_id')
+            ->with('children')
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
         $statuses = InventoryItem::select('status')->distinct()->pluck('status');
 
         return view('inventory.index', compact('items', 'categories', 'statuses'));
@@ -42,7 +50,11 @@ class InventoryItemController extends Controller
 
     public function create()
     {
-        $categories = InventoryCategory::where('is_active', true)->orderBy('name')->get();
+        $categories = InventoryCategory::whereNull('parent_id')
+            ->with('children')
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
 
         return view('inventory.create', compact('categories'));
     }
@@ -75,7 +87,11 @@ class InventoryItemController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $inventoryItem->load('auditTrails.user');
-        $categories = InventoryCategory::where('is_active', true)->orderBy('name')->get();
+        $categories = InventoryCategory::whereNull('parent_id')
+            ->with('children')
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
 
         return view('inventory.edit', compact('inventoryItem', 'categories'));
     }

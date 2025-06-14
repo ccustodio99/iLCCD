@@ -181,3 +181,25 @@ it('searches items by name', function () {
     $response->assertSee('Laptop');
     $response->assertDontSee('Projector');
 });
+
+it('filters items by parent category', function () {
+    $user = User::factory()->create(['role' => 'admin']);
+    $parent = InventoryCategory::factory()->create();
+    $child = InventoryCategory::factory()->create(['parent_id' => $parent->id]);
+    InventoryItem::factory()->for($user)->for($child)->create(['name' => 'Child Item']);
+    $this->actingAs($user);
+
+    $response = $this->get('/inventory?category=' . $parent->id);
+    $response->assertDontSee('Child Item');
+});
+
+it('searches items by description', function () {
+    $user = User::factory()->create(['role' => 'admin']);
+    InventoryItem::factory()->for($user)->create(['name' => 'Desk', 'description' => 'Wood Laptop Desk']);
+    InventoryItem::factory()->for($user)->create(['name' => 'Chair', 'description' => 'Comfort']);
+    $this->actingAs($user);
+
+    $response = $this->get('/inventory?search=Laptop');
+    $response->assertSee('Desk');
+    $response->assertDontSee('Chair');
+});

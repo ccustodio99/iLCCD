@@ -50,6 +50,14 @@ The **Inventory Module** enables real-time tracking and management of all instit
 - Only **Admin** users can add, disable, or delete categories.
 - Items link to a category via the `inventory_category_id` field, and only active categories show in forms.
 
+#### Parent & Subcategories
+Each category may optionally reference another category via a `parent_id` field. This lets administrators build a hierarchy (for example **Electronics** → **Computers** → **Laptops**).
+
+- **Create a parent category:** leave the **Parent** dropdown blank when adding a new category in the settings screen.
+- **Create a subcategory:** choose the desired parent from the **Parent** dropdown while adding or editing the record.
+- Only categories marked **active** appear in dropdowns and filters throughout the module so users see a tidy list.
+- Administrators can review and reorder the hierarchy from the [Admin Settings](admin-settings.md) page.
+
 ---
 
 ## 🖼️ User Interface Design Notes
