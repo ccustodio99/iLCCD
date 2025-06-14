@@ -1,8 +1,9 @@
 <header role="banner" class="site-header navbar navbar-expand bg-white shadow-sm px-3">
-    <button id="breadcrumb-toggle" class="btn btn-link" aria-label="Toggle breadcrumbs" aria-controls="breadcrumb-panel">
+    <button id="menu-toggle" class="btn btn-link me-2" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    <button id="breadcrumb-toggle" class="btn btn-link me-2" aria-label="Toggle breadcrumbs" aria-controls="breadcrumb-panel">
         <span class="material-symbols-outlined" aria-hidden="true">menu</span>
     </button>
-    <img src="{{ asset(setting('logo_path', 'assets/images/LCCD.jpg')) }}" alt="LCCD Logo" width="40" class="ms-2 me-1">
+    <img src="{{ asset(setting('logo_path', 'assets/images/LCCD.jpg')) }}" alt="LCCD Logo" width="40" class="me-1">
     <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Department Logo" width="40" class="me-2">
     <span class="navbar-brand">{{ $title ?? config('app.name') }}</span>
     <form method="GET" action="{{ route('search.index') }}" class="d-flex ms-auto me-2" role="search">

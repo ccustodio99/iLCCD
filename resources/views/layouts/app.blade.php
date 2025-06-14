@@ -37,10 +37,7 @@
             border: none;
             color: var(--color-primary);
             font-size: 1.5rem;
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 1100;
+            margin-right: 0.5rem;
         }
         .sidebar a {
             color: #ffffff;
@@ -149,7 +146,6 @@
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <button id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
     @include('layouts.header')
     <div class="d-flex">
         <nav class="sidebar" aria-label="Main navigation">
