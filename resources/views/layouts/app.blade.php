@@ -193,6 +193,9 @@
                 @endauth
             </ul>
         </nav>
+        <div id="breadcrumb-panel" class="bg-light p-2" style="display:none;">
+            @yield('breadcrumbs')
+        </div>
         <div class="content-wrapper flex-grow-1">
             <main id="main-content" class="py-5">
                 @if(session('success'))
@@ -215,6 +218,7 @@
         </div>
     </div>
     @include('settings.partials.settings-modal')
+    @include('partials.notifications-modal')
 <button id="back-to-top" class="btn btn-secondary" aria-label="Back to top">&uarr;</button>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
@@ -241,6 +245,15 @@
         footer.style.display = visible ? 'none' : 'block';
         toggleFooterBtn.textContent = visible ? 'Show Footer' : 'Hide Footer';
     });
+    const breadcrumbToggle = document.getElementById('breadcrumb-toggle');
+    const breadcrumbPanel = document.getElementById('breadcrumb-panel');
+    if (breadcrumbToggle && breadcrumbPanel) {
+        breadcrumbToggle.addEventListener('click', () => {
+            const visible = breadcrumbPanel.style.display !== 'none';
+            breadcrumbPanel.style.display = visible ? 'none' : 'block';
+            breadcrumbToggle.setAttribute('aria-expanded', !visible);
+        });
+    }
 </script>
 @stack('scripts')
 </body>
