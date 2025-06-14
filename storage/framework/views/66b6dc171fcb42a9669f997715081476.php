@@ -32,7 +32,7 @@
                 <label for="filter-status" class="form-label">Status</label>
                 <select id="filter-status" name="status" class="form-select">
                     <option value="">Any</option>
-                    <option value="active" <?php if(request('status') === 'active'): echo 'selected'; endif; ?>>Active</option>
+                    <option value="active" <?php if(request('status') === 'active'): echo 'selected'; endif; ?>>Enabled</option>
                     <option value="inactive" <?php if(request('status') === 'inactive'): echo 'selected'; endif; ?>>Inactive</option>
                 </select>
             </div>
