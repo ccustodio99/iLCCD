@@ -4,6 +4,11 @@
 
 @section('content')
 <div class="container">
+    @include('components.breadcrumbs', ['links' => [
+        ['label' => 'Settings', 'url' => route('settings.index')],
+        ['label' => 'Inventory Categories', 'url' => route('inventory-categories.index')],
+        ['label' => 'Add']
+    ]])
     <h1 class="mb-4">Add Inventory Category</h1>
     <form action="{{ route('inventory-categories.store') }}" method="POST">
         @csrf

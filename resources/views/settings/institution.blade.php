@@ -4,6 +4,10 @@
 
 @section('content')
 <div class="container">
+    @include('components.breadcrumbs', ['links' => [
+        ['label' => 'Settings', 'url' => route('settings.index')],
+        ['label' => 'Institution']
+    ]])
     <h1 class="mb-4">Institution Settings</h1>
     <form action="{{ route('settings.institution.update') }}" method="POST">
         @csrf

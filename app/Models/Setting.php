@@ -13,7 +13,17 @@ class Setting extends Model
 
     public static function get(string $key, $default = null)
     {
-        return static::query()->where('key', $key)->value('value') ?? $default;
+        $value = static::query()->where('key', $key)->value('value');
+        if ($value === null) {
+            return $default;
+        }
+        if ($value === '1' || $value === 1) {
+            return true;
+        }
+        if ($value === '0' || $value === 0) {
+            return false;
+        }
+        return $value;
     }
 
     public static function set(string $key, $value): void

@@ -4,6 +4,11 @@
 
 @section('content')
 <div class="container">
+    @include('components.breadcrumbs', ['links' => [
+        ['label' => 'Settings', 'url' => route('settings.index')],
+        ['label' => 'Ticket Categories', 'url' => route('ticket-categories.index')],
+        ['label' => 'Edit']
+    ]])
     <h1 class="mb-4">Edit Ticket Category</h1>
     <form action="{{ route('ticket-categories.update', $ticketCategory) }}" method="POST">
         @csrf

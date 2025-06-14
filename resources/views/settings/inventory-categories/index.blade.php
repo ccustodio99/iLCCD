@@ -4,6 +4,10 @@
 
 @section('content')
 <div class="container">
+    @include('components.breadcrumbs', ['links' => [
+        ['label' => 'Settings', 'url' => route('settings.index')],
+        ['label' => 'Inventory Categories']
+    ]])
     <h1 class="mb-4">Inventory Categories</h1>
     @include('components.per-page-selector')
     <a href="{{ route('inventory-categories.create') }}" class="btn btn-sm btn-primary mb-3">Add Category</a>

@@ -4,6 +4,9 @@
 
 @section('content')
 <div class="container">
+    @include('components.breadcrumbs', ['links' => [
+        ['label' => 'Settings']
+    ]])
     <h1 class="mb-2">System Settings</h1>
     <p class="text-muted mb-4">Administrators manage system defaults and theme settings here.</p>
     <div class="mb-4">

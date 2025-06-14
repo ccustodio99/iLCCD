@@ -4,6 +4,11 @@
 
 @section('content')
 <div class="container">
+    @include('components.breadcrumbs', ['links' => [
+        ['label' => 'Settings', 'url' => route('settings.index')],
+        ['label' => 'Job Order Types', 'url' => route('job-order-types.index')],
+        ['label' => 'Add']
+    ]])
     <h1 class="mb-4">Add Job Order Type</h1>
     <form action="{{ route('job-order-types.store') }}" method="POST">
         @csrf
