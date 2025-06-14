@@ -55,6 +55,7 @@
         .content-wrapper {
             margin-left: 200px;
             padding-left: 1rem;
+            padding-bottom: 5rem;
         }
 
         @media (max-width: 768px) {
@@ -75,7 +76,21 @@
             }
         }
         .cta { background-color: var(--color-accent); color: var(--color-primary); }
-        footer { background-color: var(--color-primary); color: #ffffff; padding: 1rem 0; }
+        footer {
+            background-color: var(--color-primary);
+            color: #ffffff;
+            padding: 1rem 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+        #toggle-footer {
+            position: fixed;
+            bottom: 4rem;
+            right: 1rem;
+            z-index: 1000;
+        }
         #back-to-top {
             position: fixed;
             bottom: 1rem;
@@ -166,12 +181,15 @@
                 @endif
                 @yield('content')
             </main>
-            <footer class="text-center">
+            <footer id="app-footer" class="text-center" style="{{ setting('show_footer', true) ? '' : 'display:none;' }}">
                 <address class="mb-1">{{ setting('institution_address') }}</address>
                 <div class="mb-1">{{ setting('institution_phone') }} | {{ setting('helpdesk_email') }}</div>
                 <div class="mb-1">{{ setting('footer_text') }}</div>
                 <div>&copy; {{ date('Y') }} La Consolacion College Daet CMS</div>
             </footer>
+            <button id="toggle-footer" class="btn btn-secondary" aria-label="Toggle footer">
+                {{ setting('show_footer', true) ? 'Hide Footer' : 'Show Footer' }}
+            </button>
         </div>
     </div>
     @include('settings.partials.settings-modal')
@@ -193,6 +211,13 @@
     menuToggle.addEventListener('click', () => {
         const expanded = sidebar.classList.toggle('active');
         menuToggle.setAttribute('aria-expanded', expanded);
+    });
+    const toggleFooterBtn = document.getElementById('toggle-footer');
+    const footer = document.getElementById('app-footer');
+    toggleFooterBtn.addEventListener('click', () => {
+        const visible = footer.style.display !== 'none';
+        footer.style.display = visible ? 'none' : 'block';
+        toggleFooterBtn.textContent = visible ? 'Show Footer' : 'Hide Footer';
     });
 </script>
 @stack('scripts')

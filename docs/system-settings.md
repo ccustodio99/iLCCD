@@ -91,5 +91,6 @@ These options control additional text displayed throughout the interface.
 
 - **Header Text** – small line shown near the top of each page
 - **Footer Text** – message displayed above the copyright notice
+- **Show Footer** – toggle visibility of the footer across the site
 
-The seed defaults set `header_text` to "La Consolacion College Daet" and `footer_text` to "Empowering Christ-centered digital transformation". You can modify these under **Settings → Institution**.
+The seed defaults set `header_text` to "La Consolacion College Daet", `footer_text` to "Empowering Christ-centered digital transformation", and `show_footer` to `true`. You can modify these under **Settings → Institution**.
