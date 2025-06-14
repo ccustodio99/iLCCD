@@ -15,7 +15,7 @@ Welcome to the documentation hub for the LCCD Integrated Information System. Thi
 - [Job Order Module](job-order-module.md)
 - [Requisition Management Module](requisition-management-module.md)
 - [Inventory Module](inventory-module.md)
-- [Admin Settings](admin-settings.md)
+- [System Settings](system-settings.md)
 - [Announcements](announcement-module.md)
 - [Demo Guide](demo-guide.md)
 - [Purchase Order System](purchase-order-module.md)
