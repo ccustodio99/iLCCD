@@ -11,6 +11,10 @@ it('shows new header elements on authenticated pages', function () {
     $response->assertSee('global-search', false);
     $response->assertSee(route('help'), false);
     $response->assertSee('notificationsModal', false);
+
+    $response = $this->get('/tickets');
+    $response->assertSee('id="mainMenu"', false);
+    $response->assertSee('id="menu-toggle"', false);
 });
 
 it('search and help routes respond successfully', function () {

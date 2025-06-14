@@ -1,7 +1,7 @@
 @props(['title' => null, 'showSidebar' => true])
 <header role="banner" class="site-header navbar navbar-expand bg-white shadow-sm px-3">
     @if($showSidebar)
-    <button id="menu-toggle" class="btn btn-link me-2" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    <button id="menu-toggle" class="btn btn-link me-2" aria-label="Toggle menu" aria-controls="mainMenu" aria-expanded="false">&#9776;</button>
     @endif
     <img src="{{ asset(setting('logo_path', 'assets/images/LCCD.jpg')) }}" alt="LCCD Logo" width="40" class="me-1">
     <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Department Logo" width="40" class="me-2">
