@@ -1,13 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.guest')
 
 @section('title', 'Welcome')
 
 @section('content')
-<style>
-    header[role="banner"], nav.sidebar, #toggle-footer, footer {
-        display: none !important;
-    }
-</style>
 <div class="modal d-block" tabindex="-1" role="dialog" aria-modal="true" style="background: rgba(0,0,0,0.5); min-height:100vh;">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow">
