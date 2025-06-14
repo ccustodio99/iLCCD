@@ -85,3 +85,11 @@ The initial seed runs **`Database\\Seeders\\SettingSeeder`** which sets the foll
 - **Secondary Font:** Roboto
 - **Home Page Heading:** "Welcome to the LCCD Integrated Information System (CMS)"
 - **Home Page Tagline:** "Empowering Christ-centered digital transformation for La Consolacion College Daet—where technology, transparency, and service unite."
+
+## Institution Settings
+These options control additional text displayed throughout the interface.
+
+- **Header Text** – small line shown near the top of each page
+- **Footer Text** – message displayed above the copyright notice
+
+The seed defaults set `header_text` to "La Consolacion College Daet" and `footer_text` to "Empowering Christ-centered digital transformation". You can modify these under **Settings → Institution**.
