@@ -33,6 +33,10 @@
             <label for="department" class="form-label">Department</label>
             <input id="department" type="text" name="department" class="form-control" value="<?php echo e(old('department')); ?>">
         </div>
+        <div class="mb-3">
+            <label for="contact_info" class="form-label">Contact Information</label>
+            <input id="contact_info" type="text" name="contact_info" class="form-control" value="<?php echo e(old('contact_info')); ?>">
+        </div>
         <div class="form-check mb-3">
             <input type="hidden" name="is_active" value="0">
             <input id="is_active" class="form-check-input" type="checkbox" name="is_active" value="1" <?php if(old('is_active', true)): echo 'checked'; endif; ?>>
