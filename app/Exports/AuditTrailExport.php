@@ -15,6 +15,11 @@ class AuditTrailExport implements FromCollection, WithHeadings
         $this->logs = $logs;
     }
 
+    public static function make(Collection $logs): self
+    {
+        return new self($logs);
+    }
+
     public function collection(): Collection
     {
         return $this->logs->map(function ($log) {
