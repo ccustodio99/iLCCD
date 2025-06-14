@@ -6,7 +6,7 @@ it('shows new header elements on authenticated pages', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
     $response = $this->get('/dashboard');
-    $response->assertSee('breadcrumb-toggle', false);
+    $response->assertDontSee('breadcrumb-toggle');
     $response->assertSee('global-search', false);
     $response->assertSee(route('help'), false);
     $response->assertSee('notificationsModal', false);

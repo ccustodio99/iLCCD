@@ -59,6 +59,9 @@
             padding-left: 1rem;
             padding-bottom: 5rem;
         }
+        .content-wrapper.no-sidebar {
+            margin-left: 0;
+        }
 
         @media (max-width: 768px) {
             .sidebar {
@@ -129,8 +132,9 @@
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    @include('layouts.header')
+    @include('layouts.header', ['showSidebar' => $showSidebar ?? true])
     <div class="d-flex">
+        @if(!isset($showSidebar) || $showSidebar)
         <nav class="sidebar" aria-label="Main navigation">
             <a class="navbar-brand d-flex align-items-center mb-3" href="{{ route('home') }}">
                 <img src="{{ asset(setting('logo_path', 'assets/images/LCCD.jpg')) }}" alt="LCCD Logo" width="40" class="me-2">
@@ -175,7 +179,8 @@
                 @yield('breadcrumbs')
             </div>
         </nav>
-        <div class="content-wrapper flex-grow-1">
+        @endif
+        <div class="content-wrapper flex-grow-1{{ (isset($showSidebar) && !$showSidebar) ? ' no-sidebar' : '' }}">
             <main id="main-content" class="py-5">
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
