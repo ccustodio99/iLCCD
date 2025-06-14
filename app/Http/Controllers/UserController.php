@@ -12,9 +12,40 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $perPage = $this->getPerPage($request);
-        $users = User::paginate($perPage)->withQueryString();
 
-        return view('users.index', compact('users'));
+        $query = User::query();
+
+        if ($request->filled('role')) {
+            $query->where('role', $request->input('role'));
+        }
+
+        if ($request->filled('department')) {
+            $query->where('department', $request->input('department'));
+        }
+
+        if ($request->filled('status')) {
+            $active = $request->input('status') === 'active';
+            $query->where('is_active', $active);
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        $users = $query->paginate($perPage)->withQueryString();
+
+        $roles = User::ROLES;
+        $departments = User::select('department')
+            ->distinct()
+            ->whereNotNull('department')
+            ->orderBy('department')
+            ->pluck('department');
+
+        return view('users.index', compact('users', 'roles', 'departments'));
     }
 
     public function create()
