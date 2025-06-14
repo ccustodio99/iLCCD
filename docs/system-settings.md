@@ -70,7 +70,11 @@ Administrators can customize the interface branding from this screen. Adjustable
 - **Home Page Heading** – large text shown on the landing page
 - **Home Page Tagline** – short tagline displayed below the heading
 
-*A screenshot of the Theme Settings form is available in the ITRC Dropbox.*
+Open **Settings → Theme** in the sidebar to access these controls. Color pickers
+let administrators select the Primary and Accent shades, dropdown menus list
+available font families, and simple text boxes set the Home Page Heading and
+Tagline. *A screenshot of the Theme Settings form is available in the ITRC
+Dropbox.*
 
 ### Theme Setting Defaults
 The initial seed runs **`Database\\Seeders\\SettingSeeder`** which sets the following values:
