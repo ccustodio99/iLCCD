@@ -33,6 +33,52 @@
     </div>
     <h3>Recent Audit Logs</h3>
     @include('components.per-page-selector')
+    <div class="mb-3">
+        <form method="GET" class="row row-cols-lg-auto g-2 align-items-end">
+            <div class="col">
+                <label for="filter-date-from" class="form-label">From</label>
+                <input id="filter-date-from" type="date" name="date_from" value="{{ request('date_from') }}" class="form-control">
+            </div>
+            <div class="col">
+                <label for="filter-date-to" class="form-label">To</label>
+                <input id="filter-date-to" type="date" name="date_to" value="{{ request('date_to') }}" class="form-control">
+            </div>
+            <div class="col">
+                <label for="filter-user" class="form-label">User</label>
+                <select id="filter-user" name="user_id" class="form-select">
+                    <option value="">All</option>
+                    @foreach($users as $u)
+                        <option value="{{ $u->id }}" @selected((string) request('user_id') === (string) $u->id)>{{ $u->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-department" class="form-label">Department</label>
+                <input id="filter-department" type="text" name="department" value="{{ request('department') }}" class="form-control">
+            </div>
+            <div class="col">
+                <label for="filter-module" class="form-label">Module</label>
+                <select id="filter-module" name="module" class="form-select">
+                    <option value="">All</option>
+                    @foreach($modules as $value => $label)
+                        <option value="{{ $value }}" @selected(request('module') === $value)>{{ $label }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-action" class="form-label">Action</label>
+                <select id="filter-action" name="action" class="form-select">
+                    <option value="">All</option>
+                    @foreach($actions as $act)
+                        <option value="{{ $act }}" @selected(request('action') === $act)>{{ ucfirst($act) }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-secondary">Filter</button>
+            </div>
+        </form>
+    </div>
     <div class="table-responsive">
     <table class="table table-striped">
     <caption class="visually-hidden">Recent Audit Logs</caption>
