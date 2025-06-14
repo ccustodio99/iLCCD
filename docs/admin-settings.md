@@ -7,7 +7,51 @@ The seeders populate several baseline records used throughout the system.
 
 - **Ticket Categories:** Computers & Devices, Software & Apps, Network & Access, User Accounts & Access, Printing & Scanning, Procurement & Inventory, Facilities & Maintenance, Security & Safety, Training & Support, Feedback & Improvement, Other / General Inquiry (each parent has its own subcategories; see [Ticket Categories](ticket-categories.md))
 - **Job Order Types:** Installation & Deployment, IT Equipment Setup (matches Computers & Devices), Software Deployment (matches Software & Apps), Classroom AV Installation (matches Classroom AV), Maintenance, Preventative Maintenance (links Facilities & Maintenance), Corrective Repairs (Doors, Plumbing, HVAC), Inspection & Audit, Safety & Compliance Audits (e.g. Fire Extinguisher Tests), Inventory Spot-Checks (cross-links Inventory Management), Emergency Response, Power Outages (matches Electrical Outages), Critical Network/Server Downtime (matches Network Outages), Upgrades & Updates, Hardware Upgrades (RAM, Storage), Software Patching & Version Updates, Calibration & Testing, Lab Equipment Calibration (links Laboratory Equipment), Printer/Scanner Accuracy Checks (cross-links Printing & Scanning), Decommissioning & Removal, Cleaning & Housekeeping, Other Job Request
-- **Inventory Categories:** Electronics, Computers & Laptops, Tablets & Chromebooks, Smartphones & Mobile Devices, Networking Gear (Routers, Switches), AV Equipment (Projectors, Microphones), Furniture & Fixtures, Desks & Chairs, Cabinets & Shelving, Laboratory Benches, Classroom Fixtures (Podiums, Whiteboards), Office Supplies, Paper & Stationery, Printing Consumables (Toner, Ink), Desk Accessories (Pens, Clips), Laboratory Equipment, Instruments & Sensors, Calibration Tools (links Calibration & Testing), Safety Gear (Goggles, Gloves), Educational Materials, Textbooks & Reference Books, AV Media (DVDs, Slides), Teaching Aids (Models, Charts), Maintenance & Cleaning, HVAC & Electrical Parts, Plumbing Supplies, Cleaning Chemicals & Tools, Safety & First Aid, Fire Extinguishers (cross-links Safety Audits), First-Aid Kits, Emergency Signage, Vehicles & Grounds, Campus Vehicles, Grounds Equipment (Mowers, Trimmers), Outdoor Furniture, Consumables & Perishables, Lab Reagents & Chemicals, Printer Paper Rolls, Batteries & Bulbs, Miscellaneous
+- **Inventory Categories:**
+  - **Electronics**
+    - Computers & Laptops
+    - Tablets & Chromebooks
+    - Smartphones & Mobile Devices
+    - Networking Gear (Routers, Switches)
+    - AV Equipment (Projectors, Microphones)
+  - **Furniture & Fixtures**
+    - Desks & Chairs
+    - Cabinets & Shelving
+    - Laboratory Benches
+    - Classroom Fixtures (Podiums, Whiteboards)
+  - **Office Supplies**
+    - Paper & Stationery
+    - Printing Consumables (Toner, Ink)
+    - Desk Accessories (Pens, Clips)
+  - **Laboratory Equipment**
+    - Instruments & Sensors
+    - Calibration Tools (links Calibration & Testing)
+    - Safety Gear (Goggles, Gloves)
+  - **Educational Materials**
+    - Textbooks & Reference Books
+    - AV Media (DVDs, Slides)
+    - Teaching Aids (Models, Charts)
+  - **Maintenance & Cleaning**
+    - HVAC & Electrical Parts
+    - Plumbing Supplies
+    - Cleaning Chemicals & Tools
+  - **Safety & First Aid**
+    - Fire Extinguishers (cross-links Safety Audits)
+    - First-Aid Kits
+    - Emergency Signage
+  - **Vehicles & Grounds**
+    - Campus Vehicles
+    - Grounds Equipment (Mowers, Trimmers)
+    - Outdoor Furniture
+  - **Consumables & Perishables**
+    - Lab Reagents & Chemicals
+    - Printer Paper Rolls
+    - Batteries & Bulbs
+  - **Miscellaneous**
+
+  See the [Inventory Module](inventory-module.md#managing-inventory-categories)
+  guide for steps on creating parent categories and subcategories in the
+  settings UI.
 - **Document Categories:** Policies & Procedures, Forms & Templates, Course Materials, Student Records, Financial & Accounting, Research & Publications, Marketing & Communications, Meeting Minutes & Reports, Archives & Historical, Miscellaneous
 
 Ticket categories already use a parent → child hierarchy with a `parent_id` field. Additional category types may adopt similar relationships in future versions.
