@@ -129,3 +129,20 @@ it('replaces old profile photo when admin updates user', function () {
     $user->refresh();
     Storage::disk('public')->assertExists($user->profile_photo_path);
 });
+
+it('deletes profile photo when admin deletes user', function () {
+    Storage::fake('public');
+
+    $admin = User::factory()->create(['role' => 'admin']);
+    $user = User::factory()->create([
+        'profile_photo_path' => UploadedFile::fake()->image('photo.jpg')->store('profile_photos', 'public'),
+    ]);
+    $path = $user->profile_photo_path;
+
+    $this->actingAs($admin);
+    $response = $this->delete("/users/{$user->id}");
+
+    $response->assertRedirect('/users');
+    Storage::disk('public')->assertMissing($path);
+    expect(User::find($user->id))->toBeNull();
+});
