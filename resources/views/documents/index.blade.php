@@ -6,6 +6,36 @@
 <div class="container">
     <h1 class="mb-4">My Documents</h1>
     @include('components.per-page-selector')
+    <div class="mb-3">
+        <form method="GET" class="row row-cols-lg-auto g-2 align-items-end">
+            <div class="col">
+                <label for="filter-category" class="form-label">Category</label>
+                <select id="filter-category" name="category" class="form-select">
+                    <option value="">Any</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" @selected(request('category') == $category->id)>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-from" class="form-label">From</label>
+                <input id="filter-from" type="date" name="from" value="{{ request('from') }}" class="form-control">
+            </div>
+            <div class="col">
+                <label for="filter-to" class="form-label">To</label>
+                <input id="filter-to" type="date" name="to" value="{{ request('to') }}" class="form-control">
+            </div>
+            <div class="col">
+                <label for="filter-search" class="form-label">Search</label>
+                <input id="filter-search" type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Title or description">
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-secondary">Filter</button>
+            </div>
+        </form>
+    </div>
     <a href="{{ route('documents.create') }}" class="btn btn-primary mb-3">Upload Document</a>
     <div class="table-responsive">
     <table class="table table-striped">

@@ -17,12 +17,36 @@ class DocumentController extends Controller
     {
         $perPage = $this->getPerPage($request);
 
-        $documents = Document::where('user_id', auth()->id())
+        $query = Document::where('user_id', auth()->id());
+
+        if ($request->filled('category')) {
+            $query->where('document_category_id', $request->input('category'));
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('from')) {
+            $query->whereDate('created_at', '>=', $request->input('from'));
+        }
+
+        if ($request->filled('to')) {
+            $query->whereDate('created_at', '<=', $request->input('to'));
+        }
+
+        $documents = $query
             ->with(['auditTrails.user', 'documentCategory'])
             ->paginate($perPage)
             ->withQueryString();
 
-        return view('documents.index', compact('documents'));
+        $categories = DocumentCategory::where('is_active', true)->get();
+
+        return view('documents.index', compact('documents', 'categories'));
     }
 
     public function create()
