@@ -86,6 +86,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Default Profile Photo
+    |--------------------------------------------------------------------------
+    |
+    | This value defines the URL used when a user does not have a profile
+    | photo uploaded. You may override it in your environment configuration
+    | using the APP_DEFAULT_PROFILE_PHOTO variable.
+    |
+    */
+
+    'default_profile_photo' => env('APP_DEFAULT_PROFILE_PHOTO', 'https://via.placeholder.com/150'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Encryption Key
     |--------------------------------------------------------------------------
     |
