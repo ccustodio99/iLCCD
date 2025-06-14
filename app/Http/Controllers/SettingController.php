@@ -26,10 +26,10 @@ class SettingController extends Controller
     public function updateTheme(Request $request)
     {
         $data = $request->validate([
-            'color_primary' => 'required|string',
-            'color_accent' => 'required|string',
-            'font_primary' => 'required|string',
-            'font_secondary' => 'required|string',
+            'color_primary' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
+            'color_accent' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
+            'font_primary' => 'required|in:Poppins,Roboto,Montserrat',
+            'font_secondary' => 'required|in:Poppins,Roboto,Montserrat',
             'home_heading' => 'required|string',
             'home_tagline' => 'required|string',
         ]);
@@ -41,6 +41,6 @@ class SettingController extends Controller
         \App\Models\Setting::set('home_heading', $data['home_heading']);
         \App\Models\Setting::set('home_tagline', $data['home_tagline']);
 
-        return redirect()->route('settings.theme');
+        return redirect()->route('settings.theme')->with('success', 'Theme updated');
     }
 }
