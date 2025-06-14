@@ -69,4 +69,28 @@ class SettingController extends Controller
 
         return redirect()->route('settings.theme')->with('success', 'Theme updated');
     }
+
+    public function editInstitution()
+    {
+        return view('settings.institution', [
+            'address' => setting('institution_address', 'Gov. Panotes Avenue, Daet, Camarines Norte 4600'),
+            'phone' => setting('institution_phone', '(054) 571-3456'),
+            'email' => setting('helpdesk_email', 'helpdesk@lccd.edu.ph'),
+        ]);
+    }
+
+    public function updateInstitution(Request $request)
+    {
+        $data = $request->validate([
+            'institution_address' => 'required|string',
+            'institution_phone' => 'required|string',
+            'helpdesk_email' => 'required|email',
+        ]);
+
+        \App\Models\Setting::set('institution_address', $data['institution_address']);
+        \App\Models\Setting::set('institution_phone', $data['institution_phone']);
+        \App\Models\Setting::set('helpdesk_email', $data['helpdesk_email']);
+
+        return redirect()->route('settings.institution')->with('success', 'Institution settings updated');
+    }
 }

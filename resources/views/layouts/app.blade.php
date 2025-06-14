@@ -165,7 +165,9 @@
                 @yield('content')
             </main>
             <footer class="text-center">
-                &copy; {{ date('Y') }} La Consolacion College Daet CMS
+                <address class="mb-1">{{ setting('institution_address') }}</address>
+                <div class="mb-1">{{ setting('institution_phone') }} | {{ setting('helpdesk_email') }}</div>
+                <div>&copy; {{ date('Y') }} La Consolacion College Daet CMS</div>
             </footer>
         </div>
     </div>
