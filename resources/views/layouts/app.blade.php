@@ -65,6 +65,13 @@
             padding-bottom: 5rem;
         }
 
+        @media (min-width: 768px) {
+            header[role="banner"],
+            .content-wrapper {
+                margin-left: 200px;
+            }
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 left: -200px;
