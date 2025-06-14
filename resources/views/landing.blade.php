@@ -19,6 +19,8 @@
                 <div class="text-center mb-4">
                     <img src="{{ asset(setting('logo_path', 'assets/images/LCCD.jpg')) }}" alt="Logo" style="max-height:80px;" />
                 </div>
+                <h1 class="h4 text-center mb-1">{{ setting('home_heading') }}</h1>
+                <p class="lead text-center mb-4">{{ setting('home_tagline') }}</p>
                 <h2 class="h5 mb-3 text-center">Login to continue to app</h2>
                 @if ($errors->any())
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -42,7 +44,7 @@
                     </div>
                     <div class="mb-3 form-check">
                         <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                        <label class="form-check-label" for="remember">Remember password</label>
+                        <label class="form-check-label" for="remember">Remember Me</label>
                     </div>
                     <div class="d-flex align-items-center mb-3">
                         <a href="{{ route('password.request') }}" class="me-auto">Forgot Password?</a>
