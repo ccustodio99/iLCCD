@@ -6,6 +6,49 @@
 <div class="container">
     <h1 class="mb-4">Purchase Orders</h1>
     @include('components.per-page-selector')
+    <div class="mb-3">
+        <form method="GET" class="row row-cols-lg-auto g-2 align-items-end">
+            <div class="col">
+                <label for="filter-status" class="form-label">Status</label>
+                <select id="filter-status" name="status" class="form-select">
+                    <option value="">Any</option>
+                    @isset($statuses)
+                        @foreach($statuses as $status)
+                            <option value="{{ $status }}" @selected(request('status') === $status)>
+                                {{ ucfirst(str_replace('_', ' ', $status)) }}
+                            </option>
+                        @endforeach
+                    @endisset
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-department" class="form-label">Department</label>
+                <select id="filter-department" name="department" class="form-select">
+                    <option value="">Any</option>
+                    @isset($departments)
+                        @foreach($departments as $dept)
+                            <option value="{{ $dept }}" @selected(request('department') === $dept)>{{ $dept }}</option>
+                        @endforeach
+                    @endisset
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-supplier" class="form-label">Supplier</label>
+                <input id="filter-supplier" type="text" name="supplier" value="{{ request('supplier') }}" class="form-control" placeholder="Supplier">
+            </div>
+            <div class="col">
+                <label for="filter-start-date" class="form-label">Start Date</label>
+                <input id="filter-start-date" type="date" name="start_date" value="{{ request('start_date') }}" class="form-control">
+            </div>
+            <div class="col">
+                <label for="filter-end-date" class="form-label">End Date</label>
+                <input id="filter-end-date" type="date" name="end_date" value="{{ request('end_date') }}" class="form-control">
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-secondary">Filter</button>
+            </div>
+        </form>
+    </div>
     <a href="{{ route('purchase-orders.create') }}" class="btn btn-primary mb-3">New Purchase Order</a>
     <div class="table-responsive">
     <table class="table table-striped">
