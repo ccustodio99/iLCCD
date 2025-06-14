@@ -1,7 +1,8 @@
 <header role="banner" class="site-header navbar navbar-expand bg-white shadow-sm px-3">
     <button id="menu-toggle" class="btn btn-link me-2" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
-    <button id="breadcrumb-toggle" class="btn btn-link me-2" aria-label="Toggle breadcrumbs" aria-controls="breadcrumb-panel">
-        <span class="material-symbols-outlined" aria-hidden="true">menu</span>
+    <button id="breadcrumb-toggle" class="btn btn-link me-2" aria-label="Toggle breadcrumbs" aria-controls="breadcrumb-panel" aria-expanded="false">
+        <span class="material-symbols-outlined" aria-hidden="true">view_headline</span>
+        <span class="visually-hidden">Toggle breadcrumbs</span>
     </button>
     <img src="{{ asset(setting('logo_path', 'assets/images/LCCD.jpg')) }}" alt="LCCD Logo" width="40" class="me-1">
     <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Department Logo" width="40" class="me-2">
