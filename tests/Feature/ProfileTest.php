@@ -68,6 +68,25 @@ it('replaces old profile photo when updating', function () {
     Storage::disk('public')->assertExists($user->profile_photo_path);
 });
 
+it('deletes profile photo when remove flag is used', function () {
+    Storage::fake('public');
+    $user = User::factory()->create([
+        'profile_photo_path' => UploadedFile::fake()->image('photo.jpg')->store('profile_photos', 'public'),
+    ]);
+    $path = $user->profile_photo_path;
+    $this->actingAs($user);
+
+    $this->put('/profile', [
+        'name' => $user->name,
+        'email' => $user->email,
+        'remove_photo' => true,
+    ])->assertRedirect('/profile');
+
+    Storage::disk('public')->assertMissing($path);
+    $user->refresh();
+    expect($user->profile_photo_path)->toBeNull();
+});
+
 it('redirects guest to login when viewing profile', function () {
     $response = $this->get('/profile');
 

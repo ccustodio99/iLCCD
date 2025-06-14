@@ -37,6 +37,10 @@
             <label for="profile_photo" class="form-label">Profile Photo</label>
             <input id="profile_photo" type="file" name="profile_photo" class="form-control">
         </div>
+        <div class="form-check mb-3">
+            <input id="remove_photo" type="checkbox" name="remove_photo" value="1" class="form-check-input">
+            <label for="remove_photo" class="form-check-label">Remove current photo</label>
+        </div>
         <div class="mb-3">
             <label for="password" class="form-label">New Password</label>
             <input id="password" type="password" name="password" class="form-control">

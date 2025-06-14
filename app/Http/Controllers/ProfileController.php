@@ -24,16 +24,22 @@ class ProfileController extends Controller
             'contact_info' => 'nullable|string|max:255',
             'profile_photo' => 'nullable|image|max:2048',
             'password' => ['nullable', 'confirmed', 'min:8', 'regex:/[A-Za-z]/', 'regex:/[0-9]/', 'regex:/[^A-Za-z0-9]/'],
+            'remove_photo' => 'boolean',
         ]);
 
         $user->name = $data['name'];
         $user->email = $data['email'];
         $user->contact_info = $data['contact_info'] ?? null;
+        $removePhoto = $data['remove_photo'] ?? false;
+
         if ($request->hasFile('profile_photo')) {
             if ($user->profile_photo_path) {
                 Storage::disk('public')->delete($user->profile_photo_path);
             }
             $user->profile_photo_path = $request->file('profile_photo')->store('profile_photos', 'public');
+        } elseif ($removePhoto && $user->profile_photo_path) {
+            Storage::disk('public')->delete($user->profile_photo_path);
+            $user->profile_photo_path = null;
         }
         if (!empty($data['password'])) {
             $user->password = Hash::make($data['password']);
