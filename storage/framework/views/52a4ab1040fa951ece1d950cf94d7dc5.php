@@ -2,7 +2,20 @@
 
 <?php $__env->startSection('content'); ?>
 <div class="container" style="max-width: 400px;">
+    <div class="text-center mb-3">
+        <img src="<?php echo e(asset(setting('logo_path', 'assets/images/LCCD.jpg'))); ?>" alt="Logo" style="max-height:80px;">
+    </div>
     <h1 class="mb-4 text-center">Login</h1>
+    <?php if($errors->any()): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <ul class="mb-0">
+                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <li><?php echo e($error); ?></li>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
     <form method="POST" action="<?php echo e(route('login')); ?>">
         <?php echo csrf_field(); ?>
         <div class="mb-3">

@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo $__env->yieldContent('title', config('app.name', 'LCCD IIS')); ?></title>
+    <link rel="icon" href="<?php echo e(asset(setting('favicon_path', 'favicon.ico'))); ?>">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <!-- Material Icons -->
@@ -14,8 +15,13 @@
         :root {
             --color-primary: <?php echo e(setting('color_primary', '#1B2660')); ?>;
             --color-accent: <?php echo e(setting('color_accent', '#FFCD38')); ?>;
+            --font-primary: '<?php echo e(setting('font_primary', 'Poppins')); ?>';
+            --font-secondary: '<?php echo e(setting('font_secondary', 'Roboto')); ?>';
         }
-        body { font-family: '<?php echo e(setting('font_primary', 'Poppins')); ?>', '<?php echo e(setting('font_secondary', 'Roboto')); ?>', 'Montserrat', sans-serif; background-color: #f8f9fa; }
+        body {
+            font-family: var(--font-primary), var(--font-secondary), 'Montserrat', sans-serif;
+            background-color: #f8f9fa;
+        }
         .sidebar {
             width: 200px;
             min-height: 100vh;
@@ -31,10 +37,7 @@
             border: none;
             color: var(--color-primary);
             font-size: 1.5rem;
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 1100;
+            margin-right: 0.5rem;
         }
         .sidebar a {
             color: #ffffff;
@@ -54,6 +57,10 @@
         .content-wrapper {
             margin-left: 200px;
             padding-left: 1rem;
+            padding-bottom: 5rem;
+        }
+        .content-wrapper.no-sidebar {
+            margin-left: 0;
         }
 
         @media (max-width: 768px) {
@@ -74,7 +81,21 @@
             }
         }
         .cta { background-color: var(--color-accent); color: var(--color-primary); }
-        footer { background-color: var(--color-primary); color: #ffffff; padding: 1rem 0; }
+        footer {
+            background-color: var(--color-primary);
+            color: #ffffff;
+            padding: 1rem 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+        #toggle-footer {
+            position: fixed;
+            bottom: 4rem;
+            right: 1rem;
+            z-index: 1000;
+        }
         #back-to-top {
             position: fixed;
             bottom: 1rem;
@@ -111,11 +132,12 @@
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <button id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    <?php echo $__env->make('layouts.header', ['showSidebar' => $showSidebar ?? true], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <div class="d-flex">
+        <?php if(!isset($showSidebar) || $showSidebar): ?>
         <nav class="sidebar" aria-label="Main navigation">
             <a class="navbar-brand d-flex align-items-center mb-3" href="<?php echo e(route('home')); ?>">
-                <img src="<?php echo e(asset('assets/images/LCCD.jpg')); ?>" alt="LCCD Logo" width="40" class="me-2">
+                <img src="<?php echo e(asset(setting('logo_path', 'assets/images/LCCD.jpg'))); ?>" alt="LCCD Logo" width="40" class="me-2">
                 <img src="<?php echo e(asset('assets/images/CCS.jpg')); ?>" alt="CCS Department Logo" width="40" class="me-2">
             </a>
             <ul class="nav flex-column">
@@ -137,7 +159,7 @@
                     <?php if(auth()->user()->role === 'admin'): ?>
                         <li class="nav-item"><a class="nav-link <?php if(request()->routeIs('users.*')): ?> active <?php endif; ?>" href="<?php echo e(route('users.index')); ?>" <?php if(request()->routeIs('users.*')): ?> aria-current="page" <?php endif; ?>>Users</a></li>
                         <li class="nav-item">
-                            <a class="nav-link <?php if(request()->routeIs('settings.*')): ?> active <?php endif; ?>" href="<?php echo e(route('settings.index')); ?>" data-bs-toggle="modal" data-bs-target="#settingsModal" <?php if(request()->routeIs('settings.*')): ?> aria-current="page" <?php endif; ?>>
+                            <a class="nav-link <?php if(request()->routeIs('settings.*')): ?> active <?php endif; ?>" href="<?php echo e(route('settings.index')); ?>" <?php if(request()->routeIs('settings.*')): ?> aria-current="page" <?php endif; ?>>
                                 Settings
                             </a>
                         </li>
@@ -153,21 +175,40 @@
                     <li class="nav-item"><a class="nav-link" href="<?php echo e(route('login')); ?>">Login</a></li>
                 <?php endif; ?>
             </ul>
+            <div id="breadcrumb-panel" class="bg-light p-2" style="display:none;">
+                <?php echo $__env->yieldContent('breadcrumbs'); ?>
+            </div>
         </nav>
-        <div class="content-wrapper flex-grow-1">
+        <?php endif; ?>
+        <div class="content-wrapper flex-grow-1<?php echo e((isset($showSidebar) && !$showSidebar) ? ' no-sidebar' : ''); ?>">
             <main id="main-content" class="py-5">
+                <?php if(session('success')): ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <?php echo e(session('success')); ?>
+
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php endif; ?>
                 <?php echo $__env->yieldContent('content'); ?>
             </main>
-            <footer class="text-center">
-                &copy; <?php echo e(date('Y')); ?> La Consolacion College Daet CMS
+            <footer id="app-footer" class="text-center" style="<?php echo e(setting('show_footer', true) ? '' : 'display:none;'); ?>">
+                <address class="mb-1"><?php echo e(setting('institution_address')); ?></address>
+                <div class="mb-1"><?php echo e(setting('institution_phone')); ?> | <?php echo e(setting('helpdesk_email')); ?></div>
+                <div class="mb-1"><?php echo e(setting('footer_text')); ?></div>
+                <div>&copy; <?php echo e(date('Y')); ?> La Consolacion College Daet CMS</div>
             </footer>
+            <button id="toggle-footer" class="btn btn-secondary" aria-label="Toggle footer">
+                <?php echo e(setting('show_footer', true) ? 'Hide Footer' : 'Show Footer'); ?>
+
+            </button>
         </div>
     </div>
     <?php echo $__env->make('settings.partials.settings-modal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <?php echo $__env->make('partials.notifications-modal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 <button id="back-to-top" class="btn btn-secondary" aria-label="Back to top">&uarr;</button>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <?php if(file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot'))): ?>
-    <?php echo app('Illuminate\Foundation\Vite')('resources/js/app.js'); ?>
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
 <?php endif; ?>
 <script>
     const backToTop = document.getElementById('back-to-top');
@@ -177,13 +218,8 @@
     backToTop.addEventListener('click', () => {
         window.scrollTo({top: 0, behavior: 'smooth'});
     });
-    const menuToggle = document.getElementById('menu-toggle');
-    const sidebar = document.querySelector('.sidebar');
-    menuToggle.addEventListener('click', () => {
-        const expanded = sidebar.classList.toggle('active');
-        menuToggle.setAttribute('aria-expanded', expanded);
-    });
 </script>
+<?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
 </html>
 <?php /**PATH D:\SynologyDrive\MIT Studies\xampp\htdocs\iLCCD\resources\views/layouts/app.blade.php ENDPATH**/ ?>
