@@ -4,6 +4,11 @@
 
 @section('content')
 <div class="container">
+    @include('components.breadcrumbs', ['links' => [
+        ['label' => 'Settings', 'url' => route('settings.index')],
+        ['label' => 'Job Order Types', 'url' => route('job-order-types.index')],
+        ['label' => 'Edit']
+    ]])
     <h1 class="mb-4">Edit Job Order Type</h1>
     <form action="{{ route('job-order-types.update', $jobOrderType) }}" method="POST">
         @csrf

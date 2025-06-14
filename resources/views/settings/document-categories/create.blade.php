@@ -4,6 +4,11 @@
 
 @section('content')
 <div class="container">
+    @include('components.breadcrumbs', ['links' => [
+        ['label' => 'Settings', 'url' => route('settings.index')],
+        ['label' => 'Document Categories', 'url' => route('document-categories.index')],
+        ['label' => 'Add']
+    ]])
     <h1 class="mb-4">Add Document Category</h1>
     <form action="{{ route('document-categories.store') }}" method="POST">
         @csrf
