@@ -4,6 +4,10 @@
 
 @section('content')
 <div class="container">
+    @include('components.breadcrumbs', ['links' => [
+        ['label' => 'Settings', 'url' => route('settings.index')],
+        ['label' => 'Announcements']
+    ]])
     <h1 class="mb-4">Announcements</h1>
     @include('components.per-page-selector')
     <a href="{{ route('announcements.create') }}" class="btn btn-sm btn-primary mb-3">Add Announcement</a>

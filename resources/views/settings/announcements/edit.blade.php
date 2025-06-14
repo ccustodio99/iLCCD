@@ -4,6 +4,11 @@
 
 @section('content')
 <div class="container">
+    @include('components.breadcrumbs', ['links' => [
+        ['label' => 'Settings', 'url' => route('settings.index')],
+        ['label' => 'Announcements', 'url' => route('announcements.index')],
+        ['label' => 'Edit']
+    ]])
     <h1 class="mb-4">Edit Announcement</h1>
     <form action="{{ route('announcements.update', $announcement) }}" method="POST">
         @csrf

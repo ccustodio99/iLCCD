@@ -4,6 +4,10 @@
 
 @section('content')
 <div class="container">
+    @include('components.breadcrumbs', ['links' => [
+        ['label' => 'Settings', 'url' => route('settings.index')],
+        ['label' => 'Ticket Categories']
+    ]])
     <h1 class="mb-4">Ticket Categories</h1>
     @include('components.per-page-selector')
     <div class="mb-3 d-flex flex-wrap gap-2">

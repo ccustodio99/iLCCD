@@ -4,6 +4,10 @@
 
 @section('content')
 <div class="container">
+    @include('components.breadcrumbs', ['links' => [
+        ['label' => 'Settings', 'url' => route('settings.index')],
+        ['label' => 'Job Order Types']
+    ]])
     <h1 class="mb-4">Job Order Types</h1>
     @include('components.per-page-selector')
     <a href="{{ route('job-order-types.create') }}" class="btn btn-sm btn-primary mb-3">Add Type</a>
