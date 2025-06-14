@@ -5,7 +5,7 @@
 @section('content')
 <div class="container" style="max-width: 500px;">
     <h1 class="mb-4">New User</h1>
-    <form action="{{ route('users.store') }}" method="POST">
+    <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <label for="name" class="form-label">Name</label>
@@ -38,6 +38,10 @@
         <div class="mb-3">
             <label for="contact_info" class="form-label">Contact Information</label>
             <input id="contact_info" type="text" name="contact_info" class="form-control" value="{{ old('contact_info') }}">
+        </div>
+        <div class="mb-3">
+            <label for="profile_photo" class="form-label">Profile Photo</label>
+            <input id="profile_photo" type="file" name="profile_photo" class="form-control">
         </div>
         <div class="form-check mb-3">
             <input type="hidden" name="is_active" value="0">

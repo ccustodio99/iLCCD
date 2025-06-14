@@ -2,6 +2,8 @@
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 it('allows user to view profile page', function () {
     $user = User::factory()->create();
@@ -26,4 +28,24 @@ it('allows user to update profile', function () {
     expect($user->name)->toBe('Updated User')
         ->and($user->contact_info)->toBe('09171234567')
         ->and(Hash::check('Newpassword1!', $user->password))->toBeTrue();
+});
+
+it('replaces old profile photo when updating', function () {
+    Storage::fake('public');
+    $user = User::factory()->create([
+        'profile_photo_path' => UploadedFile::fake()->image('old.jpg')->store('profile_photos', 'public'),
+    ]);
+    $oldPath = $user->profile_photo_path;
+    $this->actingAs($user);
+
+    $response = $this->put('/profile', [
+        'name' => $user->name,
+        'email' => $user->email,
+        'profile_photo' => UploadedFile::fake()->image('new.jpg'),
+    ]);
+
+    $response->assertRedirect('/profile');
+    Storage::disk('public')->assertMissing($oldPath);
+    $user->refresh();
+    Storage::disk('public')->assertExists($user->profile_photo_path);
 });
