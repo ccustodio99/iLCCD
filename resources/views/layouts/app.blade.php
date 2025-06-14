@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', config('app.name', 'LCCD IIS'))</title>
+    <link rel="icon" href="{{ asset(setting('favicon_path', 'favicon.ico')) }}">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <!-- Material Icons -->
@@ -115,7 +116,7 @@
     <div class="d-flex">
         <nav class="sidebar" aria-label="Main navigation">
             <a class="navbar-brand d-flex align-items-center mb-3" href="{{ route('home') }}">
-                <img src="{{ asset('assets/images/LCCD.jpg') }}" alt="LCCD Logo" width="40" class="me-2">
+                <img src="{{ asset(setting('logo_path', 'assets/images/LCCD.jpg')) }}" alt="LCCD Logo" width="40" class="me-2">
                 <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Department Logo" width="40" class="me-2">
             </a>
             <ul class="nav flex-column">

@@ -47,6 +47,12 @@
             </a>
         </div>
         <div class="col">
+            <a href="{{ route('settings.branding') }}" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Branding">
+                <span class="material-symbols-outlined d-block mb-2" aria-hidden="true">image</span>
+                <span class="fw-semibold">Branding</span>
+            </a>
+        </div>
+        <div class="col">
             <a href="{{ route('settings.institution') }}" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Institution">
                 <span class="material-symbols-outlined d-block mb-2" aria-hidden="true">school</span>
                 <span class="fw-semibold">Institution</span>
