@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Ticket;
 use App\Models\TicketComment;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -46,6 +47,7 @@ class User extends Authenticatable
         'password',
         'role',
         'department',
+        'profile_photo_path',
         'contact_info',
         'is_active',
         'failed_login_attempts',
@@ -93,6 +95,8 @@ class User extends Authenticatable
      */
     public function getProfilePhotoUrlAttribute(): string
     {
-        return 'https://via.placeholder.com/150';
+        return $this->profile_photo_path
+            ? Storage::disk('public')->url($this->profile_photo_path)
+            : 'https://via.placeholder.com/150';
     }
 }

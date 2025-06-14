@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -71,10 +72,11 @@ class UserController extends Controller
             'role' => 'required|in:' . implode(',', $roles),
             'department' => 'nullable|string|max:255',
             'contact_info' => 'nullable|string|max:255',
+            'profile_photo' => 'nullable|image|max:2048',
             'is_active' => 'boolean',
         ]);
 
-        User::create([
+        $payload = [
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
@@ -82,7 +84,12 @@ class UserController extends Controller
             'department' => $data['department'] ?? null,
             'contact_info' => $data['contact_info'] ?? null,
             'is_active' => $data['is_active'] ?? false,
-        ]);
+        ];
+        if ($request->hasFile('profile_photo')) {
+            $payload['profile_photo_path'] = $request->file('profile_photo')->store('profile_photos', 'public');
+        }
+
+        User::create($payload);
 
         return redirect()->route('users.index');
     }
@@ -98,6 +105,7 @@ class UserController extends Controller
             'role' => 'required|in:' . implode(',', $roles),
             'department' => 'nullable|string|max:255',
             'contact_info' => 'nullable|string|max:255',
+            'profile_photo' => 'nullable|image|max:2048',
             'is_active' => 'boolean',
         ]);
 
@@ -109,6 +117,13 @@ class UserController extends Controller
         $user->department = $data['department'] ?? null;
         $user->contact_info = $data['contact_info'] ?? null;
         $user->is_active = $data['is_active'] ?? false;
+        if ($request->hasFile('profile_photo')) {
+            if ($user->profile_photo_path) {
+                Storage::disk('public')->delete($user->profile_photo_path);
+            }
+            $user->profile_photo_path = $request->file('profile_photo')
+                ->store('profile_photos', 'public');
+        }
         if (!empty($data['password'])) {
             $user->password = Hash::make($data['password']);
         }

@@ -8,7 +8,7 @@
     <div class="text-center mb-3">
         <img src="{{ $user->profile_photo_url }}" alt="Profile Photo" class="rounded-circle" width="150">
     </div>
-    <form action="{{ route('profile.update') }}" method="POST">
+    <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="mb-3">
@@ -22,6 +22,10 @@
         <div class="mb-3">
             <label for="contact_info" class="form-label">Contact Information</label>
             <input id="contact_info" type="text" name="contact_info" class="form-control" value="{{ old('contact_info', $user->contact_info) }}">
+        </div>
+        <div class="mb-3">
+            <label for="profile_photo" class="form-label">Profile Photo</label>
+            <input id="profile_photo" type="file" name="profile_photo" class="form-control">
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">New Password</label>
