@@ -24,6 +24,36 @@
         </div>
     </div>
     <h3>Recent Activity</h3>
+    @include('components.per-page-selector')
+    <div class="mb-3">
+        <form method="GET" class="row row-cols-lg-auto g-2 align-items-end">
+            <div class="col">
+                <label for="filter-user" class="form-label">User</label>
+                <select id="filter-user" name="user_id" class="form-select">
+                    <option value="">All</option>
+                    @foreach($users as $u)
+                        <option value="{{ $u->id }}" @selected((string) request('user_id') === (string) $u->id)>{{ $u->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-department" class="form-label">Department</label>
+                <input id="filter-department" type="text" name="department" value="{{ request('department') }}" class="form-control">
+            </div>
+            <div class="col">
+                <label for="filter-category" class="form-label">Category</label>
+                <select id="filter-category" name="document_category_id" class="form-select">
+                    <option value="">All</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" @selected((string) request('document_category_id') === (string) $category->id)>{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-secondary">Filter</button>
+            </div>
+        </form>
+    </div>
     <div class="table-responsive">
     <table class="table table-striped">
     <caption class="visually-hidden">Recent Document Activity</caption>
@@ -47,5 +77,6 @@
         </tbody>
     </table>
     </div>
+    {{ $recentLogs->links() }}
 </div>
 @endsection
