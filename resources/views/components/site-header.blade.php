@@ -2,14 +2,13 @@
 <header role="banner" class="site-header navbar navbar-expand bg-white shadow-sm px-3">
     @if($showSidebar)
     <button id="menu-toggle" class="btn btn-link me-2" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
-    <button id="breadcrumb-toggle" class="btn btn-link me-2" aria-label="Toggle breadcrumbs" aria-controls="breadcrumb-panel" aria-expanded="false">
-        <span class="material-symbols-outlined" aria-hidden="true">view_headline</span>
-        <span class="visually-hidden">Toggle breadcrumbs</span>
-    </button>
     @endif
     <img src="{{ asset(setting('logo_path', 'assets/images/LCCD.jpg')) }}" alt="LCCD Logo" width="40" class="me-1">
     <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Department Logo" width="40" class="me-2">
-    <span class="navbar-brand">{{ $title ?? config('app.name') }}</span>
+    <div class="d-flex flex-column">
+        <span class="navbar-brand">{{ $title ?? config('app.name') }}</span>
+        @include('components.breadcrumbs', ['links' => $breadcrumbs])
+    </div>
     <form method="GET" action="{{ route('search.index') }}" class="d-flex ms-auto me-2" role="search">
         <label for="global-search" class="visually-hidden">Search</label>
         <input id="global-search" class="form-control" type="search" name="query" placeholder="Search...">

@@ -17,7 +17,10 @@ class DashboardController extends Controller
     {
         $data = $this->getDashboardData($request);
 
-        return view('dashboard', $data);
+        return view('dashboard', $data)
+            ->with('breadcrumbs', [
+                ['label' => 'Dashboard']
+            ]);
     }
 
     public function data(Request $request)
