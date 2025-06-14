@@ -23,6 +23,9 @@ Access the dashboard at `/kpi-dashboard` once logged in.
 - Trigger export via the **Export** button or visit `/kpi-dashboard/export`.
 - Export supports filters by date, department, module, user/role, and status.
 - Enables further analysis by administration, finance, QA, or external auditors.
+- Use the filter form above the audit log table to narrow results by date range,
+  user, department, module, or action. The same query parameters can be appended
+  to `/kpi-dashboard/export` to download the filtered logs.
 
 ### 3. Role-Based Dashboard Views
 - Dashboards display only data relevant to the user’s role and department:
