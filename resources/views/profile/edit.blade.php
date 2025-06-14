@@ -5,6 +5,9 @@
 @section('content')
 <div class="container" style="max-width: 500px;">
     <h1 class="mb-4">My Profile</h1>
+    <div class="text-center mb-3">
+        <img src="{{ $user->profile_photo_url }}" alt="Profile Photo" class="rounded-circle" width="150">
+    </div>
     <form action="{{ route('profile.update') }}" method="POST">
         @csrf
         @method('PUT')

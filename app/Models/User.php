@@ -87,4 +87,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(TicketComment::class);
     }
+
+    /**
+     * Get the profile photo URL.
+     */
+    public function getProfilePhotoUrlAttribute(): string
+    {
+        return 'https://via.placeholder.com/150';
+    }
 }
