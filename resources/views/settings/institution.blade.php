@@ -20,6 +20,14 @@
             <label for="helpdesk_email" class="form-label">Helpdesk Email</label>
             <input type="email" id="helpdesk_email" name="helpdesk_email" value="{{ $email }}" class="form-control" />
         </div>
+        <div class="mb-3">
+            <label for="header_text" class="form-label">Header Text</label>
+            <input type="text" id="header_text" name="header_text" value="{{ $header_text }}" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label for="footer_text" class="form-label">Footer Text</label>
+            <input type="text" id="footer_text" name="footer_text" value="{{ $footer_text }}" class="form-control" />
+        </div>
         <button type="submit" class="btn btn-primary me-2">Save</button>
         <a href="{{ route('settings.index') }}" class="btn btn-secondary">Cancel</a>
     </form>

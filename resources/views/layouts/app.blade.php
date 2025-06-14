@@ -157,6 +157,7 @@
         </nav>
         <div class="content-wrapper flex-grow-1">
             <main id="main-content" class="py-5">
+                <div class="text-center mb-3 fw-semibold">{{ setting('header_text') }}</div>
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}
@@ -168,6 +169,7 @@
             <footer class="text-center">
                 <address class="mb-1">{{ setting('institution_address') }}</address>
                 <div class="mb-1">{{ setting('institution_phone') }} | {{ setting('helpdesk_email') }}</div>
+                <div class="mb-1">{{ setting('footer_text') }}</div>
                 <div>&copy; {{ date('Y') }} La Consolacion College Daet CMS</div>
             </footer>
         </div>
