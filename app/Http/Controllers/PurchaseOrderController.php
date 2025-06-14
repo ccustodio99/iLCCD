@@ -18,15 +18,44 @@ class PurchaseOrderController extends Controller
     {
         $perPage = $this->getPerPage($request);
 
-        $query = PurchaseOrder::with('auditTrails.user');
+        $query = PurchaseOrder::with(['auditTrails.user', 'user']);
 
         if (!in_array(auth()->user()->role, ['finance', 'admin'], true)) {
             $query->where('user_id', auth()->id());
         }
 
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        if ($request->filled('supplier')) {
+            $query->where('supplier', 'like', '%' . $request->input('supplier') . '%');
+        }
+
+        if ($request->filled('department')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('department', $request->input('department'));
+            });
+        }
+
+        if ($request->filled('start_date')) {
+            $query->whereDate('created_at', '>=', $request->input('start_date'));
+        }
+
+        if ($request->filled('end_date')) {
+            $query->whereDate('created_at', '<=', $request->input('end_date'));
+        }
+
         $orders = $query->paginate($perPage)->withQueryString();
 
-        return view('purchase_orders.index', compact('orders'));
+        $statuses = PurchaseOrder::STATUSES;
+        $departments = \App\Models\User::select('department')
+            ->distinct()
+            ->whereNotNull('department')
+            ->orderBy('department')
+            ->pluck('department');
+
+        return view('purchase_orders.index', compact('orders', 'statuses', 'departments'));
     }
 
     public function create()
