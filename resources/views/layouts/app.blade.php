@@ -150,7 +150,11 @@
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <button id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
-    @include('layouts.header')
+    @auth
+        @include('components.site-header', ['showSidebar' => false])
+    @else
+        @include('layouts.header')
+    @endauth
     <div class="d-flex">
         <nav class="sidebar" aria-label="Main navigation">
             <a class="navbar-brand d-flex align-items-center mb-3" href="{{ route('home') }}">
