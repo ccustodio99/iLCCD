@@ -58,7 +58,19 @@ Ticket categories already use a parent → child hierarchy with a `parent_id` fi
 
 These defaults come from **`Database\Seeders\DocumentCategorySeeder`** and are created when running `php artisan migrate --seed`. Demo data from **`DemoSeeder`** reuses these records so no duplicates are created. You can modify or expand them later using the settings screens.
 
-Additional tools include **Theme Settings** where administrators can pick primary and accent colors, select fonts, and edit the home page text. The new **Announcements** manager lets admins post messages that appear on the dashboard.
+The new **Announcements** manager lets admins post messages that appear on the dashboard.
+
+## Theme Settings
+Administrators can customize the interface branding from this screen. Adjustable values include:
+
+- **Primary Color** – main navigation and button color
+- **Accent Color** – highlight shade for links and callouts
+- **Primary Font** – used for headings
+- **Secondary Font** – used for body text
+- **Home Page Heading** – large text shown on the landing page
+- **Home Page Tagline** – short tagline displayed below the heading
+
+*A screenshot of the Theme Settings form is available in the ITRC Dropbox.*
 
 ### Theme Setting Defaults
 The initial seed runs **`Database\\Seeders\\SettingSeeder`** which sets the following values:
