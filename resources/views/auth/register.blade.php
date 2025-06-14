@@ -5,6 +5,16 @@
 @section('content')
 <div class="container" style="max-width: 400px;">
     <h1 class="mb-4 text-center">Create Account</h1>
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     <form method="POST" action="{{ route('register') }}">
         @csrf
         <div class="mb-3">
