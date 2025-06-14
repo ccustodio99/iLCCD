@@ -2,15 +2,28 @@
 
 @section('title', 'Welcome')
 
+@push('styles')
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+        color: #ffffff;
+        border-radius: 1rem;
+    }
+</style>
+@endpush
+
 @section('content')
+
 <div class="container my-5">
-    <div class="row align-items-center">
-        <div class="col-md-6 text-center text-md-start mb-4 mb-md-0">
-            <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Logo" class="img-fluid mb-3" style="max-width:200px;">
-            <h1 class="mb-3">{{ setting('home_heading', 'Welcome to the LCCD Integrated Information System (CMS)') }}</h1>
-            <p class="lead mb-4">{{ setting('home_tagline', 'Empowering Christ-centered digital transformation for La Consolacion College Daet—where technology, transparency, and service unite.') }}</p>
+    <div class="row justify-content-center">
+        <div class="col-12 mb-4">
+            <section class="hero-section text-center p-5">
+                <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Logo" class="img-fluid mb-3" style="max-width:200px;">
+                <h1 class="display-5 fw-bold mb-3">{{ setting('home_heading', 'Welcome to the LCCD Integrated Information System (CMS)') }}</h1>
+                <p class="lead">{{ setting('home_tagline', 'Empowering Christ-centered digital transformation for La Consolacion College Daet—where technology, transparency, and service unite.') }}</p>
+            </section>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 col-lg-4">
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h2 class="mb-4 text-center">Login</h2>
