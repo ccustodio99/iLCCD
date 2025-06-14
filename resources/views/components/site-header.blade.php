@@ -2,7 +2,9 @@
     <button id="breadcrumb-toggle" class="btn btn-link" aria-label="Toggle breadcrumbs" aria-controls="breadcrumb-panel">
         <span class="material-symbols-outlined" aria-hidden="true">menu</span>
     </button>
-    <span class="navbar-brand ms-2">{{ $title ?? config('app.name') }}</span>
+    <img src="{{ asset(setting('logo_path', 'assets/images/LCCD.jpg')) }}" alt="LCCD Logo" width="40" class="ms-2 me-1">
+    <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Department Logo" width="40" class="me-2">
+    <span class="navbar-brand">{{ $title ?? config('app.name') }}</span>
     <form method="GET" action="{{ route('search.index') }}" class="d-flex ms-auto me-2" role="search">
         <label for="global-search" class="visually-hidden">Search</label>
         <input id="global-search" class="form-control" type="search" name="query" placeholder="Search...">
