@@ -6,9 +6,35 @@ use Illuminate\Http\Request;
 
 class SettingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('settings.index');
+        $perPage = $this->getPerPage($request);
+
+        $ticketCategories = \App\Models\TicketCategory::with('parent')
+            ->paginate($perPage)
+            ->withQueryString();
+
+        $jobOrderTypes = \App\Models\JobOrderType::with('parent')
+            ->paginate($perPage)
+            ->withQueryString();
+
+        $inventoryCategories = \App\Models\InventoryCategory::with('parent')
+            ->paginate($perPage)
+            ->withQueryString();
+
+        $documentCategories = \App\Models\DocumentCategory::paginate($perPage)
+            ->withQueryString();
+
+        $announcements = \App\Models\Announcement::paginate($perPage)
+            ->withQueryString();
+
+        return view('settings.index', [
+            'ticketCategories' => $ticketCategories,
+            'jobOrderTypes' => $jobOrderTypes,
+            'inventoryCategories' => $inventoryCategories,
+            'documentCategories' => $documentCategories,
+            'announcements' => $announcements,
+        ]);
     }
 
     public function editTheme()

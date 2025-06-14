@@ -11,31 +11,31 @@
     </div>
     <div class="row row-cols-1 row-cols-md-2 g-3">
         <div class="col">
-            <a href="{{ route('ticket-categories.index') }}" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Ticket Categories">
+            <a href="{{ route('ticket-categories.index') }}" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Ticket Categories" data-bs-toggle="modal" data-bs-target="#ticketCategoriesModal">
                 <span class="material-symbols-outlined d-block mb-2" aria-hidden="true">category</span>
                 <span class="fw-semibold">Ticket Categories</span>
             </a>
         </div>
         <div class="col">
-            <a href="{{ route('job-order-types.index') }}" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Job Order Types">
+            <a href="{{ route('job-order-types.index') }}" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Job Order Types" data-bs-toggle="modal" data-bs-target="#jobOrderTypesModal">
                 <span class="material-symbols-outlined d-block mb-2" aria-hidden="true">work</span>
                 <span class="fw-semibold">Job Order Types</span>
             </a>
         </div>
         <div class="col">
-            <a href="{{ route('inventory-categories.index') }}" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Inventory Categories">
+            <a href="{{ route('inventory-categories.index') }}" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Inventory Categories" data-bs-toggle="modal" data-bs-target="#inventoryCategoriesModal">
                 <span class="material-symbols-outlined d-block mb-2" aria-hidden="true">inventory_2</span>
                 <span class="fw-semibold">Inventory Categories</span>
             </a>
         </div>
         <div class="col">
-            <a href="{{ route('document-categories.index') }}" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Document Categories">
+            <a href="{{ route('document-categories.index') }}" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Document Categories" data-bs-toggle="modal" data-bs-target="#documentCategoriesModal">
                 <span class="material-symbols-outlined d-block mb-2" aria-hidden="true">folder</span>
                 <span class="fw-semibold">Document Categories</span>
             </a>
         </div>
         <div class="col">
-            <a href="{{ route('announcements.index') }}" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Announcements">
+            <a href="{{ route('announcements.index') }}" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Announcements" data-bs-toggle="modal" data-bs-target="#announcementsModal">
                 <span class="material-symbols-outlined d-block mb-2" aria-hidden="true">campaign</span>
                 <span class="fw-semibold">Announcements</span>
             </a>
@@ -48,4 +48,9 @@
         </div>
     </div>
 </div>
+@include('settings.ticket-categories.modal-index', ['categories' => $ticketCategories])
+@include('settings.job-order-types.modal-index', ['types' => $jobOrderTypes])
+@include('settings.inventory-categories.modal-index', ['categories' => $inventoryCategories])
+@include('settings.document-categories.modal-index', ['categories' => $documentCategories])
+@include('settings.announcements.modal-index', ['announcements' => $announcements])
 @endsection
