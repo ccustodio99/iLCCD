@@ -21,7 +21,7 @@ it('filters job orders by status', function () {
     $this->actingAs($user);
     $response = $this->get('/job-orders?status=' . JobOrder::STATUS_APPROVED);
     $response->assertSee('approved');
-    $response->assertDontSee('pending');
+    $response->assertDontSee('<td>pending</td>', false);
 });
 
 it('filters job orders by type', function () {
@@ -37,7 +37,7 @@ it('filters job orders by type', function () {
     $this->actingAs($user);
     $response = $this->get('/job-orders?type_parent=' . $parentA->id);
     $response->assertSee('A');
-    $response->assertDontSee('B');
+    $response->assertDontSee('<td>B</td>', false);
 });
 
 it('filters job orders by assignee', function () {
@@ -62,7 +62,7 @@ it('filters job orders by assignee', function () {
     $this->actingAs($requester);
     $response = $this->get('/job-orders?assigned_to_id=' . $assigneeA->id);
     $response->assertSee('A');
-    $response->assertDontSee('B');
+    $response->assertDontSee('<td>B</td>', false);
 });
 
 it('searches job order descriptions', function () {

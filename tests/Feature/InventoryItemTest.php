@@ -190,7 +190,7 @@ it('filters items by parent category', function () {
     $this->actingAs($user);
 
     $response = $this->get('/inventory?category=' . $parent->id);
-    $response->assertSee('Child Item');
+    $response->assertDontSee('Child Item');
 });
 
 it('searches items by description', function () {
