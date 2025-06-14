@@ -137,7 +137,7 @@
                     @if(auth()->user()->role === 'admin')
                         <li class="nav-item"><a class="nav-link @if(request()->routeIs('users.*')) active @endif" href="{{ route('users.index') }}" @if(request()->routeIs('users.*')) aria-current="page" @endif>Users</a></li>
                         <li class="nav-item">
-                            <a class="nav-link @if(request()->routeIs('settings.*')) active @endif" href="{{ route('settings.index') }}" data-bs-toggle="modal" data-bs-target="#settingsModal" @if(request()->routeIs('settings.*')) aria-current="page" @endif>
+                            <a class="nav-link @if(request()->routeIs('settings.*')) active @endif" href="{{ route('settings.index') }}" @if(request()->routeIs('settings.*')) aria-current="page" @endif>
                                 Settings
                             </a>
                         </li>
