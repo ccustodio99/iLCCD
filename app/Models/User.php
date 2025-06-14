@@ -97,6 +97,6 @@ class User extends Authenticatable
     {
         return $this->profile_photo_path
             ? Storage::disk('public')->url($this->profile_photo_path)
-            : 'https://via.placeholder.com/150';
+            : config('app.default_profile_photo');
     }
 }
