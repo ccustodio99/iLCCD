@@ -79,6 +79,9 @@
             #menu-toggle {
                 display: block;
             }
+            header[role="banner"] {
+                margin-left: 0;
+            }
         }
         .cta { background-color: var(--color-accent); color: var(--color-primary); }
         footer {
@@ -137,6 +140,7 @@
             position: sticky;
             top: 0;
             z-index: 1090;
+            margin-left: 200px;
         }
         header[role="banner"] .notification-area {
             color: var(--color-accent);
