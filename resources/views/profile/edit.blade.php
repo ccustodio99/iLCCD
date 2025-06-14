@@ -5,6 +5,16 @@
 @section('content')
 <div class="container" style="max-width: 500px;">
     <h1 class="mb-4">My Profile</h1>
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     <div class="text-center mb-3">
         <img src="{{ $user->profile_photo_url }}" alt="Profile Photo" class="rounded-circle" width="150">
     </div>
