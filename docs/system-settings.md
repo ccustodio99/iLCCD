@@ -1,4 +1,4 @@
-# ⚙️ System Settings – LCCD Integrated Information System
+# System Settings
 
 Administrators can manage baseline values used across the modules from the **Settings** section of the sidebar. Each record includes an `is_active` flag so items may be disabled without deletion. The Settings link is visible only for users with the **admin** role.
 
