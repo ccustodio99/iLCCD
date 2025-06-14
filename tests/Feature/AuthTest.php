@@ -33,9 +33,9 @@ test('forgot password page is accessible', function () {
     $response->assertStatus(200);
 });
 
-test('login page contains link to home', function () {
+test('login route redirects to home', function () {
     $response = $this->get('/login');
-    $response->assertSee(route('home'));
+    $response->assertRedirect('/');
 });
 
 test('user locked out after five failed login attempts', function () {

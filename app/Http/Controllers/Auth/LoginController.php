@@ -12,7 +12,7 @@ class LoginController extends Controller
 {
     public function show()
     {
-        return view('auth.login');
+        return redirect()->route('home');
     }
 
     public function authenticate(Request $request)
