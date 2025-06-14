@@ -110,3 +110,56 @@ it('allows downloading document versions', function () {
     $response = $this->get("/documents/{$version->document_id}/versions/{$version->id}/download");
     $response->assertStatus(200);
 });
+
+it('filters documents by category', function () {
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $catA = DocumentCategory::factory()->create();
+    $catB = DocumentCategory::factory()->create();
+
+    Document::factory()->for($user)->for($catA)->create(['title' => 'Cat A']);
+    Document::factory()->for($user)->for($catB)->create(['title' => 'Cat B']);
+
+    $response = $this->get('/documents?category=' . $catA->id);
+    $response->assertSee('Cat A');
+    $response->assertDontSee('Cat B');
+});
+
+it('searches documents by title and description', function () {
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $cat = DocumentCategory::factory()->create();
+    Document::factory()->for($user)->for($cat)->create(['title' => 'Handbook']);
+    Document::factory()->for($user)->for($cat)->create([
+        'title' => 'Policy',
+        'description' => 'Handbook guidelines',
+    ]);
+
+    $response = $this->get('/documents?search=Handbook');
+    $response->assertSee('Handbook');
+    $response->assertSee('Policy');
+});
+
+it('filters documents by date range', function () {
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $cat = DocumentCategory::factory()->create();
+    Document::factory()->for($user)->for($cat)->create([
+        'title' => 'Old Doc',
+        'created_at' => now()->subDays(10),
+    ]);
+    Document::factory()->for($user)->for($cat)->create([
+        'title' => 'New Doc',
+        'created_at' => now(),
+    ]);
+
+    $from = now()->subDays(5)->format('Y-m-d');
+    $to = now()->format('Y-m-d');
+
+    $response = $this->get('/documents?from=' . $from . '&to=' . $to);
+    $response->assertSee('New Doc');
+    $response->assertDontSee('Old Doc');
+});
