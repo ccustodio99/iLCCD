@@ -78,6 +78,7 @@ class SettingController extends Controller
             'email' => setting('helpdesk_email', 'helpdesk@lccd.edu.ph'),
             'header_text' => setting('header_text', 'La Consolacion College Daet'),
             'footer_text' => setting('footer_text', 'Empowering Christ-centered digital transformation'),
+            'show_footer' => setting('show_footer', true),
         ]);
     }
 
@@ -89,6 +90,7 @@ class SettingController extends Controller
             'helpdesk_email' => 'required|email',
             'header_text' => 'required|string',
             'footer_text' => 'required|string',
+            'show_footer' => 'boolean',
         ]);
 
         \App\Models\Setting::set('institution_address', $data['institution_address']);
@@ -96,6 +98,7 @@ class SettingController extends Controller
         \App\Models\Setting::set('helpdesk_email', $data['helpdesk_email']);
         \App\Models\Setting::set('header_text', $data['header_text']);
         \App\Models\Setting::set('footer_text', $data['footer_text']);
+        \App\Models\Setting::set('show_footer', $request->boolean('show_footer'));
 
         return redirect()->route('settings.institution')->with('success', 'Institution settings updated');
     }
