@@ -56,3 +56,4 @@ supporting the project's emphasis on user-centric feedback.
 - Previous: [User Management Module](user.md)
 - Next: [Ticketing System Module](Ticketing_System_Module.md)
 - [Documentation Index](README.md)
+- [Theme Settings](system-settings.md#theme-settings)
