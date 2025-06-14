@@ -46,6 +46,7 @@ class User extends Authenticatable
         'password',
         'role',
         'department',
+        'contact_info',
         'is_active',
         'failed_login_attempts',
         'lockout_until',

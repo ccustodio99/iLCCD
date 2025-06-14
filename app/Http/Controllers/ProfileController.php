@@ -20,11 +20,13 @@ class ProfileController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
+            'contact_info' => 'nullable|string|max:255',
             'password' => ['nullable', 'confirmed', 'min:8', 'regex:/[A-Za-z]/', 'regex:/[0-9]/', 'regex:/[^A-Za-z0-9]/'],
         ]);
 
         $user->name = $data['name'];
         $user->email = $data['email'];
+        $user->contact_info = $data['contact_info'] ?? null;
         if (!empty($data['password'])) {
             $user->password = Hash::make($data['password']);
         }

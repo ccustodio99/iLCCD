@@ -56,7 +56,7 @@ Each category may optionally reference another category via a `parent_id` field.
 - **Create a parent category:** leave the **Parent** dropdown blank when adding a new category in the settings screen.
 - **Create a subcategory:** choose the desired parent from the **Parent** dropdown while adding or editing the record.
 - Only categories marked **active** appear in dropdowns and filters throughout the module so users see a tidy list.
-- Administrators can review and reorder the hierarchy from the [Admin Settings](admin-settings.md) page.
+- Administrators can review and reorder the hierarchy from the [System Settings](system-settings.md) page.
 
 ---
 

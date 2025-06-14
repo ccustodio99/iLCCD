@@ -20,12 +20,14 @@ class RegisterController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
+            'contact_info' => 'nullable|string|max:255',
             'password' => ['required', 'confirmed', 'min:8', 'regex:/[A-Za-z]/', 'regex:/[0-9]/', 'regex:/[^A-Za-z0-9]/'],
         ]);
 
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'contact_info' => $data['contact_info'] ?? null,
             'password' => Hash::make($data['password']),
         ]);
 

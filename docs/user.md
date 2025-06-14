@@ -17,7 +17,7 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
   - Full name
   - Email / Username
   - Department
-  - Contact information
+  - Contact information (phone number or other details)
   - Account photo (optional)
 - Passwords are hashed (e.g., bcrypt) and stored securely.
 - Optional: Bulk user registration (CSV import).
@@ -55,7 +55,7 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
   Each entry also includes the user's IP address for accountability.
 
 ### 6. Profile Management
-- Each user can update their own **name**, **email**, and password from the *My Profile* page.
+- Each user can update their **name**, **email**, **contact information**, and password from the *My Profile* page.
 - Password changes require confirmation and log an audit entry.
 - Access via the Profile link in the left sidebar navigation when logged in.
 
