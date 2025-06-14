@@ -6,6 +6,9 @@
 <div class="container">
     <h1 class="mb-2">System Settings</h1>
     <p class="text-muted mb-4">Administrators manage system defaults and theme settings here.</p>
+    <div class="mb-4">
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#settingsModal">Quick Settings</a>
+    </div>
     <div class="row row-cols-1 row-cols-md-2 g-3">
         <div class="col">
             <a href="{{ route('ticket-categories.index') }}" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Ticket Categories">
