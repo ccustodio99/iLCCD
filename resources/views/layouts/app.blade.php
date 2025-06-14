@@ -58,9 +58,6 @@
             color: var(--color-primary);
         }
         .content-wrapper {
-            @unless(request()->routeIs('dashboard'))
-            margin-left: 200px;
-            @endunless
             padding-left: 1rem;
             padding-bottom: 5rem;
         }
@@ -73,7 +70,7 @@
                 left: 0;
             }
             nav.sidebar.active + .content-wrapper {
-                margin-left: 200px;
+                margin-left: 0;
             }
             .content-wrapper {
                 margin-left: 0;
@@ -142,9 +139,6 @@
             position: sticky;
             top: 0;
             z-index: 1090;
-            @unless(request()->routeIs('dashboard'))
-            margin-left: 200px;
-            @endunless
         }
         header[role="banner"] .notification-area {
             color: var(--color-accent);
@@ -152,57 +146,14 @@
     </style>
 </head>
 <body>
+    @include('components.hamburger-menu')
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <button id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
     @auth
-        @include('components.site-header', ['showSidebar' => false])
+        @include('components.site-header', ['showSidebar' => true])
     @else
         @include('layouts.header')
     @endauth
     <div class="d-flex">
-        @unless(request()->routeIs('dashboard'))
-        <nav class="sidebar" aria-label="Main navigation">
-            <a class="navbar-brand d-flex align-items-center mb-3" href="{{ route('home') }}">
-                <img src="{{ asset(setting('logo_path', 'assets/images/LCCD.jpg')) }}" alt="LCCD Logo" width="40" class="me-2">
-                <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Department Logo" width="40" class="me-2">
-            </a>
-            <ul class="nav flex-column">
-                @auth
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('dashboard')) active @endif" href="{{ route('dashboard') }}" @if(request()->routeIs('dashboard')) aria-current="page" @endif>Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('tickets.*')) active @endif" href="{{ route('tickets.index') }}" @if(request()->routeIs('tickets.*')) aria-current="page" @endif>Tickets</a></li>
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('job-orders.*')) active @endif" href="{{ route('job-orders.index') }}" @if(request()->routeIs('job-orders.*')) aria-current="page" @endif>Job Orders</a></li>
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('requisitions.*')) active @endif" href="{{ route('requisitions.index') }}" @if(request()->routeIs('requisitions.*')) aria-current="page" @endif>Requisitions</a></li>
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('inventory.*')) active @endif" href="{{ route('inventory.index') }}" @if(request()->routeIs('inventory.*')) aria-current="page" @endif>Inventory</a></li>
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('purchase-orders.*')) active @endif" href="{{ route('purchase-orders.index') }}" @if(request()->routeIs('purchase-orders.*')) aria-current="page" @endif>Purchase Orders</a></li>
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('documents.*')) active @endif" href="{{ route('documents.index') }}" @if(request()->routeIs('documents.*')) aria-current="page" @endif>Documents</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('documents.dashboard')) active @endif" href="{{ route('documents.dashboard') }}">
-                            Document KPI
-                        </a>
-                    </li>
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('kpi.dashboard')) active @endif" href="{{ route('kpi.dashboard') }}" @if(request()->routeIs('kpi.dashboard')) aria-current="page" @endif>KPI Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('audit-trails.*')) active @endif" href="{{ route('audit-trails.index') }}" @if(request()->routeIs('audit-trails.*')) aria-current="page" @endif>Audit Trail</a></li>
-                    @if(auth()->user()->role === 'admin')
-                        <li class="nav-item"><a class="nav-link @if(request()->routeIs('users.*')) active @endif" href="{{ route('users.index') }}" @if(request()->routeIs('users.*')) aria-current="page" @endif>Users</a></li>
-                        <li class="nav-item">
-                            <a class="nav-link @if(request()->routeIs('settings.*')) active @endif" href="{{ route('settings.index') }}" @if(request()->routeIs('settings.*')) aria-current="page" @endif>
-                                Settings
-                            </a>
-                        </li>
-                    @endif
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('profile.*')) active @endif" href="{{ route('profile.edit') }}" @if(request()->routeIs('profile.*')) aria-current="page" @endif>Profile</a></li>
-                    <li class="nav-item">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="nav-link btn btn-link p-0">Logout</button>
-                        </form>
-                    </li>
-                @else
-                    <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
-                @endauth
-            </ul>
-        </nav>
-        @endunless
         <div class="content-wrapper flex-grow-1">
             <main id="main-content" class="py-5">
                 @if(session('success'))
@@ -239,11 +190,16 @@
         window.scrollTo({top: 0, behavior: 'smooth'});
     });
     const menuToggle = document.getElementById('menu-toggle');
-    const sidebar = document.querySelector('.sidebar');
-    menuToggle.addEventListener('click', () => {
-        const expanded = sidebar.classList.toggle('active');
-        menuToggle.setAttribute('aria-expanded', expanded);
-    });
+    const mainMenuEl = document.getElementById('mainMenu');
+    if (menuToggle && mainMenuEl) {
+        const offcanvasMenu = new bootstrap.Offcanvas(mainMenuEl);
+        menuToggle.addEventListener('click', () => {
+            offcanvasMenu.toggle();
+            const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+            menuToggle.setAttribute('aria-expanded', (!expanded).toString());
+        });
+        mainMenuEl.addEventListener('hidden.bs.offcanvas', () => menuToggle.focus());
+    }
     const toggleFooterBtn = document.getElementById('toggle-footer');
     const footer = document.getElementById('app-footer');
     toggleFooterBtn.addEventListener('click', () => {
