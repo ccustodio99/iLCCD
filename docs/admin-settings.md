@@ -59,3 +59,13 @@ Ticket categories already use a parent → child hierarchy with a `parent_id` fi
 These defaults come from **`Database\Seeders\DocumentCategorySeeder`** and are created when running `php artisan migrate --seed`. Demo data from **`DemoSeeder`** reuses these records so no duplicates are created. You can modify or expand them later using the settings screens.
 
 Additional tools include **Theme Settings** where administrators can pick primary and accent colors, select fonts, and edit the home page text. The new **Announcements** manager lets admins post messages that appear on the dashboard.
+
+### Theme Setting Defaults
+The initial seed runs **`Database\\Seeders\\SettingSeeder`** which sets the following values:
+
+- **Primary Color:** `#1B2660`
+- **Accent Color:** `#FFCD38`
+- **Primary Font:** Poppins
+- **Secondary Font:** Roboto
+- **Home Page Heading:** "Welcome to the LCCD Integrated Information System (CMS)"
+- **Home Page Tagline:** "Empowering Christ-centered digital transformation for La Consolacion College Daet—where technology, transparency, and service unite."
