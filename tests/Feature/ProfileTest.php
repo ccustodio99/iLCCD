@@ -67,3 +67,15 @@ it('replaces old profile photo when updating', function () {
     $user->refresh();
     Storage::disk('public')->assertExists($user->profile_photo_path);
 });
+
+it('redirects guest to login when viewing profile', function () {
+    $response = $this->get('/profile');
+
+    $response->assertRedirect('/login');
+});
+
+it('redirects guest to login when updating profile', function () {
+    $response = $this->put('/profile');
+
+    $response->assertRedirect('/login');
+});
