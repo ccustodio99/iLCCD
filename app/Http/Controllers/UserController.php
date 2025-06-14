@@ -70,6 +70,7 @@ class UserController extends Controller
             'password' => ['required', 'confirmed', 'min:8', 'regex:/[A-Za-z]/', 'regex:/[0-9]/', 'regex:/[^A-Za-z0-9]/'],
             'role' => 'required|in:' . implode(',', $roles),
             'department' => 'nullable|string|max:255',
+            'contact_info' => 'nullable|string|max:255',
             'is_active' => 'boolean',
         ]);
 
@@ -79,6 +80,7 @@ class UserController extends Controller
             'password' => Hash::make($data['password']),
             'role' => $data['role'],
             'department' => $data['department'] ?? null,
+            'contact_info' => $data['contact_info'] ?? null,
             'is_active' => $data['is_active'] ?? false,
         ]);
 
@@ -95,6 +97,7 @@ class UserController extends Controller
             'password' => ['nullable', 'confirmed', 'min:8', 'regex:/[A-Za-z]/', 'regex:/[0-9]/', 'regex:/[^A-Za-z0-9]/'],
             'role' => 'required|in:' . implode(',', $roles),
             'department' => 'nullable|string|max:255',
+            'contact_info' => 'nullable|string|max:255',
             'is_active' => 'boolean',
         ]);
 
@@ -104,6 +107,7 @@ class UserController extends Controller
         $user->email = $data['email'];
         $user->role = $data['role'];
         $user->department = $data['department'] ?? null;
+        $user->contact_info = $data['contact_info'] ?? null;
         $user->is_active = $data['is_active'] ?? false;
         if (!empty($data['password'])) {
             $user->password = Hash::make($data['password']);
