@@ -5,8 +5,19 @@
 @push('styles')
 <style>
     .hero-left {
-        background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+        position: relative;
         color: #ffffff;
+        background: url("{{ asset('assets/images/CCS.jpg') }}") center/cover no-repeat;
+    }
+    .hero-left::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+        opacity: 0.85;
+    }
+    .hero-left > * {
+        position: relative;
     }
 </style>
 @endpush
