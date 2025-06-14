@@ -31,6 +31,9 @@
             left: 0;
             transition: left 0.3s ease;
         }
+        #mainMenu.offcanvas {
+            width: 200px;
+        }
         #menu-toggle {
             display: block;
             background: transparent;
