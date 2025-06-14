@@ -193,5 +193,6 @@
         menuToggle.setAttribute('aria-expanded', expanded);
     });
 </script>
+@stack('scripts')
 </body>
 </html>

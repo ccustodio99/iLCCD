@@ -16,12 +16,16 @@ class LowStockNotification extends Notification
 
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return setting('notify_low_stock', true) ? ['mail'] : [];
     }
 
     public function toMail(object $notifiable): MailMessage
     {
+        $template = setting('template_low_stock', '{{ message }}');
+        $message = "Inventory item {$this->itemName} is low on stock. Remaining quantity: {$this->quantity}";
+        $content = str_replace('{{ message }}', $message, $template);
+
         return (new MailMessage)
-            ->line("Inventory item {$this->itemName} is low on stock. Remaining quantity: {$this->quantity}");
+            ->markdown('mail::message', ['slot' => $content]);
     }
 }

@@ -8,6 +8,8 @@ use App\Notifications\JobOrderStatusNotification;
 
 it('routes job order through approval and assignment workflow', function () {
     Notification::fake();
+    \App\Models\Setting::set('notify_job_order_status', true);
+    \App\Models\Setting::set('template_job_order_status', '{{ message }}');
 
     $requester = User::factory()->create(['role' => 'staff']);
     $head = User::factory()->create(['role' => 'head']);
