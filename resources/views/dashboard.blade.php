@@ -8,6 +8,52 @@
 <div class="container">
     <h1 class="mb-4 text-center">Dashboard</h1>
 
+    <div class="row row-cols-2 row-cols-md-5 g-3 mb-3 text-center" id="dashboard-summary">
+        <div class="col">
+            <div class="card card-quick p-3" aria-label="Pending Tickets">
+                <span class="material-symbols-outlined d-block" aria-hidden="true">confirmation_number</span>
+                <span class="fw-semibold">Tickets</span>
+                <span class="display-6" id="count-tickets">{{ $tickets->total() }}</span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card card-quick p-3" aria-label="Pending Job Orders">
+                <span class="material-symbols-outlined d-block" aria-hidden="true">engineering</span>
+                <span class="fw-semibold">Job Orders</span>
+                <span class="display-6" id="count-jobs">{{ $jobOrders->total() }}</span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card card-quick p-3" aria-label="Pending Requisitions">
+                <span class="material-symbols-outlined d-block" aria-hidden="true">receipt</span>
+                <span class="fw-semibold">Requisitions</span>
+                <span class="display-6" id="count-requisitions">{{ $requisitions->total() }}</span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card card-quick p-3" aria-label="Pending Purchase Orders">
+                <span class="material-symbols-outlined d-block" aria-hidden="true">shopping_cart</span>
+                <span class="fw-semibold">Purchase Orders</span>
+                <span class="display-6" id="count-pos">{{ $purchaseOrders->total() }}</span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card card-quick p-3" aria-label="Recent Document Logs">
+                <span class="material-symbols-outlined d-block" aria-hidden="true">description</span>
+                <span class="fw-semibold">Documents</span>
+                <span class="display-6" id="count-docs">{{ $incomingDocuments->total() + $outgoingDocuments->total() + $forApprovalDocuments->total() }}</span>
+            </div>
+        </div>
+    </div>
+
+    <nav class="visually-hidden-focusable mb-4" aria-label="Dashboard sections">
+        <a href="#tickets-section" class="me-3">Skip to Tickets</a>
+        <a href="#job-orders-section" class="me-3">Skip to Job Orders</a>
+        <a href="#requisitions-section" class="me-3">Skip to Requisitions</a>
+        <a href="#purchase-orders-section" class="me-3">Skip to Purchase Orders</a>
+        <a href="#documents-section">Skip to Documents</a>
+    </nav>
+
     @if($announcements->count())
     <div class="mb-4">
         <h2>Announcements</h2>
@@ -22,7 +68,7 @@
     </div>
     @endif
 
-    <h2 class="mt-4">Pending Tickets</h2>
+    <h2 id="tickets-section" class="mt-4">Pending Tickets</h2>
     <form method="GET" class="mb-2">
         @foreach(request()->except(['ticket_status','tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']) as $name => $value)
             <input type="hidden" name="{{ $name }}" value="{{ $value }}">
@@ -59,7 +105,7 @@
     </div>
     {{ $tickets->appends(request()->except(['tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']))->links() }}
 
-    <h2 class="mt-5">Pending Job Orders</h2>
+    <h2 id="job-orders-section" class="mt-5">Pending Job Orders</h2>
     <form method="GET" class="mb-2">
         @foreach(request()->except(['job_status','tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']) as $name => $value)
             <input type="hidden" name="{{ $name }}" value="{{ $value }}">
@@ -105,7 +151,7 @@
     </div>
     {{ $jobOrders->appends(request()->except(['tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']))->links() }}
 
-    <h2 class="mt-5">Pending Requisitions</h2>
+    <h2 id="requisitions-section" class="mt-5">Pending Requisitions</h2>
     <form method="GET" class="mb-2">
         @foreach(request()->except(['requisition_status','tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']) as $name => $value)
             <input type="hidden" name="{{ $name }}" value="{{ $value }}">
@@ -140,7 +186,7 @@
     </div>
     {{ $requisitions->appends(request()->except(['tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']))->links() }}
 
-    <h2 class="mt-5">Pending Purchase Orders</h2>
+    <h2 id="purchase-orders-section" class="mt-5">Pending Purchase Orders</h2>
     <form method="GET" class="mb-2">
         @foreach(request()->except(['po_status','tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']) as $name => $value)
             <input type="hidden" name="{{ $name }}" value="{{ $value }}">
@@ -179,7 +225,7 @@
     </div>
     {{ $purchaseOrders->appends(request()->except(['tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']))->links() }}
 
-    <h2 class="mt-5">Incoming &amp; Outgoing Documents</h2>
+    <h2 id="documents-section" class="mt-5">Incoming &amp; Outgoing Documents</h2>
     <div class="row">
         <div class="col-md-6">
             <h5>Incoming</h5>
@@ -233,7 +279,7 @@
         </div>
     </div>
 
-    <h2 class="mt-5">For Approval/Checking</h2>
+    <h2 id="for-approval-section" class="mt-5">For Approval/Checking</h2>
     <caption class="visually-hidden">Documents for Approval</caption>
     <div class="table-responsive">
     <table class="table table-striped" id="for-approval-table">
