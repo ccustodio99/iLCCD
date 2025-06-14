@@ -27,7 +27,8 @@
         @foreach(request()->except(['ticket_status','tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']) as $name => $value)
             <input type="hidden" name="{{ $name }}" value="{{ $value }}">
         @endforeach
-        <select name="ticket_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
+        <label for="ticket_status" class="visually-hidden">Ticket Status</label>
+        <select id="ticket_status" name="ticket_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
             <option value="">All Statuses</option>
             @foreach(['open' => 'Open', 'escalated' => 'Escalated', 'converted' => 'Converted'] as $val => $label)
                 <option value="{{ $val }}" {{ request('ticket_status') === $val ? 'selected' : '' }}>{{ $label }}</option>
@@ -64,7 +65,8 @@
         @foreach(request()->except(['job_status','tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']) as $name => $value)
             <input type="hidden" name="{{ $name }}" value="{{ $value }}">
         @endforeach
-        <select name="job_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
+        <label for="job_status" class="visually-hidden">Job Status</label>
+        <select id="job_status" name="job_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
             <option value="">All Statuses</option>
             @foreach([
                 'pending_head' => 'Pending Head',
@@ -110,7 +112,8 @@
         @foreach(request()->except(['requisition_status','tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']) as $name => $value)
             <input type="hidden" name="{{ $name }}" value="{{ $value }}">
         @endforeach
-        <select name="requisition_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
+        <label for="requisition_status" class="visually-hidden">Requisition Status</label>
+        <select id="requisition_status" name="requisition_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
             <option value="">All Statuses</option>
             @foreach([\App\Models\Requisition::STATUS_PENDING_HEAD => 'Pending Head', \App\Models\Requisition::STATUS_APPROVED => 'Approved'] as $val => $label)
                 <option value="{{ $val }}" {{ request('requisition_status') === $val ? 'selected' : '' }}>{{ $label }}</option>
@@ -145,7 +148,8 @@
         @foreach(request()->except(['po_status','tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']) as $name => $value)
             <input type="hidden" name="{{ $name }}" value="{{ $value }}">
         @endforeach
-        <select name="po_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
+        <label for="po_status" class="visually-hidden">PO Status</label>
+        <select id="po_status" name="po_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
             <option value="">All Statuses</option>
             @foreach(\App\Models\PurchaseOrder::STATUSES as $status)
                 <option value="{{ $status }}" {{ request('po_status') === $status ? 'selected' : '' }}>
