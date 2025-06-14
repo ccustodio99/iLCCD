@@ -1,4 +1,3 @@
-@unless(request()->routeIs('dashboard'))
 <div id="mainMenu" class="offcanvas offcanvas-start" tabindex="-1" role="navigation" aria-labelledby="mainMenuLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="mainMenuLabel">{{ config('app.name') }}</h5>
@@ -48,4 +47,3 @@
         </nav>
     </div>
 </div>
-@endunless
