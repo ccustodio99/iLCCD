@@ -14,5 +14,5 @@ Announcements are managed under **Settings → Announcements**. Admins may creat
 ---
 
 ## 🚀 Navigation
-- Previous: [Admin Settings](admin-settings.md)
+- Previous: [System Settings](system-settings.md)
 - [Documentation Index](README.md)

@@ -13,7 +13,7 @@ The interface embraces seven core UX principles:
 1. **User-centricity** – forms preserve input and highlight required fields while
    confirmation messages guide each step.
 2. **Consistency** – all modules share the same palette and fonts. Administrators
-   customize these in the [Theme Settings](admin-settings.md#theme-settings) screen.
+   customize these in the [Theme Settings](system-settings.md#theme-settings) screen.
 3. **Hierarchy** – the active sidebar link and clear headings reveal where you
    are within the system.
 4. **Context** – breadcrumbs and page titles maintain orientation in multi-step
