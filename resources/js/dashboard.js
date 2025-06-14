@@ -29,6 +29,8 @@ async function loadDashboardData() {
                 return tr;
             });
             renderTableBody('tickets-body', rows);
+            const cnt = document.getElementById('count-tickets');
+            if (cnt) cnt.textContent = data.tickets.total;
         }
         if (data.jobOrders && data.jobOrders.data) {
             const rows = data.jobOrders.data.map(o => {
@@ -37,6 +39,8 @@ async function loadDashboardData() {
                 return tr;
             });
             renderTableBody('job-orders-body', rows);
+            const cnt = document.getElementById('count-jobs');
+            if (cnt) cnt.textContent = data.jobOrders.total;
         }
         if (data.requisitions && data.requisitions.data) {
             const rows = data.requisitions.data.map(r => {
@@ -45,6 +49,8 @@ async function loadDashboardData() {
                 return tr;
             });
             renderTableBody('requisitions-body', rows);
+            const cnt = document.getElementById('count-requisitions');
+            if (cnt) cnt.textContent = data.requisitions.total;
         }
         if (data.purchaseOrders && data.purchaseOrders.data) {
             const rows = data.purchaseOrders.data.map(p => {
@@ -53,6 +59,8 @@ async function loadDashboardData() {
                 return tr;
             });
             renderTableBody('purchase-orders-body', rows);
+            const cnt = document.getElementById('count-pos');
+            if (cnt) cnt.textContent = data.purchaseOrders.total;
         }
         if (data.incomingDocuments && data.incomingDocuments.data) {
             const rows = data.incomingDocuments.data.map(d => {
@@ -77,6 +85,13 @@ async function loadDashboardData() {
                 return tr;
             });
             renderTableBody('for-approval-body', rows);
+        }
+        const docsCnt = document.getElementById('count-docs');
+        if (docsCnt) {
+            const total = (data.incomingDocuments?.total || 0) +
+                (data.outgoingDocuments?.total || 0) +
+                (data.forApprovalDocuments?.total || 0);
+            docsCnt.textContent = total;
         }
         const statusEl = document.getElementById('dashboard-status');
         if (statusEl) {
