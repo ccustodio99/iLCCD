@@ -195,7 +195,10 @@
             const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
             menuToggle.setAttribute('aria-expanded', (!expanded).toString());
         });
-        mainMenuEl.addEventListener('hidden.bs.offcanvas', () => menuToggle.focus());
+        mainMenuEl.addEventListener('hidden.bs.offcanvas', () => {
+            menuToggle.setAttribute('aria-expanded', 'false');
+            menuToggle.focus();
+        });
     }
     const toggleFooterBtn = document.getElementById('toggle-footer');
     const footer = document.getElementById('app-footer');
