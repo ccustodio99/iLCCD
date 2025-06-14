@@ -94,3 +94,27 @@ These options control additional text displayed throughout the interface.
 - **Show Footer** – toggle visibility of the footer across the site
 
 The seed defaults set `header_text` to "La Consolacion College Daet", `footer_text` to "Empowering Christ-centered digital transformation", and `show_footer` to `true`. You can modify these under **Settings → Institution**.
+
+## Branding
+Upload the images that identify the system:
+
+- **Logo** – appears in the sidebar header
+- **Favicon** – used in the browser tab and bookmarks
+
+Open **Settings → Branding** to update these files.
+
+## Localization
+Set how dates and times appear across the application:
+
+- **Timezone** – server time zone for all schedules
+- **Date Format** – choose `YYYY-MM-DD`, `MM/DD/YYYY`, etc.
+
+Access this screen under **Settings → Localization**.
+
+## Notifications
+Manage the email alerts sent to users:
+
+- **Email Toggles** – enable or disable notifications for tickets, job orders, and more
+- **Templates** – customize the wording of outgoing messages
+
+Visit **Settings → Notifications** to adjust these settings.
