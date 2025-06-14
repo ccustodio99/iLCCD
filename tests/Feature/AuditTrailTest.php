@@ -100,3 +100,38 @@ it('logs watchers update and assignment actions', function () {
     expect(AuditTrail::where('auditable_id', $ticket->id)
         ->where('action', 'assigned')->exists())->toBeTrue();
 });
+
+it('filters logs by user and action', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+    $userA = User::factory()->create();
+    $userB = User::factory()->create();
+    $this->actingAs($admin);
+
+    AuditTrail::factory()->for($userA)->create(['action' => 'login']);
+    AuditTrail::factory()->for($userB)->create(['action' => 'logout']);
+
+    $response = $this->get('/audit-trails?user_id='.$userA->id.'&action=login');
+    $response->assertSee($userA->name);
+    expect($response->viewData('logs')->count())->toBe(1);
+});
+
+it('filters logs by date range', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+    $this->actingAs($admin);
+
+    AuditTrail::factory()->for($admin)->create([
+        'action' => 'ancient',
+        'created_at' => now()->subDays(10),
+    ]);
+    AuditTrail::factory()->for($admin)->create([
+        'action' => 'recent',
+        'created_at' => now()->subDays(1),
+    ]);
+
+    $from = now()->subDays(5)->format('Y-m-d');
+    $to = now()->format('Y-m-d');
+
+    $response = $this->get('/audit-trails?from='.$from.'&to='.$to);
+    $response->assertSee('recent');
+    expect($response->viewData('logs')->count())->toBe(1);
+});
