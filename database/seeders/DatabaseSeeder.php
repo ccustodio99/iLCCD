@@ -7,6 +7,7 @@ use Database\Seeders\DocumentCategorySeeder;
 use Database\Seeders\TicketCategorySeeder;
 use Database\Seeders\InventoryCategorySeeder;
 use Database\Seeders\JobOrderTypeSeeder;
+use Database\Seeders\SettingSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -22,6 +23,7 @@ class DatabaseSeeder extends Seeder
             InventoryCategorySeeder::class,
             JobOrderTypeSeeder::class,
             DocumentCategorySeeder::class,
+            SettingSeeder::class,
         ]);
         // Populate demo data
         $this->call(DemoSeeder::class);

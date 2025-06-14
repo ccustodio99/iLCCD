@@ -34,7 +34,7 @@
                 <label for="filter-status" class="form-label">Status</label>
                 <select id="filter-status" name="status" class="form-select">
                     <option value="">Any</option>
-                    <option value="active" @selected(request('status') === 'active')>Active</option>
+                    <option value="active" @selected(request('status') === 'active')>Enabled</option>
                     <option value="inactive" @selected(request('status') === 'inactive')>Inactive</option>
                 </select>
             </div>
