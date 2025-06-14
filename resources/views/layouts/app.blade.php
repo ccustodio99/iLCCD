@@ -188,10 +188,10 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
                 @endauth
             </ul>
+            <div id="breadcrumb-panel" class="bg-light p-2" style="display:none;">
+                @yield('breadcrumbs')
+            </div>
         </nav>
-        <div id="breadcrumb-panel" class="bg-light p-2" style="display:none;">
-            @yield('breadcrumbs')
-        </div>
         <div class="content-wrapper flex-grow-1">
             <main id="main-content" class="py-5">
                 @if(session('success'))
@@ -242,7 +242,7 @@
         toggleFooterBtn.textContent = visible ? 'Show Footer' : 'Hide Footer';
     });
     const breadcrumbToggle = document.getElementById('breadcrumb-toggle');
-    const breadcrumbPanel = document.getElementById('breadcrumb-panel');
+    const breadcrumbPanel = sidebar.querySelector('#breadcrumb-panel');
     if (breadcrumbToggle && breadcrumbPanel) {
         breadcrumbToggle.addEventListener('click', () => {
             const visible = breadcrumbPanel.style.display !== 'none';
