@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['showSidebar' => false])
 
 @php use Illuminate\Support\Str; @endphp
 
