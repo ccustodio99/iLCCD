@@ -76,9 +76,6 @@
             #menu-toggle {
                 display: block;
             }
-            header[role="banner"] {
-                margin-left: 0;
-            }
         }
         .cta { background-color: var(--color-accent); color: var(--color-primary); }
         footer {
@@ -127,20 +124,6 @@
         .card-quick .material-symbols-outlined {
             font-size: 2.5rem;
             color: var(--color-primary);
-        }
-        header[role="banner"] {
-            background-color: var(--color-primary);
-            color: #ffffff;
-            border-bottom: 4px solid var(--color-accent);
-            font-family: var(--font-primary), var(--font-secondary), sans-serif;
-            padding: 0.5rem 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 1090;
-            margin-left: 200px;
-        }
-        header[role="banner"] .notification-area {
-            color: var(--color-accent);
         }
     </style>
 </head>
@@ -218,7 +201,7 @@
 <button id="back-to-top" class="btn btn-secondary" aria-label="Back to top">&uarr;</button>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-    @vite('resources/js/app.js')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 @endif
 <script>
     const backToTop = document.getElementById('back-to-top');
@@ -228,28 +211,6 @@
     backToTop.addEventListener('click', () => {
         window.scrollTo({top: 0, behavior: 'smooth'});
     });
-    const menuToggle = document.getElementById('menu-toggle');
-    const sidebar = document.querySelector('.sidebar');
-    menuToggle.addEventListener('click', () => {
-        const expanded = sidebar.classList.toggle('active');
-        menuToggle.setAttribute('aria-expanded', expanded);
-    });
-    const toggleFooterBtn = document.getElementById('toggle-footer');
-    const footer = document.getElementById('app-footer');
-    toggleFooterBtn.addEventListener('click', () => {
-        const visible = footer.style.display !== 'none';
-        footer.style.display = visible ? 'none' : 'block';
-        toggleFooterBtn.textContent = visible ? 'Show Footer' : 'Hide Footer';
-    });
-    const breadcrumbToggle = document.getElementById('breadcrumb-toggle');
-    const breadcrumbPanel = sidebar.querySelector('#breadcrumb-panel');
-    if (breadcrumbToggle && breadcrumbPanel) {
-        breadcrumbToggle.addEventListener('click', () => {
-            const visible = breadcrumbPanel.style.display !== 'none';
-            breadcrumbPanel.style.display = visible ? 'none' : 'block';
-            breadcrumbToggle.setAttribute('aria-expanded', !visible);
-        });
-    }
 </script>
 @stack('scripts')
 </body>
