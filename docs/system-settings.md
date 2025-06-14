@@ -1,6 +1,6 @@
 # System Settings
 
-Administrators can manage baseline values used across the modules from the **Settings** section of the sidebar. Each record includes an `is_active` flag so items may be disabled without deletion. The Settings link is visible only for users with the **admin** role.
+Administrators can manage baseline values used across the modules from the **Settings** section of the navigation menu. Each record includes an `is_active` flag so items may be disabled without deletion. The Settings link is visible only for users with the **admin** role.
 
 ## Default Records
 The seeders populate several baseline records used throughout the system.
@@ -70,7 +70,7 @@ Administrators can customize the interface branding from this screen. Adjustable
 - **Home Page Heading** – large text shown on the landing page
 - **Home Page Tagline** – short tagline displayed below the heading
 
-Open **Settings → Theme** in the sidebar to access these controls. Color pickers
+Open **Settings → Theme** in the navigation menu to access these controls. Color pickers
 let administrators select the Primary and Accent shades, dropdown menus list
 available font families, and simple text boxes set the Home Page Heading and
 Tagline. *A screenshot of the Theme Settings form is available in the ITRC
@@ -98,7 +98,7 @@ The seed defaults set `header_text` to "La Consolacion College Daet", `footer_te
 ## Branding
 Upload the images that identify the system:
 
-- **Logo** – appears in the sidebar header
+- **Logo** – appears in the navigation menu header
 - **Favicon** – used in the browser tab and bookmarks
 
 Open **Settings → Branding** to update these files.

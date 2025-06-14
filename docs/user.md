@@ -58,7 +58,7 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
 ### 6. Profile Management
 - Each user can update their **name**, **email**, **contact information**, and password from the *My Profile* page.
 - Password changes require confirmation and log an audit entry.
-- Access via the Profile link in the left sidebar navigation when logged in.
+- Access via the Profile link in the navigation menu when logged in.
 
 ---
 
@@ -66,7 +66,7 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
 
 - Branded with **LCCD and CCS department logos** (located in `public/assets/images/LCCD.jpg` and `public/assets/images/CCS.jpg`).
 - Uses Bootstrap 5 for responsive design.
-- Consistent layout with sidebar navigation and profile dropdown.
+- Consistent layout with navigation menu and profile dropdown.
 - Accessible color scheme (dark navy/gold and cyan highlights).
 - Status indicators: green (active), gray (inactive), red (locked).
 
