@@ -3,6 +3,7 @@
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\TicketCategory;
+use App\Models\JobOrderType;
 
 it('allows authenticated user to create ticket', function () {
     $user = User::factory()->create();
@@ -65,7 +66,14 @@ it('converts ticket to job order', function () {
         'description' => 'Fix door',
     ]);
 
-    $response = $this->post("/tickets/{$ticket->id}/convert");
+    $parentType = JobOrderType::factory()->create();
+    $childType = JobOrderType::factory()->create(['parent_id' => $parentType->id]);
+
+    $response = $this->post("/tickets/{$ticket->id}/convert", [
+        'type_parent' => $parentType->id,
+        'job_type' => $childType->name,
+        'description' => 'Fix door',
+    ]);
 
     $response->assertRedirect('/job-orders');
 
@@ -88,7 +96,11 @@ it('converts ticket to requisition', function () {
         'description' => 'Need replacement bulb',
     ]);
 
-    $response = $this->post("/tickets/{$ticket->id}/requisition");
+    $response = $this->post("/tickets/{$ticket->id}/requisition", [
+        'item' => ['Projector Bulb'],
+        'quantity' => [1],
+        'purpose' => 'Need replacement bulb',
+    ]);
 
     $response->assertRedirect('/requisitions');
 
@@ -113,7 +125,11 @@ it('uses ticket owners department when converted by assignee', function () {
         'description' => 'Need new marker',
     ]);
 
-    $this->post("/tickets/{$ticket->id}/requisition")
+    $this->post("/tickets/{$ticket->id}/requisition", [
+        'item' => ['Whiteboard Marker'],
+        'quantity' => [1],
+        'purpose' => 'Need new marker',
+    ])
         ->assertRedirect('/requisitions');
 
     $req = App\Models\Requisition::where('ticket_id', $ticket->id)->first();
@@ -151,7 +167,13 @@ it('shows job order on ticket details after conversion', function () {
         'description' => 'Door repair',
     ]);
 
-    $this->post("/tickets/{$ticket->id}/convert");
+    $parent = JobOrderType::factory()->create();
+    $child = JobOrderType::factory()->create(['parent_id' => $parent->id]);
+    $this->post("/tickets/{$ticket->id}/convert", [
+        'type_parent' => $parent->id,
+        'job_type' => $child->name,
+        'description' => 'Door repair',
+    ]);
 
     $jobOrderId = $ticket->fresh()->jobOrder->id;
 
@@ -172,7 +194,11 @@ it('shows requisition on ticket details after conversion', function () {
         'description' => 'Need extra charger',
     ]);
 
-    $this->post("/tickets/{$ticket->id}/requisition");
+    $this->post("/tickets/{$ticket->id}/requisition", [
+        'item' => ['Laptop Charger'],
+        'quantity' => [1],
+        'purpose' => 'Need extra charger',
+    ]);
 
     $reqId = $ticket->fresh()->requisitions->first()->id;
 

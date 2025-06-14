@@ -19,9 +19,7 @@ class InventoryItemController extends Controller
 
         if ($request->filled('category')) {
             $categoryId = $request->input('category');
-            $query->whereHas('inventoryCategory', function ($q) use ($categoryId) {
-                $q->where('id', $categoryId)->orWhere('parent_id', $categoryId);
-            });
+            $query->whereHas('inventoryCategory', fn($q) => $q->where('id', $categoryId));
         }
 
         if ($request->filled('status')) {

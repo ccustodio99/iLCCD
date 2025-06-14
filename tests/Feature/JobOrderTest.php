@@ -147,7 +147,13 @@ it('shows ticket reference in job order details', function () {
         'description' => 'Aircon issue',
     ]);
 
-    $this->post("/tickets/{$ticket->id}/convert");
+    $parent = JobOrderType::factory()->create();
+    $child = JobOrderType::factory()->create(['parent_id' => $parent->id]);
+    $this->post("/tickets/{$ticket->id}/convert", [
+        'type_parent' => $parent->id,
+        'job_type' => $child->name,
+        'description' => 'Aircon issue',
+    ]);
 
     $response = $this->get('/job-orders');
 
