@@ -101,6 +101,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [SettingController::class, 'index'])->name('settings.index');
         Route::get('theme', [SettingController::class, 'editTheme'])->name('settings.theme');
         Route::put('theme', [SettingController::class, 'updateTheme'])->name('settings.theme.update');
+        Route::get('branding', [SettingController::class, 'editBranding'])->name('settings.branding');
+        Route::put('branding', [SettingController::class, 'updateBranding'])->name('settings.branding.update');
         Route::get('institution', [SettingController::class, 'editInstitution'])->name('settings.institution');
         Route::put('institution', [SettingController::class, 'updateInstitution'])->name('settings.institution.update');
         Route::get('localization', [SettingController::class, 'editLocalization'])->name('settings.localization');

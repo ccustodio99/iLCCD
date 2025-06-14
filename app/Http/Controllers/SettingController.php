@@ -117,4 +117,32 @@ class SettingController extends Controller
 
         return redirect()->route('settings.localization')->with('success', 'Localization settings updated');
     }
+
+    public function editBranding()
+    {
+        return view('settings.branding', [
+            'logo' => setting('logo_path'),
+            'favicon' => setting('favicon_path'),
+        ]);
+    }
+
+    public function updateBranding(Request $request)
+    {
+        $request->validate([
+            'logo' => 'nullable|image|max:2048',
+            'favicon' => 'nullable|image|max:1024',
+        ]);
+
+        if ($request->hasFile('logo')) {
+            $path = $request->file('logo')->store('branding', 'public');
+            \App\Models\Setting::set('logo_path', 'storage/' . $path);
+        }
+
+        if ($request->hasFile('favicon')) {
+            $path = $request->file('favicon')->store('branding', 'public');
+            \App\Models\Setting::set('favicon_path', 'storage/' . $path);
+        }
+
+        return redirect()->route('settings.branding')->with('success', 'Branding updated');
+    }
 }

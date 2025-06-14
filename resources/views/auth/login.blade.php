@@ -4,6 +4,9 @@
 
 @section('content')
 <div class="container" style="max-width: 400px;">
+    <div class="text-center mb-3">
+        <img src="{{ asset(setting('logo_path', 'assets/images/LCCD.jpg')) }}" alt="Logo" style="max-height:80px;">
+    </div>
     <h1 class="mb-4 text-center">Login</h1>
     @if ($errors->any())
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
