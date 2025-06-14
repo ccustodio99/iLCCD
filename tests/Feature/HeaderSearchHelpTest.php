@@ -7,6 +7,7 @@ it('shows new header elements on authenticated pages', function () {
     $this->actingAs($user);
     $response = $this->get('/dashboard');
     $response->assertDontSee('breadcrumb-toggle');
+    $response->assertSee('<nav aria-label="breadcrumb"', false);
     $response->assertSee('global-search', false);
     $response->assertSee(route('help'), false);
     $response->assertSee('notificationsModal', false);
