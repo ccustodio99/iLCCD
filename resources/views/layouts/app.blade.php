@@ -58,7 +58,9 @@
             color: var(--color-primary);
         }
         .content-wrapper {
+            @unless(request()->routeIs('dashboard'))
             margin-left: 200px;
+            @endunless
             padding-left: 1rem;
             padding-bottom: 5rem;
         }
@@ -140,7 +142,9 @@
             position: sticky;
             top: 0;
             z-index: 1090;
+            @unless(request()->routeIs('dashboard'))
             margin-left: 200px;
+            @endunless
         }
         header[role="banner"] .notification-area {
             color: var(--color-accent);
@@ -156,6 +160,7 @@
         @include('layouts.header')
     @endauth
     <div class="d-flex">
+        @unless(request()->routeIs('dashboard'))
         <nav class="sidebar" aria-label="Main navigation">
             <a class="navbar-brand d-flex align-items-center mb-3" href="{{ route('home') }}">
                 <img src="{{ asset(setting('logo_path', 'assets/images/LCCD.jpg')) }}" alt="LCCD Logo" width="40" class="me-2">
@@ -197,6 +202,7 @@
                 @endauth
             </ul>
         </nav>
+        @endunless
         <div class="content-wrapper flex-grow-1">
             <main id="main-content" class="py-5">
                 @if(session('success'))
