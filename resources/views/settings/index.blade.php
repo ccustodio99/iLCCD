@@ -46,6 +46,12 @@
                 <span class="fw-semibold">Theme</span>
             </a>
         </div>
+        <div class="col">
+            <a href="{{ route('settings.institution') }}" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Institution">
+                <span class="material-symbols-outlined d-block mb-2" aria-hidden="true">school</span>
+                <span class="fw-semibold">Institution</span>
+            </a>
+        </div>
     </div>
 </div>
 @include('settings.ticket-categories.modal-index', ['categories' => $ticketCategories])
