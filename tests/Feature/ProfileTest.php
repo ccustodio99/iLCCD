@@ -31,6 +31,23 @@ it('allows user to update profile', function () {
         ->and(Hash::check('Newpassword1!', $user->password))->toBeTrue();
 });
 
+it('does not change password when not provided', function () {
+    $user = User::factory()->create();
+    $oldHash = $user->password;
+    $this->actingAs($user);
+
+    $response = $this->put('/profile', [
+        'name' => 'Updated User',
+        'email' => 'updated@example.com',
+        'contact_info' => '09171234567',
+    ]);
+
+    $response->assertRedirect('/profile');
+    $response->assertSessionHas('success', 'Profile updated successfully.');
+    $user->refresh();
+    expect($user->password)->toBe($oldHash);
+});
+
 it('replaces old profile photo when updating', function () {
     Storage::fake('public');
     $user = User::factory()->create([
