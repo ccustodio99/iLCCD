@@ -83,7 +83,7 @@ The initial seed runs **`Database\\Seeders\\SettingSeeder`** which sets the foll
 - **Accent Color:** `#FFCD38`
 - **Primary Font:** Poppins
 - **Secondary Font:** Roboto
-- **Home Page Heading:** "Welcome to the LCCD Integrated Information System (CMS)"
+- **Home Page Heading:** "Welcome to the LCCD Integrated Information System"
 - **Home Page Tagline:** "Empowering Christ-centered digital transformation for La Consolacion College Daet—where technology, transparency, and service unite."
 
 ## Institution Settings
