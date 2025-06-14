@@ -13,7 +13,7 @@
                     <p class="mb-0">{{ setting('home_tagline', 'Empowering Christ-centered digital transformation for La Consolacion College Daet—where technology, transparency, and service unite.') }}</p>
                 </div>
                 <div class="col-md-6 p-4">
-                    <h2 class="h5 mb-3">Login <small class="text-muted">to continue to app</small></h2>
+                    <h2 class="h5 mb-3">Login to continue to app</h2>
                     @if ($errors->any())
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <ul class="mb-0">
