@@ -40,6 +40,7 @@
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
+    @include('layouts.header')
     <main id="main-content" class="py-5">
         @yield('content')
     </main>
