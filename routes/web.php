@@ -103,6 +103,8 @@ Route::middleware('auth')->group(function () {
         Route::put('theme', [SettingController::class, 'updateTheme'])->name('settings.theme.update');
         Route::get('institution', [SettingController::class, 'editInstitution'])->name('settings.institution');
         Route::put('institution', [SettingController::class, 'updateInstitution'])->name('settings.institution.update');
+        Route::get('localization', [SettingController::class, 'editLocalization'])->name('settings.localization');
+        Route::put('localization', [SettingController::class, 'updateLocalization'])->name('settings.localization.update');
 
         Route::resource('ticket-categories', TicketCategoryController::class)->except('show');
         Route::resource('document-categories', DocumentCategoryController::class)->except('show');

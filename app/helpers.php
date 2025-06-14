@@ -6,3 +6,11 @@ if (! function_exists('setting')) {
         return Setting::get($key, $default);
     }
 }
+
+if (! function_exists('format_date')) {
+    function format_date(\DateTimeInterface $date, ?string $format = null): string {
+        $format = $format ?? setting('date_format', 'Y-m-d');
+
+        return $date->format($format);
+    }
+}

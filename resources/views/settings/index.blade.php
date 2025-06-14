@@ -52,6 +52,12 @@
                 <span class="fw-semibold">Institution</span>
             </a>
         </div>
+        <div class="col">
+            <a href="{{ route('settings.localization') }}" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Localization">
+                <span class="material-symbols-outlined d-block mb-2" aria-hidden="true">schedule</span>
+                <span class="fw-semibold">Localization</span>
+            </a>
+        </div>
     </div>
 </div>
 @include('settings.ticket-categories.modal-index', ['categories' => $ticketCategories])
