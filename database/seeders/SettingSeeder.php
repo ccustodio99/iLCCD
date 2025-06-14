@@ -22,5 +22,13 @@ class SettingSeeder extends Seeder
         Setting::set('footer_text', 'Empowering Christ-centered digital transformation');
         Setting::set('timezone', 'Asia/Manila');
         Setting::set('date_format', 'Y-m-d');
+        Setting::set('notify_ticket_updates', true);
+        Setting::set('notify_job_order_status', true);
+        Setting::set('notify_requisition_status', true);
+        Setting::set('notify_low_stock', true);
+        Setting::set('template_ticket_updates', '{{ message }}');
+        Setting::set('template_job_order_status', '{{ message }}');
+        Setting::set('template_requisition_status', '{{ message }}');
+        Setting::set('template_low_stock', '{{ message }}');
     }
 }

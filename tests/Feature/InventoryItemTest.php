@@ -117,6 +117,8 @@ it('highlights out of stock items on index', function () {
 
 it('dispatches low stock notification when issuing causes quantity to drop below minimum', function () {
     Notification::fake();
+    \App\Models\Setting::set('notify_low_stock', true);
+    \App\Models\Setting::set('template_low_stock', '{{ message }}');
 
     $user = User::factory()->create(['role' => 'admin', 'department' => 'IT']);
     $head = User::factory()->create(['role' => 'head', 'department' => 'IT']);

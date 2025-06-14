@@ -17,12 +17,15 @@ class RequisitionStatusNotification extends Notification
 
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return setting('notify_requisition_status', true) ? ['mail'] : [];
     }
 
     public function toMail(object $notifiable): MailMessage
     {
+        $template = setting('template_requisition_status', '{{ message }}');
+        $content = str_replace('{{ message }}', $this->message, $template);
+
         return (new MailMessage)
-            ->line($this->message);
+            ->markdown('mail::message', ['slot' => $content]);
     }
 }

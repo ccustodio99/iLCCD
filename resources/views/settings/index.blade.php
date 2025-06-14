@@ -64,6 +64,12 @@
                 <span class="fw-semibold">Localization</span>
             </a>
         </div>
+        <div class="col">
+            <a href="{{ route('settings.notifications') }}" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Notifications">
+                <span class="material-symbols-outlined d-block mb-2" aria-hidden="true">notifications</span>
+                <span class="fw-semibold">Notifications</span>
+            </a>
+        </div>
     </div>
 </div>
 @include('settings.ticket-categories.modal-index', ['categories' => $ticketCategories])

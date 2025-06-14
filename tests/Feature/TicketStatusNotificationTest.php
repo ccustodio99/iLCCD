@@ -8,6 +8,8 @@ use App\Notifications\TicketStatusNotification;
 
 it('dispatches status notifications on ticket events', function () {
     Notification::fake();
+    \App\Models\Setting::set('notify_ticket_updates', true);
+    \App\Models\Setting::set('template_ticket_updates', '{{ message }}');
 
     $owner = User::factory()->create();
     $assignee = User::factory()->create();
