@@ -1,6 +1,7 @@
 <?php
 
-test('landing page contains link to login', function () {
+test('landing page displays login form', function () {
     $response = $this->get('/');
-    $response->assertSee(route('login'));
+    $response->assertSee('Login');
+    $response->assertSee('action="' . route('login') . '"', false);
 });
