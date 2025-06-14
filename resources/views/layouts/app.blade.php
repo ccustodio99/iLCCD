@@ -15,8 +15,13 @@
         :root {
             --color-primary: {{ setting('color_primary', '#1B2660') }};
             --color-accent: {{ setting('color_accent', '#FFCD38') }};
+            --font-primary: '{{ setting('font_primary', 'Poppins') }}';
+            --font-secondary: '{{ setting('font_secondary', 'Roboto') }}';
         }
-        body { font-family: '{{ setting('font_primary', 'Poppins') }}', '{{ setting('font_secondary', 'Roboto') }}', 'Montserrat', sans-serif; background-color: #f8f9fa; }
+        body {
+            font-family: var(--font-primary), var(--font-secondary), 'Montserrat', sans-serif;
+            background-color: #f8f9fa;
+        }
         .sidebar {
             width: 200px;
             min-height: 100vh;
@@ -123,11 +128,25 @@
             font-size: 2.5rem;
             color: var(--color-primary);
         }
+        header[role="banner"] {
+            background-color: var(--color-primary);
+            color: #ffffff;
+            border-bottom: 4px solid var(--color-accent);
+            font-family: var(--font-primary), var(--font-secondary), sans-serif;
+            padding: 0.5rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1090;
+        }
+        header[role="banner"] .notification-area {
+            color: var(--color-accent);
+        }
     </style>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <button id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    @include('layouts.header')
     <div class="d-flex">
         <nav class="sidebar" aria-label="Main navigation">
             <a class="navbar-brand d-flex align-items-center mb-3" href="{{ route('home') }}">
@@ -172,7 +191,6 @@
         </nav>
         <div class="content-wrapper flex-grow-1">
             <main id="main-content" class="py-5">
-                <div class="text-center mb-3 fw-semibold">{{ setting('header_text') }}</div>
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}
