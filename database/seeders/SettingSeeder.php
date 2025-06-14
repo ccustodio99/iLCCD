@@ -13,7 +13,7 @@ class SettingSeeder extends Seeder
         Setting::set('color_accent', '#FFCD38');
         Setting::set('font_primary', 'Poppins');
         Setting::set('font_secondary', 'Roboto');
-        Setting::set('home_heading', 'Welcome to the LCCD Integrated Information System (CMS)');
+        Setting::set('home_heading', 'Welcome to the LCCD Integrated Information System');
         Setting::set('home_tagline', 'Empowering Christ-centered digital transformation for La Consolacion College Daet—where technology, transparency, and service unite.');
         Setting::set('institution_address', 'Gov. Panotes Avenue, Daet, Camarines Norte 4600');
         Setting::set('institution_phone', '(054) 571-3456');

@@ -16,8 +16,8 @@
 <div class="container-fluid">
     <div class="row g-0 min-vh-100">
         <div class="col-md-6 d-flex flex-column justify-content-center align-items-center text-center p-5 hero-left">
-            <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Logo" class="img-fluid mb-4" style="max-width:200px;">
-            <h1 class="display-5 fw-bold mb-3">{{ setting('home_heading', 'Welcome to the LCCD Integrated Information System (CMS)') }}</h1>
+            <img src="{{ asset('assets/images/LCCD.jpg') }}" alt="LCCD Logo" class="img-fluid mb-4" style="max-width:200px;">
+            <h1 class="display-5 fw-bold mb-3">{{ setting('home_heading', 'Welcome to the LCCD Integrated Information System') }}</h1>
             <p class="lead">{{ setting('home_tagline', 'Empowering Christ-centered digital transformation for La Consolacion College Daet—where technology, transparency, and service unite.') }}</p>
         </div>
         <div class="col-md-6 d-flex align-items-center justify-content-center p-5">

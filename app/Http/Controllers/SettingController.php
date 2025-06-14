@@ -44,7 +44,7 @@ class SettingController extends Controller
             'accent' => setting('color_accent', '#FFCD38'),
             'font_primary' => setting('font_primary', 'Poppins'),
             'font_secondary' => setting('font_secondary', 'Roboto'),
-            'home_heading' => setting('home_heading', 'Welcome to the LCCD Integrated Information System (CMS)'),
+            'home_heading' => setting('home_heading', 'Welcome to the LCCD Integrated Information System'),
             'home_tagline' => setting('home_tagline', 'Empowering Christ-centered digital transformation for La Consolacion College Daet—where technology, transparency, and service unite.'),
         ]);
     }
