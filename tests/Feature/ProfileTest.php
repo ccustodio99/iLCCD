@@ -24,6 +24,7 @@ it('allows user to update profile', function () {
         'password_confirmation' => 'Newpassword1!',
     ]);
     $response->assertRedirect('/profile');
+    $response->assertSessionHas('success', 'Profile updated successfully.');
     $user->refresh();
     expect($user->name)->toBe('Updated User')
         ->and($user->contact_info)->toBe('09171234567')
