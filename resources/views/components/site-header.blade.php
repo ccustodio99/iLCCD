@@ -9,7 +9,7 @@
             <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Department Logo" width="40" class="me-2">
         </a>
         <div class="d-flex flex-column">
-            <h1 class="h6 mb-0 header-title">{!! nl2br(e(setting('header_text'))) !!}</h1>
+            <h1 class="h6 mb-0 my-auto header-title">{!! nl2br(e(setting('header_text'))) !!}</h1>
             @include('components.breadcrumbs', ['links' => $breadcrumbs])
         </div>
         <nav class="d-flex align-items-center ms-auto" aria-label="Global">
