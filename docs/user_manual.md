@@ -15,7 +15,7 @@ The User Manual provides a step-by-step guide for everyday actions in the LCCD I
 
 ## 🧭 Navigating the Dashboard
 - After signing in, the dashboard shows shortcuts to Tickets, Job Orders, Requisitions, Inventory, Purchase Orders, and Documents.
-- Use the hamburger button at the top of any page to open the navigation menu. This off-canvas panel lists all modules.
+- On small screens, use the hamburger button at the top of any page to open the navigation menu. On larger screens the menu is visible at all times.
 - Notifications appear in the header for pending approvals or assigned tasks.
 - Use the profile menu to update your **contact information** (e.g., phone number) or change your password.
 
