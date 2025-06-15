@@ -8,7 +8,9 @@ it('allows admin to update institution settings', function () {
 
     $data = [
         'header_text' => "Header\nLine2",
-        'footer_text' => "Footer\nLine2",
+
+        'footer_text' => "Footer\n© {year} Line2",
+
         'show_footer' => false,
     ];
 

@@ -16,7 +16,7 @@ class SettingSeeder extends Seeder
         Setting::set('home_heading', 'Welcome to the LCCD Integrated Information System');
         Setting::set('home_tagline', 'Empowering Christ-centered digital transformation for La Consolacion College Daet—where technology, transparency, and service unite.');
         Setting::set('header_text', 'La Consolacion College Daet');
-        Setting::set('footer_text', 'Empowering Christ-centered digital transformation');
+        Setting::set('footer_text', "Empowering Christ-centered digital transformation\n© {year} La Consolacion College Daet CMS");
         Setting::set('show_footer', true);
         Setting::set('timezone', 'Asia/Manila');
         Setting::set('date_format', 'Y-m-d');

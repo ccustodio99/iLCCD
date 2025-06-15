@@ -74,7 +74,7 @@ class SettingController extends Controller
     {
         return view('settings.institution', [
             'header_text' => setting('header_text', 'La Consolacion College Daet'),
-            'footer_text' => setting('footer_text', 'Empowering Christ-centered digital transformation'),
+            'footer_text' => setting('footer_text', "Empowering Christ-centered digital transformation\n© {year} La Consolacion College Daet CMS"),
             'show_footer' => setting('show_footer', true),
         ]);
     }

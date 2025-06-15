@@ -90,10 +90,11 @@ The initial seed runs **`Database\\Seeders\\SettingSeeder`** which sets the foll
 These options control additional text displayed throughout the interface.
 
 - **Header** – small line shown near the top of each page. Use `\n` for a new line.
-- **Footer** – message displayed above the copyright notice. Use `\n` for a new line.
+- **Footer** – message displayed above the copyright notice. Use `\n` for a new line. The token `{year}` is replaced with the current year when displayed.
+
 - **Show Footer** – toggle visibility of the footer across the site.
 
-The seed defaults set `header_text` to "La Consolacion College Daet", `footer_text` to "Empowering Christ-centered digital transformation", and `show_footer` to `true`. You can modify these under **Settings → Institution**.
+The seed defaults set `header_text` to "La Consolacion College Daet", `footer_text` to "Empowering Christ-centered digital transformation\n© {year} La Consolacion College Daet CMS", and `show_footer` to `true`. You can modify these under **Settings → Institution**.
 
 ## Branding
 Upload the images that identify the system:
