@@ -1,8 +1,10 @@
 <div id="mainMenu" class="offcanvas offcanvas-start offcanvas-lg" tabindex="-1" role="navigation" aria-labelledby="mainMenuLabel" data-bs-scroll="true" data-bs-backdrop="false">
     <div class="offcanvas-header">
+
         <h5 class="offcanvas-title text-center fw-bold mb-0" id="mainMenuLabel">
             <span id="sidebar-date">{{ \Carbon\Carbon::now(setting('timezone'))->format('M. d, y') }}</span><br>
-            <span id="sidebar-time">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i A') }}</span>
+            <span id="sidebar-time">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i:s A') }}</span>
+
         </h5>
         <button type="button" class="btn-close d-lg-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
@@ -10,8 +12,9 @@
         <nav class="sidebar" aria-label="Main navigation">
             <div class="navbar-brand d-flex flex-column align-items-center mb-3">
                 <span id="sidebar-date-link" class="fw-semibold">{{ \Carbon\Carbon::now(setting('timezone'))->format('M. d, y') }}</span>
-                <span id="sidebar-time-link" class="text-muted">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i A') }}</span>
+                <span id="sidebar-time-link" class="text-muted">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i:s A') }}</span>
             </div>
+
             <ul class="nav flex-column">
                 @auth
                     <li class="nav-item"><a class="nav-link @if(request()->routeIs('dashboard')) active @endif" href="{{ route('dashboard') }}" @if(request()->routeIs('dashboard')) aria-current="page" @endif>Dashboard</a></li>
@@ -59,6 +62,7 @@ const yearFormatter = new Intl.DateTimeFormat('en-US', { year: '2-digit', timeZo
 const timeFormatter = new Intl.DateTimeFormat('en-US', {
     hour: '2-digit',
     minute: '2-digit',
+    second: '2-digit',
     hour12: true,
     timeZone,
 });
@@ -67,6 +71,7 @@ function updateSidebarDateTime() {
     const now = new Date();
     const date = `${monthFormatter.format(now)}. ${dayFormatter.format(now)}, ${yearFormatter.format(now)}`;
     const time = timeFormatter.format(now);
+
     document.querySelectorAll('#sidebar-date, #sidebar-date-link').forEach(el => el.textContent = date);
     document.querySelectorAll('#sidebar-time, #sidebar-time-link').forEach(el => el.textContent = time);
 }
