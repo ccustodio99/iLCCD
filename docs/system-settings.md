@@ -84,7 +84,7 @@ All appearance settings are grouped together so administrators can update the co
 - **Logo** – appears in the navigation menu header
 - **Favicon** – used in the browser tab and bookmarks
 
-Open **Settings → Theme**, **Settings → Branding**, or **Settings → Institution** in the navigation menu to modify these values. Color pickers let administrators select the Primary and Accent shades, dropdown menus list available font families, and simple text boxes set the Home Page Heading and Tagline. *A screenshot of the Theme Settings form is available in the ITRC Dropbox.*
+Open **Settings → Appearance** in the navigation menu to modify these values. Color pickers let administrators select the Primary and Accent shades, dropdown menus list available font families, simple text boxes set the Home Page Heading and Tagline, and file upload fields manage logos and favicons. *A screenshot of the Appearance Settings form is available in the ITRC Dropbox.*
 
 ### Theme Setting Defaults
 The initial seed runs **`Database\\Seeders\\SettingSeeder`** which sets the following values:
