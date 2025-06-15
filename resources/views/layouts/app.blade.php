@@ -79,6 +79,13 @@
             .content-wrapper {
                 margin-left: 200px;
             }
+            #mainMenu {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                transform: none !important;
+            }
         }
 
         @media (max-width: 992px) {
