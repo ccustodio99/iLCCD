@@ -1,8 +1,8 @@
 <div id="mainMenu" class="offcanvas offcanvas-start offcanvas-lg" tabindex="-1" role="navigation" aria-labelledby="mainMenuLabel" data-bs-scroll="true" data-bs-backdrop="false">
     <div class="offcanvas-header">
-
-        <h5 class="offcanvas-title text-center fw-bold mb-0" id="mainMenuLabel">
-            <span id="sidebar-date">{{ \Carbon\Carbon::now(setting('timezone'))->format('M. d, y') }}</span><br>
+        <h5 class="offcanvas-title text-center fw-bold mb-0 text-white" id="mainMenuLabel">
+            <div class="navbar-brand d-flex flex-column align-items-center mb-3 text-white">
+                <span id="sidebar-time-link">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i A') }}</span>
             <span id="sidebar-time">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i:s A') }}</span>
 
         </h5>
