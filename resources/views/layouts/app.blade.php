@@ -89,14 +89,9 @@
         }
 
         @media (max-width: 992px) {
+            /* Let Bootstrap's offcanvas control the menu position */
             .sidebar {
-                left: -200px;
-            }
-            .sidebar.active {
                 left: 0;
-            }
-            nav.sidebar.active + .content-wrapper {
-                margin-left: 0;
             }
             .content-wrapper {
                 margin-left: 0;
