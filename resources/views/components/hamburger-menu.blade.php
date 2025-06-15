@@ -1,4 +1,4 @@
-<div id="mainMenu" class="offcanvas offcanvas-start offcanvas-lg" tabindex="-1" role="navigation" aria-labelledby="mainMenuLabel">
+<div id="mainMenu" class="offcanvas offcanvas-start offcanvas-lg show" tabindex="-1" role="navigation" aria-labelledby="mainMenuLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="mainMenuLabel">{{ config('app.name') }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
