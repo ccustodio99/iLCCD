@@ -188,7 +188,9 @@
                 @yield('content')
             </main>
             <footer id="app-footer" class="text-center" style="{{ setting('show_footer', true) ? '' : 'display:none;' }}">
+
                 <div class="mb-1">{!! nl2br(e(str_replace('{year}', date('Y'), setting('footer_text')))) !!}</div>
+
             </footer>
             <button id="toggle-footer" class="btn btn-secondary" aria-label="Toggle footer">
                 {{ setting('show_footer', true) ? 'Hide Footer' : 'Show Footer' }}
