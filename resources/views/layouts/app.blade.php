@@ -38,12 +38,15 @@
             display: block;
             background: transparent;
             border: none;
-            color: var(--color-primary);
+            color: #fff;
             font-size: 1.5rem;
             position: fixed;
             top: 10px;
             left: 10px;
             z-index: 1100;
+        }
+        #menu-toggle:hover {
+            color: var(--color-accent);
         }
 
         @media (min-width: 992px) {
