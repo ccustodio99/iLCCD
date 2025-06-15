@@ -166,6 +166,12 @@
         header[role="banner"] .notification-area {
             color: var(--color-accent);
         }
+        .header-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body>
