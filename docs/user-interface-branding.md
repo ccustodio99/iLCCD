@@ -13,7 +13,7 @@ The interface embraces seven core UX principles:
 1. **User-centricity** – forms preserve input and highlight required fields while
    confirmation messages guide each step.
 2. **Consistency** – all modules share the same palette and fonts. Administrators
-   customize these in the [Theme Settings](system-settings.md#theme-settings) screen.
+  customize these in the [Appearance Settings](system-settings.md#theme-branding--institution) screen.
 3. **Hierarchy** – the active navigation menu link and clear headings reveal where you
    are within the system.
 4. **Context** – breadcrumbs and page titles maintain orientation in multi-step
@@ -56,4 +56,4 @@ supporting the project's emphasis on user-centric feedback.
 - Previous: [User Management Module](user.md)
 - Next: [Ticketing System Module](Ticketing_System_Module.md)
 - [Documentation Index](README.md)
-- [Theme Settings](system-settings.md#theme-settings)
+- [Appearance Settings](system-settings.md#theme-branding--institution)

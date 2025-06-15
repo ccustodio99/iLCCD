@@ -26,13 +26,7 @@
             <x-settings-link :href="route('announcements.index')" icon="campaign" label="Announcements" />
         </div>
         <div class="col">
-            <x-settings-link :href="route('settings.theme')" icon="color_lens" label="Theme" />
-        </div>
-        <div class="col">
-            <x-settings-link :href="route('settings.branding')" icon="image" label="Branding" />
-        </div>
-        <div class="col">
-            <x-settings-link :href="route('settings.institution')" icon="school" label="Institution" />
+            <x-settings-link :href="route('settings.theme')" icon="color_lens" label="Appearance" />
         </div>
         <div class="col">
             <x-settings-link :href="route('settings.localization')" icon="schedule" label="Localization" />

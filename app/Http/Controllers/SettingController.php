@@ -37,16 +37,26 @@ class SettingController extends Controller
         ]);
     }
 
-    public function editTheme()
+    private function appearanceData(): array
     {
-        return view('settings.theme', [
+        return [
             'primary' => setting('color_primary', '#1B2660'),
             'accent' => setting('color_accent', '#FFCD38'),
             'font_primary' => setting('font_primary', 'Poppins'),
             'font_secondary' => setting('font_secondary', 'Roboto'),
             'home_heading' => setting('home_heading', 'Welcome to the LCCD Integrated Information System'),
             'home_tagline' => setting('home_tagline', 'Empowering Christ-centered digital transformation for La Consolacion College Daet—where technology, transparency, and service unite.'),
-        ]);
+            'header_text' => setting('header_text', 'La Consolacion College Daet'),
+            'footer_text' => setting('footer_text', "Empowering Christ-centered digital transformation\n© {year} La Consolacion College Daet CMS"),
+            'show_footer' => setting('show_footer', true),
+            'logo' => setting('logo_path'),
+            'favicon' => setting('favicon_path'),
+        ];
+    }
+
+    public function editTheme()
+    {
+        return view('settings.appearance', $this->appearanceData());
     }
 
     public function updateTheme(Request $request)
@@ -72,11 +82,7 @@ class SettingController extends Controller
 
     public function editInstitution()
     {
-        return view('settings.institution', [
-            'header_text' => setting('header_text', 'La Consolacion College Daet'),
-            'footer_text' => setting('footer_text', "Empowering Christ-centered digital transformation\n© {year} La Consolacion College Daet CMS"),
-            'show_footer' => setting('show_footer', true),
-        ]);
+        return view('settings.appearance', $this->appearanceData());
     }
 
     public function updateInstitution(Request $request)
@@ -120,10 +126,7 @@ class SettingController extends Controller
 
     public function editBranding()
     {
-        return view('settings.branding', [
-            'logo' => setting('logo_path'),
-            'favicon' => setting('favicon_path'),
-        ]);
+        return view('settings.appearance', $this->appearanceData());
     }
 
     public function updateBranding(Request $request)
