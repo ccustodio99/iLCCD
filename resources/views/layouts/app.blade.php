@@ -217,6 +217,11 @@
     const mainMenuEl = document.getElementById('mainMenu');
     if (menuToggle && mainMenuEl) {
         const offcanvasMenu = new bootstrap.Offcanvas(mainMenuEl);
+        if (window.innerWidth >= 992) {
+            offcanvasMenu.show();
+        } else {
+            offcanvasMenu.hide();
+        }
         const toggleOffcanvas = () => {
             if (window.innerWidth < 992) {
                 offcanvasMenu.toggle();
@@ -239,6 +244,8 @@
         window.addEventListener('resize', () => {
             if (window.innerWidth >= 992) {
                 offcanvasMenu.show();
+            } else {
+                offcanvasMenu.hide();
             }
         });
     }
