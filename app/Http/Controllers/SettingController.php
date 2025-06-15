@@ -73,9 +73,6 @@ class SettingController extends Controller
     public function editInstitution()
     {
         return view('settings.institution', [
-            'address' => setting('institution_address', 'Gov. Panotes Avenue, Daet, Camarines Norte 4600'),
-            'phone' => setting('institution_phone', '(054) 571-3456'),
-            'email' => setting('helpdesk_email', 'helpdesk@lccd.edu.ph'),
             'header_text' => setting('header_text', 'La Consolacion College Daet'),
             'footer_text' => setting('footer_text', 'Empowering Christ-centered digital transformation'),
             'show_footer' => setting('show_footer', true),
@@ -85,17 +82,11 @@ class SettingController extends Controller
     public function updateInstitution(Request $request)
     {
         $data = $request->validate([
-            'institution_address' => 'required|string',
-            'institution_phone' => 'required|string',
-            'helpdesk_email' => 'required|email',
             'header_text' => 'required|string',
             'footer_text' => 'required|string',
             'show_footer' => 'boolean',
         ]);
 
-        \App\Models\Setting::set('institution_address', $data['institution_address']);
-        \App\Models\Setting::set('institution_phone', $data['institution_phone']);
-        \App\Models\Setting::set('helpdesk_email', $data['helpdesk_email']);
         \App\Models\Setting::set('header_text', $data['header_text']);
         \App\Models\Setting::set('footer_text', $data['footer_text']);
         \App\Models\Setting::set('show_footer', $request->boolean('show_footer'));
