@@ -79,6 +79,13 @@
             .content-wrapper {
                 margin-left: 200px;
             }
+            #mainMenu {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                transform: none !important;
+            }
         }
 
         @media (max-width: 992px) {
@@ -210,14 +217,24 @@
     const mainMenuEl = document.getElementById('mainMenu');
     if (menuToggle && mainMenuEl) {
         const offcanvasMenu = new bootstrap.Offcanvas(mainMenuEl);
-        menuToggle.addEventListener('click', () => {
-            offcanvasMenu.toggle();
-            const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
-            menuToggle.setAttribute('aria-expanded', (!expanded).toString());
-        });
+        const toggleOffcanvas = () => {
+            if (window.innerWidth < 992) {
+                offcanvasMenu.toggle();
+                const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+                menuToggle.setAttribute('aria-expanded', (!expanded).toString());
+            }
+        };
+        menuToggle.addEventListener('click', toggleOffcanvas);
         mainMenuEl.addEventListener('hidden.bs.offcanvas', () => {
-            menuToggle.setAttribute('aria-expanded', 'false');
-            menuToggle.focus();
+            if (window.innerWidth < 992) {
+                menuToggle.setAttribute('aria-expanded', 'false');
+                menuToggle.focus();
+            }
+        });
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 992) {
+                offcanvasMenu.show();
+            }
         });
     }
     const toggleFooterBtn = document.getElementById('toggle-footer');
