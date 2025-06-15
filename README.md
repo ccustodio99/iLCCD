@@ -160,7 +160,7 @@ Every action is traceable; every step is value-aligned.
 - **Logos:** `public/assets/images/LCCD.jpg`, `public/assets/images/CCS.jpg`
 - **Colors:** Navy Blue (#1B2660), Gold (#FFCD38), CCS Cyan (#20BFEA), Red (#E5403A), White, Gray
 - **Fonts:** Poppins, Roboto, Montserrat
-- **UI:** Mobile-first, Bootstrap 5, intuitive role-based menus, quick actions, breadcrumbs
+- **UI:** Mobile-first, Bootstrap 5, intuitive role-based menus, breadcrumbs
 - **Accessibility:** WCAG 2.1 color contrast, keyboard navigation, screen reader friendly, alt text everywhere
 - **Feedback:** Clear alerts, success/error icons, always inform next steps
 - **Performance:** Dashboard tables load via AJAX to keep page transitions quick
