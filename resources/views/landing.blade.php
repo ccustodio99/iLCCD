@@ -1,3 +1,5 @@
+@php($hideHeader = true)
+@php($hideSkipLink = true)
 @extends('layouts.guest')
 
 @section('title', 'Welcome')

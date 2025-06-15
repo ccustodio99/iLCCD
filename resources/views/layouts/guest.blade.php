@@ -39,8 +39,12 @@
     </style>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    @include('layouts.header')
+    @unless(isset($hideSkipLink) && $hideSkipLink)
+        <a href="#main-content" class="skip-link">Skip to main content</a>
+    @endunless
+    @unless(isset($hideHeader) && $hideHeader)
+        @include('layouts.header')
+    @endunless
     <main id="main-content" class="py-5">
         @yield('content')
     </main>
