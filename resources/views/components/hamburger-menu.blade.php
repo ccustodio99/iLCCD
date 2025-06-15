@@ -1,12 +1,16 @@
 <div id="mainMenu" class="offcanvas offcanvas-start offcanvas-lg" tabindex="-1" role="navigation" aria-labelledby="mainMenuLabel" data-bs-scroll="true" data-bs-backdrop="false">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="mainMenuLabel">{{ config('app.name') }}</h5>
+        <h5 class="offcanvas-title text-center" id="mainMenuLabel">
+            <span id="sidebar-date">{{ \Carbon\Carbon::now(setting('timezone'))->format('M. d, y') }}</span><br>
+            <span id="sidebar-time">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i A') }}</span>
+        </h5>
         <button type="button" class="btn-close d-lg-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body p-0">
         <nav class="sidebar" aria-label="Main navigation">
-            <a class="navbar-brand d-flex align-items-center mb-3" href="{{ route('home') }}">
-                {{ config('app.name') }}
+            <a class="navbar-brand d-flex flex-column align-items-start mb-3" href="{{ route('home') }}">
+                <span id="sidebar-date-link">{{ \Carbon\Carbon::now(setting('timezone'))->format('M. d, y') }}</span>
+                <span id="sidebar-time-link">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i A') }}</span>
             </a>
             <ul class="nav flex-column">
                 @auth
@@ -46,3 +50,19 @@
         </nav>
     </div>
 </div>
+@push('scripts')
+<script>
+const timeZone = @json(setting('timezone', config('app.timezone')));
+function updateSidebarDateTime() {
+    const now = new Date();
+    const dateOptions = { month: 'short', day: '2-digit', year: '2-digit', timeZone };
+    const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true, timeZone };
+    const date = new Intl.DateTimeFormat('en-US', dateOptions).format(now).replace(',', '.');
+    const time = new Intl.DateTimeFormat('en-US', timeOptions).format(now);
+    document.querySelectorAll('#sidebar-date, #sidebar-date-link').forEach(el => el.textContent = date);
+    document.querySelectorAll('#sidebar-time, #sidebar-time-link').forEach(el => el.textContent = time);
+}
+updateSidebarDateTime();
+setInterval(updateSidebarDateTime, 60000);
+</script>
+@endpush
