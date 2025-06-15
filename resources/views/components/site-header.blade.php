@@ -26,7 +26,9 @@
         </button>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
             <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
-            <li><a class="dropdown-item" href="{{ route('settings.index') }}">Settings</a></li>
+            @if(auth()->user()->role === 'admin')
+                <li><a class="dropdown-item" href="{{ route('settings.index') }}">Settings</a></li>
+            @endif
             <li><a class="dropdown-item" href="{{ route('help') }}">Help</a></li>
             <li><hr class="dropdown-divider"></li>
             <li>
