@@ -2,7 +2,8 @@
     <div class="offcanvas-header">
         <h5 class="offcanvas-title text-center fw-bold mb-0 text-white" id="mainMenuLabel">
             <span id="sidebar-date">{{ \Carbon\Carbon::now(setting('timezone'))->format('M. d, y') }}</span><br>
-            <span id="sidebar-time">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i A') }}</span>
+            <span id="sidebar-time">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i:s A') }}</span>
+
         </h5>
         <button type="button" class="btn-close d-lg-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
@@ -10,7 +11,7 @@
         <nav class="sidebar" aria-label="Main navigation">
             <div class="navbar-brand d-flex flex-column align-items-center mb-3 text-white">
                 <span id="sidebar-date-link" class="fw-semibold">{{ \Carbon\Carbon::now(setting('timezone'))->format('M. d, y') }}</span>
-                <span id="sidebar-time-link">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i A') }}</span>
+                <span id="sidebar-time-link">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i:s A') }}</span>
             </div>
             <ul class="nav flex-column">
                 @auth
@@ -59,6 +60,7 @@ const yearFormatter = new Intl.DateTimeFormat('en-US', { year: '2-digit', timeZo
 const timeFormatter = new Intl.DateTimeFormat('en-US', {
     hour: '2-digit',
     minute: '2-digit',
+    second: '2-digit',
     hour12: true,
     timeZone,
 });
