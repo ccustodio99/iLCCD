@@ -224,7 +224,12 @@
                 menuToggle.setAttribute('aria-expanded', (!expanded).toString());
             }
         };
-        menuToggle.addEventListener('click', toggleOffcanvas);
+       menuToggle.addEventListener('click', toggleOffcanvas);
+        mainMenuEl.addEventListener('hide.bs.offcanvas', (event) => {
+            if (window.innerWidth >= 992) {
+                event.preventDefault();
+            }
+        });
         mainMenuEl.addEventListener('hidden.bs.offcanvas', () => {
             if (window.innerWidth < 992) {
                 menuToggle.setAttribute('aria-expanded', 'false');

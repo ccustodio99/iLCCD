@@ -1,7 +1,7 @@
 <div id="mainMenu" class="offcanvas offcanvas-start offcanvas-lg show" tabindex="-1" role="navigation" aria-labelledby="mainMenuLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="mainMenuLabel">{{ config('app.name') }}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <button type="button" class="btn-close d-lg-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body p-0">
         <nav class="sidebar" aria-label="Main navigation">
