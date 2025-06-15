@@ -45,6 +45,12 @@
             left: 10px;
             z-index: 1100;
         }
+
+        @media (min-width: 992px) {
+            #menu-toggle {
+                display: none;
+            }
+        }
         .sidebar a {
             color: #ffffff;
             text-decoration: none;
@@ -65,14 +71,14 @@
             padding-bottom: 5rem;
         }
 
-        @media (min-width: 768px) {
+        @media (min-width: 992px) {
             header[role="banner"],
             .content-wrapper {
                 margin-left: 200px;
             }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             .sidebar {
                 left: -200px;
             }
