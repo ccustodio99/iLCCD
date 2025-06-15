@@ -1,4 +1,4 @@
-<div id="mainMenu" class="offcanvas offcanvas-start offcanvas-lg show" tabindex="-1" role="navigation" aria-labelledby="mainMenuLabel">
+<div id="mainMenu" class="offcanvas offcanvas-start offcanvas-lg" tabindex="-1" role="navigation" aria-labelledby="mainMenuLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="mainMenuLabel">{{ config('app.name') }}</h5>
         <button type="button" class="btn-close d-lg-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -6,8 +6,7 @@
     <div class="offcanvas-body p-0">
         <nav class="sidebar" aria-label="Main navigation">
             <a class="navbar-brand d-flex align-items-center mb-3" href="{{ route('home') }}">
-                <img src="{{ asset(setting('logo_path', 'assets/images/LCCD.jpg')) }}" alt="LCCD Logo" width="40" class="me-2">
-                <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Department Logo" width="40" class="me-2">
+                {{ config('app.name') }}
             </a>
             <ul class="nav flex-column">
                 @auth
