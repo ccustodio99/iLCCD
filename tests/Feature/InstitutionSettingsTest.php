@@ -7,11 +7,8 @@ it('allows admin to update institution settings', function () {
     $this->actingAs($admin);
 
     $data = [
-        'institution_address' => 'New Address',
-        'institution_phone' => '1234',
-        'helpdesk_email' => 'new@example.com',
-        'header_text' => 'Header',
-        'footer_text' => 'Footer',
+        'header_text' => "Header\nLine2",
+        'footer_text' => "Footer\nLine2",
         'show_footer' => false,
     ];
 
