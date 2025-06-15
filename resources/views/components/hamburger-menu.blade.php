@@ -2,7 +2,7 @@
     <div class="offcanvas-header">
 
         <h5 class="offcanvas-title text-center fw-bold mb-0" id="mainMenuLabel">
-            <span id="sidebar-date">{{ \Carbon\Carbon::now(setting('timezone'))->format('M. d, Y') }}</span><br>
+            <span id="sidebar-date">{{ \Carbon\Carbon::now(setting('timezone'))->format('M. d, y') }}</span><br>
             <span id="sidebar-time">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i:s A') }}</span>
 
         </h5>
@@ -10,10 +10,9 @@
     </div>
     <div class="offcanvas-body p-0">
         <nav class="sidebar" aria-label="Main navigation">
-
-            <div class="navbar-brand d-flex flex-column align-items-start mb-3">
-                <span id="sidebar-date-link">{{ \Carbon\Carbon::now(setting('timezone'))->format('M. d, Y') }}</span>
-                <span id="sidebar-time-link">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i:s A') }}</span>
+            <div class="navbar-brand d-flex flex-column align-items-center mb-3">
+                <span id="sidebar-date-link" class="fw-semibold">{{ \Carbon\Carbon::now(setting('timezone'))->format('M. d, y') }}</span>
+                <span id="sidebar-time-link" class="text-muted">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i:s A') }}</span>
             </div>
 
             <ul class="nav flex-column">
@@ -59,7 +58,7 @@
 const timeZone = @json(setting('timezone', config('app.timezone')));
 const monthFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', timeZone });
 const dayFormatter = new Intl.DateTimeFormat('en-US', { day: '2-digit', timeZone });
-const yearFormatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', timeZone });
+const yearFormatter = new Intl.DateTimeFormat('en-US', { year: '2-digit', timeZone });
 const timeFormatter = new Intl.DateTimeFormat('en-US', {
     hour: '2-digit',
     minute: '2-digit',
