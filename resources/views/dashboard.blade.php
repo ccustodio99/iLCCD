@@ -6,7 +6,6 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4 text-center">Dashboard</h1>
 
     @if($announcements->count())
     <div class="mb-4">
