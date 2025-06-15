@@ -1,6 +1,6 @@
 # System Settings
 
-Administrators can manage baseline values used across the modules from the **Settings** section of the navigation menu. Each record includes an `is_active` flag so items may be disabled without deletion. The Settings link is visible only for users with the **admin** role.
+Administrators manage system defaults and theme settings here from the **Settings** section of the navigation menu. Each record includes an `is_active` flag so items may be disabled without deletion. The Settings link is visible only for users with the **admin** role.
 
 ## Interface Layout
 
@@ -64,9 +64,10 @@ These defaults come from **`Database\Seeders\DocumentCategorySeeder`** and are c
 
 The new **Announcements** manager lets admins post messages that appear on the dashboard.
 
-## Theme Settings
-Administrators can customize the interface branding from this screen. Adjustable values include:
+## Theme, Branding & Institution
+All appearance settings are grouped together so administrators can update the color scheme, fonts, logos, and institution text in one place.
 
+### Theme Options
 - **Primary Color** – main navigation and button color
 - **Accent Color** – highlight shade for links and callouts
 - **Primary Font** – used for headings
@@ -74,11 +75,16 @@ Administrators can customize the interface branding from this screen. Adjustable
 - **Home Page Heading** – large text shown on the landing page
 - **Home Page Tagline** – short tagline displayed below the heading
 
-Open **Settings → Theme** in the navigation menu to access these controls. Color pickers
-let administrators select the Primary and Accent shades, dropdown menus list
-available font families, and simple text boxes set the Home Page Heading and
-Tagline. *A screenshot of the Theme Settings form is available in the ITRC
-Dropbox.*
+### Institution Text
+- **Header** – small line shown near the top of each page. Use `\n` for a new line.
+- **Footer** – message displayed above the copyright notice. Use `\n` for a new line. The token `{year}` is replaced with the current year when displayed.
+- **Show Footer** – toggle visibility of the footer across the site.
+
+### Brand Images
+- **Logo** – appears in the navigation menu header
+- **Favicon** – used in the browser tab and bookmarks
+
+Open **Settings → Theme**, **Settings → Branding**, or **Settings → Institution** in the navigation menu to modify these values. Color pickers let administrators select the Primary and Accent shades, dropdown menus list available font families, and simple text boxes set the Home Page Heading and Tagline. *A screenshot of the Theme Settings form is available in the ITRC Dropbox.*
 
 ### Theme Setting Defaults
 The initial seed runs **`Database\\Seeders\\SettingSeeder`** which sets the following values:
@@ -90,23 +96,7 @@ The initial seed runs **`Database\\Seeders\\SettingSeeder`** which sets the foll
 - **Home Page Heading:** "Welcome to the LCCD Integrated Information System"
 - **Home Page Tagline:** "Empowering Christ-centered digital transformation for La Consolacion College Daet—where technology, transparency, and service unite."
 
-## Institution Settings
-These options control additional text displayed throughout the interface.
-
-- **Header** – small line shown near the top of each page. Use `\n` for a new line.
-- **Footer** – message displayed above the copyright notice. Use `\n` for a new line. The token `{year}` is replaced with the current year when displayed.
-
-- **Show Footer** – toggle visibility of the footer across the site.
-
-The seed defaults set `header_text` to "La Consolacion College Daet", `footer_text` to "Empowering Christ-centered digital transformation\n© {year} La Consolacion College Daet CMS", and `show_footer` to `true`. You can modify these under **Settings → Institution**.
-
-## Branding
-Upload the images that identify the system:
-
-- **Logo** – appears in the navigation menu header
-- **Favicon** – used in the browser tab and bookmarks
-
-Open **Settings → Branding** to update these files.
+The seed defaults also set `header_text` to "La Consolacion College Daet", `footer_text` to "Empowering Christ-centered digital transformation\n© {year} La Consolacion College Daet CMS", and `show_footer` to `true`.
 
 ## Localization
 Set how dates and times appear across the application:
