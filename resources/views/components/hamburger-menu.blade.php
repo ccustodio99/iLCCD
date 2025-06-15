@@ -1,17 +1,21 @@
 <div id="mainMenu" class="offcanvas offcanvas-start offcanvas-lg" tabindex="-1" role="navigation" aria-labelledby="mainMenuLabel" data-bs-scroll="true" data-bs-backdrop="false">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title text-center" id="mainMenuLabel">
-            <span id="sidebar-date">{{ \Carbon\Carbon::now(setting('timezone'))->format('M. d, y') }}</span><br>
-            <span id="sidebar-time">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i A') }}</span>
+
+        <h5 class="offcanvas-title text-center fw-bold mb-0" id="mainMenuLabel">
+            <span id="sidebar-date">{{ \Carbon\Carbon::now(setting('timezone'))->format('M. d, Y') }}</span><br>
+            <span id="sidebar-time">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i:s A') }}</span>
+
         </h5>
         <button type="button" class="btn-close d-lg-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body p-0">
         <nav class="sidebar" aria-label="Main navigation">
-            <a class="navbar-brand d-flex flex-column align-items-start mb-3" href="{{ route('home') }}">
-                <span id="sidebar-date-link">{{ \Carbon\Carbon::now(setting('timezone'))->format('M. d, y') }}</span>
-                <span id="sidebar-time-link">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i A') }}</span>
-            </a>
+
+            <div class="navbar-brand d-flex flex-column align-items-start mb-3">
+                <span id="sidebar-date-link">{{ \Carbon\Carbon::now(setting('timezone'))->format('M. d, Y') }}</span>
+                <span id="sidebar-time-link">{{ \Carbon\Carbon::now(setting('timezone'))->format('h:i:s A') }}</span>
+            </div>
+
             <ul class="nav flex-column">
                 @auth
                     <li class="nav-item"><a class="nav-link @if(request()->routeIs('dashboard')) active @endif" href="{{ route('dashboard') }}" @if(request()->routeIs('dashboard')) aria-current="page" @endif>Dashboard</a></li>
@@ -53,16 +57,26 @@
 @push('scripts')
 <script>
 const timeZone = @json(setting('timezone', config('app.timezone')));
+const monthFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', timeZone });
+const dayFormatter = new Intl.DateTimeFormat('en-US', { day: '2-digit', timeZone });
+const yearFormatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', timeZone });
+const timeFormatter = new Intl.DateTimeFormat('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+    timeZone,
+});
+
 function updateSidebarDateTime() {
     const now = new Date();
-    const dateOptions = { month: 'short', day: '2-digit', year: '2-digit', timeZone };
-    const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true, timeZone };
-    const date = new Intl.DateTimeFormat('en-US', dateOptions).format(now).replace(',', '.');
-    const time = new Intl.DateTimeFormat('en-US', timeOptions).format(now);
+    const date = `${monthFormatter.format(now)}. ${dayFormatter.format(now)}, ${yearFormatter.format(now)}`;
+    const time = timeFormatter.format(now);
+
     document.querySelectorAll('#sidebar-date, #sidebar-date-link').forEach(el => el.textContent = date);
     document.querySelectorAll('#sidebar-time, #sidebar-time-link').forEach(el => el.textContent = time);
 }
 updateSidebarDateTime();
-setInterval(updateSidebarDateTime, 60000);
+setInterval(updateSidebarDateTime, 1000);
 </script>
 @endpush
