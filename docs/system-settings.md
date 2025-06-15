@@ -2,6 +2,10 @@
 
 Administrators can manage baseline values used across the modules from the **Settings** section of the navigation menu. Each record includes an `is_active` flag so items may be disabled without deletion. The Settings link is visible only for users with the **admin** role.
 
+## Interface Layout
+
+The landing page presents a responsive grid of cards that link to each configuration area. Icons and concise labels help users quickly find what they need, and every card includes an accessible name. Breadcrumbs keep the current context visible and all forms provide a **Cancel** button. These patterns align with the project's [UX Design Principles](user-interface-branding.md#ux-design-principles).
+
 ## Default Records
 The seeders populate several baseline records used throughout the system.
 
