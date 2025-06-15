@@ -6,7 +6,6 @@
     <img src="{{ asset(setting('logo_path', 'assets/images/LCCD.jpg')) }}" alt="LCCD Logo" width="40" class="me-1">
     <img src="{{ asset('assets/images/CCS.jpg') }}" alt="CCS Department Logo" width="40" class="me-2">
     <div class="d-flex flex-column">
-        <span class="navbar-brand">{{ $title ?? config('app.name') }}</span>
         <small class="header-text">{!! nl2br(e(setting('header_text'))) !!}</small>
         @include('components.breadcrumbs', ['links' => $breadcrumbs])
     </div>
