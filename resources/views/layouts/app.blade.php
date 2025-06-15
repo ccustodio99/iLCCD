@@ -188,10 +188,7 @@
                 @yield('content')
             </main>
             <footer id="app-footer" class="text-center" style="{{ setting('show_footer', true) ? '' : 'display:none;' }}">
-                <address class="mb-1">{{ setting('institution_address') }}</address>
-                <div class="mb-1">{{ setting('institution_phone') }} | {{ setting('helpdesk_email') }}</div>
-                <div class="mb-1">{{ setting('footer_text') }}</div>
-                <div>&copy; {{ date('Y') }} La Consolacion College Daet CMS</div>
+                <div class="mb-1">{!! nl2br(e(str_replace('{year}', date('Y'), setting('footer_text')))) !!}</div>
             </footer>
             <button id="toggle-footer" class="btn btn-secondary" aria-label="Toggle footer">
                 {{ setting('show_footer', true) ? 'Hide Footer' : 'Show Footer' }}

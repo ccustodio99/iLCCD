@@ -15,11 +15,8 @@ class SettingSeeder extends Seeder
         Setting::set('font_secondary', 'Roboto');
         Setting::set('home_heading', 'Welcome to the LCCD Integrated Information System');
         Setting::set('home_tagline', 'Empowering Christ-centered digital transformation for La Consolacion College Daet—where technology, transparency, and service unite.');
-        Setting::set('institution_address', 'Gov. Panotes Avenue, Daet, Camarines Norte 4600');
-        Setting::set('institution_phone', '(054) 571-3456');
-        Setting::set('helpdesk_email', 'helpdesk@lccd.edu.ph');
         Setting::set('header_text', 'La Consolacion College Daet');
-        Setting::set('footer_text', 'Empowering Christ-centered digital transformation');
+        Setting::set('footer_text', "Empowering Christ-centered digital transformation\n© {year} La Consolacion College Daet CMS");
         Setting::set('show_footer', true);
         Setting::set('timezone', 'Asia/Manila');
         Setting::set('date_format', 'Y-m-d');
