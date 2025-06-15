@@ -214,7 +214,7 @@
     const menuToggle = document.getElementById('menu-toggle');
     const mainMenuEl = document.getElementById('mainMenu');
     if (menuToggle && mainMenuEl) {
-        const offcanvasMenu = new bootstrap.Offcanvas(mainMenuEl, { backdrop: false });
+        const offcanvasMenu = new bootstrap.Offcanvas(mainMenuEl, { backdrop: false, scroll: true });
         if (window.innerWidth >= 992) {
             offcanvasMenu.show();
         } else {
