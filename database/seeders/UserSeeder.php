@@ -28,7 +28,6 @@ class UserSeeder extends Seeder
             'department' => 'Administration',
             'designation' => 'President',
         ]);
-
         User::factory()->create([
             'name' => 'Finance Officer',
             'email' => 'finance@example.com',
@@ -62,22 +61,5 @@ class UserSeeder extends Seeder
                 'department' => $dept,
             ]);
         }
-
-        // Generic demo accounts used in docs
-        User::factory()->create([
-            'name' => 'Demo Staff',
-            'email' => 'staff@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'staff',
-            'department' => 'CCS',
-        ]);
-
-        User::factory()->create([
-            'name' => 'Demo User',
-            'email' => 'user@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'staff',
-            'department' => 'CCS',
-        ]);
     }
 }
