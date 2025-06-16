@@ -48,7 +48,9 @@ class UserSeeder extends Seeder
             'Finance Office',
         ];
 
+
         foreach ($departments as $index => $dept) {
+
             // Department head
             User::factory()->create([
                 'name' => $dept . ' Head',
@@ -57,6 +59,7 @@ class UserSeeder extends Seeder
                 'role' => 'head',
                 'department' => $dept,
             ]);
+
 
             // Skip creating another staff for finance office
             if ($dept === 'Finance Office') {
@@ -68,8 +71,10 @@ class UserSeeder extends Seeder
                 'name' => $dept . ' Staff',
                 'email' => Str::slug($dept) . '.staff@example.com',
                 'password' => Hash::make('Password1'),
+
                 'role' => 'staff',
                 'department' => $dept,
+                'password' => Hash::make('Password1'),
             ]);
         }
     }
