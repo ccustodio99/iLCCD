@@ -43,8 +43,20 @@ class JobOrderTypeSeeder extends Seeder
         'Other Job Request' => [],
     ];
 
+    /**
+     * Flattened list of all canonical names.
+     */
+    public static function allNames(): array
+    {
+        return collect(self::TYPES)
+            ->flatMap(fn ($children, $parent) => array_merge([$parent], $children))
+            ->all();
+    }
+
     public function run(): void
     {
+        JobOrderType::whereNotIn('name', self::allNames())->delete();
+
         foreach (self::TYPES as $parent => $children) {
             $parentType = JobOrderType::firstOrCreate(
                 ['name' => $parent],

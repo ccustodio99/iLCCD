@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\InventoryCategory;
+use Database\Seeders\InventoryCategorySeeder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -15,7 +16,9 @@ class InventoryCategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->unique()->word(),
+            'name' => $this->faker->unique()->randomElement(
+                InventoryCategorySeeder::allNames()
+            ),
             'is_active' => true,
         ];
     }
