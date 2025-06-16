@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             JobOrderTypeSeeder::class,
             DocumentCategorySeeder::class,
             SettingSeeder::class,
+            UserSeeder::class,
         ]);
         // Populate demo data
         $this->call(DemoSeeder::class);
