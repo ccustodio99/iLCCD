@@ -29,8 +29,10 @@ class DemoSeeder extends Seeder
         $admin = User::where('role', 'admin')->first();
         $staff = User::where('role', 'staff')->first();
         $head = User::where('role', 'head')->first();
-        // Additional demo users for variety in ownership/assignment
+
         $extraUsers = User::factory()->count(10)->create();
+
+
         $ticketData = [
             [
                 'category' => 'Desktops & Laptops',
@@ -149,7 +151,6 @@ class DemoSeeder extends Seeder
                 'description' => 'Portable whiteboard with stand',
                 'location' => 'Faculty Room',
             ],
-
         ];
 
         $transactionPurposes = [
@@ -180,7 +181,6 @@ class DemoSeeder extends Seeder
                     'ticket_category_id' => $ticketCategories[$data['category']]->id ?? null,
                     'subject' => $data['subject'],
                     'description' => $data['description'],
-
                     'status' => $status,
                     'resolved_at' => in_array($status, ['resolved', 'closed']) ? now()->subDays(fake()->numberBetween(1, 5)) : null,
                     'escalated_at' => $status === 'escalated' ? now()->subDays(fake()->numberBetween(1, 5)) : null,
@@ -212,7 +212,6 @@ class DemoSeeder extends Seeder
         });
 
         // Job Orders linked to random tickets
-
         $jobOrders = collect($jobOrderData)->map(function ($data) use ($tickets, $staff) {
 
             $ticket = $tickets->random();
@@ -223,7 +222,6 @@ class DemoSeeder extends Seeder
                 ->for($ticket->user)
                 ->for($staff, 'assignedTo')
                 ->state([
-
                     'job_type' => $data['type'],
                     'description' => $data['description'],
                     'status' => $status,
@@ -280,8 +278,6 @@ class DemoSeeder extends Seeder
 
             return $req;
         });
-
-
         $inventoryCategories = InventoryCategory::whereIn('name', collect($inventoryData)->pluck('category'))
             ->get()
             ->keyBy('name');
@@ -294,7 +290,6 @@ class DemoSeeder extends Seeder
                     'name' => $data['name'],
                     'description' => $data['description'],
                     'location' => $data['location'],
-
                     'status' => fake()->randomElement([
                         InventoryItem::STATUS_AVAILABLE,
                         InventoryItem::STATUS_RESERVED,
@@ -386,8 +381,6 @@ class DemoSeeder extends Seeder
                 'description' => 'Guidelines for conducting research responsibly.',
             ],
         ];
-
-
         $docCategories = DocumentCategory::whereIn('name', collect($documentData)->pluck('category'))
             ->get()
             ->keyBy('name');
@@ -403,7 +396,6 @@ class DemoSeeder extends Seeder
                 ])
                 ->create();
         });
-
         $documents->each(function (Document $document) use ($admin) {
             $versions = DocumentVersion::factory()->count(3)
                 ->for($document)
