@@ -29,8 +29,8 @@ class DemoSeeder extends Seeder
         $staff = User::where('role', 'staff')->first();
         $head = User::where('role', 'head')->first();
 
-        // Additional demo users for variety in ownership/assignment
-        $extraUsers = User::factory()->count(10)->create();
+        // Use seeded staff accounts for demo ownership/assignment
+        $extraUsers = User::where('role', 'staff')->get();
 
         $ticketData = [
             [

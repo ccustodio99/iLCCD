@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Core demo accounts
-        User::factory()->create([
+        User::create([
             'name' => 'Demo Admin',
             'email' => 'admin@example.com',
             'password' => Hash::make('Password1'),
@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
             'department' => 'ITRC',
         ]);
 
-        User::factory()->create([
+        User::create([
             'name' => 'Demo President',
             'email' => 'president@example.com',
             'password' => Hash::make('Password1'),
@@ -30,7 +30,7 @@ class UserSeeder extends Seeder
         ]);
 
         // Dedicated finance staff account for docs
-        User::factory()->create([
+        User::create([
             'name' => 'Finance Officer',
             'email' => 'finance@example.com',
             'password' => Hash::make('Password1'),
@@ -52,7 +52,7 @@ class UserSeeder extends Seeder
         foreach ($departments as $index => $dept) {
 
             // Department head
-            User::factory()->create([
+            User::create([
                 'name' => $dept . ' Head',
                 'email' => $index === 0 ? 'head@example.com' : Str::slug($dept) . '.head@example.com',
                 'password' => Hash::make('Password1'),
@@ -67,14 +67,12 @@ class UserSeeder extends Seeder
             }
 
             // Single staff member
-            User::factory()->create([
+            User::create([
                 'name' => $dept . ' Staff',
                 'email' => Str::slug($dept) . '.staff@example.com',
                 'password' => Hash::make('Password1'),
-
                 'role' => 'staff',
                 'department' => $dept,
-                'password' => Hash::make('Password1'),
             ]);
         }
     }
