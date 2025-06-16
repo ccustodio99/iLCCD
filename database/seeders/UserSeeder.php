@@ -29,6 +29,15 @@ class UserSeeder extends Seeder
             'designation' => 'President',
         ]);
 
+        // Dedicated finance staff account for docs
+        User::factory()->create([
+            'name' => 'Finance Officer',
+            'email' => 'finance@example.com',
+            'password' => Hash::make('Password1'),
+            'role' => 'staff',
+            'department' => 'Finance Office',
+        ]);
+
         $departments = [
             'Nursing',
             'CHTM',
@@ -39,18 +48,30 @@ class UserSeeder extends Seeder
             'Finance Office',
         ];
 
-        foreach ($departments as $dept) {
+
+        foreach ($departments as $index => $dept) {
+
             // Department head
             User::factory()->create([
                 'name' => $dept . ' Head',
-                'email' => Str::slug($dept) . '.head@example.com',
+                'email' => $index === 0 ? 'head@example.com' : Str::slug($dept) . '.head@example.com',
                 'password' => Hash::make('Password1'),
                 'role' => 'head',
                 'department' => $dept,
             ]);
 
+
+            // Skip creating another staff for finance office
+            if ($dept === 'Finance Office') {
+                continue;
+            }
+
             // Single staff member
             User::factory()->create([
+                'name' => $dept . ' Staff',
+                'email' => Str::slug($dept) . '.staff@example.com',
+                'password' => Hash::make('Password1'),
+
                 'role' => 'staff',
                 'department' => $dept,
                 'password' => Hash::make('Password1'),
