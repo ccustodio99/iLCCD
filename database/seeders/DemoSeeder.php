@@ -28,14 +28,9 @@ class DemoSeeder extends Seeder
         // Demo users seeded separately
         $admin = User::where('role', 'admin')->first();
         $staff = User::where('role', 'staff')->first();
-        $itrc = User::where('role', 'itrc')->first();
         $head = User::where('role', 'head')->first();
-
-
         // Additional demo users for variety in ownership/assignment
         $extraUsers = User::factory()->count(10)->create();
-
-
         $ticketData = [
             [
                 'category' => 'Desktops & Laptops',
@@ -194,7 +189,7 @@ class DemoSeeder extends Seeder
                 ->create();
         });
 
-        $watchers = [$admin->id, $itrc->id, $head->id];
+        $watchers = [$admin->id, $head->id];
 
         $tickets->each(function (Ticket $ticket) use ($watchers, $admin, $ticketComments) {
             $ticket->watchers()->sync($watchers);
@@ -228,7 +223,7 @@ class DemoSeeder extends Seeder
                 ->for($ticket->user)
                 ->for($staff, 'assignedTo')
                 ->state([
-n
+
                     'job_type' => $data['type'],
                     'description' => $data['description'],
                     'status' => $status,

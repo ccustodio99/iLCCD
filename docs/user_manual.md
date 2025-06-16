@@ -52,7 +52,7 @@ The ticket "Printer not working" has been escalated.
 ---
 
 ## 🔒 Access and Permissions
-Roles determine what you can see or modify. Typical roles include Admin, Department Head, Faculty/Staff, Student, and Finance. If you cannot access a feature you need, contact your administrator. For more details, see the [Access Control Module](Access_Control_Module.md).
+Roles determine what you can see or modify. Typical roles include Admin, Department Head, and Staff. If you cannot access a feature you need, contact your administrator. For more details, see the [Access Control Module](Access_Control_Module.md).
 
 ---
 

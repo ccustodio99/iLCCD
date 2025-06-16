@@ -24,64 +24,9 @@ class UserSeeder extends Seeder
             'name' => 'Demo President',
             'email' => 'president@example.com',
             'password' => Hash::make('Password1'),
-            'role' => 'president',
+            'role' => 'head',
             'department' => 'Administration',
-        ]);
-
-        User::factory()->create([
-            'name' => 'Demo Treasurer',
-            'email' => 'treasurer@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'treasurer',
-            'department' => 'Finance Office',
-        ]);
-
-        User::factory()->create([
-            'name' => 'Demo Finance College',
-            'email' => 'finance.college@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'finance',
-            'department' => 'College Finance Office',
-        ]);
-
-        User::factory()->create([
-            'name' => 'Demo Finance BED',
-            'email' => 'finance.bed@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'finance',
-            'department' => 'BED Finance Office',
-        ]);
-
-        User::factory()->create([
-            'name' => 'Demo Registrar',
-            'email' => 'registrar@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'registrar',
-            'department' => 'Registrar',
-        ]);
-
-        User::factory()->create([
-            'name' => 'Demo HR',
-            'email' => 'hr@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'hr',
-            'department' => 'HR Department',
-        ]);
-
-        User::factory()->create([
-            'name' => 'Demo Clinic',
-            'email' => 'clinic@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'clinic',
-            'department' => 'Clinic',
-        ]);
-
-        User::factory()->create([
-            'name' => 'Demo ITRC',
-            'email' => 'itrc@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'itrc',
-            'department' => 'ITRC',
+            'designation' => 'President',
         ]);
 
         $departments = [
@@ -123,24 +68,10 @@ class UserSeeder extends Seeder
             'name' => 'Demo User',
             'email' => 'user@example.com',
             'password' => Hash::make('Password1'),
-            'role' => 'user',
+
+            'role' => 'staff',
             'department' => 'CCS',
         ]);
 
-        User::factory()->create([
-            'name' => 'Demo Faculty',
-            'email' => 'faculty@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'staff',
-            'department' => 'Faculty/Staff',
-        ]);
-
-        User::factory()->create([
-            'name' => 'Demo Academic',
-            'email' => 'academic@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'academic',
-            'department' => 'Academic Units',
-        ]);
     }
 }

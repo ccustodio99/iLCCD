@@ -25,13 +25,10 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
 
 ### 2. Role Assignments and Permission Settings
 - Roles are predefined and linked to system modules. Allowed roles are:
-  `admin`, `staff`, `head`, `president`, `finance`, and `itrc`.
+  `admin`, `head`, and `staff`.
   Examples include:
-  - **Faculty/Staff**: Can create tickets, requisitions, and job orders.
-  - **Department Heads**: Can review/approve within their scope.
-  - **President**: Strategic approval, high-level dashboards.
-  - **Finance**: Budget validation, PO authorization.
-  - **ITRC Admins**: Full system access, audit tools.
+  - **Staff**: Can create tickets, requisitions, and job orders.
+  - **Department Heads**: Can review and approve within their scope.
 - Each role grants access to specific views and actions (using RBAC).
 
 ### 3. Departmental Affiliations and Access Controls
