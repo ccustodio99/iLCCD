@@ -16,7 +16,6 @@ use App\Models\TicketComment;
 use App\Models\RequisitionItem;
 use App\Models\InventoryTransaction;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -121,17 +120,22 @@ class DemoSeeder extends Seeder
             'department' => 'Academic Units',
         ]);
 
+        // Additional random users for demo data
+        $extraUsers = User::factory()->count(500)->create();
+
         // Tickets
         $tickets = Ticket::factory()
-            ->count(5)
-            ->for($user)
-            ->sequence(
-                ['status' => 'open'],
-                ['status' => 'open'],
-                ['status' => 'resolved', 'resolved_at' => now()->subDay()],
-                ['status' => 'escalated', 'escalated_at' => now()->subHours(2)],
-                ['status' => 'closed', 'resolved_at' => now()->subDays(4), 'archived_at' => now()->subDays(3)]
-            )
+            ->count(500)
+            ->recycle($extraUsers)
+            ->state(function () {
+                $status = fake()->randomElement(['open', 'resolved', 'escalated', 'closed']);
+                return [
+                    'status' => $status,
+                    'resolved_at' => in_array($status, ['resolved', 'closed']) ? now()->subDays(fake()->numberBetween(1, 5)) : null,
+                    'escalated_at' => $status === 'escalated' ? now()->subDays(fake()->numberBetween(1, 5)) : null,
+                    'archived_at' => $status === 'closed' ? now()->subDays(fake()->numberBetween(1, 5)) : null,
+                ];
+            })
             ->create();
 
         $watchers = [$admin->id, $itrc->id, $head->id];
@@ -140,11 +144,11 @@ class DemoSeeder extends Seeder
             $ticket->watchers()->sync($watchers);
 
             TicketComment::factory()->for($ticket)->for($ticket->user)->create([
-                'comment' => 'Initial issue details',
+                'comment' => fake()->realText(50),
             ]);
 
             TicketComment::factory()->for($ticket)->for($admin)->create([
-                'comment' => 'Acknowledged by admin',
+                'comment' => fake()->realText(50),
             ]);
 
             AuditTrail::factory()->create([
@@ -156,20 +160,21 @@ class DemoSeeder extends Seeder
             ]);
         });
 
-        // Job Orders linked to first three tickets
-        $jobOrders = $tickets->take(3)->map(function (Ticket $ticket, $index) use ($staff) {
+        // Job Orders linked to random tickets
+        $jobOrders = collect(range(1, 500))->map(function () use ($tickets, $staff) {
+            $ticket = $tickets->random();
+            $status = fake()->randomElement(JobOrder::STATUSES);
+
             return JobOrder::factory()
                 ->for($ticket)
                 ->for($ticket->user)
                 ->for($staff, 'assignedTo')
-                ->state(function () use ($index) {
-                    return [
-                        'status' => $index === 0 ? 'in_progress' : ($index === 1 ? 'completed' : 'new'),
-                        'approved_at' => now()->subDays(2),
-                        'started_at' => now()->subDay(),
-                        'completed_at' => $index === 1 ? now()->subHours(1) : null,
-                    ];
-                })
+                ->state([
+                    'status' => $status,
+                    'approved_at' => now()->subDays(fake()->numberBetween(1, 5)),
+                    'started_at' => now()->subDays(fake()->numberBetween(1, 3)),
+                    'completed_at' => in_array($status, ['completed', 'closed']) ? now()->subDay() : null,
+                ])
                 ->create();
         });
 
@@ -184,15 +189,19 @@ class DemoSeeder extends Seeder
         });
 
         // Requisitions linked to tickets and job orders
-        $tickets->take(3)->each(function (Ticket $ticket, $index) use ($user, $jobOrders) {
+        $requisitions = collect(range(1, 500))->map(function () use ($tickets, $jobOrders, $extraUsers) {
+            $ticket = $tickets->random();
+            $jobOrder = $jobOrders->random();
+            $user = $extraUsers->random();
+
             $req = Requisition::factory()
                 ->for($user)
                 ->for($ticket)
-                ->for($jobOrders[$index])
+                ->for($jobOrder)
                 ->state([
-                    'status' => 'approved',
+                    'status' => fake()->randomElement(Requisition::STATUSES),
                     'approved_by_id' => $user->id,
-                    'approved_at' => now()->subDay(),
+                    'approved_at' => now()->subDays(fake()->numberBetween(1, 5)),
                 ])
                 ->create();
 
@@ -205,41 +214,26 @@ class DemoSeeder extends Seeder
             ]);
 
             RequisitionItem::factory()->count(2)->for($req)->create();
+
+            return $req;
         });
-
-        // Additional requisition not tied to job order
-        $extraReq = Requisition::factory()
-            ->for($user)
-            ->for($tickets->last())
-            ->create();
-
-        AuditTrail::factory()->create([
-            'auditable_id' => $extraReq->id,
-            'auditable_type' => Requisition::class,
-            'user_id' => $user->id,
-            'ip_address' => '127.0.0.1',
-            'action' => 'created',
-        ]);
-
-        RequisitionItem::factory()->count(2)->for($extraReq)->create();
 
         // Inventory items
         $items = InventoryItem::factory()
-            ->count(8)
+            ->count(500)
             ->for($admin)
-            ->state(new Sequence(
-                ['status' => InventoryItem::STATUS_AVAILABLE],
-                ['status' => InventoryItem::STATUS_RESERVED],
-                ['status' => InventoryItem::STATUS_AVAILABLE],
-                ['status' => InventoryItem::STATUS_MAINTENANCE],
-                ['status' => InventoryItem::STATUS_AVAILABLE],
-                ['status' => InventoryItem::STATUS_AVAILABLE],
-                ['status' => InventoryItem::STATUS_RESERVED],
-                ['status' => InventoryItem::STATUS_AVAILABLE],
-            ))
+            ->state(function () {
+                return [
+                    'status' => fake()->randomElement([
+                        InventoryItem::STATUS_AVAILABLE,
+                        InventoryItem::STATUS_RESERVED,
+                        InventoryItem::STATUS_MAINTENANCE,
+                    ]),
+                ];
+            })
             ->create();
 
-        $items->each(function (InventoryItem $item, $index) use ($admin, $user, $jobOrders) {
+        $items->each(function (InventoryItem $item) use ($admin, $jobOrders, $extraUsers) {
             AuditTrail::factory()->create([
                 'auditable_id' => $item->id,
                 'auditable_type' => InventoryItem::class,
@@ -248,33 +242,38 @@ class DemoSeeder extends Seeder
                 'action' => 'created',
             ]);
 
-            if ($index < 2) {
-                InventoryTransaction::factory()
-                    ->for($item)
-                    ->for($user)
-                    ->for($jobOrders[$index])
-                    ->state(['action' => 'issue', 'quantity' => 1, 'purpose' => 'Demo issue'])
-                    ->create();
+            InventoryTransaction::factory()
+                ->for($item)
+                ->for($extraUsers->random())
+                ->for($jobOrders->random())
+                ->state([
+                    'action' => 'issue',
+                    'quantity' => 1,
+                    'purpose' => fake()->sentence(),
+                ])
+                ->create();
 
-                InventoryTransaction::factory()
-                    ->for($item)
-                    ->for($user)
-                    ->for($jobOrders[$index])
-                    ->state(['action' => 'return', 'quantity' => 1, 'purpose' => 'Demo return'])
-                    ->create();
-            }
+            InventoryTransaction::factory()
+                ->for($item)
+                ->for($extraUsers->random())
+                ->for($jobOrders->random())
+                ->state([
+                    'action' => 'return',
+                    'quantity' => 1,
+                    'purpose' => fake()->sentence(),
+                ])
+                ->create();
         });
 
         // Purchase orders referencing requisitions and inventory
-        $requisitions = Requisition::limit(2)->get();
-        $requisitions->each(function (Requisition $req, $index) use ($admin, $items) {
+        $purchaseOrders = collect(range(1, 500))->map(function () use ($admin, $requisitions, $items) {
             $po = PurchaseOrder::factory()
                 ->for($admin)
-                ->for($req)
-                ->for($items[$index])
+                ->for($requisitions->random())
+                ->for($items->random())
                 ->state([
-                    'status' => $index === 0 ? 'ordered' : 'draft',
-                    'ordered_at' => now()->subDays(1),
+                    'status' => fake()->randomElement([PurchaseOrder::STATUS_DRAFT, PurchaseOrder::STATUS_ORDERED]),
+                    'ordered_at' => now()->subDays(fake()->numberBetween(1, 5)),
                 ])
                 ->create();
 
@@ -285,6 +284,8 @@ class DemoSeeder extends Seeder
                 'ip_address' => '127.0.0.1',
                 'action' => 'created',
             ]);
+
+            return $po;
         });
 
         $docCategoryNames = [
@@ -301,13 +302,13 @@ class DemoSeeder extends Seeder
         });
 
         // Documents with versions, logs and audit trails
-        $documents = Document::factory()->count(3)
+        $documents = Document::factory()->count(500)
             ->for($admin)
-            ->state(new Sequence(
-                ['document_category_id' => $docCategories[0]->id],
-                ['document_category_id' => $docCategories[1]->id],
-                ['document_category_id' => $docCategories[2]->id]
-            ))
+            ->state(function () use ($docCategories) {
+                return [
+                    'document_category_id' => $docCategories->random()->id,
+                ];
+            })
             ->create();
         $documents->each(function (Document $document) use ($admin) {
             $versions = DocumentVersion::factory()->count(3)
