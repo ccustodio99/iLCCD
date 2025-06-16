@@ -9,7 +9,7 @@ The Access Control module is the core of security and data integrity in the syst
 ## 🧩 Core Features
 
 ### 1. Role-Based Access Control (RBAC) Implementation
-- Every user is assigned a **role** (e.g., Admin, President, Finance, Registrar, HR, Faculty/Staff, Department Head, ITRC, etc.).
+- Every user is assigned a **role** (e.g., Admin, Department Head, or Staff).
 - Each role maps to a specific set of permissions, such as:
   - View/Create/Approve/Modify/Delete requests
   - Manage users or departments
