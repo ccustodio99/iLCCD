@@ -332,7 +332,7 @@ class DemoSeeder extends Seeder
             })
             ->create();
 
-        $items->each(function (InventoryItem $item) use ($admin, $jobOrders, $extraUsers) {
+        $items->each(function (InventoryItem $item) use ($admin, $jobOrders, $extraUsers, $transactionPurposes) {
             AuditTrail::factory()->create([
                 'auditable_id' => $item->id,
                 'auditable_type' => InventoryItem::class,
