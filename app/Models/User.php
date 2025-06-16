@@ -22,16 +22,8 @@ class User extends Authenticatable
      */
     public const ROLES = [
         'admin',
-        'staff',
         'head',
-        'president',
-        'finance',
-        'itrc',
-        'registrar',
-        'hr',
-        'clinic',
-        'user',
-        'academic',
+        'staff',
     ];
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, LogsAudit;
@@ -47,6 +39,7 @@ class User extends Authenticatable
         'password',
         'role',
         'department',
+        'designation',
         'profile_photo_path',
         'contact_info',
         'is_active',

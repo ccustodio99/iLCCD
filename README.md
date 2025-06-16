@@ -54,8 +54,6 @@ Deliver a holistic, faith-driven digital backbone for LCCD, empowering every use
 | Clinic            | Medical incidents, reports                          |
 | ITRC              | IT support, system admin                            |
 | Department Heads  | Approvals, departmental management                  |
-| Faculty/Staff     | Requests, tickets, job orders                       |
-| Academic Units    | Academic/facility requests                          |
 
 ---
 
