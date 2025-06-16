@@ -39,8 +39,6 @@ These commands assume a local development setup with PHP, Composer, Node.js, and
 | President    | president@example.com  | Password1 |
 | Finance       | finance@example.com  | Password1 |
 | Department Head | head@example.com    | Password1 |
-| Staff        | staff@example.com      | Password1 |
-| User         | user@example.com       | Password1 |
 
 *Passwords are intentionally generic for demo purposes only.*
 

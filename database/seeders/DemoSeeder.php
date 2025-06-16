@@ -31,6 +31,7 @@ class DemoSeeder extends Seeder
 
         // Additional demo users for variety in ownership/assignment
         $extraUsers = User::factory()->count(10)->create();
+
         $ticketData = [
             [
                 'category' => 'Desktops & Laptops',
@@ -275,9 +276,6 @@ class DemoSeeder extends Seeder
 
             return $req;
         });
-        $inventoryCategories = InventoryCategory::whereIn('name', collect($inventoryData)->pluck('category'))
-            ->get()
-            ->keyBy('name');
 
         $inventoryCategories = InventoryCategory::whereIn('name', collect($inventoryData)->pluck('category'))
             ->get()
