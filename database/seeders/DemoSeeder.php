@@ -24,15 +24,13 @@ class DemoSeeder extends Seeder
 {
     public function run(): void
     {
-
         // Demo users seeded separately
         $admin = User::where('role', 'admin')->first();
         $staff = User::where('role', 'staff')->first();
         $head = User::where('role', 'head')->first();
 
+        // Additional demo users for variety in ownership/assignment
         $extraUsers = User::factory()->count(10)->create();
-
-
         $ticketData = [
             [
                 'category' => 'Desktops & Laptops',
@@ -213,7 +211,6 @@ class DemoSeeder extends Seeder
 
         // Job Orders linked to random tickets
         $jobOrders = collect($jobOrderData)->map(function ($data) use ($tickets, $staff) {
-
             $ticket = $tickets->random();
             $status = fake()->randomElement(JobOrder::STATUSES);
 
@@ -282,6 +279,9 @@ class DemoSeeder extends Seeder
             ->get()
             ->keyBy('name');
 
+        $inventoryCategories = InventoryCategory::whereIn('name', collect($inventoryData)->pluck('category'))
+            ->get()
+            ->keyBy('name');
         $items = collect($inventoryData)->map(function ($data) use ($admin, $inventoryCategories) {
             return InventoryItem::factory()
                 ->for($admin)
@@ -381,6 +381,7 @@ class DemoSeeder extends Seeder
                 'description' => 'Guidelines for conducting research responsibly.',
             ],
         ];
+
         $docCategories = DocumentCategory::whereIn('name', collect($documentData)->pluck('category'))
             ->get()
             ->keyBy('name');

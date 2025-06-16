@@ -32,7 +32,7 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
 - Each role grants access to specific views and actions (using RBAC).
 
 ### 3. Departmental Affiliations and Access Controls
-- Users are linked to departments (e.g., CCS, HR, Finance, Library).
+- Users are linked to departments (e.g., CCS, HR, Finance, ITRC, Library).
 - Requests, approvals, and dashboard access are filtered by department.
 - Cross-departmental access is managed only by Admins or Super Admins.
 

@@ -28,6 +28,7 @@ class UserSeeder extends Seeder
             'department' => 'Administration',
             'designation' => 'President',
         ]);
+
         User::factory()->create([
             'name' => 'Finance Officer',
             'email' => 'finance@example.com',
@@ -42,6 +43,7 @@ class UserSeeder extends Seeder
             'CCS',
             'BED Department',
             'Non-Teaching Department',
+            'ITRC',
         ];
 
         foreach ($departments as $dept) {
