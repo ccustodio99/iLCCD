@@ -280,7 +280,6 @@ class DemoSeeder extends Seeder
         $inventoryCategories = InventoryCategory::whereIn('name', collect($inventoryData)->pluck('category'))
             ->get()
             ->keyBy('name');
-
         $items = collect($inventoryData)->map(function ($data) use ($admin, $inventoryCategories) {
             return InventoryItem::factory()
                 ->for($admin)
