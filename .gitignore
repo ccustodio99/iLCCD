@@ -1,0 +1,27 @@
+# Laravel
+/vendor
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/storage/logs
+/storage/framework
+/storage/app/public
+.phpunit.result.cache
+.phpunit.cache
+.env
+.env.backup
+.env.production
+.phpactor.json
+Homestead.json
+Homestead.yaml
+npm-debug.log
+Thumbs.db
+yarn-error.log
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
+/database/*.sqlite
