@@ -18,7 +18,10 @@ class JobOrderFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'job_type' => JobOrderType::factory()->create()->name,
+            // Use a seeded job order type if available; otherwise default to
+            // a generic value instead of creating random lorem words
+            'job_type' => JobOrderType::inRandomOrder()->value('name')
+                ?? 'Other Job Request',
             'description' => fake()->paragraph(),
             'attachment_path' => null,
             'status' => JobOrder::STATUS_PENDING_HEAD,
