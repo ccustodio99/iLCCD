@@ -16,11 +16,19 @@
         @method('PUT')
         <div class="mb-3">
             <label for="color_primary" class="form-label">Primary Color</label>
-            <input type="color" id="color_primary" name="color_primary" value="{{ $primary }}" class="form-control form-control-color" />
+            <div class="d-flex align-items-center gap-2">
+                <input type="color" id="color_primary" name="color_primary" value="{{ $primary }}" class="form-control form-control-color" aria-describedby="primary_help" />
+                <span id="primary_color_preview" class="border rounded" style="width: 2rem; height: 2rem; background: {{ $primary }};"></span>
+            </div>
+            <div id="primary_help" class="form-text">Preview of the primary color</div>
         </div>
         <div class="mb-3">
             <label for="color_accent" class="form-label">Accent Color</label>
-            <input type="color" id="color_accent" name="color_accent" value="{{ $accent }}" class="form-control form-control-color" />
+            <div class="d-flex align-items-center gap-2">
+                <input type="color" id="color_accent" name="color_accent" value="{{ $accent }}" class="form-control form-control-color" aria-describedby="accent_help" />
+                <span id="accent_color_preview" class="border rounded" style="width: 2rem; height: 2rem; background: {{ $accent }};"></span>
+            </div>
+            <div id="accent_help" class="form-text">Preview of the accent color</div>
         </div>
         <div class="mb-3">
             <label for="font_primary" class="form-label">Primary Font</label>
@@ -45,6 +53,10 @@
         <div class="mb-3">
             <label for="home_tagline" class="form-label">Home Page Tagline</label>
             <textarea id="home_tagline" name="home_tagline" rows="3" class="form-control">{{ $home_tagline }}</textarea>
+        </div>
+        <div id="theme-preview" class="card p-3 mb-4" style="--color-primary: {{ $primary }}; --color-accent: {{ $accent }}; --font-primary: '{{ $font_primary }}'; --font-secondary: '{{ $font_secondary }}';">
+            <h5 class="preview-heading mb-2" style="font-family: var(--font-primary); color: var(--color-primary);">{{ $home_heading }}</h5>
+            <p class="preview-tagline mb-0" style="font-family: var(--font-secondary); color: var(--color-accent);">{{ $home_tagline }}</p>
         </div>
         <button type="submit" class="btn btn-primary">Save Theme</button>
     </form>
@@ -96,3 +108,7 @@
     <a href="{{ route('settings.index') }}" class="btn btn-secondary">Back to Settings</a>
 </div>
 @endsection
+
+@push('scripts')
+@vite('resources/js/theme-preview.js')
+@endpush

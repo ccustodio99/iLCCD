@@ -11,6 +11,7 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/js/dashboard.js',
                 'resources/js/category-dropdown.js',
+                'resources/js/theme-preview.js',
             ],
             refresh: true,
         }),
