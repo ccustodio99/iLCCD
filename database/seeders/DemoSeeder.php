@@ -19,108 +19,18 @@ use App\Models\RequisitionItem;
 use App\Models\InventoryTransaction;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class DemoSeeder extends Seeder
 {
     public function run(): void
     {
-        // Demo users
-        $admin = User::factory()->create([
-            'name' => 'Demo Admin',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'admin',
-            'department' => 'ITRC',
-        ]);
 
-        $staff = User::factory()->create([
-            'name' => 'Demo Staff',
-            'email' => 'staff@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'staff',
-            'department' => 'CCS',
-        ]);
+        // Demo users seeded separately
+        $admin = User::where('role', 'admin')->first();
+        $staff = User::where('role', 'staff')->first();
+        $itrc = User::where('role', 'itrc')->first();
+        $head = User::where('role', 'head')->first();
 
-        $user = User::factory()->create([
-            'name' => 'Demo User',
-            'email' => 'user@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'user',
-            'department' => 'CCS',
-        ]);
-
-        $president = User::factory()->create([
-            'name' => 'Demo President',
-            'email' => 'president@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'president',
-            'department' => 'Administration',
-        ]);
-
-        $finance = User::factory()->create([
-            'name' => 'Demo Finance',
-            'email' => 'finance@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'finance',
-            'department' => 'Finance Office',
-        ]);
-
-        $registrar = User::factory()->create([
-            'name' => 'Demo Registrar',
-            'email' => 'registrar@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'registrar',
-            'department' => 'Registrar',
-        ]);
-
-        $hr = User::factory()->create([
-            'name' => 'Demo HR',
-            'email' => 'hr@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'hr',
-            'department' => 'HR Department',
-        ]);
-
-        $clinic = User::factory()->create([
-            'name' => 'Demo Clinic',
-            'email' => 'clinic@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'clinic',
-            'department' => 'Clinic',
-        ]);
-
-        $itrc = User::factory()->create([
-            'name' => 'Demo ITRC',
-            'email' => 'itrc@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'itrc',
-            'department' => 'ITRC',
-        ]);
-
-        $head = User::factory()->create([
-            'name' => 'Demo Head',
-            'email' => 'head@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'head',
-            'department' => 'CCS',
-        ]);
-
-        $faculty = User::factory()->create([
-            'name' => 'Demo Faculty',
-            'email' => 'faculty@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'staff',
-            'department' => 'Faculty/Staff',
-        ]);
-
-        $academic = User::factory()->create([
-            'name' => 'Demo Academic',
-            'email' => 'academic@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'academic',
-            'department' => 'Academic Units',
-        ]);
 
         // Additional demo users for variety in ownership/assignment
         $extraUsers = User::factory()->count(10)->create();
@@ -318,7 +228,7 @@ class DemoSeeder extends Seeder
                 ->for($ticket->user)
                 ->for($staff, 'assignedTo')
                 ->state([
-
+n
                     'job_type' => $data['type'],
                     'description' => $data['description'],
                     'status' => $status,

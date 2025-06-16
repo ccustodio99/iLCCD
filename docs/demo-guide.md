@@ -37,6 +37,9 @@ These commands assume a local development setup with PHP, Composer, Node.js, and
 |-------|---------------------|----------|
 | Admin        | admin@example.com      | Password1 |
 | President    | president@example.com  | Password1 |
+| Treasurer    | treasurer@example.com | Password1 |
+| Finance (College) | finance.college@example.com | Password1 |
+| Finance (BED) | finance.bed@example.com | Password1 |
 | Finance      | finance@example.com    | Password1 |
 | Registrar    | registrar@example.com  | Password1 |
 | HR           | hr@example.com         | Password1 |

@@ -25,6 +25,7 @@ class User extends Authenticatable
         'staff',
         'head',
         'president',
+        'treasurer',
         'finance',
         'itrc',
         'registrar',
