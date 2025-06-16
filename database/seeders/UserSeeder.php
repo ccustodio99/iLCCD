@@ -29,14 +29,6 @@ class UserSeeder extends Seeder
             'designation' => 'President',
         ]);
 
-        User::factory()->create([
-            'name' => 'Finance Officer',
-            'email' => 'finance@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'staff',
-            'department' => 'Finance Office',
-        ]);
-
         $departments = [
             'Nursing',
             'CHTM',
@@ -44,9 +36,11 @@ class UserSeeder extends Seeder
             'BED Department',
             'Non-Teaching Department',
             'ITRC',
+            'Finance Office',
         ];
 
         foreach ($departments as $dept) {
+            // Department head
             User::factory()->create([
                 'name' => $dept . ' Head',
                 'email' => Str::slug($dept) . '.head@example.com',
@@ -54,13 +48,12 @@ class UserSeeder extends Seeder
                 'role' => 'head',
                 'department' => $dept,
             ]);
-        }
 
-        // Additional staff across departments
-        foreach ($departments as $dept) {
-            User::factory()->count(2)->create([
+            // Single staff member
+            User::factory()->create([
                 'role' => 'staff',
                 'department' => $dept,
+                'password' => Hash::make('Password1'),
             ]);
         }
     }
