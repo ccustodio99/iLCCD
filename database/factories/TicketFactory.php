@@ -19,7 +19,10 @@ class TicketFactory extends Factory
         return [
             'user_id' => User::factory(),
             'assigned_to_id' => null,
-            'ticket_category_id' => TicketCategory::factory(),
+            // Use an existing ticket category instead of creating random names
+            // to avoid filler words like "deserunt" appearing in the database
+            'ticket_category_id' => TicketCategory::inRandomOrder()->value('id')
+                ?? TicketCategory::factory()->create()->id,
             'subject' => fake()->sentence(4),
             'description' => fake()->paragraph(),
             'attachment_path' => null,
