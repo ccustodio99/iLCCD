@@ -4,7 +4,7 @@
     "name": "bootstrap"
   },
   "resources/css/app.css": {
-    "file": "assets/app-BbTrW6qs.css",
+    "file": "assets/app-DzPPyo8P.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -34,5 +34,11 @@
     "imports": [
       "_bootstrap-T1DpEqax.js"
     ]
+  },
+  "resources/js/theme-preview.js": {
+    "file": "assets/theme-preview-DVcsE5OU.js",
+    "name": "theme-preview",
+    "src": "resources/js/theme-preview.js",
+    "isEntry": true
   }
 }
