@@ -14,9 +14,23 @@ class TicketCategoryFactory extends Factory
 
     public function definition(): array
     {
+        $categories = [
+            'Computers & Devices',
+            'Software & Apps',
+            'Network & Access',
+            'User Accounts & Access',
+            'Printing & Scanning',
+            'Procurement & Inventory',
+            'Facilities & Maintenance',
+            'Security & Safety',
+            'Training & Support',
+            'Feedback & Improvement',
+            'Other / General Inquiry',
+        ];
+
         return [
             'parent_id' => null,
-            'name' => $this->faker->word(),
+            'name' => $this->faker->unique()->randomElement($categories),
             'is_active' => true,
         ];
     }
