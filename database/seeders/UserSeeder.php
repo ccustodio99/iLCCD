@@ -68,8 +68,10 @@ class UserSeeder extends Seeder
             'name' => 'Demo User',
             'email' => 'user@example.com',
             'password' => Hash::make('Password1'),
+
             'role' => 'staff',
             'department' => 'CCS',
         ]);
+
     }
 }
