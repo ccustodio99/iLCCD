@@ -20,7 +20,8 @@ class InventoryItemFactory extends Factory
             'user_id' => User::factory(),
             'name' => fake()->words(2, true),
             'description' => fake()->sentence(),
-            'inventory_category_id' => InventoryCategory::factory(),
+            'inventory_category_id' => InventoryCategory::inRandomOrder()->value('id')
+                ?? InventoryCategory::factory(),
             'department' => fake()->randomElement(['IT', 'HR', 'Admin']),
             'location' => fake()->city(),
             'supplier' => fake()->company(),

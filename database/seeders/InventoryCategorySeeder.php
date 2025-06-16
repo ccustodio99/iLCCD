@@ -62,8 +62,20 @@ class InventoryCategorySeeder extends Seeder
         'Miscellaneous' => [],
     ];
 
+    /**
+     * Flattened list of all canonical names.
+     */
+    public static function allNames(): array
+    {
+        return collect(self::CATEGORIES)
+            ->flatMap(fn ($children, $parent) => array_merge([$parent], $children))
+            ->all();
+    }
+
     public function run(): void
     {
+        InventoryCategory::whereNotIn('name', self::allNames())->delete();
+
         foreach (self::CATEGORIES as $parent => $children) {
             $parentCategory = InventoryCategory::firstOrCreate(
                 ['name' => $parent],
