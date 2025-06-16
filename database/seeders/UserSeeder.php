@@ -42,6 +42,7 @@ class UserSeeder extends Seeder
             'CCS',
             'BED Department',
             'Non-Teaching Department',
+            'ITRC',
         ];
 
         foreach ($departments as $dept) {
