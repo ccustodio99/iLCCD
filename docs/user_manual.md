@@ -35,6 +35,9 @@ Each module has status indicators so you can track approvals and fulfillment. Se
 - The **My Tickets** or **My Requests** pages list everything you have submitted with their current status.
 - Email alerts are sent whenever a ticket is created, assigned, updated, escalated, closed, or when someone comments. These notifications go to the ticket owner, the assigned user, and all watchers so everyone stays informed.
 - Archiving a ticket removes it from the active list and automatically sets the status to **Closed**.
+- After department approval of a job order or requisition, linked tickets
+  and orders are locked from editing by the requester. Approvers can send
+  them back to **pending** with remarks when revisions are needed.
 - For managers, the dashboard highlights pending approvals with quick links to review them.
 - The **KPI & Audit Dashboard** aggregates performance metrics like response times and completion rates. Access it via the **KPI Dashboard** link or by visiting `/kpi-dashboard`.
 

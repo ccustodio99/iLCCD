@@ -36,6 +36,9 @@ The **Requisition Management Module** enables LCCD stakeholders to request mater
   - **pending_president** – awaiting president approval
   - **pending_finance** – awaiting finance approval
   - **approved** – fully approved and ready for fulfillment
+- Once a requisition moves beyond **pending_head**, the requester can no
+  longer edit it. Approvers may return the request to **pending_head** with
+  remarks when changes are needed, restarting the approval cycle.
 - Requesters can monitor their requisitions and remarks via their dashboard.
 
 ### 4. Integration with Other Modules

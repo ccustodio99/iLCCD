@@ -71,6 +71,7 @@ Route::middleware('auth')->group(function () {
     Route::get('job-order-types/{parent}/children', [JobOrderTypeController::class, 'children'])->name('job-order-types.children');
     Route::get('job-orders/approvals', [JobOrderController::class, 'approvals'])->name('job-orders.approvals')->middleware('role:head,president,finance');
     Route::put('job-orders/{jobOrder}/approve', [JobOrderController::class, 'approve'])->name('job-orders.approve')->middleware('role:head,president,finance');
+    Route::put('job-orders/{jobOrder}/return', [JobOrderController::class, 'returnToPending'])->name('job-orders.return')->middleware('role:head');
     Route::get('job-orders/assignments', [JobOrderController::class, 'assignments'])->name('job-orders.assignments')->middleware('role:itrc,admin');
     Route::put('job-orders/{jobOrder}/assign', [JobOrderController::class, 'assign'])->name('job-orders.assign')->middleware('role:itrc,admin');
     Route::get('job-orders/assigned', [JobOrderController::class, 'assigned'])->name('job-orders.assigned')->middleware('role:staff,itrc');
@@ -82,6 +83,9 @@ Route::middleware('auth')->group(function () {
     Route::put('requisitions/{requisition}/approve', [RequisitionController::class,'approve'])
         ->middleware('role:head,president,finance')
         ->name('requisitions.approve');
+    Route::put('requisitions/{requisition}/return', [RequisitionController::class,'returnToPending'])
+        ->middleware('role:head')
+        ->name('requisitions.return');
     Route::get('requisitions/{requisition}/attachment', [RequisitionController::class, 'downloadAttachment'])->name('requisitions.attachment');
     Route::resource('requisitions', RequisitionController::class)->except('show');
     Route::middleware('role:admin,itrc')->group(function () {

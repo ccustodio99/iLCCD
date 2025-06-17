@@ -107,6 +107,9 @@ class JobOrderController extends Controller
         if ($jobOrder->user_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
+        if ($jobOrder->status !== JobOrder::STATUS_PENDING_HEAD && auth()->user()->role !== 'head') {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
         $types = JobOrderType::whereNull('parent_id')
             ->where('is_active', true)
             ->orderBy('name')
@@ -122,6 +125,9 @@ class JobOrderController extends Controller
     public function update(Request $request, JobOrder $jobOrder)
     {
         if ($jobOrder->user_id !== auth()->id()) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+        if ($jobOrder->status !== JobOrder::STATUS_PENDING_HEAD && auth()->user()->role !== 'head') {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $data = $request->validate([
@@ -194,6 +200,9 @@ class JobOrderController extends Controller
     public function destroy(JobOrder $jobOrder)
     {
         if ($jobOrder->user_id !== auth()->id()) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+        if ($jobOrder->status !== JobOrder::STATUS_PENDING_HEAD) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $jobOrder->delete();
@@ -317,6 +326,26 @@ class JobOrderController extends Controller
         }
 
         return redirect()->route('job-orders.approvals');
+    }
+
+    /**
+     * Return the job order to pending_head for revisions.
+     */
+    public function returnToPending(Request $request, JobOrder $jobOrder)
+    {
+        abort_unless(auth()->user()->role === 'head', Response::HTTP_FORBIDDEN);
+
+        $request->validate(['remarks' => 'required|string']);
+
+        $jobOrder->update([
+            'status' => JobOrder::STATUS_PENDING_HEAD,
+        ]);
+
+        $jobOrder->user->notify(new \App\Notifications\JobOrderStatusNotification(
+            "Job order #{$jobOrder->id} was returned for revisions."
+        ));
+
+        return back();
     }
 
     /** Show approved job orders for assignment */
