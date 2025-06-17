@@ -126,6 +126,14 @@ Deliver a holistic, faith-driven digital backbone for LCCD, empowering every use
 - Unified LCCD/CCS identity, mobile-first, accessible, role-tailored navigation
 - Consistent colors, fonts, logos, and feedback—all Gen Z ready
 
+### 12. ⚙️ System Settings
+- Manage global defaults, theme options, and configuration records
+- Admin-only area centralizing system-wide preferences
+
+### 13. 📢 Announcements
+- Publish dashboard messages with active/inactive status
+- CRUD operations housed within **System Settings**
+
 ---
 
 ## 🔄 System Flow
@@ -210,18 +218,23 @@ Every action is traceable; every step is value-aligned.
 ---
 
 ## 📚 Documentation & Resources
-
 - [User Manual](docs/user_manual.md)
 - [Access Control Module](docs/Access_Control_Module.md)
 - [User Management Module](docs/user.md)
 - [User Interface & Branding](docs/user-interface-branding.md)
 - [Ticketing System Module](docs/Ticketing_System_Module.md)
+- [Ticket Categories](docs/ticket-categories.md)
 - [Document Management Module](docs/document-management-module.md)
 - [Document Tracking Module](docs/document-tracking-module.md)
 - [Document KPI & Log Dashboard](docs/document-kpi-log-dashboard.md)
 - [KPI & Audit Dashboard](docs/kpi-audit-log-dashboard.md)
+- [Audit Trail Overview](docs/audit-trail-overview.md)
 - [Job Order Module](docs/job-order-module.md)
 - [Requisition Management Module](docs/requisition-management-module.md)
+- [Inventory Module](docs/inventory-module.md)
+- [System Settings](docs/system-settings.md)
+- [Announcements](docs/announcement-module.md)
+- [Demo Guide](docs/demo-guide.md)
 - [Purchase Order System](docs/purchase-order-module.md)
 - [Codebase Overview](docs/codebase_overview.md)
 - [Testing Guide](docs/testing.md)
