@@ -31,6 +31,9 @@ Tickets can be assigned to another user for resolution in addition to the ticket
 - IT or system administrators
 
 Additional users may be included as watchers to collaborate on the issue. Watchers can follow progress and comment, but only the ticket owner and the assigned user can modify or close the ticket.
+- After a department head approves a linked job order or requisition,
+  the ticket becomes read-only for the requester. The head may revert the
+  ticket to a pending state with remarks if updates are required.
 
 ### Email Alerts
 The system emails stakeholders whenever a ticket is created, assigned, updated, escalated, closed, or when a new comment is posted. Alerts go to the ticket owner, the assigned user, and all watchers so everyone stays on the same page.
