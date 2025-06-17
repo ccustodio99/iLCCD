@@ -4,7 +4,8 @@ horizontally on small screens. Navigation uses a hamburger button on mobile
 while a persistent sidebar remains visible on larger screens. The menu lists
 links to **Tickets**, **Job Orders**, **Requisitions**, **Inventory**,
 **Purchase Orders**, and **Documents** so moving between modules is quick and
-intuitive.
+intuitive. Each sidebar link now displays a small Material icon for faster
+visual recognition.
 
 ### UX Design Principles
 
