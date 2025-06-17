@@ -238,6 +238,10 @@ class TicketController extends Controller
             'watchers' => 'array',
             'watchers.*' => 'exists:users,id',
         ]);
+
+        if ($request->user()->role === 'staff' && $request->input('status') !== $ticket->status) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
         if ($request->hasFile('attachment')) {
             if ($ticket->attachment_path) {
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($ticket->attachment_path);
@@ -335,6 +339,37 @@ class TicketController extends Controller
 
         $ticket->load('watchers', 'assignedTo', 'user');
         $this->notifyStakeholders($ticket, "New comment on ticket #{$ticket->id}.");
+
+        return back();
+    }
+
+    public function requestEdit(Request $request, Ticket $ticket)
+    {
+        if ($ticket->user_id !== $request->user()->id) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+
+        $data = $request->validate([
+            'reason' => 'required|string',
+        ]);
+
+        $ticket->update([
+            'status' => 'open',
+            'edit_request_reason' => $data['reason'],
+            'edit_requested_at' => now(),
+            'edit_requested_by' => $request->user()->id,
+        ]);
+
+        AuditTrail::create([
+            'auditable_id' => $ticket->id,
+            'auditable_type' => Ticket::class,
+            'user_id' => $request->user()->id,
+            'ip_address' => $request->ip(),
+            'action' => 'edit_requested',
+            'changes' => ['reason' => $data['reason']],
+        ]);
+
+        $this->notifyStakeholders($ticket, "Edit requested for ticket #{$ticket->id}.");
 
         return back();
     }

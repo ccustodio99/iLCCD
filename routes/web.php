@@ -61,6 +61,7 @@ Route::middleware('auth')->group(function () {
     Route::post('tickets/{ticket}/convert', [TicketController::class, 'convertToJobOrder'])->name('tickets.convert');
     Route::post('tickets/{ticket}/requisition', [TicketController::class, 'convertToRequisition'])->name('tickets.requisition');
     Route::post('tickets/{ticket}/comments', [TicketController::class, 'storeComment'])->name('tickets.comment');
+    Route::post('tickets/{ticket}/request-edit', [TicketController::class, 'requestEdit'])->name('tickets.request-edit');
     Route::get('tickets/{ticket}/attachment', [TicketController::class, 'downloadAttachment'])->name('tickets.attachment');
     Route::resource('job-orders', JobOrderController::class)->except('show');
     Route::get('job-orders/{jobOrder}/attachment', [JobOrderController::class, 'downloadAttachment'])->name('job-orders.attachment');

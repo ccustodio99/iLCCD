@@ -28,6 +28,9 @@ class Ticket extends Model
         'due_at',
         'escalated_at',
         'resolved_at',
+        'edit_request_reason',
+        'edit_requested_at',
+        'edit_requested_by',
     ];
 
     protected function casts(): array
@@ -37,6 +40,7 @@ class Ticket extends Model
             'escalated_at' => 'datetime',
             'resolved_at' => 'datetime',
             'archived_at' => 'datetime',
+            'edit_requested_at' => 'datetime',
         ];
     }
 

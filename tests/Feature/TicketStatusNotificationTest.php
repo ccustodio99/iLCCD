@@ -11,8 +11,8 @@ it('dispatches status notifications on ticket events', function () {
     \App\Models\Setting::set('notify_ticket_updates', true);
     \App\Models\Setting::set('template_ticket_updates', '{{ message }}');
 
-    $owner = User::factory()->create();
-    $assignee = User::factory()->create();
+    $owner = User::factory()->create(['role' => 'staff']);
+    $assignee = User::factory()->create(['role' => 'head']);
     $watcher = User::factory()->create();
     $category = TicketCategory::factory()->create(['name' => 'IT']);
 
@@ -38,6 +38,7 @@ it('dispatches status notifications on ticket events', function () {
     ])->assertRedirect('/tickets');
 
     // escalate
+    $this->actingAs($assignee);
     $this->put("/tickets/{$ticket->id}", [
         'ticket_category_id' => $category->id,
         'subject' => 'Printer',
