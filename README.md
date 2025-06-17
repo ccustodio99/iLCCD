@@ -226,7 +226,20 @@ Every action is traceable; every step is value-aligned.
 - [Codebase Overview](docs/codebase_overview.md)
 - [Testing Guide](docs/testing.md)
 - [Contributor Guidelines](AGENTS.md)
+- [Documentation Index](docs/README.md)
 - Need help? Email: `itrc@lccd.edu.ph`
+
+---
+
+## 🔍 Developer Quick Check
+
+Before committing, run the automated tests to verify everything works:
+
+```bash
+php artisan test
+```
+
+For additional testing tips, see the [Testing Guide](docs/testing.md).
 
 ---
 
