@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">My Job Orders</h1>
+    <h1 class="mb-4">Job Orders</h1>
     @include('components.per-page-selector')
     <div class="mb-3">
         <form method="GET" class="row row-cols-lg-auto g-2 align-items-end">

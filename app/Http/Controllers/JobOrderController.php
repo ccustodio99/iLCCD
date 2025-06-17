@@ -17,10 +17,17 @@ class JobOrderController extends Controller
     {
         $perPage = $this->getPerPage($request);
 
+        $user = $request->user();
         $query = JobOrder::with(['requisitions', 'ticket', 'auditTrails.user'])
-            ->where(function ($q) {
-                $q->where('user_id', auth()->id())
-                    ->orWhere('assigned_to_id', auth()->id());
+            ->where(function ($q) use ($user) {
+                $q->where('user_id', $user->id)
+                    ->orWhere('assigned_to_id', $user->id);
+
+                if ($user->role === 'head') {
+                    $q->orWhereHas('user', function ($uq) use ($user) {
+                        $uq->where('department', $user->department);
+                    });
+                }
             });
 
         if (!$request->boolean('closed')) {

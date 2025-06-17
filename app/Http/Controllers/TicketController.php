@@ -35,7 +35,20 @@ class TicketController extends Controller
     {
         $perPage = $this->getPerPage($request);
 
-        $query = Ticket::query()->where('user_id', auth()->id());
+        $user = $request->user();
+        $query = Ticket::query()->where(function ($q) use ($user) {
+            $q->where('user_id', $user->id)
+                ->orWhere('assigned_to_id', $user->id)
+                ->orWhereHas('watchers', function ($w) use ($user) {
+                    $w->where('users.id', $user->id);
+                });
+
+            if ($user->role === 'head') {
+                $q->orWhereHas('user', function ($uq) use ($user) {
+                    $uq->where('department', $user->department);
+                });
+            }
+        });
 
         if ($request->boolean('archived')) {
             $query->withTrashed();
