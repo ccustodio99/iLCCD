@@ -108,6 +108,9 @@ class RequisitionController extends Controller
         if ($requisition->status === Requisition::STATUS_APPROVED) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
+        if ($requisition->status !== Requisition::STATUS_PENDING_HEAD && auth()->user()->role !== 'head') {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
         $data = $request->validate([
             'item.*' => 'required|string|max:255',
             'quantity.*' => 'required|integer|min:1',
@@ -190,7 +193,7 @@ class RequisitionController extends Controller
         if ($requisition->user_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
-        if ($requisition->status === Requisition::STATUS_APPROVED) {
+        if ($requisition->status !== Requisition::STATUS_PENDING_HEAD) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $requisition->delete();
@@ -267,6 +270,27 @@ class RequisitionController extends Controller
         }
 
         return redirect()->route('requisitions.approvals');
+    }
+
+    /**
+     * Return the requisition to pending_head for revisions.
+     */
+    public function returnToPending(Request $request, Requisition $requisition)
+    {
+        abort_unless(auth()->user()->role === 'head', Response::HTTP_FORBIDDEN);
+
+        $data = $request->validate(['remarks' => 'required|string']);
+
+        $requisition->update([
+            'status' => Requisition::STATUS_PENDING_HEAD,
+            'remarks' => $data['remarks'],
+        ]);
+
+        $requisition->user->notify(new \App\Notifications\RequisitionStatusNotification(
+            "Requisition #{$requisition->id} was returned for revisions."
+        ));
+
+        return back();
     }
 
     private function authorizeApproval(Requisition $requisition): void

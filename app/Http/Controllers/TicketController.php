@@ -203,6 +203,14 @@ class TicketController extends Controller
         if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
+        if (auth()->user()->role !== 'head') {
+            if ($ticket->jobOrder && $ticket->jobOrder->status !== JobOrder::STATUS_PENDING_HEAD) {
+                abort(Response::HTTP_FORBIDDEN, 'Access denied');
+            }
+            if ($ticket->requisitions()->where('status', '!=', Requisition::STATUS_PENDING_HEAD)->exists()) {
+                abort(Response::HTTP_FORBIDDEN, 'Access denied');
+            }
+        }
         $data = $request->validate([
             'ticket_category_id' => [
                 'required',
@@ -337,6 +345,14 @@ class TicketController extends Controller
     {
         if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+        if (auth()->user()->role !== 'head') {
+            if ($ticket->jobOrder && $ticket->jobOrder->status !== JobOrder::STATUS_PENDING_HEAD) {
+                abort(Response::HTTP_FORBIDDEN, 'Access denied');
+            }
+            if ($ticket->requisitions()->where('status', '!=', Requisition::STATUS_PENDING_HEAD)->exists()) {
+                abort(Response::HTTP_FORBIDDEN, 'Access denied');
+            }
         }
         if ($ticket->status !== 'closed') {
             $ticket->status = 'closed';
