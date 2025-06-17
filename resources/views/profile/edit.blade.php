@@ -3,6 +3,12 @@
 @section('title', 'Profile')
 
 @section('content')
+@php
+    $breadcrumbs = [
+        ['label' => 'Dashboard', 'url' => route('dashboard')],
+        ['label' => 'Profile'],
+    ];
+@endphp
 <div class="container" style="max-width: 500px;">
     <h1 class="mb-4">My Profile</h1>
     @if ($errors->any())
@@ -16,7 +22,8 @@
         </div>
     @endif
     <div class="text-center mb-3">
-        <img src="{{ $user->profile_photo_url }}" alt="Profile Photo" class="rounded-circle" width="150">
+        <img id="photo-preview" src="{{ $user->profile_photo_url }}" alt="Profile photo of {{ $user->name }}" class="rounded-circle mb-2" width="150" height="150">
+        <p id="photo-help" class="form-text">Accepted formats: JPG, PNG, up to 2MB.</p>
     </div>
     <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -35,7 +42,7 @@
         </div>
         <div class="mb-3">
             <label for="profile_photo" class="form-label">Profile Photo</label>
-            <input id="profile_photo" type="file" name="profile_photo" class="form-control">
+            <input id="profile_photo" type="file" name="profile_photo" class="form-control" accept="image/*" aria-describedby="photo-help">
         </div>
         <div class="form-check mb-3">
             <input id="remove_photo" type="checkbox" name="remove_photo" value="1" class="form-check-input">
@@ -53,4 +60,15 @@
         <a href="{{ route('profile.edit') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
+@push('scripts')
+<script>
+document.getElementById('profile_photo').addEventListener('change', function () {
+    const [file] = this.files;
+    if (file) {
+        const preview = document.getElementById('photo-preview');
+        preview.src = URL.createObjectURL(file);
+    }
+});
+</script>
+@endpush
 @endsection
