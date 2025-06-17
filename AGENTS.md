@@ -57,6 +57,14 @@ This guide ensures **every contributor (human or AI)** follows best practices fo
   - Variables: meaningful, no abbreviations
 - **Comments:**
   - Comment complex business logic, workflows, and any “why” behind key decisions
+  - Run `composer pint` to automatically fix PHP formatting
+
+---
+
+## 🖥 Local Development
+
+- Use `composer dev` to start the server, queue worker, and Vite in watch mode.
+- This script runs `php artisan serve`, `php artisan queue:listen`, and `npm run dev` concurrently.
 
 ---
 
@@ -67,7 +75,8 @@ This guide ensures **every contributor (human or AI)** follows best practices fo
   - Validate both happy path and error flows
 - **Automated:**
   - Write unit and feature tests for controllers, models, and core logic in `/tests/`
-  - Run: `php artisan test` before PR or merge
+  - Run: `php artisan test` before PR or merge (uses [Pest](https://pestphp.com/))
+  - See [docs/testing.md](docs/testing.md) for detailed instructions
 
 ---
 
@@ -92,6 +101,7 @@ This guide ensures **every contributor (human or AI)** follows best practices fo
 
 - **PHP Syntax:**
   - `php artisan test` (preferred) or `php -l file.php`
+  - Run `composer pint` to fix PHP style issues
 - **HTML Validation:**
   - [W3C Markup Validator](https://validator.w3.org/)
 - **CSS Validation:**
@@ -140,6 +150,8 @@ This guide ensures **every contributor (human or AI)** follows best practices fo
 - [Branding Guide](docs/user-interface-branding.md)
 - [Access Control](docs/Access_Control_Module.md)
 - [Module Docs](docs/)
+- [Codebase Overview](docs/codebase_overview.md)
+- [Testing Guide](docs/testing.md)
 - Email: `itrc@lccd.edu.ph` for help or onboarding
 
 ---
