@@ -21,7 +21,15 @@ class DocumentFactory extends Factory
             'title' => fake()->sentence(3),
             'description' => fake()->sentence(),
             'document_category_id' => DocumentCategory::factory(),
-            'department' => 'CCS',
+            'department' => fake()->randomElement([
+                'Nursing',
+                'CHTM',
+                'BED Department',
+                'Non-Teaching Department',
+                'ITRC',
+                'Finance Office',
+                'Administration',
+            ]),
             'current_version' => 1,
         ];
     }
