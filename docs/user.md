@@ -79,11 +79,12 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
 ### Current Implementation
 - Users can register and log in with hashed passwords.
 - Admins manage roles, departments, activation status, and can create accounts directly from the Users page.
-- 2FA, password expiry, account lockout, and auto-logout are planned features.
+- Two-factor authentication, password expiry, and automatic logout remain planned features. Account lockout after repeated failed logins is already active.
+- An optional `Remember me` checkbox keeps users logged in across browser restarts.
 
 ### Password Policy & Session Management
 - Minimum 8 characters with a mix of letters, numbers, and symbols
-- Passwords expire every 90 days and cannot be reused immediately
+- Planned: passwords will expire every 90 days and cannot be reused immediately
 - Accounts lock for 15 minutes after 5 failed login attempts
 - Sessions expire after 15 minutes of inactivity and IDs regenerate on login
 - Changing a password invalidates all other active sessions
