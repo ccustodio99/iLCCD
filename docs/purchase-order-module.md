@@ -23,6 +23,7 @@ The **Purchase Order (PO) System** manages the procurement workflow for out-of-s
 - **Approval:** Follows the institution’s financial controls (typically routed through Finance, then President or designated signatory).
 - **Order Placement:** Upon approval, PO is sent to the supplier; status is tracked as "Ordered."
 - **Fulfillment:** Upon delivery, items are inspected and marked "Received" in the system.
+- **Automatic Dates:** The system stamps the `ordered_at` and `received_at` fields when those statuses are set.
 - **Status Tracking:** Dashboard tracks PO stages: Draft, Pending Approval, Approved, Ordered, Received, Closed, or Cancelled.
 
 ### 4. Inventory Updates Upon Receipt
@@ -31,6 +32,11 @@ The **Purchase Order (PO) System** manages the procurement workflow for out-of-s
   - Item history logs receipt with date, supplier, and reference PO.
   - Notifications are sent to the original requestor and inventory custodian.
 - Partial deliveries are supported; outstanding quantities remain tracked.
+
+### 5. File Attachments for Supporting Documents
+- Users in the Finance or Admin role may upload supplier quotations, invoices, or other files when creating or editing a PO.
+- Uploaded files are limited to **2&nbsp;MB** and stored under `storage/app/public/purchase_order_attachments`.
+- Owners and administrators can download the attachment from the PO listing; other users are denied access.
 
 ---
 
@@ -49,6 +55,7 @@ The **Purchase Order (PO) System** manages the procurement workflow for out-of-s
 - All PO activities—creation, edits, approvals, receipts—are logged in the audit trail.
 - Attachments (quotations, invoices, delivery receipts) are stored securely with each PO.
 - Permission checks for high-value or restricted item purchases.
+- Staff users may view only the orders they created, while admins can manage any order.
 
 ---
 
