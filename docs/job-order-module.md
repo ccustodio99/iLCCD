@@ -20,21 +20,25 @@ begins.
      auto-fills the requester and department.
    - Job order types are managed under **Settings → Job Order Types**.
    - When submitting a request, choose a **Type** first. A second dropdown then lists the available **Sub Types** for that category.
+2. **Conversion from Tickets**
+   - Maintenance-related tickets in the [Ticketing System Module](Ticketing_System_Module.md) can be converted directly into a job order.
+   - The conversion carries over the description and requester so the workflow continues seamlessly.
 
-2. **Post-Approval Assignment**
+
+3. **Post-Approval Assignment**
    - After multi-level approval (Head → President → Finance when
      required), jobs route automatically to the correct team—ITRC,
      maintenance, or another office.
    - Both the assignee and requester receive notifications.
 
-3. **Requesting Materials**
-   - When a job requires supplies, the system first checks **Inventory**.
+4. **Requesting Materials**
+   - When a job requires supplies, the system first checks [Inventory Module](inventory-module.md).
    - Available stock is deducted immediately and noted on the job order.
-   - If items are missing, a linked **Requisition** is created so the materials can be procured.
+   - If items are missing, a linked [Requisition Management Module](requisition-management-module.md) is created so the materials can be procured.
    - The job order remains in its current approval stage until the requisition is approved.
    - Once the requisition reaches **approved** and items are issued, the job order automatically advances to **approved** so it can be assigned.
 
-4. **Evaluation and Execution Logging**
+5. **Evaluation and Execution Logging**
    - Jobs move through these workflow states:
      `pending_head` → `pending_president` → `pending_finance` → `approved` → `assigned` → `in_progress` → `completed` → `closed`.
    - Requesters close the job order once work is verified done. The system
@@ -58,7 +62,7 @@ begins.
 
 - Only authenticated users may create or act on job orders.
 - Every step—from submission to closure—is logged.
-- Attachments are stored securely, and permission checks prevent
+- Attachments (downloadable) and saved in the [Document Management Module](document-management-module.md) are stored securely, and permission checks prevent
   unauthorized edits.
 - Once a job order is approved at any stage, the requester can no longer
   edit it. Approvers may return the record to `pending_head` with a
@@ -66,7 +70,7 @@ begins.
 
 ## 📊 Integration and Reporting
 
-- Connects directly with the Requisition and Inventory modules.
+- Connects directly with the [Requisition Management Module](requisition-management-module.md), [Inventory Module](inventory-module.md), and [Ticketing System Module](Ticketing_System_Module.md).
 - Feeds metrics such as completion time and material delays into the KPI
   dashboard.
 - Reports can be exported for administration and finance review.
