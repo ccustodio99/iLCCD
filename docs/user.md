@@ -109,6 +109,18 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
 5. User Management loads role and department data to personalize the dashboard
 6. The login event is written to the audit log
 
+### Database Schema & Seeded Accounts
+The `users` table stores account information with key fields:
+- `name`, unique `email`, and hashed `password`
+- `department` and `role`
+- `is_active` plus lockout timestamps
+- optional `designation`, `contact_info`, and `profile_photo_path`
+
+Run `php artisan migrate --seed` to populate demo accounts via
+`Database\Seeders\UserSeeder`. This seeder creates **admin**, **head**, and
+**staff** examples so you can log in right away. Customize the credentials in
+the seeder or provide your own users in production.
+
 
 ---
 
