@@ -1,11 +1,26 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Database\Seeders\UserSeeder;
 
 it('filters users by role', function () {
-    $admin = User::factory()->create(['role' => 'admin']);
-    User::factory()->create(['role' => 'staff', 'name' => 'Staff User']);
-    User::factory()->create(['role' => 'itrc', 'name' => 'ITRC User']);
+    $this->seed(UserSeeder::class);
+    $admin = User::firstWhere('role', 'admin');
+    User::create([
+        'name' => 'Staff User',
+        'email' => 'staff.user@example.com',
+        'password' => Hash::make('Password1'),
+        'role' => 'staff',
+        'department' => 'ITRC',
+    ]);
+    User::create([
+        'name' => 'ITRC User',
+        'email' => 'itrc.user@example.com',
+        'password' => Hash::make('Password1'),
+        'role' => 'itrc',
+        'department' => 'ITRC',
+    ]);
 
     $this->actingAs($admin);
     $response = $this->get('/users?role=staff');
@@ -14,9 +29,22 @@ it('filters users by role', function () {
 });
 
 it('searches users by name and email', function () {
-    $admin = User::factory()->create(['role' => 'admin']);
-    User::factory()->create(['name' => 'John Doe', 'email' => 'john@example.com']);
-    User::factory()->create(['name' => 'Jane', 'email' => 'jane@example.com']);
+    $this->seed(UserSeeder::class);
+    $admin = User::firstWhere('role', 'admin');
+    User::create([
+        'name' => 'John Doe',
+        'email' => 'john@example.com',
+        'password' => Hash::make('Password1'),
+        'role' => 'staff',
+        'department' => 'CCS',
+    ]);
+    User::create([
+        'name' => 'Jane',
+        'email' => 'jane@example.com',
+        'password' => Hash::make('Password1'),
+        'role' => 'staff',
+        'department' => 'CCS',
+    ]);
 
     $this->actingAs($admin);
     $response = $this->get('/users?search=john');
@@ -25,9 +53,22 @@ it('searches users by name and email', function () {
 });
 
 it('filters users by department', function () {
-    $admin = User::factory()->create(['role' => 'admin']);
-    User::factory()->create(['name' => 'CCS User', 'department' => 'CCS']);
-    User::factory()->create(['name' => 'HR User', 'department' => 'HR']);
+    $this->seed(UserSeeder::class);
+    $admin = User::firstWhere('role', 'admin');
+    User::create([
+        'name' => 'CCS User',
+        'email' => 'ccs.user@example.com',
+        'password' => Hash::make('Password1'),
+        'role' => 'staff',
+        'department' => 'CCS',
+    ]);
+    User::create([
+        'name' => 'HR User',
+        'email' => 'hr.user@example.com',
+        'password' => Hash::make('Password1'),
+        'role' => 'staff',
+        'department' => 'HR',
+    ]);
 
     $this->actingAs($admin);
     $response = $this->get('/users?department=CCS');
@@ -36,9 +77,24 @@ it('filters users by department', function () {
 });
 
 it('filters users by status', function () {
-    $admin = User::factory()->create(['role' => 'admin']);
-    User::factory()->create(['name' => 'Active', 'is_active' => true]);
-    User::factory()->create(['name' => 'Inactive', 'is_active' => false]);
+    $this->seed(UserSeeder::class);
+    $admin = User::firstWhere('role', 'admin');
+    User::create([
+        'name' => 'Active',
+        'email' => 'active@example.com',
+        'password' => Hash::make('Password1'),
+        'role' => 'staff',
+        'department' => 'CCS',
+        'is_active' => true,
+    ]);
+    User::create([
+        'name' => 'Inactive',
+        'email' => 'inactive@example.com',
+        'password' => Hash::make('Password1'),
+        'role' => 'staff',
+        'department' => 'CCS',
+        'is_active' => false,
+    ]);
 
     $this->actingAs($admin);
     $response = $this->get('/users?status=inactive');
