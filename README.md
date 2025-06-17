@@ -223,6 +223,8 @@ Every action is traceable; every step is value-aligned.
 - [Job Order Module](docs/job-order-module.md)
 - [Requisition Management Module](docs/requisition-management-module.md)
 - [Purchase Order System](docs/purchase-order-module.md)
+- [Codebase Overview](docs/codebase_overview.md)
+- [Testing Guide](docs/testing.md)
 - [Contributor Guidelines](AGENTS.md)
 - Need help? Email: `itrc@lccd.edu.ph`
 
