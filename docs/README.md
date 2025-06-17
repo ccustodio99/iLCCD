@@ -21,5 +21,6 @@ Welcome to the documentation hub for the LCCD Integrated Information System. Thi
 - [Demo Guide](demo-guide.md)
 - [Purchase Order System](purchase-order-module.md)
 - [Codebase Overview](codebase_overview.md)
+- [Testing Guide](testing.md)
 
 For a high-level overview of the project, see the [project README](../README.md).
