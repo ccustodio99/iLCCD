@@ -12,31 +12,37 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Core demo accounts
-        User::create([
-            'name' => 'Demo Admin',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'admin',
-            'department' => 'ITRC',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Demo Admin',
+                'password' => Hash::make('Password1'),
+                'role' => 'admin',
+                'department' => 'ITRC',
+            ]
+        );
 
-        User::create([
-            'name' => 'Demo President',
-            'email' => 'president@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'head',
-            'department' => 'Administration',
-            'designation' => 'President',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'president@example.com'],
+            [
+                'name' => 'Demo President',
+                'password' => Hash::make('Password1'),
+                'role' => 'head',
+                'department' => 'Administration',
+                'designation' => 'President',
+            ]
+        );
 
         // Dedicated finance staff account for docs
-        User::create([
-            'name' => 'Finance Officer',
-            'email' => 'finance@example.com',
-            'password' => Hash::make('Password1'),
-            'role' => 'staff',
-            'department' => 'Finance Office',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'finance@example.com'],
+            [
+                'name' => 'Finance Officer',
+                'password' => Hash::make('Password1'),
+                'role' => 'staff',
+                'department' => 'Finance Office',
+            ]
+        );
 
         $departments = [
             'Nursing',
@@ -52,13 +58,15 @@ class UserSeeder extends Seeder
         foreach ($departments as $index => $dept) {
 
             // Department head
-            User::create([
-                'name' => $dept . ' Head',
-                'email' => $index === 0 ? 'head@example.com' : Str::slug($dept) . '.head@example.com',
-                'password' => Hash::make('Password1'),
-                'role' => 'head',
-                'department' => $dept,
-            ]);
+            User::updateOrCreate(
+                ['email' => $index === 0 ? 'head@example.com' : Str::slug($dept) . '.head@example.com'],
+                [
+                    'name' => $dept . ' Head',
+                    'password' => Hash::make('Password1'),
+                    'role' => 'head',
+                    'department' => $dept,
+                ]
+            );
 
 
             // Skip creating another staff for finance office
@@ -67,13 +75,15 @@ class UserSeeder extends Seeder
             }
 
             // Single staff member
-            User::create([
-                'name' => $dept . ' Staff',
-                'email' => Str::slug($dept) . '.staff@example.com',
-                'password' => Hash::make('Password1'),
-                'role' => 'staff',
-                'department' => $dept,
-            ]);
+            User::updateOrCreate(
+                ['email' => Str::slug($dept) . '.staff@example.com'],
+                [
+                    'name' => $dept . ' Staff',
+                    'password' => Hash::make('Password1'),
+                    'role' => 'staff',
+                    'department' => $dept,
+                ]
+            );
         }
     }
 }
