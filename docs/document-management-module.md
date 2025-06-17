@@ -31,6 +31,18 @@ The **Document Management Module** provides a secure, organized, and version-con
 - Audit logs support institutional compliance, reporting, and accountability.
 - Admins can review all document history, revert to previous versions, or restore archived files.
 
+### 5. Customizable Document Categories
+- Default categories like **Policies & Procedures** and **Course Materials** are seeded via
+  `Database\Seeders\DocumentCategorySeeder` using the list in
+  `App\Models\DocumentCategory::DEFAULT_CATEGORIES`.
+- Administrators can create, edit, or disable categories under **Settings → Document Categories**.
+- Each document references its category through the `document_category_id` field.
+
+### 6. KPI & Log Dashboard
+- All actions feed into the [Document KPI & Log Dashboard](document-kpi-log-dashboard.md)
+  which displays total uploads, version counts, and recent activity.
+- Logs can be filtered by user, department, and category for compliance reviews.
+
 ---
 
 ## 🖼️ User Interface Design Notes
@@ -54,8 +66,8 @@ The **Document Management Module** provides a secure, organized, and version-con
 ## 📊 Integration and Reporting
 
 - Integration with Ticketing, Requisition, and Job Order modules.
-- Dashboard shows recent uploads, pending reviews, and usage analytics.
-- Exportable logs for compliance and accreditation documentation.
+- The built-in dashboard lists recent uploads and usage analytics and links to the dedicated [Document KPI & Log Dashboard](document-kpi-log-dashboard.md).
+- Exportable logs allow compliance and accreditation documentation.
 
 ---
 
