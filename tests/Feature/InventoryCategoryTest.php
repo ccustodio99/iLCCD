@@ -1,9 +1,12 @@
 <?php
 use App\Models\InventoryCategory;
 use App\Models\User;
+use Database\Seeders\InventoryCategorySeeder;
+use Database\Seeders\UserSeeder;
 
 it('allows admin to create inventory category', function () {
-    $admin = User::factory()->create(['role' => 'admin']);
+    $this->seed([UserSeeder::class, InventoryCategorySeeder::class]);
+    $admin = User::firstWhere('role', 'admin');
     $this->actingAs($admin);
 
     $response = $this->post('/settings/inventory-categories', [
@@ -16,8 +19,9 @@ it('allows admin to create inventory category', function () {
 });
 
 it('allows admin to update inventory category', function () {
-    $admin = User::factory()->create(['role' => 'admin']);
-    $category = InventoryCategory::factory()->create(['name' => 'Tools']);
+    $this->seed([UserSeeder::class, InventoryCategorySeeder::class]);
+    $admin = User::firstWhere('role', 'admin');
+    $category = InventoryCategory::firstWhere('name', 'Electronics');
     $this->actingAs($admin);
 
     $response = $this->put("/settings/inventory-categories/{$category->id}", [
@@ -30,8 +34,9 @@ it('allows admin to update inventory category', function () {
 });
 
 it('allows admin to disable inventory category', function () {
-    $admin = User::factory()->create(['role' => 'admin']);
-    $category = InventoryCategory::factory()->create(['is_active' => true]);
+    $this->seed([UserSeeder::class, InventoryCategorySeeder::class]);
+    $admin = User::firstWhere('role', 'admin');
+    $category = InventoryCategory::firstWhere('name', 'Electronics');
     $this->actingAs($admin);
 
     $response = $this->put("/settings/inventory-categories/{$category->id}/disable");
@@ -41,8 +46,9 @@ it('allows admin to disable inventory category', function () {
 });
 
 it('allows admin to delete inventory category', function () {
-    $admin = User::factory()->create(['role' => 'admin']);
-    $category = InventoryCategory::factory()->create();
+    $this->seed([UserSeeder::class, InventoryCategorySeeder::class]);
+    $admin = User::firstWhere('role', 'admin');
+    $category = InventoryCategory::firstWhere('name', 'Electronics');
     $this->actingAs($admin);
 
     $response = $this->delete("/settings/inventory-categories/{$category->id}");
