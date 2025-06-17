@@ -158,6 +158,9 @@
             top: 0;
             z-index: 1090;
         }
+        .modal-dialog {
+            margin-top: 5rem;
+        }
         header[role="banner"] .notification-area {
             color: var(--color-accent);
         }
