@@ -9,25 +9,23 @@ Access the dashboard at `/kpi-dashboard` once logged in.
 
 ## 🧩 Core Features
 
-### 1. Monitoring of Response Times, Approval Durations, and Completion Rates
-- Tracks the entire lifecycle of requests, job orders, tickets, and requisitions.
-- KPIs monitored include:
-  - Average response time (from submission to first action)
-  - Average approval duration per workflow stage
-  - Completion rates per department, module, or user
-  - Bottlenecks (e.g., where requests are delayed)
-- Visual analytics (charts, tables) show trends over time.
+### 1. Metrics at a Glance
+- Displays the total number of **Tickets**, **Job Orders**, and **Requisitions**.
+- Counts respect any applied date or department filters.
 
-### 2. Export Functionality to Excel for Analytics
-- All KPI data, logs, and summaries can be exported to Excel format (.xlsx).
-- Trigger export via the **Export** button or visit `/kpi-dashboard/export`.
-- Export supports filters by date, department, module, user/role, and status.
-- Enables further analysis by administration, finance, QA, or external auditors.
-- Use the filter form above the audit log table to narrow results by date range,
-  user, department, module, or action. The same query parameters can be appended
-  to `/kpi-dashboard/export` to download the filtered logs.
+### 2. Filterable Audit Trail
+- Search logs by **date range**, **user**, **department**, **module**, and **action**.
+- Page size can be adjusted via the *Items per page* selector (5, 10, 20, 50).
+- URL parameters:
+  `date_from`, `date_to`, `user_id`, `department`, `module`, `action`, and `per_page`.
 
-### 3. Role-Based Dashboard Views
+### 3. Excel Export for Administrators
+- Admin users may download the currently filtered logs from `/kpi-dashboard/export`.
+- The exported file is named `kpi_audit_logs.xlsx` for easy reference.
+- Export respects the same query parameters as the dashboard filters.
+- Access is restricted to users with the **admin** role.
+
+### 4. Role-Based Dashboard Views
 - Dashboards display only data relevant to the user’s role and department:
   - **Administrators/ITRC**: All data, all modules, full logs
   - **Department Heads**: Department-specific KPIs, their requests and actions
@@ -35,7 +33,7 @@ Access the dashboard at `/kpi-dashboard` once logged in.
   - **President**: Institutional-wide overview and critical metrics
 - Customizable widgets and quick filters for user-centric experience.
 
-### 4. Detailed Audit Logs of All Actions, with Optional Remarks
+### 5. Detailed Audit Logs of All Actions, with Optional Remarks
 - Every significant action (create, update, approve, reject, return, delete) is logged with:
   - Timestamp, user, department, module, affected record, action details
   - Optional remarks/comments for context (e.g., reason for rejection)
