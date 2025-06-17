@@ -19,6 +19,7 @@ The **Requisition Management Module** enables LCCD stakeholders to request mater
   - Purpose/justification
   - Department and requester auto-filled
   - Optional attachments (quotations, specification sheets) stored with the request
+  - Attachments may be up to 2 MB and are stored under `storage/app/public/requisition_attachments`. Only the requester can download them.
 
 ### 2. Multi-Level Approval Workflows
 - The system enforces a structured chain depending on the requester’s role:
@@ -29,23 +30,24 @@ The **Requisition Management Module** enables LCCD stakeholders to request mater
 - Approvers simply advance the request to the next stage; the Finance office’s approval finalizes the requisition.
 
 ### 3. Automated Routing, Statuses, and Notifications
-- Workflow engine automatically routes requests to the next required approver.
-- Email notifications are sent to the next approver and to the requester whenever the status changes.
-- Real-time status tracking uses these workflow states:
-  - **pending_head** – awaiting department head review
-  - **pending_president** – awaiting president approval
-  - **pending_finance** – awaiting finance approval
-  - **approved** – fully approved and ready for fulfillment
-- Once a requisition moves beyond **pending_head**, the requester can no
-  longer edit it. Approvers may return the request to **pending_head** with
-  remarks when changes are needed, restarting the approval cycle.
-- Requesters can monitor their requisitions and remarks via their dashboard.
+  - Workflow engine automatically routes requests to the next required approver.
+  - Email notifications are sent to the next approver and to the requester whenever the status changes.
+  - Notifications use `RequisitionStatusNotification` with templates configurable in **System Settings**.
+  - Real-time status tracking uses these workflow states:
+    - **pending_head** – awaiting department head review
+    - **pending_president** – awaiting president approval
+    - **pending_finance** – awaiting finance approval
+    - **approved** – fully approved and ready for fulfillment
+  - These status values correspond to constants in the `Requisition` model and control workflow transitions.
+  - Once a requisition moves beyond **pending_head**, the requester can no longer edit it.
+  - Approvers may return the request to **pending_head** with remarks when changes are needed, restarting the approval cycle. Requesters regain edit access only at this stage.
+  - Requesters can monitor their requisitions and remarks via their dashboard.
 
 ### 4. Integration with Other Modules
-- **Job Order Module**: Created automatically when a job order needs materials not in stock.
-- **Inventory Module**: Approved requisitions trigger inventory checks and item issuance.
-- **Purchase Order Module**: If requested item is out of stock, system can auto-generate a Purchase Order (PO) for Finance.
-- **Audit Trail**: Every approval, modification, and comment is stored for compliance.
+  - **Job Order Module**: Created automatically when a job order needs materials not in stock and marked **approved** when the requisition is fulfilled.
+  - **Inventory Module**: Approved requisitions check stock levels, deduct available quantities, and log the transaction.
+  - **Purchase Order Module**: If requested item is out of stock, the system auto-generates a draft Purchase Order (PO) for Finance.
+  - **Audit Trail**: Every approval, modification, and comment is stored for compliance.
 
 ---
 
