@@ -40,7 +40,8 @@ The **Inventory Module** enables real-time tracking and management of all instit
 - The system continuously checks inventory and:
   - Flags items that fall below threshold (yellow/orange alert)
   - Flags out-of-stock items (red alert)
-  - Sends notifications to custodians/department heads and, optionally, the purchasing office
+  - Sends email notifications to department staff and the department head when stock is low
+  - Notification recipients and the message template can be configured under **Settings → Notifications**
 - Dashboards and reports feature visual alerts and quick links to restock or reorder.
 - Rows on the dashboard turn yellow for low stock and red when items are depleted.
 - Email alerts are sent automatically when stock drops to or below the minimum level.
@@ -64,7 +65,7 @@ Each category may optionally reference another category via a `parent_id` field.
 
 - Branded with LCCD/CCS logos and official colors; Bootstrap 5-based responsive tables and cards.
 - Central inventory dashboard shows item categories, stock status, alerts.
-- Filters at the top of the list let you search by name and narrow by category or status. Low stock filters surface items needing attention.
+- Filters at the top of the list let you search by item name **or description** and narrow by category or status. Low stock filters surface items needing attention.
 - “Add Item,” “Issue Item,” and “Return Item” actions are prominent for authorized roles.
 - Visual badges for item status (in stock, low, out, reserved, maintenance).
 
