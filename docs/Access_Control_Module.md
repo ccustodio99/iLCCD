@@ -41,17 +41,28 @@ The Access Control module is the core of security and data integrity in the syst
   - Database and backup access is restricted to authorized personnel only.
 
 ### 5. Audit Logging
-- Every authentication, authorization, and access event is logged.
+- Every authentication, authorization, and access event is logged in the
+  `audit_trails` table.
   - Successful and failed logins
   - Session timeouts
   - Role or permission changes
   - Unauthorized access attempts
-- Logs are immutable and regularly reviewed by the ITRC/admin.
+  - Login and logout events
+- Each entry records the acting user, IP address, module, action name, and any
+  changed fields. Most Eloquent models use the `App\Traits\LogsAudit` trait so
+  creates, updates, and deletions are automatically captured.
+- Logs are immutable and regularly reviewed by the ITRC/admin. They are
+  viewable from the [KPI & Audit Log Dashboard](kpi-audit-log-dashboard.md).
 ### Current Implementation
 - Role-based middleware restricts access to routes.
 - Passwords are hashed and sessions regenerate on login/logout.
 - Accounts are locked for 15 minutes after five failed login attempts and audit logs capture these events.
-- Two-factor auth is not yet implemented. Automatic session timeout logs users out after 15 minutes of inactivity.
+- Sessions use the database driver and are stored in the `sessions` table with a
+  default lifetime of 15 minutes (configurable via `SESSION_LIFETIME`).
+- Audit trails include actions such as `login`, `logout`, `login_failed`, and
+  `account_locked` for clear traceability.
+- Two-factor auth is not yet implemented. Automatic session timeout logs users
+  out after 15 minutes of inactivity.
 - Role checks rely on `app/Http/Middleware/RoleMiddleware.php`, which compares the `role` field on the `users` table with the allowed roles configured on each route.
 
 ### Planned Two-Factor Authentication
