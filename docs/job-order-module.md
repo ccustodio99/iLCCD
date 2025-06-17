@@ -60,6 +60,9 @@ begins.
 - Every step—from submission to closure—is logged.
 - Attachments are stored securely, and permission checks prevent
   unauthorized edits.
+- Once a job order is approved at any stage, the requester can no longer
+  edit it. Approvers may return the record to `pending_head` with a
+  justification comment to restart the approval workflow.
 
 ## 📊 Integration and Reporting
 
