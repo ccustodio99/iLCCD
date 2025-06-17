@@ -15,37 +15,37 @@
             </div>
             <ul class="nav flex-column">
                 @auth
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('dashboard')) active @endif" href="{{ route('dashboard') }}" @if(request()->routeIs('dashboard')) aria-current="page" @endif>Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('tickets.*')) active @endif" href="{{ route('tickets.index') }}" @if(request()->routeIs('tickets.*')) aria-current="page" @endif>Tickets</a></li>
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('job-orders.*')) active @endif" href="{{ route('job-orders.index') }}" @if(request()->routeIs('job-orders.*')) aria-current="page" @endif>Job Orders</a></li>
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('requisitions.*')) active @endif" href="{{ route('requisitions.index') }}" @if(request()->routeIs('requisitions.*')) aria-current="page" @endif>Requisitions</a></li>
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('inventory.*')) active @endif" href="{{ route('inventory.index') }}" @if(request()->routeIs('inventory.*')) aria-current="page" @endif>Inventory</a></li>
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('purchase-orders.*')) active @endif" href="{{ route('purchase-orders.index') }}" @if(request()->routeIs('purchase-orders.*')) aria-current="page" @endif>Purchase Orders</a></li>
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('documents.*')) active @endif" href="{{ route('documents.index') }}" @if(request()->routeIs('documents.*')) aria-current="page" @endif>Documents</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('dashboard')) active @endif" href="{{ route('dashboard') }}" @if(request()->routeIs('dashboard')) aria-current="page" @endif><span class="material-symbols-outlined me-1" aria-hidden="true">dashboard</span>Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('tickets.*')) active @endif" href="{{ route('tickets.index') }}" @if(request()->routeIs('tickets.*')) aria-current="page" @endif><span class="material-symbols-outlined me-1" aria-hidden="true">confirmation_number</span>Tickets</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('job-orders.*')) active @endif" href="{{ route('job-orders.index') }}" @if(request()->routeIs('job-orders.*')) aria-current="page" @endif><span class="material-symbols-outlined me-1" aria-hidden="true">work</span>Job Orders</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('requisitions.*')) active @endif" href="{{ route('requisitions.index') }}" @if(request()->routeIs('requisitions.*')) aria-current="page" @endif><span class="material-symbols-outlined me-1" aria-hidden="true">receipt_long</span>Requisitions</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('inventory.*')) active @endif" href="{{ route('inventory.index') }}" @if(request()->routeIs('inventory.*')) aria-current="page" @endif><span class="material-symbols-outlined me-1" aria-hidden="true">inventory_2</span>Inventory</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('purchase-orders.*')) active @endif" href="{{ route('purchase-orders.index') }}" @if(request()->routeIs('purchase-orders.*')) aria-current="page" @endif><span class="material-symbols-outlined me-1" aria-hidden="true">shopping_cart</span>Purchase Orders</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('documents.*')) active @endif" href="{{ route('documents.index') }}" @if(request()->routeIs('documents.*')) aria-current="page" @endif><span class="material-symbols-outlined me-1" aria-hidden="true">folder</span>Documents</a></li>
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('documents.dashboard')) active @endif" href="{{ route('documents.dashboard') }}">
-                            Document KPI
+                            <span class="material-symbols-outlined me-1" aria-hidden="true">monitoring</span>Document KPI
                         </a>
                     </li>
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('kpi.dashboard')) active @endif" href="{{ route('kpi.dashboard') }}" @if(request()->routeIs('kpi.dashboard')) aria-current="page" @endif>KPI Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('audit-trails.*')) active @endif" href="{{ route('audit-trails.index') }}" @if(request()->routeIs('audit-trails.*')) aria-current="page" @endif>Audit Trail</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('kpi.dashboard')) active @endif" href="{{ route('kpi.dashboard') }}" @if(request()->routeIs('kpi.dashboard')) aria-current="page" @endif><span class="material-symbols-outlined me-1" aria-hidden="true">query_stats</span>KPI Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('audit-trails.*')) active @endif" href="{{ route('audit-trails.index') }}" @if(request()->routeIs('audit-trails.*')) aria-current="page" @endif><span class="material-symbols-outlined me-1" aria-hidden="true">history</span>Audit Trail</a></li>
                     @if(auth()->user()->role === 'admin')
-                        <li class="nav-item"><a class="nav-link @if(request()->routeIs('users.*')) active @endif" href="{{ route('users.index') }}" @if(request()->routeIs('users.*')) aria-current="page" @endif>Users</a></li>
+                        <li class="nav-item"><a class="nav-link @if(request()->routeIs('users.*')) active @endif" href="{{ route('users.index') }}" @if(request()->routeIs('users.*')) aria-current="page" @endif><span class="material-symbols-outlined me-1" aria-hidden="true">group</span>Users</a></li>
                         <li class="nav-item">
                             <a class="nav-link @if(request()->routeIs('settings.*')) active @endif" href="{{ route('settings.index') }}" @if(request()->routeIs('settings.*')) aria-current="page" @endif>
-                                Settings
+                                <span class="material-symbols-outlined me-1" aria-hidden="true">settings</span>Settings
                             </a>
                         </li>
                     @endif
-                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('profile.*')) active @endif" href="{{ route('profile.edit') }}" @if(request()->routeIs('profile.*')) aria-current="page" @endif>Profile</a></li>
+                    <li class="nav-item"><a class="nav-link @if(request()->routeIs('profile.*')) active @endif" href="{{ route('profile.edit') }}" @if(request()->routeIs('profile.*')) aria-current="page" @endif><span class="material-symbols-outlined me-1" aria-hidden="true">person</span>Profile</a></li>
                     <li class="nav-item">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button type="submit" class="nav-link btn btn-link p-0">Logout</button>
+                            <button type="submit" class="nav-link btn btn-link p-0"><span class="material-symbols-outlined me-1" aria-hidden="true">logout</span>Logout</button>
                         </form>
                     </li>
                 @else
-                    <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('login') }}"><span class="material-symbols-outlined me-1" aria-hidden="true">login</span>Login</a></li>
                 @endauth
             </ul>
         </nav>
