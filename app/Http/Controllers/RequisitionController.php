@@ -18,7 +18,13 @@ class RequisitionController extends Controller
     {
         $perPage = $this->getPerPage($request);
 
-        $query = Requisition::where('user_id', auth()->id());
+        $user = $request->user();
+        $query = Requisition::where(function ($q) use ($user) {
+            $q->where('user_id', $user->id);
+            if ($user->role === 'head') {
+                $q->orWhere('department', $user->department);
+            }
+        });
 
         if ($request->filled('status')) {
             $query->where('status', $request->input('status'));
