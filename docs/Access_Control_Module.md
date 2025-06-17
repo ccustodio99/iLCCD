@@ -52,6 +52,12 @@ The Access Control module is the core of security and data integrity in the syst
 - Passwords are hashed and sessions regenerate on login/logout.
 - Accounts are locked for 15 minutes after five failed login attempts and audit logs capture these events.
 - Two-factor auth is not yet implemented. Automatic session timeout logs users out after 15 minutes of inactivity.
+- Role checks rely on `app/Http/Middleware/RoleMiddleware.php`, which compares the `role` field on the `users` table with the allowed roles configured on each route.
+
+### Planned Two-Factor Authentication
+1. Integrate [Laravel Fortify](https://laravel.com/docs/11.x/fortify) to handle time-based OTP verification.
+2. Store a per-user secret key and allow enabling or disabling 2FA from the *My Profile* page.
+3. Require the OTP during login when 2FA is active and record failures in the audit trail.
 
 ---
 
