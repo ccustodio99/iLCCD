@@ -20,7 +20,9 @@ The interface uses Bootstrap 5 with official LCCD branding and is secured throug
 - Ticket subjects display as `[Category] - [Issue Summary] - Ticket ID` for easy reference.
 - Tickets are listed on the My Tickets page.
 - Users can filter tickets by status, category, assigned user, and choose whether to include archived tickets. The search box checks both the ticket subject and description.
-- Automatic SLA monitoring escalates overdue tickets every minute.
+- Automatic SLA monitoring escalates overdue tickets every minute. The background
+  scheduler runs the `tickets:check-sla` console command to mark overdue tickets
+  as escalated.
 - Ticket categories are configurable under **Settings → Ticket Categories**.
 - KPI logs capture escalation timestamps for dashboard reporting.
 
@@ -31,6 +33,8 @@ Tickets can be assigned to another user for resolution in addition to the ticket
 - IT or system administrators
 
 Additional users may be included as watchers to collaborate on the issue. Watchers can follow progress and comment, but only the ticket owner and the assigned user can modify or close the ticket.
+- Discussions are captured as comments with author and timestamp, and watchers
+  receive email notifications whenever a new comment is posted.
 - After a department head approves a linked job order or requisition,
   the ticket becomes read-only for the requester. The head may revert the
   ticket to a pending state with remarks if updates are required.
