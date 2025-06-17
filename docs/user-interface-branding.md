@@ -51,6 +51,22 @@ Data on the dashboard is now requested via AJAX from the `dashboard.data`
 endpoint. This minimizes initial load time and keeps the interface responsive,
 supporting the project's emphasis on user-centric feedback.
 
+### Theme & Branding Settings
+
+Interface colors and typography come from the database so the same scheme applies across all screens. `layouts/app.blade.php` defines CSS variables pulled from settings:
+
+```html
+<style>
+    :root {
+        --color-primary: {{ setting('color_primary', '#1B2660') }};
+        --color-accent: {{ setting('color_accent', '#FFCD38') }};
+        --font-primary: '{{ setting('font_primary', 'Poppins') }}';
+        --font-secondary: '{{ setting('font_secondary', 'Roboto') }}';
+    }
+</style>
+```
+
+`SettingController` loads these values via `appearanceData()` and saves updates from the **Settings → Appearance** form. A live preview powered by `resources/js/theme-preview.js` lets administrators test colors and fonts before saving. Uploaded logos and favicons are stored in `storage/branding/`, while header and footer text are managed through the same screen with the `updateInstitution()` action.
 ---
 
 ## 🚀 Navigation
