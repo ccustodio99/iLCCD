@@ -12,7 +12,8 @@ The **Document Tracking Module** provides lightweight pages for monitoring incom
 - **Tracking** – a consolidated view to check document status or location.
 - **Reports** – placeholder page for future analytics and summaries.
 
-All routes simply return a view at this stage, as seen in `DocumentTrackingController`.
+All routes currently return a simple view, with no database interaction. The
+logic is contained in `DocumentTrackingController`.
 
 ---
 
@@ -26,6 +27,14 @@ All routes simply return a view at this stage, as seen in `DocumentTrackingContr
 ## 🔒 Security Considerations
 - Access requires authentication (`auth` middleware in `routes/web.php`).
 - Future enhancements may include permission checks per department.
+
+## 🗂️ Code Overview
+- **Routes**: Defined in `routes/web.php` under the `document-tracking` prefix. The
+  endpoints are `incoming`, `outgoing`, `for-approval`, `tracking`, and `reports`.
+- **Controller**: `app/Http/Controllers/DocumentTrackingController.php` returns the
+  corresponding views without additional logic.
+- **Views**: Blade templates live in `resources/views/documents/tracking/` and
+  extend the main `layouts.app` layout.
 
 ---
 
