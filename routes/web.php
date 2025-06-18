@@ -135,6 +135,7 @@ Route::middleware('auth')->group(function () {
         Route::post('approval-processes/{approval_process}/stages', [ApprovalProcessController::class, 'storeStage'])->name('approval-processes.stages.store');
         Route::put('approval-processes/{approval_process}/stages/{stage}', [ApprovalProcessController::class, 'updateStage'])->name('approval-processes.stages.update');
         Route::delete('approval-processes/{approval_process}/stages/{stage}', [ApprovalProcessController::class, 'destroyStage'])->name('approval-processes.stages.destroy');
+        Route::get('approval-processes/{approval_process}/stages', [ApprovalProcessController::class, 'stages'])->name('approval-processes.stages.index');
 
         Route::resource('announcements', AnnouncementController::class)->except('show');
     });
