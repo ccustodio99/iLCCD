@@ -3,11 +3,11 @@ import './bootstrap';
 function initStageForms() {
     const table = document.getElementById('stages-table');
     if (!table) return;
-    const processId = table.dataset.processId;
+    const stagesUrl = table.dataset.stagesUrl;
 
     async function reload() {
         try {
-            const resp = await axios.get(`/approval-processes/${processId}/stages`);
+            const resp = await axios.get(stagesUrl);
             const tbody = table.querySelector('tbody');
             tbody.innerHTML = resp.data.html;
             attachHandlers();
