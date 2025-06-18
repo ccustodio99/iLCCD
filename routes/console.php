@@ -21,3 +21,10 @@ Artisan::command('tickets:check-sla', function () {
         \Illuminate\Support\Facades\Log::info('Ticket escalated', ['ticket_id' => $ticket->id]);
     }
 })->purpose('Mark overdue tickets as escalated');
+
+Artisan::command('ensure:storage-link', function () {
+    if (! file_exists(public_path('storage'))) {
+        $this->info('Creating storage symlink...');
+        $this->call('storage:link');
+    }
+})->purpose('Ensure the public/storage link exists');
