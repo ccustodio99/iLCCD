@@ -83,7 +83,15 @@ class ApprovalProcessController extends Controller
             'assigned_user_id' => 'nullable|exists:users,id',
         ]);
 
-        $approvalProcess->stages()->create($data);
+        $existing = $approvalProcess->stages()
+            ->where('position', $data['position'])
+            ->first();
+
+        if ($existing) {
+            $existing->update($data);
+        } else {
+            $approvalProcess->stages()->create($data);
+        }
         $this->reorderStages($approvalProcess);
 
         return redirect()->route('approval-processes.edit', $approvalProcess);
@@ -96,6 +104,15 @@ class ApprovalProcessController extends Controller
             'position' => 'required|integer|min:1',
             'assigned_user_id' => 'nullable|exists:users,id',
         ]);
+
+        $existing = $approvalProcess->stages()
+            ->where('position', $data['position'])
+            ->where('id', '!=', $stage->id)
+            ->first();
+
+        if ($existing) {
+            $existing->delete();
+        }
 
         $stage->update($data);
 
