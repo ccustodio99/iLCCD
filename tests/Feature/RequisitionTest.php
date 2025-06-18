@@ -1,10 +1,10 @@
 <?php
 
-use App\Models\Requisition;
-use App\Models\User;
 use App\Models\InventoryItem;
 use App\Models\InventoryTransaction;
+use App\Models\Requisition;
 use App\Models\TicketCategory;
+use App\Models\User;
 
 it('allows authenticated user to create requisition', function () {
     $user = User::factory()->create();
@@ -12,13 +12,14 @@ it('allows authenticated user to create requisition', function () {
 
     $response = $this->post('/requisitions', [
         'item' => ['Laptop', 'Mouse'],
+        'sku' => [null, null],
         'quantity' => [2, 1],
         'specification' => ['Dell', 'Logitech'],
         'purpose' => 'Office work',
     ]);
 
     $response->assertRedirect('/requisitions');
-    expect(Requisition::whereHas('items', fn($q) => $q->where('item', 'Laptop'))->exists())->toBeTrue();
+    expect(Requisition::whereHas('items', fn ($q) => $q->where('item', 'Laptop'))->exists())->toBeTrue();
 });
 
 it('shows user requisitions', function () {
@@ -54,6 +55,7 @@ it('creates purchase order when approved and item missing', function () {
 
     $response = $this->put("/requisitions/{$req->id}", [
         'item' => ['Projector'],
+        'sku' => [null],
         'quantity' => [1],
         'specification' => [$req->items->first()->specification],
         'purpose' => $req->purpose,
@@ -82,6 +84,7 @@ it('deducts inventory when approved and stock available', function () {
 
     $this->put("/requisitions/{$req->id}", [
         'item' => ['Cable'],
+        'sku' => [$item->sku],
         'quantity' => [2],
         'specification' => [$req->items->first()->specification],
         'purpose' => $req->purpose,
@@ -125,6 +128,7 @@ it('forbids updating approved requisition', function () {
 
     $this->put("/requisitions/{$req->id}", [
         'item' => [$item->item],
+        'sku' => [null],
         'quantity' => [$item->quantity],
         'specification' => [$item->specification],
         'purpose' => $req->purpose,

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InventoryCategory;
 use App\Models\InventoryItem;
 use App\Models\InventoryTransaction;
-use App\Models\InventoryCategory;
-use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
 class InventoryItemController extends Controller
@@ -19,7 +19,7 @@ class InventoryItemController extends Controller
 
         if ($request->filled('category')) {
             $categoryId = $request->input('category');
-            $query->whereHas('inventoryCategory', fn($q) => $q->where('id', $categoryId));
+            $query->whereHas('inventoryCategory', fn ($q) => $q->where('id', $categoryId));
         }
 
         if ($request->filled('status')) {
@@ -30,7 +30,8 @@ class InventoryItemController extends Controller
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%");
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('sku', 'like', "%{$search}%");
             });
         }
 
@@ -62,6 +63,7 @@ class InventoryItemController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
+            'sku' => 'required|string|max:255|unique:inventory_items,sku',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'inventory_category_id' => [
@@ -78,6 +80,7 @@ class InventoryItemController extends Controller
         ]);
         $data['user_id'] = $request->user()->id;
         InventoryItem::create($data);
+
         return redirect()->route('inventory.index');
     }
 
@@ -102,6 +105,12 @@ class InventoryItemController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $data = $request->validate([
+            'sku' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('inventory_items', 'sku')->ignore($inventoryItem->id),
+            ],
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'inventory_category_id' => [
@@ -117,6 +126,7 @@ class InventoryItemController extends Controller
             'status' => ['required', Rule::in(InventoryItem::STATUSES)],
         ]);
         $inventoryItem->update($data);
+
         return redirect()->route('inventory.index');
     }
 
@@ -126,6 +136,7 @@ class InventoryItemController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $inventoryItem->delete();
+
         return redirect()->route('inventory.index');
     }
 

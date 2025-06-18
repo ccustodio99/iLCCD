@@ -13,6 +13,7 @@ class RequisitionItem extends Model
     protected $fillable = [
         'requisition_id',
         'item',
+        'sku',
         'quantity',
         'specification',
     ];
