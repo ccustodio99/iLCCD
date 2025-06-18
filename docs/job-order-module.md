@@ -26,9 +26,9 @@ begins.
 
 
 3. **Post-Approval Assignment**
-   - After multi-level approval (Head → President → Finance when
-     required), jobs route automatically to the correct team—ITRC,
-     maintenance, or another office.
+   - Once the configured approval workflow completes (default chain:
+     Head → President → Finance when required), jobs route automatically
+     to the correct team—ITRC, maintenance, or another office.
    - Both the assignee and requester receive notifications.
 
 4. **Requesting Materials**

@@ -119,6 +119,9 @@ Approval workflows ensure requests are reviewed by the proper people before they
 - Requisitions and job orders follow the stages for their module and department.
 - If no process exists, submissions remain pending until manually handled.
 - Other modules may reference these tables to implement similar approval flows.
+- The seed defines a default three-step chain (Head → President → Finance), but
+  you can reorder or add stages to meet each department's needs. Existing stages
+  remain intact when a process is edited.
 
 Example command to load the default processes:
 
