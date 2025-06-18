@@ -10,7 +10,7 @@ use App\Models\PurchaseOrder;
 use App\Models\Requisition;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
@@ -198,28 +198,36 @@ class RequisitionController extends Controller
             $requisition->save();
 
             foreach ($requisition->items as $reqItem) {
-                $item = $reqItem->sku
-                    ? InventoryItem::where('sku', $reqItem->sku)->first()
-                    : null;
-                if (! $item || $item->quantity < $reqItem->quantity) {
-                    PurchaseOrder::create([
-                        'user_id' => auth()->id(),
-                        'requisition_id' => $requisition->id,
-                        'inventory_item_id' => $item?->id,
-                        'item' => $reqItem->item,
-                        'quantity' => $reqItem->quantity,
-                        'status' => PurchaseOrder::STATUS_DRAFT,
-                    ]);
-                } else {
-                    $item->decrement('quantity', $reqItem->quantity);
-                    InventoryTransaction::create([
-                        'inventory_item_id' => $item->id,
-                        'user_id' => auth()->id(),
-                        'requisition_id' => $requisition->id,
-                        'action' => 'issue',
-                        'quantity' => $reqItem->quantity,
-                        'purpose' => $requisition->purpose,
-                    ]);
+
+                try {
+                    $item = InventoryItem::where('name', $reqItem->item)->first();
+
+                    if (! $item || $item->quantity < $reqItem->quantity) {
+                        PurchaseOrder::create([
+                            'user_id' => auth()->id(),
+                            'requisition_id' => $requisition->id,
+                            'inventory_item_id' => $item?->id,
+                            'item' => $reqItem->item,
+                            'quantity' => $reqItem->quantity,
+                            'status' => PurchaseOrder::STATUS_DRAFT,
+                        ]);
+                    } else {
+                        $item->decrement('quantity', $reqItem->quantity);
+                        InventoryTransaction::create([
+                            'inventory_item_id' => $item->id,
+                            'user_id' => auth()->id(),
+                            'requisition_id' => $requisition->id,
+                            'action' => 'issue',
+                            'quantity' => $reqItem->quantity,
+                            'purpose' => $requisition->purpose,
+                        ]);
+                    }
+                } catch (\Throwable $e) {
+                    Log::error(
+                        'Requisition '.$requisition->id.' item '.$reqItem->item.
+                        ' qty '.$reqItem->quantity.' error: '.$e->getMessage()
+                    );
+                    throw $e;
                 }
             }
 
