@@ -10,6 +10,7 @@ use App\Models\JobOrderType;
 use App\Models\Requisition;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -109,8 +110,12 @@ class JobOrderController extends Controller
         $data['user_id'] = $request->user()->id;
         $data['status'] = $firstStage->name ?? JobOrder::STATUS_PENDING_HEAD;
         if ($request->hasFile('attachment')) {
-            $data['attachment_path'] = $request->file('attachment')
-                ->store('job_order_attachments', 'public');
+            try {
+                $data['attachment_path'] = $request->file('attachment')
+                    ->store('job_order_attachments', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to store job order attachment: '.$e->getMessage());
+            }
         }
         unset($data['type_parent']);
         JobOrder::create($data);
@@ -161,11 +166,17 @@ class JobOrderController extends Controller
             'attachment' => 'nullable|file|max:2048',
         ]);
         if ($request->hasFile('attachment')) {
-            if ($jobOrder->attachment_path) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($jobOrder->attachment_path);
+            $oldPath = $jobOrder->attachment_path;
+            try {
+                if ($oldPath) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
+                }
+                $data['attachment_path'] = $request->file('attachment')
+                    ->store('job_order_attachments', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to replace job order attachment: '.$e->getMessage());
+                $data['attachment_path'] = $oldPath;
             }
-            $data['attachment_path'] = $request->file('attachment')
-                ->store('job_order_attachments', 'public');
         }
         unset($data['type_parent']);
         $jobOrder->update($data);

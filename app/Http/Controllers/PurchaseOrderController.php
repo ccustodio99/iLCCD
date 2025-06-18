@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PurchaseOrder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +15,7 @@ class PurchaseOrderController extends Controller
     {
         $this->middleware('role:head,admin')->except(['index', 'downloadAttachment']);
     }
+
     public function index(Request $request)
     {
         $perPage = $this->getPerPage($request);
@@ -21,7 +23,7 @@ class PurchaseOrderController extends Controller
         $query = PurchaseOrder::with(['auditTrails.user', 'user']);
 
         $user = auth()->user();
-        if (!($user->role === 'admin' || ($user->role === 'head' && $user->department === 'Finance Office'))) {
+        if (! ($user->role === 'admin' || ($user->role === 'head' && $user->department === 'Finance Office'))) {
             $query->where('user_id', $user->id);
         }
 
@@ -30,7 +32,7 @@ class PurchaseOrderController extends Controller
         }
 
         if ($request->filled('supplier')) {
-            $query->where('supplier', 'like', '%' . $request->input('supplier') . '%');
+            $query->where('supplier', 'like', '%'.$request->input('supplier').'%');
         }
 
         if ($request->filled('department')) {
@@ -80,8 +82,12 @@ class PurchaseOrderController extends Controller
         $data['status'] = $data['status'] ?? PurchaseOrder::STATUS_DRAFT;
 
         if ($request->hasFile('attachment')) {
-            $data['attachment_path'] = $request->file('attachment')
-                ->store('purchase_order_attachments', 'public');
+            try {
+                $data['attachment_path'] = $request->file('attachment')
+                    ->store('purchase_order_attachments', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to store purchase order attachment: '.$e->getMessage());
+            }
         }
 
         PurchaseOrder::create($data);
@@ -93,10 +99,11 @@ class PurchaseOrderController extends Controller
     {
         $user = auth()->user();
         $allowed = $user->role === 'admin' || ($user->role === 'head' && $user->department === 'Finance Office');
-        if ($purchaseOrder->user_id !== $user->id && !$allowed) {
+        if ($purchaseOrder->user_id !== $user->id && ! $allowed) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $purchaseOrder->load('auditTrails.user');
+
         return view('purchase_orders.edit', compact('purchaseOrder'));
     }
 
@@ -104,7 +111,7 @@ class PurchaseOrderController extends Controller
     {
         $user = auth()->user();
         $allowed = $user->role === 'admin' || ($user->role === 'head' && $user->department === 'Finance Office');
-        if ($purchaseOrder->user_id !== $user->id && !$allowed) {
+        if ($purchaseOrder->user_id !== $user->id && ! $allowed) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $data = $request->validate([
@@ -118,11 +125,17 @@ class PurchaseOrderController extends Controller
         ]);
 
         if ($request->hasFile('attachment')) {
-            if ($purchaseOrder->attachment_path) {
-                Storage::disk('public')->delete($purchaseOrder->attachment_path);
+            $oldPath = $purchaseOrder->attachment_path;
+            try {
+                if ($oldPath) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+                $data['attachment_path'] = $request->file('attachment')
+                    ->store('purchase_order_attachments', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to replace purchase order attachment: '.$e->getMessage());
+                $data['attachment_path'] = $oldPath;
             }
-            $data['attachment_path'] = $request->file('attachment')
-                ->store('purchase_order_attachments', 'public');
         }
 
         $purchaseOrder->update($data);
@@ -146,10 +159,11 @@ class PurchaseOrderController extends Controller
     {
         $user = auth()->user();
         $allowed = $user->role === 'admin' || ($user->role === 'head' && $user->department === 'Finance Office');
-        if ($purchaseOrder->user_id !== $user->id && !$allowed) {
+        if ($purchaseOrder->user_id !== $user->id && ! $allowed) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $purchaseOrder->delete();
+
         return redirect()->route('purchase-orders.index');
     }
 
@@ -161,7 +175,7 @@ class PurchaseOrderController extends Controller
 
         $user = auth()->user();
         $allowed = $user->role === 'admin' || ($user->role === 'head' && $user->department === 'Finance Office');
-        if ($purchaseOrder->user_id !== $user->id && !$allowed) {
+        if ($purchaseOrder->user_id !== $user->id && ! $allowed) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 

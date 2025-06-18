@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ticket;
+use App\Models\AuditTrail;
 use App\Models\JobOrder;
 use App\Models\JobOrderType;
 use App\Models\Requisition;
-use App\Models\User;
-use App\Models\AuditTrail;
+use App\Models\Ticket;
 use App\Models\TicketCategory;
+use App\Models\User;
 use App\Notifications\TicketStatusNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,6 +32,7 @@ class TicketController extends Controller
             $user->notify(new TicketStatusNotification($message));
         }
     }
+
     public function index(Request $request)
     {
         $perPage = $this->getPerPage($request);
@@ -114,6 +116,7 @@ class TicketController extends Controller
             ->where('is_active', true)
             ->orderBy('name')
             ->get();
+
         return view('tickets.create', compact('users', 'categories'));
     }
 
@@ -135,7 +138,11 @@ class TicketController extends Controller
         $data['user_id'] = $request->user()->id;
         $data['status'] = Ticket::STATUS_PENDING_HEAD;
         if ($request->hasFile('attachment')) {
-            $data['attachment_path'] = $request->file('attachment')->store('ticket_attachments', 'public');
+            try {
+                $data['attachment_path'] = $request->file('attachment')->store('ticket_attachments', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to store ticket attachment: '.$e->getMessage());
+            }
         }
 
         $ticket = Ticket::create($data);
@@ -208,6 +215,7 @@ class TicketController extends Controller
             ->where('is_active', true)
             ->orderBy('name')
             ->get();
+
         return view('tickets.edit', compact('ticket', 'users', 'categories'));
     }
 
@@ -243,10 +251,16 @@ class TicketController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         if ($request->hasFile('attachment')) {
-            if ($ticket->attachment_path) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($ticket->attachment_path);
+            $oldPath = $ticket->attachment_path;
+            try {
+                if ($oldPath) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
+                }
+                $data['attachment_path'] = $request->file('attachment')->store('ticket_attachments', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to replace ticket attachment: '.$e->getMessage());
+                $data['attachment_path'] = $oldPath;
             }
-            $data['attachment_path'] = $request->file('attachment')->store('ticket_attachments', 'public');
         }
 
         $ticket->update($data);
@@ -317,6 +331,7 @@ class TicketController extends Controller
         } else {
             $this->notifyStakeholders($ticket, "Ticket #{$ticket->id} has been updated.");
         }
+
         return redirect()->route('tickets.index');
     }
 
@@ -448,6 +463,7 @@ class TicketController extends Controller
         }
 
         $ticket->delete();
+
         return redirect()->route('tickets.index');
     }
 
@@ -477,8 +493,12 @@ class TicketController extends Controller
         $data['status'] = JobOrder::STATUS_PENDING_HEAD;
 
         if ($request->hasFile('attachment')) {
-            $data['attachment_path'] = $request->file('attachment')
-                ->store('job_order_attachments', 'public');
+            try {
+                $data['attachment_path'] = $request->file('attachment')
+                    ->store('job_order_attachments', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to store job order attachment from ticket: '.$e->getMessage());
+            }
         }
 
         unset($data['type_parent']);
@@ -515,8 +535,12 @@ class TicketController extends Controller
         ];
 
         if ($request->hasFile('attachment')) {
-            $requisitionData['attachment_path'] = $request->file('attachment')
-                ->store('requisition_attachments', 'public');
+            try {
+                $requisitionData['attachment_path'] = $request->file('attachment')
+                    ->store('requisition_attachments', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to store requisition attachment from ticket: '.$e->getMessage());
+            }
         }
 
         $requisition = Requisition::create($requisitionData);

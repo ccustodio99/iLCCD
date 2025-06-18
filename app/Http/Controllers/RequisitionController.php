@@ -10,6 +10,7 @@ use App\Models\PurchaseOrder;
 use App\Models\Requisition;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
@@ -90,8 +91,12 @@ class RequisitionController extends Controller
         ];
 
         if ($request->hasFile('attachment')) {
-            $requisitionData['attachment_path'] = $request->file('attachment')
-                ->store('requisition_attachments', 'public');
+            try {
+                $requisitionData['attachment_path'] = $request->file('attachment')
+                    ->store('requisition_attachments', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to store requisition attachment: '.$e->getMessage());
+            }
         }
 
         $requisition = Requisition::create($requisitionData);
@@ -145,11 +150,17 @@ class RequisitionController extends Controller
         ];
 
         if ($request->hasFile('attachment')) {
-            if ($requisition->attachment_path) {
-                Storage::disk('public')->delete($requisition->attachment_path);
+            $oldPath = $requisition->attachment_path;
+            try {
+                if ($oldPath) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+                $updateData['attachment_path'] = $request->file('attachment')
+                    ->store('requisition_attachments', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to replace requisition attachment: '.$e->getMessage());
+                $updateData['attachment_path'] = $oldPath;
             }
-            $updateData['attachment_path'] = $request->file('attachment')
-                ->store('requisition_attachments', 'public');
         }
 
         $requisition->update($updateData);
