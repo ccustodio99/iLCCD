@@ -287,26 +287,55 @@ class JobOrderController extends Controller
 
         abort_if($user->role !== 'head', Response::HTTP_FORBIDDEN, 'Access denied');
 
-        $process = ApprovalProcess::where('module', 'job_orders')->first();
-        $stages = $process?->stages->sortBy('position');
+        $processes = ApprovalProcess::where('module', 'job_orders')
+            ->with('stages')
+            ->get();
 
-        if ($user->department === 'President Department') {
-            $status = $stages->get(1)?->name ?? JobOrder::STATUS_PENDING_PRESIDENT;
-        } elseif ($user->department === 'Finance Office') {
-            $status = $stages->get(2)?->name ?? JobOrder::STATUS_PENDING_FINANCE;
+        $pairs = [];
+
+        foreach ($processes as $process) {
+            foreach ($process->stages as $stage) {
+                $allowed = false;
+
+                if ($stage->assigned_user_id) {
+                    $allowed = $stage->assigned_user_id === $user->id;
+                } elseif ($stage->name === JobOrder::STATUS_PENDING_HEAD && $user->department === $process->department) {
+                    $allowed = true;
+                } elseif ($stage->name === JobOrder::STATUS_PENDING_PRESIDENT && $user->department === 'President Department') {
+                    $allowed = true;
+                } elseif ($stage->name === JobOrder::STATUS_PENDING_FINANCE && $user->department === 'Finance Office') {
+                    $allowed = true;
+                }
+
+                if ($allowed) {
+                    $pairs[] = [$stage->name, $process->department];
+                }
+            }
+        }
+
+        if (empty($pairs)) {
+            $jobOrders = JobOrder::whereRaw('1=0')
+                ->paginate($perPage)
+                ->withQueryString();
         } else {
-            $status = $stages->get(0)?->name ?? JobOrder::STATUS_PENDING_HEAD;
+            $jobOrders = JobOrder::with('user')
+                ->where(function ($query) use ($pairs) {
+                    foreach ($pairs as $pair) {
+                        [$status, $dept] = $pair;
+                        $query->orWhere(function ($q) use ($status, $dept) {
+                            $q->where('status', $status);
+
+                            if ($status === JobOrder::STATUS_PENDING_HEAD) {
+                                $q->whereHas('user', function ($q2) use ($dept) {
+                                    $q2->where('department', $dept);
+                                });
+                            }
+                        });
+                    }
+                })
+                ->paginate($perPage)
+                ->withQueryString();
         }
-
-        $query = JobOrder::with('user')->where('status', $status);
-
-        if ($stages->get(0)?->name === $status) {
-            $query->whereHas('user', function ($q) use ($user) {
-                $q->where('department', $user->department);
-            });
-        }
-
-        $jobOrders = $query->paginate($perPage)->withQueryString();
 
         return view('job_orders.approvals', compact('jobOrders'));
     }
