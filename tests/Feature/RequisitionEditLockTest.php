@@ -1,9 +1,19 @@
 <?php
 
+use App\Models\ApprovalProcess;
 use App\Models\Requisition;
 use App\Models\User;
 
 it('locks requester editing after head approval until returned', function () {
+    $process = ApprovalProcess::create([
+        'module' => 'requisitions',
+        'department' => 'Nursing',
+    ]);
+    $process->stages()->createMany([
+        ['name' => Requisition::STATUS_PENDING_HEAD, 'position' => 1],
+        ['name' => Requisition::STATUS_PENDING_PRESIDENT, 'position' => 2],
+        ['name' => Requisition::STATUS_PENDING_FINANCE, 'position' => 3],
+    ]);
     $requester = User::factory()->create(['role' => 'staff', 'department' => 'Nursing']);
     $head = User::factory()->create(['role' => 'head', 'department' => 'Nursing']);
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ApprovalProcess;
 use App\Models\JobOrder;
 use App\Models\JobOrderType;
 use App\Models\User;
@@ -10,6 +11,16 @@ it('routes job order through approval and assignment workflow', function () {
     Notification::fake();
     \App\Models\Setting::set('notify_job_order_status', true);
     \App\Models\Setting::set('template_job_order_status', '{{ message }}');
+
+    $process = ApprovalProcess::create([
+        'module' => 'job_orders',
+        'department' => 'Nursing',
+    ]);
+    $process->stages()->createMany([
+        ['name' => JobOrder::STATUS_PENDING_HEAD, 'position' => 1],
+        ['name' => JobOrder::STATUS_PENDING_PRESIDENT, 'position' => 2],
+        ['name' => JobOrder::STATUS_PENDING_FINANCE, 'position' => 3],
+    ]);
 
     $requester = User::factory()->create(['role' => 'staff', 'department' => 'Nursing']);
     $head = User::factory()->create(['role' => 'head', 'department' => 'Nursing']);

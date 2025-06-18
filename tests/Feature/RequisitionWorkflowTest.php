@@ -1,9 +1,19 @@
 <?php
 
+use App\Models\ApprovalProcess;
 use App\Models\Requisition;
 use App\Models\User;
 
 it('enforces approval chain and displays remarks', function () {
+    $process = ApprovalProcess::create([
+        'module' => 'requisitions',
+        'department' => 'Nursing',
+    ]);
+    $process->stages()->createMany([
+        ['name' => Requisition::STATUS_PENDING_HEAD, 'position' => 1],
+        ['name' => Requisition::STATUS_PENDING_PRESIDENT, 'position' => 2],
+        ['name' => Requisition::STATUS_PENDING_FINANCE, 'position' => 3],
+    ]);
     $requester = User::factory()->create(['role' => 'staff', 'department' => 'Nursing']);
     $head = User::factory()->create(['role' => 'head', 'department' => 'Nursing']);
     $president = User::factory()->create(['role' => 'head', 'department' => 'President Department']);
@@ -49,4 +59,3 @@ it('enforces approval chain and displays remarks', function () {
     expect($req->status)->toBe(Requisition::STATUS_APPROVED);
     expect($req->approved_by_id)->toBe($finance->id);
 });
-
