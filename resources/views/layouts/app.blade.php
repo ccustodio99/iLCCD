@@ -179,6 +179,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
+                <div id="flash-container"></div>
                 @yield('content')
             </main>
             <footer id="app-footer" class="text-center" style="{{ setting('show_footer', true) ? '' : 'display:none;' }}">

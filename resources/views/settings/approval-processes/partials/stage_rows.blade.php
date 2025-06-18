@@ -3,10 +3,10 @@
     <form action="{{ route('approval-processes.stages.update', [$approvalProcess, $stage]) }}" method="POST" class="stage-form">
         @csrf
         @method('PUT')
-        <td><input type="number" name="position" class="form-control" value="{{ $stage->position }}" required></td>
-        <td><input type="text" name="name" class="form-control" value="{{ $stage->name }}" required></td>
+        <td><input type="number" name="position" class="form-control" value="{{ $stage->position }}" aria-label="Position" required></td>
+        <td><input type="text" name="name" class="form-control" value="{{ $stage->name }}" aria-label="Stage name" required></td>
         <td>
-            <select name="assigned_user_id" class="form-select">
+            <select name="assigned_user_id" class="form-select" aria-label="Assigned user">
                 <option value="">-- None --</option>
                 @foreach($users as $user)
                     <option value="{{ $user->id }}" {{ $stage->assigned_user_id == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
@@ -27,10 +27,10 @@
 <tr>
     <form action="{{ route('approval-processes.stages.store', $approvalProcess) }}" method="POST" class="stage-form">
         @csrf
-        <td><input type="number" name="position" class="form-control" value="{{ $approvalProcess->stages->max('position') + 1 }}" required></td>
-        <td><input type="text" name="name" class="form-control" required></td>
+        <td><input type="number" name="position" class="form-control" value="{{ $approvalProcess->stages->max('position') + 1 }}" aria-label="Position" required></td>
+        <td><input type="text" name="name" class="form-control" aria-label="Stage name" required></td>
         <td>
-            <select name="assigned_user_id" class="form-select">
+            <select name="assigned_user_id" class="form-select" aria-label="Assigned user">
                 <option value="">-- None --</option>
                 @foreach($users as $user)
                     <option value="{{ $user->id }}">{{ $user->name }}</option>

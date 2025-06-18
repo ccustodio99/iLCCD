@@ -10,7 +10,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($processes as $process)
+        @forelse ($processes as $process)
         <tr>
             <td>{{ $process->module }}</td>
             <td>{{ $process->department }}</td>
@@ -28,7 +28,11 @@
                 </form>
             </td>
         </tr>
-        @endforeach
+        @empty
+        <tr>
+            <td colspan="4" class="text-center">No approval processes found.</td>
+        </tr>
+        @endforelse
     </tbody>
 </table>
 </div>
