@@ -44,9 +44,11 @@ function initStageForms() {
     }
 
     function attachHandlers() {
-        table.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', handleSubmit);
-        });
+        table
+            .querySelectorAll('form.stage-update-form, form.stage-delete-form, form.stage-form')
+            .forEach(form => {
+                form.addEventListener('submit', handleSubmit);
+            });
     }
 
     attachHandlers();

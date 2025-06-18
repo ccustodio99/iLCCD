@@ -1,6 +1,6 @@
 @foreach($approvalProcess->stages->sortBy('position') as $stage)
 <tr>
-    <form action="{{ route('approval-processes.stages.update', [$approvalProcess, $stage]) }}" method="POST" class="stage-form">
+    <form action="{{ route('approval-processes.stages.update', [$approvalProcess, $stage]) }}" method="POST" class="stage-update-form">
         @csrf
         @method('PUT')
         <td><input type="number" name="position" class="form-control" value="{{ $stage->position }}" aria-label="Position" required></td>
@@ -15,13 +15,13 @@
         </td>
         <td class="whitespace-nowrap">
             <button type="submit" class="btn btn-sm btn-primary me-1">Update</button>
-            <button formaction="{{ route('approval-processes.stages.destroy', [$approvalProcess, $stage]) }}" formmethod="POST" class="btn btn-sm btn-danger" onclick="return confirm('Delete this stage?')">
+    </form>
+            <form action="{{ route('approval-processes.stages.destroy', [$approvalProcess, $stage]) }}" method="POST" class="d-inline stage-delete-form" onsubmit="return confirm('Delete this stage?')">
                 @csrf
                 @method('DELETE')
-                Delete
-            </button>
+                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
         </td>
-    </form>
 </tr>
 @endforeach
 <tr>
