@@ -45,6 +45,24 @@ it('rejects inactive document categories', function () {
     expect(Document::count())->toBe(0);
 });
 
+it('rejects unsupported file types when creating document', function () {
+    Storage::fake('local');
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $category = DocumentCategory::factory()->create();
+
+    $response = $this->post('/documents', [
+        'title' => 'Bad File',
+        'description' => 'Important',
+        'document_category_id' => $category->id,
+        'file' => UploadedFile::fake()->create('virus.exe', 10),
+    ]);
+
+    $response->assertSessionHasErrors('file');
+    expect(Document::count())->toBe(0);
+});
+
 it('shows user documents', function () {
     $user = User::factory()->create();
     $doc = Document::factory()->for($user)->create(['title' => 'Handbook']);
@@ -109,6 +127,31 @@ it('allows downloading document versions', function () {
     $version = DocumentVersion::first();
     $response = $this->get("/documents/{$version->document_id}/versions/{$version->id}/download");
     $response->assertStatus(200);
+});
+
+it('rejects unsupported file types when updating document', function () {
+    Storage::fake('local');
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $category = DocumentCategory::factory()->create();
+    $this->post('/documents', [
+        'title' => 'Policy',
+        'description' => 'Important',
+        'document_category_id' => $category->id,
+        'file' => UploadedFile::fake()->create('policy.pdf', 10),
+    ]);
+
+    $document = Document::first();
+
+    $response = $this->put("/documents/{$document->id}", [
+        'title' => 'Policy',
+        'description' => 'Updated',
+        'document_category_id' => $category->id,
+        'file' => UploadedFile::fake()->create('malware.exe', 10),
+    ]);
+
+    $response->assertSessionHasErrors('file');
 });
 
 it('filters documents by category', function () {

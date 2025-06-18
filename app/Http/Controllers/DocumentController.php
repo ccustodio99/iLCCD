@@ -82,33 +82,24 @@ class DocumentController extends Controller
                 'required',
                 Rule::exists('document_categories', 'id')->where('is_active', true),
             ],
-            'file' => 'required|file|mimes:pdf,doc,docx|max:2048',
+
+            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:10240',
         ]);
         $data['user_id'] = $request->user()->id;
         $data['department'] = $request->user()->department;
-
-
-        $document = DB::transaction(function () use ($data, $request) {
-            $document = Document::create($data);
-
-            $path = $request->file('file')->store('documents');
-
-            DocumentVersion::create([
-                'document_id' => $document->id,
-                'version' => 1,
-                'path' => $path,
-                'uploaded_by' => $request->user()->id,
-            ]);
-
-            DocumentLog::create([
-                'document_id' => $document->id,
-                'user_id' => $request->user()->id,
-                'action' => 'upload',
-            ]);
-
-            return $document;
-        });
-
+        $document = Document::create($data);
+        $path = $request->file('file')->store('documents');
+        DocumentVersion::create([
+            'document_id' => $document->id,
+            'version' => 1,
+            'path' => $path,
+            'uploaded_by' => $request->user()->id,
+        ]);
+        DocumentLog::create([
+            'document_id' => $document->id,
+            'user_id' => $request->user()->id,
+            'action' => 'upload',
+        ]);
 
         return redirect()->route('documents.index');
     }
@@ -136,7 +127,8 @@ class DocumentController extends Controller
                 'required',
                 Rule::exists('document_categories', 'id')->where('is_active', true),
             ],
-            'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'file' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:10240',
+
         ]);
 
         DB::transaction(function () use ($document, $data, $request) {
@@ -164,8 +156,14 @@ class DocumentController extends Controller
                 'action' => 'update',
             ]);
 
-        });
-
+            $document->current_version = $version;
+            $document->save();
+        }
+        DocumentLog::create([
+            'document_id' => $document->id,
+            'user_id' => $request->user()->id,
+            'action' => 'update',
+        ]);
 
 
         return redirect()->route('documents.index');
