@@ -10,7 +10,9 @@ use App\Models\PurchaseOrder;
 use App\Models\Requisition;
 use App\Models\User;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\DB;
+
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,6 +70,7 @@ class RequisitionController extends Controller
     {
         $data = $request->validate([
             'item.*' => 'required|string|max:255',
+            'sku.*' => 'nullable|string|max:255',
             'quantity.*' => 'required|integer|min:1',
             'specification.*' => 'nullable|string',
             'purpose' => 'required|string',
@@ -90,19 +93,53 @@ class RequisitionController extends Controller
             'status' => $firstStage->name ?? Requisition::STATUS_PENDING_HEAD,
         ];
 
+
         if ($request->hasFile('attachment')) {
-            $requisitionData['attachment_path'] = $request->file('attachment')
-                ->store('requisition_attachments', 'public');
+            try {
+                $requisitionData['attachment_path'] = $request->file('attachment')
+                    ->store('requisition_attachments', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to store requisition attachment: '.$e->getMessage());
+            }
         }
 
-        $requisition = Requisition::create($requisitionData);
 
-        foreach ($data['item'] as $i => $name) {
-            $requisition->items()->create([
-                'item' => $name,
-                'quantity' => $data['quantity'][$i] ?? 1,
-                'specification' => $data['specification'][$i] ?? null,
-            ]);
+        try {
+            if ($request->hasFile('attachment')) {
+                try {
+                    $requisitionData['attachment_path'] = $request->file('attachment')
+                        ->store('requisition_attachments', 'public');
+                } catch (\Throwable $e) {
+                    DB::rollBack();
+
+
+                    return back()
+                        ->withErrors(['attachment' => 'Failed to upload attachment.'])
+                        ->withInput();
+                }
+            }
+
+            $requisition = Requisition::create($requisitionData);
+
+            foreach ($data['item'] as $i => $name) {
+                $requisition->items()->create([
+                    'item' => $name,
+                    'quantity' => $data['quantity'][$i] ?? 1,
+                    'specification' => $data['specification'][$i] ?? null,
+                ]);
+            }
+
+            DB::commit();
+        } catch (\Throwable $e) {
+            if (! empty($requisitionData['attachment_path'] ?? null)) {
+                Storage::disk('public')->delete($requisitionData['attachment_path']);
+            }
+
+            DB::rollBack();
+
+            return back()
+                ->withErrors(['error' => 'Failed to create requisition.'])
+                ->withInput();
         }
 
         return redirect()->route('requisitions.index');
@@ -123,6 +160,9 @@ class RequisitionController extends Controller
         if ($requisition->user_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
+        if (auth()->user()->department !== $requisition->department) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
         if ($requisition->status === Requisition::STATUS_APPROVED) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
@@ -131,6 +171,7 @@ class RequisitionController extends Controller
         }
         $data = $request->validate([
             'item.*' => 'required|string|max:255',
+            'sku.*' => 'nullable|string|max:255',
             'quantity.*' => 'required|integer|min:1',
             'specification.*' => 'nullable|string',
             'purpose' => 'required|string',
@@ -146,11 +187,17 @@ class RequisitionController extends Controller
         ];
 
         if ($request->hasFile('attachment')) {
-            if ($requisition->attachment_path) {
-                Storage::disk('public')->delete($requisition->attachment_path);
+            $oldPath = $requisition->attachment_path;
+            try {
+                if ($oldPath) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+                $updateData['attachment_path'] = $request->file('attachment')
+                    ->store('requisition_attachments', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to replace requisition attachment: '.$e->getMessage());
+                $updateData['attachment_path'] = $oldPath;
             }
-            $updateData['attachment_path'] = $request->file('attachment')
-                ->store('requisition_attachments', 'public');
         }
 
         $requisition->update($updateData);
@@ -159,12 +206,14 @@ class RequisitionController extends Controller
         foreach ($data['item'] as $i => $name) {
             $requisition->items()->create([
                 'item' => $name,
+                'sku' => $data['sku'][$i] ?? null,
                 'quantity' => $data['quantity'][$i] ?? 1,
                 'specification' => $data['specification'][$i] ?? null,
             ]);
         }
 
         if ($data['status'] === Requisition::STATUS_APPROVED && $requisition->approved_at === null) {
+
             DB::transaction(function () use ($requisition) {
                 $requisition->approved_at = now();
                 $requisition->approved_by_id = auth()->id();
@@ -172,6 +221,7 @@ class RequisitionController extends Controller
 
                 foreach ($requisition->items as $reqItem) {
                     $item = InventoryItem::where('name', $reqItem->item)->first();
+
                     if (! $item || $item->quantity < $reqItem->quantity) {
                         PurchaseOrder::create([
                             'user_id' => auth()->id(),
@@ -306,7 +356,12 @@ class RequisitionController extends Controller
         $stages = $process?->stages->sortBy('position')->values();
 
         $currentIndex = $stages->search(fn ($s) => $s->name === $requisition->status);
-        $nextStage = $currentIndex !== false ? $stages->get($currentIndex + 1) : null;
+
+        if ($stages->isEmpty() || $currentIndex === false) {
+            abort(Response::HTTP_INTERNAL_SERVER_ERROR, 'Approval process misconfigured.');
+        }
+
+        $nextStage = $stages->get($currentIndex + 1);
         $nextApprover = null;
 
         if ($nextStage) {

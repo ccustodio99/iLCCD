@@ -1,4 +1,5 @@
 <?php
+
 use App\Models\DocumentCategory;
 use App\Models\User;
 
@@ -38,4 +39,18 @@ it('allows admin to delete document category', function () {
 
     $response->assertRedirect('/settings/document-categories');
     expect(DocumentCategory::where('id', $category->id)->exists())->toBeFalse();
+});
+
+it('rejects duplicate document category names', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+    DocumentCategory::factory()->create(['name' => 'Policies']);
+    $this->actingAs($admin);
+
+    $response = $this->from('/settings/document-categories/create')
+        ->post('/settings/document-categories', [
+            'name' => 'Policies',
+            'is_active' => true,
+        ]);
+
+    $response->assertSessionHasErrors('name');
 });

@@ -10,6 +10,7 @@ use App\Models\JobOrderType;
 use App\Models\Requisition;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -109,8 +110,12 @@ class JobOrderController extends Controller
         $data['user_id'] = $request->user()->id;
         $data['status'] = $firstStage->name ?? JobOrder::STATUS_PENDING_HEAD;
         if ($request->hasFile('attachment')) {
-            $data['attachment_path'] = $request->file('attachment')
-                ->store('job_order_attachments', 'public');
+            try {
+                $data['attachment_path'] = $request->file('attachment')
+                    ->store('job_order_attachments', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to store job order attachment: '.$e->getMessage());
+            }
         }
         unset($data['type_parent']);
         JobOrder::create($data);
@@ -161,11 +166,17 @@ class JobOrderController extends Controller
             'attachment' => 'nullable|file|max:2048',
         ]);
         if ($request->hasFile('attachment')) {
-            if ($jobOrder->attachment_path) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($jobOrder->attachment_path);
+            $oldPath = $jobOrder->attachment_path;
+            try {
+                if ($oldPath) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
+                }
+                $data['attachment_path'] = $request->file('attachment')
+                    ->store('job_order_attachments', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to replace job order attachment: '.$e->getMessage());
+                $data['attachment_path'] = $oldPath;
             }
-            $data['attachment_path'] = $request->file('attachment')
-                ->store('job_order_attachments', 'public');
         }
         unset($data['type_parent']);
         $jobOrder->update($data);
@@ -230,12 +241,15 @@ class JobOrderController extends Controller
 
         $data = $request->validate([
             'item' => 'required|string|max:255',
+            'item_sku' => 'nullable|string|max:255',
             'quantity' => 'required|integer|min:1',
             'specification' => 'nullable|string',
             'purpose' => 'required|string',
         ]);
 
-        $item = InventoryItem::where('name', $data['item'])->first();
+        $item = $data['item_sku']
+            ? InventoryItem::where('sku', $data['item_sku'])->first()
+            : null;
         if ($item && $item->quantity >= $data['quantity']) {
             $item->decrement('quantity', $data['quantity']);
             InventoryTransaction::create([
@@ -257,6 +271,7 @@ class JobOrderController extends Controller
 
             $requisition->items()->create([
                 'item' => $data['item'],
+                'sku' => $data['item_sku'] ?? null,
                 'quantity' => $data['quantity'],
                 'specification' => $data['specification'] ?? null,
             ]);
@@ -352,7 +367,12 @@ class JobOrderController extends Controller
         $stages = $process?->stages->sortBy('position')->values();
 
         $currentIndex = $stages->search(fn ($s) => $s->name === $jobOrder->status);
-        $nextStage = $currentIndex !== false ? $stages->get($currentIndex + 1) : null;
+
+        if ($stages->isEmpty() || $currentIndex === false) {
+            abort(Response::HTTP_INTERNAL_SERVER_ERROR, 'Approval process misconfigured.');
+        }
+
+        $nextStage = $stages->get($currentIndex + 1);
         $nextApprover = null;
 
         if ($nextStage) {

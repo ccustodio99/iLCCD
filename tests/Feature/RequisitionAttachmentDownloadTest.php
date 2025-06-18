@@ -27,3 +27,13 @@ it('prevents others from downloading requisition attachment', function () {
     $this->actingAs($other);
     $this->get("/requisitions/{$req->id}/attachment")->assertForbidden();
 });
+
+it('redirects guest to login when downloading requisition attachment', function () {
+    Storage::fake('public');
+
+    $owner = User::factory()->create();
+    $path = UploadedFile::fake()->create('file.txt', 1)->store('requisition_attachments', 'public');
+    $req = Requisition::factory()->for($owner)->create(['attachment_path' => $path]);
+
+    $this->get("/requisitions/{$req->id}/attachment")->assertRedirect('/login');
+});
