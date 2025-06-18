@@ -165,7 +165,6 @@ class DocumentController extends Controller
             'action' => 'update',
         ]);
 
-
         return redirect()->route('documents.index');
     }
 
@@ -183,6 +182,8 @@ class DocumentController extends Controller
             'user_id' => $request->user()->id,
             'action' => 'delete',
         ]);
+        $document->delete();
+
 
         return redirect()->route('documents.index');
     }
