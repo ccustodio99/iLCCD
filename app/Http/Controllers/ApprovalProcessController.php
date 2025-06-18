@@ -84,6 +84,7 @@ class ApprovalProcessController extends Controller
         ]);
 
         $approvalProcess->stages()->create($data);
+        $this->reorderStages($approvalProcess);
 
         return redirect()->route('approval-processes.edit', $approvalProcess);
     }
@@ -98,6 +99,8 @@ class ApprovalProcessController extends Controller
 
         $stage->update($data);
 
+        $this->reorderStages($approvalProcess);
+
         return redirect()->route('approval-processes.edit', $approvalProcess);
     }
 
@@ -105,6 +108,20 @@ class ApprovalProcessController extends Controller
     {
         $stage->delete();
 
+        $this->reorderStages($approvalProcess);
+
         return redirect()->route('approval-processes.edit', $approvalProcess);
+    }
+
+    private function reorderStages(ApprovalProcess $approvalProcess): void
+    {
+        $approvalProcess->load('stages');
+
+        $approvalProcess->stages
+            ->sortBy('position')
+            ->values()
+            ->each(function (ApprovalStage $stage, int $index) {
+                $stage->update(['position' => $index + 1]);
+            });
     }
 }
