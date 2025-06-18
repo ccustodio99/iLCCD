@@ -2,12 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Database\Seeders\DocumentCategorySeeder;
-use Database\Seeders\TicketCategorySeeder;
-use Database\Seeders\InventoryCategorySeeder;
-use Database\Seeders\JobOrderTypeSeeder;
-use Database\Seeders\SettingSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -23,6 +17,7 @@ class DatabaseSeeder extends Seeder
             InventoryCategorySeeder::class,
             JobOrderTypeSeeder::class,
             DocumentCategorySeeder::class,
+            ApprovalProcessSeeder::class,
             SettingSeeder::class,
             UserSeeder::class,
         ]);
