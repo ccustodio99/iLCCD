@@ -131,7 +131,7 @@ Route::middleware('auth')->group(function () {
         Route::put('job-order-types/{jobOrderType}/disable', [JobOrderTypeController::class, 'disable'])->name('job-order-types.disable');
         Route::resource('job-order-types', JobOrderTypeController::class)->except('show');
 
-        Route::resource('approval-processes', ApprovalProcessController::class)->except('show');
+        Route::resource('approval-processes', ApprovalProcessController::class);
         Route::post('approval-processes/{approval_process}/stages', [ApprovalProcessController::class, 'storeStage'])->name('approval-processes.stages.store');
         Route::put('approval-processes/{approval_process}/stages/{stage}', [ApprovalProcessController::class, 'updateStage'])->name('approval-processes.stages.update');
         Route::delete('approval-processes/{approval_process}/stages/{stage}', [ApprovalProcessController::class, 'destroyStage'])->name('approval-processes.stages.destroy');
