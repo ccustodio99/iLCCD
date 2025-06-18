@@ -35,6 +35,8 @@ Tickets can be assigned to another user for resolution in addition to the ticket
 Additional users may be included as watchers to collaborate on the issue. Watchers can follow progress and comment, but only the ticket owner and the assigned user can modify or close the ticket.
 - Discussions are captured as comments with author and timestamp, and watchers
   receive email notifications whenever a new comment is posted.
+- Newly submitted tickets enter **pending_head** status and require approval from the requester's department head.
+- After approval the ticket status becomes **open** and normal editing is allowed.
 - After a department head approves a linked job order or requisition,
   the ticket becomes read-only for the requester. The head may revert the
   ticket to a pending state with remarks if updates are required.

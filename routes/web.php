@@ -58,6 +58,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::resource('tickets', TicketController::class)->except('show');
+    Route::get('tickets/approvals', [TicketController::class, 'approvals'])
+        ->name('tickets.approvals')->middleware('role:head');
+    Route::put('tickets/{ticket}/approve', [TicketController::class, 'approve'])
+        ->name('tickets.approve')->middleware('role:head');
     Route::post('tickets/{ticket}/convert', [TicketController::class, 'convertToJobOrder'])->name('tickets.convert');
     Route::post('tickets/{ticket}/requisition', [TicketController::class, 'convertToRequisition'])->name('tickets.requisition');
     Route::post('tickets/{ticket}/comments', [TicketController::class, 'storeComment'])->name('tickets.comment');

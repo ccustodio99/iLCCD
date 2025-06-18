@@ -133,7 +133,7 @@ class TicketController extends Controller
             'watchers.*' => 'exists:users,id',
         ]);
         $data['user_id'] = $request->user()->id;
-        $data['status'] = 'open';
+        $data['status'] = Ticket::STATUS_PENDING_HEAD;
         if ($request->hasFile('attachment')) {
             $data['attachment_path'] = $request->file('attachment')->store('ticket_attachments', 'public');
         }
@@ -387,6 +387,43 @@ class TicketController extends Controller
         }
 
         return Storage::disk('public')->download($ticket->attachment_path);
+    }
+
+    /** Show tickets awaiting department head approval */
+    public function approvals(Request $request)
+    {
+        abort_unless(auth()->user()->role === 'head', Response::HTTP_FORBIDDEN);
+
+        $perPage = $this->getPerPage($request);
+
+        $tickets = Ticket::with('user')
+            ->where('status', Ticket::STATUS_PENDING_HEAD)
+            ->whereHas('user', function ($q) {
+                $q->where('department', auth()->user()->department);
+            })
+            ->paginate($perPage)
+            ->withQueryString();
+
+        return view('tickets.approvals', compact('tickets'));
+    }
+
+    /** Approve the given ticket */
+    public function approve(Ticket $ticket)
+    {
+        abort_unless(auth()->user()->role === 'head', Response::HTTP_FORBIDDEN);
+        abort_if($ticket->status !== Ticket::STATUS_PENDING_HEAD, Response::HTTP_FORBIDDEN);
+        abort_if($ticket->user->department !== auth()->user()->department, Response::HTTP_FORBIDDEN);
+
+        $ticket->update([
+            'status' => Ticket::STATUS_OPEN,
+            'approved_by_id' => auth()->id(),
+            'approved_at' => now(),
+        ]);
+
+        $ticket->load('watchers', 'assignedTo', 'user');
+        $this->notifyStakeholders($ticket, "Ticket #{$ticket->id} was approved.");
+
+        return redirect()->route('tickets.approvals');
     }
 
     public function destroy(Ticket $ticket)
