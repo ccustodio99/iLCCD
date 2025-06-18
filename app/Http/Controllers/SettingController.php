@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SettingController extends Controller
 {
@@ -137,13 +138,21 @@ class SettingController extends Controller
         ]);
 
         if ($request->hasFile('logo')) {
+            $current = setting('logo_path');
+            if ($current) {
+                Storage::disk('public')->delete(str_replace('storage/', '', $current));
+            }
             $path = $request->file('logo')->store('branding', 'public');
-            \App\Models\Setting::set('logo_path', 'storage/' . $path);
+            \App\Models\Setting::set('logo_path', 'storage/'.$path);
         }
 
         if ($request->hasFile('favicon')) {
+            $current = setting('favicon_path');
+            if ($current) {
+                Storage::disk('public')->delete(str_replace('storage/', '', $current));
+            }
             $path = $request->file('favicon')->store('branding', 'public');
-            \App\Models\Setting::set('favicon_path', 'storage/' . $path);
+            \App\Models\Setting::set('favicon_path', 'storage/'.$path);
         }
 
         return redirect()->route('settings.branding')->with('success', 'Branding updated');
