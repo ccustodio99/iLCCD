@@ -204,5 +204,8 @@ it('searches items by description', function () {
 
     $response = $this->get('/inventory?search=Laptop');
     $response->assertSee('Desk');
-    $response->assertDontSee('Chair');
+    // Search results should exclude the Chair item while allowing category
+    // names like "Desks & Chairs". Verify by checking for the full table cell
+    // markup of the Chair item instead of the plain text.
+    $response->assertDontSee('<td>Chair</td>', false);
 });
