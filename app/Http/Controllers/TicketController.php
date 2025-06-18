@@ -408,6 +408,33 @@ class TicketController extends Controller
         return Storage::disk('public')->download($ticket->attachment_path);
     }
 
+    public function modalDetails(Ticket $ticket)
+    {
+        if ($ticket->user_id !== auth()->id() &&
+            $ticket->assigned_to_id !== auth()->id() &&
+            ! $ticket->watchers->contains(auth()->id())) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+
+        return view('tickets._modal_details', compact('ticket'));
+    }
+
+    public function modalEdit(Ticket $ticket)
+    {
+        if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+
+        $users = User::orderBy('name')->get();
+        $categories = TicketCategory::whereNull('parent_id')
+            ->with('children')
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        return view('tickets._modal_edit', compact('ticket', 'users', 'categories'));
+    }
+
     /** Show tickets awaiting department head approval */
     public function approvals(Request $request)
     {
