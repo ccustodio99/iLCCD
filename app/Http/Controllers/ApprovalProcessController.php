@@ -43,6 +43,13 @@ class ApprovalProcessController extends Controller
             ->with('success', 'Approval process created.');
     }
 
+    public function show(ApprovalProcess $approvalProcess)
+    {
+        $approvalProcess->load('stages.assignedUser');
+
+        return view('settings.approval-processes.show', compact('approvalProcess'));
+    }
+
     public function edit(ApprovalProcess $approvalProcess)
     {
         $approvalProcess = ApprovalProcess::with('stages.assignedUser')
@@ -96,9 +103,10 @@ class ApprovalProcessController extends Controller
         if ($request->expectsJson()) {
             $users = User::orderBy('name')->get();
             $html = view('settings.approval-processes.partials.stage_rows', compact('approvalProcess', 'users'))->render();
+
             return response()->json([
                 'html' => $html,
-                'message' => 'Stage added.'
+                'message' => 'Stage added.',
             ]);
         }
 
@@ -123,9 +131,10 @@ class ApprovalProcessController extends Controller
         if ($request->expectsJson()) {
             $users = User::orderBy('name')->get();
             $html = view('settings.approval-processes.partials.stage_rows', compact('approvalProcess', 'users'))->render();
+
             return response()->json([
                 'html' => $html,
-                'message' => 'Stage updated.'
+                'message' => 'Stage updated.',
             ]);
         }
 
@@ -144,9 +153,10 @@ class ApprovalProcessController extends Controller
         if (request()->expectsJson()) {
             $users = User::orderBy('name')->get();
             $html = view('settings.approval-processes.partials.stage_rows', compact('approvalProcess', 'users'))->render();
+
             return response()->json([
                 'html' => $html,
-                'message' => 'Stage deleted.'
+                'message' => 'Stage deleted.',
             ]);
         }
 
@@ -160,6 +170,7 @@ class ApprovalProcessController extends Controller
         $approvalProcess->load('stages.assignedUser');
         $users = User::orderBy('name')->get();
         $html = view('settings.approval-processes.partials.stage_rows', compact('approvalProcess', 'users'))->render();
+
         return response()->json(['html' => $html]);
     }
 
