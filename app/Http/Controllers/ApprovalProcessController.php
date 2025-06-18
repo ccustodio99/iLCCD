@@ -43,7 +43,8 @@ class ApprovalProcessController extends Controller
 
     public function edit(ApprovalProcess $approvalProcess)
     {
-        $approvalProcess->load('stages.assignedUser');
+        $approvalProcess = ApprovalProcess::with('stages.assignedUser')
+            ->findOrFail($approvalProcess->id);
         $users = User::orderBy('name')->get();
         $modules = ApprovalProcess::MODULES;
         $departments = User::select('department')
