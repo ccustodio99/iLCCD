@@ -87,19 +87,27 @@ class DocumentController extends Controller
         $data['user_id'] = $request->user()->id;
         $data['department'] = $request->user()->department;
 
-        $document = Document::create($data);
-        $path = $request->file('file')->store('documents');
-        DocumentVersion::create([
-            'document_id' => $document->id,
-            'version' => 1,
-            'path' => $path,
-            'uploaded_by' => $request->user()->id,
-        ]);
-        DocumentLog::create([
-            'document_id' => $document->id,
-            'user_id' => $request->user()->id,
-            'action' => 'upload',
-        ]);
+
+        $document = DB::transaction(function () use ($data, $request) {
+            $document = Document::create($data);
+
+            $path = $request->file('file')->store('documents');
+
+            DocumentVersion::create([
+                'document_id' => $document->id,
+                'version' => 1,
+                'path' => $path,
+                'uploaded_by' => $request->user()->id,
+            ]);
+
+            DocumentLog::create([
+                'document_id' => $document->id,
+                'user_id' => $request->user()->id,
+                'action' => 'upload',
+            ]);
+
+            return $document;
+        });
 
 
         return redirect()->route('documents.index');
@@ -130,7 +138,9 @@ class DocumentController extends Controller
             ],
             'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
         ]);
-        DB::transaction(function () use ($request, $document, $data) {
+
+        DB::transaction(function () use ($document, $data, $request) {
+
             $document->update($data);
 
             if ($request->hasFile('file')) {
@@ -154,14 +164,10 @@ class DocumentController extends Controller
                 'action' => 'update',
             ]);
 
-            $document->current_version = $version;
-            $document->save();
-        }
-        DocumentLog::create([
-            'document_id' => $document->id,
-            'user_id' => $request->user()->id,
-            'action' => 'update',
-        ]);
+        });
+
+
+
         return redirect()->route('documents.index');
     }
 
