@@ -9,33 +9,12 @@ class SettingController extends Controller
 {
     public function index(Request $request)
     {
-        $perPage = $this->getPerPage($request);
+        // The settings index no longer displays paginated lists of categories or
+        // announcements. These resources have their own dedicated routes where
+        // pagination is handled. Removing the queries here keeps the page light
+        // and avoids unnecessary database calls.
 
-        $ticketCategories = \App\Models\TicketCategory::with('parent')
-            ->paginate($perPage)
-            ->withQueryString();
-
-        $jobOrderTypes = \App\Models\JobOrderType::with('parent')
-            ->paginate($perPage)
-            ->withQueryString();
-
-        $inventoryCategories = \App\Models\InventoryCategory::with('parent')
-            ->paginate($perPage)
-            ->withQueryString();
-
-        $documentCategories = \App\Models\DocumentCategory::paginate($perPage)
-            ->withQueryString();
-
-        $announcements = \App\Models\Announcement::paginate($perPage)
-            ->withQueryString();
-
-        return view('settings.index', [
-            'ticketCategories' => $ticketCategories,
-            'jobOrderTypes' => $jobOrderTypes,
-            'inventoryCategories' => $inventoryCategories,
-            'documentCategories' => $documentCategories,
-            'announcements' => $announcements,
-        ]);
+        return view('settings.index');
     }
 
     private function appearanceData(): array
