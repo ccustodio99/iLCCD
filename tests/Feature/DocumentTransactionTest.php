@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
+
 class FailingUploadedFile extends UploadedFile
 {
     public function store($path = '', $options = [])
@@ -45,6 +46,7 @@ it('rolls back when document update fails', function () {
     $this->actingAs($user);
     $category = DocumentCategory::factory()->create();
 
+
     $this->post('/documents', [
         'title' => 'Policy',
         'description' => 'Important',
@@ -71,4 +73,5 @@ it('rolls back when document update fails', function () {
     expect($document->title)->toBe('Policy');
     expect(DocumentVersion::count())->toBe(1);
     expect(DocumentLog::count())->toBe(1);
+
 });
