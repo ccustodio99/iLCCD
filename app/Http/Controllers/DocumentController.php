@@ -7,7 +7,7 @@ use App\Models\DocumentCategory;
 use App\Models\DocumentLog;
 use App\Models\DocumentVersion;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
@@ -88,13 +88,17 @@ class DocumentController extends Controller
         $data['user_id'] = $request->user()->id;
         $data['department'] = $request->user()->department;
         $document = Document::create($data);
-        $path = $request->file('file')->store('documents');
-        DocumentVersion::create([
-            'document_id' => $document->id,
-            'version' => 1,
-            'path' => $path,
-            'uploaded_by' => $request->user()->id,
-        ]);
+        try {
+            $path = $request->file('file')->store('documents');
+            DocumentVersion::create([
+                'document_id' => $document->id,
+                'version' => 1,
+                'path' => $path,
+                'uploaded_by' => $request->user()->id,
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('Failed to store initial document version: '.$e->getMessage());
+        }
         DocumentLog::create([
             'document_id' => $document->id,
             'user_id' => $request->user()->id,
@@ -130,12 +134,9 @@ class DocumentController extends Controller
             'file' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:10240',
 
         ]);
-
-        DB::transaction(function () use ($document, $data, $request) {
-
-            $document->update($data);
-
-            if ($request->hasFile('file')) {
+        $document->update($data);
+        if ($request->hasFile('file')) {
+            try {
                 $path = $request->file('file')->store('documents');
                 $version = $document->current_version + 1;
 
@@ -145,19 +146,11 @@ class DocumentController extends Controller
                     'path' => $path,
                     'uploaded_by' => $request->user()->id,
                 ]);
-
                 $document->current_version = $version;
                 $document->save();
+            } catch (\Throwable $e) {
+                Log::error('Failed to store new document version for document '.$document->id.': '.$e->getMessage());
             }
-
-            DocumentLog::create([
-                'document_id' => $document->id,
-                'user_id' => $request->user()->id,
-                'action' => 'update',
-            ]);
-
-            $document->current_version = $version;
-            $document->save();
         }
         DocumentLog::create([
             'document_id' => $document->id,
@@ -182,8 +175,6 @@ class DocumentController extends Controller
             'user_id' => $request->user()->id,
             'action' => 'delete',
         ]);
-        $document->delete();
-
 
         return redirect()->route('documents.index');
     }

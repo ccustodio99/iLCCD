@@ -91,7 +91,16 @@ class RequisitionController extends Controller
             'status' => $firstStage->name ?? Requisition::STATUS_PENDING_HEAD,
         ];
 
-        DB::beginTransaction();
+
+        if ($request->hasFile('attachment')) {
+            try {
+                $requisitionData['attachment_path'] = $request->file('attachment')
+                    ->store('requisition_attachments', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to store requisition attachment: '.$e->getMessage());
+            }
+        }
+
 
         try {
             if ($request->hasFile('attachment')) {
@@ -173,11 +182,17 @@ class RequisitionController extends Controller
         ];
 
         if ($request->hasFile('attachment')) {
-            if ($requisition->attachment_path) {
-                Storage::disk('public')->delete($requisition->attachment_path);
+            $oldPath = $requisition->attachment_path;
+            try {
+                if ($oldPath) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+                $updateData['attachment_path'] = $request->file('attachment')
+                    ->store('requisition_attachments', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to replace requisition attachment: '.$e->getMessage());
+                $updateData['attachment_path'] = $oldPath;
             }
-            $updateData['attachment_path'] = $request->file('attachment')
-                ->store('requisition_attachments', 'public');
         }
 
         $requisition->update($updateData);

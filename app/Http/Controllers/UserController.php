@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -52,12 +53,14 @@ class UserController extends Controller
     public function create()
     {
         $roles = User::ROLES;
+
         return view('users.create', compact('roles'));
     }
 
     public function edit(User $user)
     {
         $roles = User::ROLES;
+
         return view('users.edit', compact('user', 'roles'));
     }
 
@@ -69,7 +72,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => ['required', 'confirmed', 'min:8', 'regex:/[A-Za-z]/', 'regex:/[0-9]/', 'regex:/[^A-Za-z0-9]/'],
-            'role' => 'required|in:' . implode(',', $roles),
+            'role' => 'required|in:'.implode(',', $roles),
             'department' => 'nullable|string|max:255',
             'contact_info' => 'nullable|string|max:255',
             'profile_photo' => 'nullable|image|max:2048',
@@ -86,7 +89,11 @@ class UserController extends Controller
             'is_active' => $data['is_active'] ?? false,
         ];
         if ($request->hasFile('profile_photo')) {
-            $payload['profile_photo_path'] = $request->file('profile_photo')->store('profile_photos', 'public');
+            try {
+                $payload['profile_photo_path'] = $request->file('profile_photo')->store('profile_photos', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to store profile photo for user creation: '.$e->getMessage());
+            }
         }
 
         User::create($payload);
@@ -100,9 +107,9 @@ class UserController extends Controller
 
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'email' => 'required|email|unique:users,email,'.$user->id,
             'password' => ['nullable', 'confirmed', 'min:8', 'regex:/[A-Za-z]/', 'regex:/[0-9]/', 'regex:/[^A-Za-z0-9]/'],
-            'role' => 'required|in:' . implode(',', $roles),
+            'role' => 'required|in:'.implode(',', $roles),
             'department' => 'nullable|string|max:255',
             'contact_info' => 'nullable|string|max:255',
             'profile_photo' => 'nullable|image|max:2048',
@@ -118,13 +125,19 @@ class UserController extends Controller
         $user->contact_info = $data['contact_info'] ?? null;
         $user->is_active = $data['is_active'] ?? false;
         if ($request->hasFile('profile_photo')) {
-            if ($user->profile_photo_path) {
-                Storage::disk('public')->delete($user->profile_photo_path);
+            $oldPath = $user->profile_photo_path;
+            try {
+                if ($oldPath) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+                $user->profile_photo_path = $request->file('profile_photo')
+                    ->store('profile_photos', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to replace profile photo for user '.$user->id.': '.$e->getMessage());
+                $user->profile_photo_path = $oldPath;
             }
-            $user->profile_photo_path = $request->file('profile_photo')
-                ->store('profile_photos', 'public');
         }
-        if (!empty($data['password'])) {
+        if (! empty($data['password'])) {
             $user->password = Hash::make($data['password']);
         }
         $user->save();
@@ -142,9 +155,14 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         if ($user->profile_photo_path) {
-            Storage::disk('public')->delete($user->profile_photo_path);
+            try {
+                Storage::disk('public')->delete($user->profile_photo_path);
+            } catch (\Throwable $e) {
+                Log::error('Failed to delete profile photo for user '.$user->id.': '.$e->getMessage());
+            }
         }
         $user->delete();
+
         return redirect()->route('users.index');
     }
 }
