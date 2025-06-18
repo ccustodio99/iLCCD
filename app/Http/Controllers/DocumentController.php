@@ -82,7 +82,7 @@ class DocumentController extends Controller
                 'required',
                 Rule::exists('document_categories', 'id')->where('is_active', true),
             ],
-            'file' => 'required|file',
+            'file' => 'required|file|mimes:pdf,doc,docx|max:2048',
         ]);
         $data['user_id'] = $request->user()->id;
         $data['department'] = $request->user()->department;
@@ -128,7 +128,7 @@ class DocumentController extends Controller
                 'required',
                 Rule::exists('document_categories', 'id')->where('is_active', true),
             ],
-            'file' => 'nullable|file',
+            'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
         ]);
         DB::transaction(function () use ($request, $document, $data) {
             $document->update($data);
@@ -162,8 +162,6 @@ class DocumentController extends Controller
             'user_id' => $request->user()->id,
             'action' => 'update',
         ]);
-
-
         return redirect()->route('documents.index');
     }
 
@@ -181,9 +179,6 @@ class DocumentController extends Controller
             'user_id' => $request->user()->id,
             'action' => 'delete',
         ]);
-
-
-        $document->delete();
 
         return redirect()->route('documents.index');
     }
