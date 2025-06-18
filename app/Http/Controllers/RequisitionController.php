@@ -10,6 +10,7 @@ use App\Models\PurchaseOrder;
 use App\Models\Requisition;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
@@ -90,20 +91,44 @@ class RequisitionController extends Controller
             'status' => $firstStage->name ?? Requisition::STATUS_PENDING_HEAD,
         ];
 
-        if ($request->hasFile('attachment')) {
-            $requisitionData['attachment_path'] = $request->file('attachment')
-                ->store('requisition_attachments', 'public');
-        }
+        DB::beginTransaction();
 
-        $requisition = Requisition::create($requisitionData);
+        try {
+            if ($request->hasFile('attachment')) {
+                try {
+                    $requisitionData['attachment_path'] = $request->file('attachment')
+                        ->store('requisition_attachments', 'public');
+                } catch (\Throwable $e) {
+                    DB::rollBack();
 
-        foreach ($data['item'] as $i => $name) {
-            $requisition->items()->create([
-                'item' => $name,
-                'sku' => $data['sku'][$i] ?? null,
-                'quantity' => $data['quantity'][$i] ?? 1,
-                'specification' => $data['specification'][$i] ?? null,
-            ]);
+
+                    return back()
+                        ->withErrors(['attachment' => 'Failed to upload attachment.'])
+                        ->withInput();
+                }
+            }
+
+            $requisition = Requisition::create($requisitionData);
+
+            foreach ($data['item'] as $i => $name) {
+                $requisition->items()->create([
+                    'item' => $name,
+                    'quantity' => $data['quantity'][$i] ?? 1,
+                    'specification' => $data['specification'][$i] ?? null,
+                ]);
+            }
+
+            DB::commit();
+        } catch (\Throwable $e) {
+            if (! empty($requisitionData['attachment_path'] ?? null)) {
+                Storage::disk('public')->delete($requisitionData['attachment_path']);
+            }
+
+            DB::rollBack();
+
+            return back()
+                ->withErrors(['error' => 'Failed to create requisition.'])
+                ->withInput();
         }
 
         return redirect()->route('requisitions.index');
