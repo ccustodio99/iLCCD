@@ -192,14 +192,14 @@ class TicketController extends Controller
         }
 
         $ticket->load('watchers', 'assignedTo', 'user');
-        $this->notifyStakeholders($ticket, "Ticket #{$ticket->id} has been created.");
+
+        $message = "Ticket #{$ticket->id} has been created.";
 
         if ($ticket->assigned_to_id) {
-            $this->notifyStakeholders(
-                $ticket,
-                "Ticket #{$ticket->id} has been assigned to {$ticket->assignedTo->name}."
-            );
+            $message = "Ticket #{$ticket->id} has been created and assigned to {$ticket->assignedTo->name}.";
         }
+
+        $this->notifyStakeholders($ticket, $message);
 
         return redirect()->route('tickets.index');
     }
