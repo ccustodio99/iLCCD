@@ -1,10 +1,10 @@
 <?php
 
 use App\Models\JobOrder;
-use App\Models\User;
 use App\Models\JobOrderType;
-use Illuminate\Support\Facades\Notification;
+use App\Models\User;
 use App\Notifications\JobOrderStatusNotification;
+use Illuminate\Support\Facades\Notification;
 
 it('routes job order through approval and assignment workflow', function () {
     Notification::fake();
@@ -32,7 +32,7 @@ it('routes job order through approval and assignment workflow', function () {
 
     // head approval
     $this->actingAs($head);
-    $this->put("/job-orders/{$order->id}/approve")->assertRedirect('/job-orders/approvals');
+    $this->put("/job-orders/{$order->id}/approve")->assertRedirect('/job-orders');
     $order->refresh();
     expect($order->status)->toBe(JobOrder::STATUS_PENDING_PRESIDENT);
 
@@ -60,4 +60,3 @@ it('routes job order through approval and assignment workflow', function () {
 
     Notification::assertSentTimes(JobOrderStatusNotification::class, 7);
 });
-
