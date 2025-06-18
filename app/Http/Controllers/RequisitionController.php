@@ -10,7 +10,9 @@ use App\Models\PurchaseOrder;
 use App\Models\Requisition;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+
+use Illuminate\Support\Facades\DB;
+
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
@@ -211,13 +213,13 @@ class RequisitionController extends Controller
         }
 
         if ($data['status'] === Requisition::STATUS_APPROVED && $requisition->approved_at === null) {
-            $requisition->approved_at = now();
-            $requisition->approved_by_id = auth()->id();
-            $requisition->save();
 
-            foreach ($requisition->items as $reqItem) {
+            DB::transaction(function () use ($requisition) {
+                $requisition->approved_at = now();
+                $requisition->approved_by_id = auth()->id();
+                $requisition->save();
 
-                try {
+                foreach ($requisition->items as $reqItem) {
                     $item = InventoryItem::where('name', $reqItem->item)->first();
 
                     if (! $item || $item->quantity < $reqItem->quantity) {
@@ -240,24 +242,18 @@ class RequisitionController extends Controller
                             'purpose' => $requisition->purpose,
                         ]);
                     }
-                } catch (\Throwable $e) {
-                    Log::error(
-                        'Requisition '.$requisition->id.' item '.$reqItem->item.
-                        ' qty '.$reqItem->quantity.' error: '.$e->getMessage()
-                    );
-                    throw $e;
                 }
-            }
 
-            if ($requisition->job_order_id) {
-                $jobOrder = $requisition->jobOrder;
-                if ($jobOrder && $jobOrder->status !== JobOrder::STATUS_APPROVED) {
-                    $jobOrder->update([
-                        'status' => JobOrder::STATUS_APPROVED,
-                        'approved_at' => now(),
-                    ]);
+                if ($requisition->job_order_id) {
+                    $jobOrder = $requisition->jobOrder;
+                    if ($jobOrder && $jobOrder->status !== JobOrder::STATUS_APPROVED) {
+                        $jobOrder->update([
+                            'status' => JobOrder::STATUS_APPROVED,
+                            'approved_at' => now(),
+                        ]);
+                    }
                 }
-            }
+            });
         }
 
         return redirect()->route('requisitions.index');
