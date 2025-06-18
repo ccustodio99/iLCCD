@@ -38,7 +38,9 @@ class ApprovalProcessController extends Controller
 
         ApprovalProcess::create($data);
 
-        return redirect()->route('approval-processes.index');
+        return redirect()
+            ->route('approval-processes.index')
+            ->with('success', 'Approval process created.');
     }
 
     public function edit(ApprovalProcess $approvalProcess)
@@ -65,14 +67,18 @@ class ApprovalProcessController extends Controller
 
         $approvalProcess->update($data);
 
-        return redirect()->route('approval-processes.edit', $approvalProcess);
+        return redirect()
+            ->route('approval-processes.edit', $approvalProcess)
+            ->with('success', 'Approval process updated.');
     }
 
     public function destroy(ApprovalProcess $approvalProcess)
     {
         $approvalProcess->delete();
 
-        return redirect()->route('approval-processes.index');
+        return redirect()
+            ->route('approval-processes.index')
+            ->with('success', 'Approval process deleted.');
     }
 
     public function storeStage(Request $request, ApprovalProcess $approvalProcess)
@@ -90,10 +96,15 @@ class ApprovalProcessController extends Controller
         if ($request->expectsJson()) {
             $users = User::orderBy('name')->get();
             $html = view('settings.approval-processes.partials.stage_rows', compact('approvalProcess', 'users'))->render();
-            return response()->json(['html' => $html]);
+            return response()->json([
+                'html' => $html,
+                'message' => 'Stage added.'
+            ]);
         }
 
-        return redirect()->route('approval-processes.edit', $approvalProcess);
+        return redirect()
+            ->route('approval-processes.edit', $approvalProcess)
+            ->with('success', 'Stage added.');
     }
 
     public function updateStage(Request $request, ApprovalProcess $approvalProcess, ApprovalStage $stage)
@@ -112,10 +123,15 @@ class ApprovalProcessController extends Controller
         if ($request->expectsJson()) {
             $users = User::orderBy('name')->get();
             $html = view('settings.approval-processes.partials.stage_rows', compact('approvalProcess', 'users'))->render();
-            return response()->json(['html' => $html]);
+            return response()->json([
+                'html' => $html,
+                'message' => 'Stage updated.'
+            ]);
         }
 
-        return redirect()->route('approval-processes.edit', $approvalProcess);
+        return redirect()
+            ->route('approval-processes.edit', $approvalProcess)
+            ->with('success', 'Stage updated.');
     }
 
     public function destroyStage(ApprovalProcess $approvalProcess, ApprovalStage $stage)
@@ -128,10 +144,15 @@ class ApprovalProcessController extends Controller
         if (request()->expectsJson()) {
             $users = User::orderBy('name')->get();
             $html = view('settings.approval-processes.partials.stage_rows', compact('approvalProcess', 'users'))->render();
-            return response()->json(['html' => $html]);
+            return response()->json([
+                'html' => $html,
+                'message' => 'Stage deleted.'
+            ]);
         }
 
-        return redirect()->route('approval-processes.edit', $approvalProcess);
+        return redirect()
+            ->route('approval-processes.edit', $approvalProcess)
+            ->with('success', 'Stage deleted.');
     }
 
     public function stages(ApprovalProcess $approvalProcess)
