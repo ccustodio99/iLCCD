@@ -241,12 +241,15 @@ class JobOrderController extends Controller
 
         $data = $request->validate([
             'item' => 'required|string|max:255',
+            'item_sku' => 'nullable|string|max:255',
             'quantity' => 'required|integer|min:1',
             'specification' => 'nullable|string',
             'purpose' => 'required|string',
         ]);
 
-        $item = InventoryItem::where('name', $data['item'])->first();
+        $item = $data['item_sku']
+            ? InventoryItem::where('sku', $data['item_sku'])->first()
+            : null;
         if ($item && $item->quantity >= $data['quantity']) {
             $item->decrement('quantity', $data['quantity']);
             InventoryTransaction::create([
@@ -268,6 +271,7 @@ class JobOrderController extends Controller
 
             $requisition->items()->create([
                 'item' => $data['item'],
+                'sku' => $data['item_sku'] ?? null,
                 'quantity' => $data['quantity'],
                 'specification' => $data['specification'] ?? null,
             ]);

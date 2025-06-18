@@ -10,7 +10,7 @@
         ['label' => 'Edit']
     ]])
     <h1 class="mb-4">Edit Approval Process</h1>
-    <form action="{{ route('approval-processes.update', $approvalProcess) }}" method="POST" class="mb-4">
+    <form id="process-form" action="{{ route('approval-processes.update', $approvalProcess) }}" method="POST" class="mb-4">
         @csrf
         @method('PUT')
         <div class="mb-3">
@@ -55,4 +55,12 @@
 
 @push('scripts')
     @include('partials.approval-stages-script')
+    <script>
+        document.getElementById('process-form').addEventListener('submit', function(e) {
+            if (document.querySelectorAll('#stages-body .stage-row').length === 0) {
+                e.preventDefault();
+                alert('At least one stage is required.');
+            }
+        });
+    </script>
 @endpush

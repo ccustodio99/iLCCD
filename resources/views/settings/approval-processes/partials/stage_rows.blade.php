@@ -1,5 +1,5 @@
 @foreach($approvalProcess->stages->sortBy('position') as $stage)
-<tr>
+<tr class="stage-row">
     <form action="{{ route('approval-processes.stages.update', [$approvalProcess, $stage]) }}" method="POST" class="stage-update-form">
         @csrf
         @method('PUT')

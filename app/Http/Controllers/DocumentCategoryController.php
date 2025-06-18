@@ -23,7 +23,7 @@ class DocumentCategoryController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:document_categories,name',
             'is_active' => 'boolean',
         ]);
         $data['is_active'] = $data['is_active'] ?? false;
@@ -41,7 +41,7 @@ class DocumentCategoryController extends Controller
     public function update(Request $request, DocumentCategory $documentCategory)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:document_categories,name,'.$documentCategory->id,
             'is_active' => 'boolean',
         ]);
         $data['is_active'] = $data['is_active'] ?? false;

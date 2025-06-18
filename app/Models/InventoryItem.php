@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
+use App\Traits\LogsAudit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\InventoryTransaction;
-use App\Models\InventoryCategory;
-use App\Traits\LogsAudit;
 
 class InventoryItem extends Model
 {
@@ -17,8 +15,11 @@ class InventoryItem extends Model
 
     /** Inventory item status values */
     public const STATUS_AVAILABLE = 'available';
+
     public const STATUS_RESERVED = 'reserved';
+
     public const STATUS_MAINTENANCE = 'maintenance';
+
     public const STATUS_RETIRED = 'retired';
 
     /**
@@ -34,6 +35,7 @@ class InventoryItem extends Model
     ];
 
     protected $fillable = [
+        'sku',
         'user_id',
         'name',
         'description',
