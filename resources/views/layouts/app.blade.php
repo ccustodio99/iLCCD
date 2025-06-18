@@ -41,10 +41,7 @@
             border: none;
             color: #fff;
             font-size: 1.5rem;
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 1100;
+            margin-right: 0.5rem;
         }
         #menu-toggle:hover {
             color: var(--color-accent);
