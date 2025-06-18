@@ -92,7 +92,9 @@
                         <form action="{{ route('job-orders.approve', $jobOrder) }}" method="POST" class="d-inline">
                             @csrf
                             @method('PUT')
-                            <button type="submit" class="btn btn-sm btn-primary">Approve</button>
+
+                            <button type="submit" class="btn btn-sm btn-primary" onclick="return confirm('Approve this job order?')">Approve</button>
+
                         </form>
                     @endif
                 </td>
