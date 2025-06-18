@@ -85,6 +85,13 @@ class ApprovalProcessController extends Controller
 
         $approvalProcess->stages()->create($data);
         $this->reorderStages($approvalProcess);
+        $approvalProcess->refresh()->load('stages.assignedUser');
+
+        if ($request->expectsJson()) {
+            $users = User::orderBy('name')->get();
+            $html = view('settings.approval-processes.partials.stage_rows', compact('approvalProcess', 'users'))->render();
+            return response()->json(['html' => $html]);
+        }
 
         return redirect()->route('approval-processes.edit', $approvalProcess);
     }
@@ -100,6 +107,13 @@ class ApprovalProcessController extends Controller
         $stage->update($data);
 
         $this->reorderStages($approvalProcess);
+        $approvalProcess->refresh()->load('stages.assignedUser');
+
+        if ($request->expectsJson()) {
+            $users = User::orderBy('name')->get();
+            $html = view('settings.approval-processes.partials.stage_rows', compact('approvalProcess', 'users'))->render();
+            return response()->json(['html' => $html]);
+        }
 
         return redirect()->route('approval-processes.edit', $approvalProcess);
     }
@@ -109,8 +123,23 @@ class ApprovalProcessController extends Controller
         $stage->delete();
 
         $this->reorderStages($approvalProcess);
+        $approvalProcess->refresh()->load('stages.assignedUser');
+
+        if (request()->expectsJson()) {
+            $users = User::orderBy('name')->get();
+            $html = view('settings.approval-processes.partials.stage_rows', compact('approvalProcess', 'users'))->render();
+            return response()->json(['html' => $html]);
+        }
 
         return redirect()->route('approval-processes.edit', $approvalProcess);
+    }
+
+    public function stages(ApprovalProcess $approvalProcess)
+    {
+        $approvalProcess->load('stages.assignedUser');
+        $users = User::orderBy('name')->get();
+        $html = view('settings.approval-processes.partials.stage_rows', compact('approvalProcess', 'users'))->render();
+        return response()->json(['html' => $html]);
     }
 
     private function reorderStages(ApprovalProcess $approvalProcess): void
