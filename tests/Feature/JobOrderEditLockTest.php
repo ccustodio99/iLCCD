@@ -24,7 +24,6 @@ it('locks requester editing after head approval until returned', function () {
         'type_parent' => $parent->id,
         'job_type' => $type->name,
         'description' => $order->description,
-        'status' => $order->status,
     ])->assertForbidden();
 
     $this->actingAs($head);
@@ -37,6 +36,5 @@ it('locks requester editing after head approval until returned', function () {
         'type_parent' => $parent->id,
         'job_type' => $type->name,
         'description' => $order->description,
-        'status' => $order->status,
     ])->assertRedirect('/job-orders');
 });

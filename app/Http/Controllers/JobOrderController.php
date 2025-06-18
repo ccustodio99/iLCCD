@@ -149,7 +149,6 @@ class JobOrderController extends Controller
                 }),
             ],
             'description' => 'required|string',
-            'status' => ['required', 'string', Rule::in(JobOrder::STATUSES)],
             'attachment' => 'nullable|file|max:2048',
         ]);
         if ($request->hasFile('attachment')) {
@@ -161,14 +160,6 @@ class JobOrderController extends Controller
         }
         unset($data['type_parent']);
         $jobOrder->update($data);
-        if ($data['status'] === JobOrder::STATUS_COMPLETED && $jobOrder->completed_at === null) {
-            $jobOrder->completed_at = now();
-            $jobOrder->save();
-        }
-        if ($data['status'] === JobOrder::STATUS_CLOSED && $jobOrder->closed_at === null) {
-            $jobOrder->closed_at = now();
-            $jobOrder->save();
-        }
         return redirect()->route('job-orders.index');
     }
 
