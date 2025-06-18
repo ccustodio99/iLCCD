@@ -20,6 +20,14 @@ Copy `.env.example` to `.env` and update the following keys:
 | `PHP_CLI_SERVER_WORKERS` | PHP built-in workers | `4` | |
 | `BCRYPT_ROUNDS` | Password hashing rounds | `12` | Lower or equal for dev |
 
+> **Important:** Set `APP_URL` to the base address of your application (for example `http://localhost:8000` when using `php artisan serve`). After updating `.env`, run the following command so Laravel reloads the value:
+
+```bash
+php artisan config:clear
+```
+
+If profile photos or other links fail to load, see [profile-photo-guide.md](profile-photo-guide.md) for troubleshooting tips.
+
 ## Logging
 
 | Key | Description |
