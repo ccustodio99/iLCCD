@@ -84,6 +84,17 @@
                             <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Mark this job order as complete?')">Job Complete</button>
                         </form>
                     @endif
+                    @if(auth()->user()->role === 'head' && (
+                            ($jobOrder->status === \App\Models\JobOrder::STATUS_PENDING_HEAD && auth()->user()->department === $jobOrder->user->department) ||
+                            ($jobOrder->status === \App\Models\JobOrder::STATUS_PENDING_PRESIDENT && auth()->user()->department === 'President Department') ||
+                            ($jobOrder->status === \App\Models\JobOrder::STATUS_PENDING_FINANCE && auth()->user()->department === 'Finance Office')
+                        ))
+                        <form action="{{ route('job-orders.approve', $jobOrder) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="btn btn-sm btn-primary" onclick="return confirm('Approve this job order?')">Approve</button>
+                        </form>
+                    @endif
                 </td>
             </tr>
             @endforeach
