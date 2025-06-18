@@ -122,6 +122,7 @@ Approval workflows ensure requests are reviewed by the proper people before they
 - The seed defines a default three-step chain (Head → President → Finance), but
   you can reorder or add stages to meet each department's needs. Existing stages
   remain intact when a process is edited.
+  When adjusting stage order, ensure each position number is unique starting at 1. Duplicate positions can briefly hide a stage in the list until the page is refreshed.
 
 Example command to load the default processes:
 
