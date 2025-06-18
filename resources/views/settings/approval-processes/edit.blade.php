@@ -35,7 +35,7 @@
 
     <h2 class="h4 mb-3">Stages</h2>
     <div class="table-responsive mb-3">
-        <table id="stages-table" class="table table-bordered align-middle" data-process-id="{{ $approvalProcess->id }}">
+        <table id="stages-table" class="table table-bordered align-middle" data-stages-url="{{ route('approval-processes.stages.index', $approvalProcess) }}">
         <caption class="visually-hidden">Approval Stages</caption>
             <thead>
                 <tr>

@@ -4,7 +4,7 @@
     "name": "bootstrap"
   },
   "resources/css/app.css": {
-    "file": "assets/app-DzPPyo8P.css",
+    "file": "assets/app-CgKScHSy.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -12,6 +12,15 @@
     "file": "assets/app-CH6PfHwj.js",
     "name": "app",
     "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_bootstrap-T1DpEqax.js"
+    ]
+  },
+  "resources/js/approval-stages.js": {
+    "file": "assets/approval-stages-DiKFCeYB.js",
+    "name": "approval-stages",
+    "src": "resources/js/approval-stages.js",
     "isEntry": true,
     "imports": [
       "_bootstrap-T1DpEqax.js"
