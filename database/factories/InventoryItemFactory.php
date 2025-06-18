@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\InventoryCategory;
 use App\Models\InventoryItem;
 use App\Models\User;
-use App\Models\InventoryCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends Factory<InventoryItem>
@@ -17,6 +18,7 @@ class InventoryItemFactory extends Factory
     public function definition(): array
     {
         return [
+            'sku' => strtoupper(Str::random(8)),
             'user_id' => User::factory(),
             'name' => fake()->words(2, true),
             'description' => fake()->sentence(),

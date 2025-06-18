@@ -1,11 +1,11 @@
 <?php
 
+use App\Models\InventoryCategory;
 use App\Models\InventoryItem;
 use App\Models\InventoryTransaction;
 use App\Models\User;
-use App\Models\InventoryCategory;
-use Illuminate\Support\Facades\Notification;
 use App\Notifications\LowStockNotification;
+use Illuminate\Support\Facades\Notification;
 
 it('allows authorized user to create inventory item', function () {
     $user = User::factory()->create(['role' => 'admin']);
@@ -13,6 +13,7 @@ it('allows authorized user to create inventory item', function () {
     $this->actingAs($user);
 
     $response = $this->post('/inventory', [
+        'sku' => 'SKU123',
         'name' => 'Laptop',
         'description' => 'Dell',
         'inventory_category_id' => $category->id,
@@ -26,7 +27,7 @@ it('allows authorized user to create inventory item', function () {
     ]);
 
     $response->assertRedirect('/inventory');
-    expect(InventoryItem::where('name', 'Laptop')->exists())->toBeTrue();
+    expect(InventoryItem::where('sku', 'SKU123')->exists())->toBeTrue();
 });
 
 it('shows user inventory items', function () {
@@ -57,7 +58,7 @@ it('updates quantity and records transaction when item is issued', function () {
 
     $request = Illuminate\Http\Request::create('/', 'POST', ['quantity' => 2, 'purpose' => 'Maintenance']);
     $request->setUserResolver(fn () => $user);
-    $controller = new App\Http\Controllers\InventoryItemController();
+    $controller = new App\Http\Controllers\InventoryItemController;
     $response = $controller->issue($request, $item);
 
     expect($response->status())->toBe(302);
@@ -77,7 +78,7 @@ it('updates quantity and records transaction when item is returned', function ()
 
     $request = Illuminate\Http\Request::create('/', 'POST', ['quantity' => 2, 'purpose' => 'Return']);
     $request->setUserResolver(fn () => $user);
-    $controller = new App\Http\Controllers\InventoryItemController();
+    $controller = new App\Http\Controllers\InventoryItemController;
     $response = $controller->return($request, $item);
 
     expect($response->status())->toBe(302);
@@ -134,7 +135,7 @@ it('dispatches low stock notification when issuing causes quantity to drop below
 
     $request = Illuminate\Http\Request::create('/', 'POST', ['quantity' => 1]);
     $request->setUserResolver(fn () => $user);
-    $controller = new App\Http\Controllers\InventoryItemController();
+    $controller = new App\Http\Controllers\InventoryItemController;
     $controller->issue($request, $item);
 
     Notification::assertSentTimes(LowStockNotification::class, 2);
@@ -156,7 +157,7 @@ it('filters items by category', function () {
     InventoryItem::factory()->for($user)->for($catB)->create(['name' => 'Cat B']);
     $this->actingAs($user);
 
-    $response = $this->get('/inventory?category=' . $catA->id);
+    $response = $this->get('/inventory?category='.$catA->id);
     $response->assertStatus(200);
     $response->assertSee('Cat A');
     $response->assertDontSee('Cat B');
@@ -191,7 +192,7 @@ it('filters items by parent category', function () {
     InventoryItem::factory()->for($user)->for($child)->create(['name' => 'Child Item']);
     $this->actingAs($user);
 
-    $response = $this->get('/inventory?category=' . $parent->id);
+    $response = $this->get('/inventory?category='.$parent->id);
     $response->assertDontSee('Child Item');
 });
 

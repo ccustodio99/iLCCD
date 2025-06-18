@@ -68,6 +68,7 @@ class RequisitionController extends Controller
     {
         $data = $request->validate([
             'item.*' => 'required|string|max:255',
+            'sku.*' => 'nullable|string|max:255',
             'quantity.*' => 'required|integer|min:1',
             'specification.*' => 'nullable|string',
             'purpose' => 'required|string',
@@ -99,6 +100,7 @@ class RequisitionController extends Controller
                         ->store('requisition_attachments', 'public');
                 } catch (\Throwable $e) {
                     DB::rollBack();
+
 
                     return back()
                         ->withErrors(['attachment' => 'Failed to upload attachment.'])
@@ -155,6 +157,7 @@ class RequisitionController extends Controller
         }
         $data = $request->validate([
             'item.*' => 'required|string|max:255',
+            'sku.*' => 'nullable|string|max:255',
             'quantity.*' => 'required|integer|min:1',
             'specification.*' => 'nullable|string',
             'purpose' => 'required|string',
@@ -183,6 +186,7 @@ class RequisitionController extends Controller
         foreach ($data['item'] as $i => $name) {
             $requisition->items()->create([
                 'item' => $name,
+                'sku' => $data['sku'][$i] ?? null,
                 'quantity' => $data['quantity'][$i] ?? 1,
                 'specification' => $data['specification'][$i] ?? null,
             ]);
@@ -194,7 +198,9 @@ class RequisitionController extends Controller
             $requisition->save();
 
             foreach ($requisition->items as $reqItem) {
-                $item = InventoryItem::where('name', $reqItem->item)->first();
+                $item = $reqItem->sku
+                    ? InventoryItem::where('sku', $reqItem->sku)->first()
+                    : null;
                 if (! $item || $item->quantity < $reqItem->quantity) {
                     PurchaseOrder::create([
                         'user_id' => auth()->id(),
