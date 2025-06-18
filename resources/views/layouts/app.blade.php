@@ -17,6 +17,7 @@
             --color-accent: {{ setting('color_accent', '#FFCD38') }};
             --font-primary: '{{ setting('font_primary', 'Poppins') }}';
             --font-secondary: '{{ setting('font_secondary', 'Roboto') }}';
+            --header-height: 56px;
         }
         body {
             font-family: var(--font-primary), var(--font-secondary), 'Montserrat', sans-serif;
@@ -98,6 +99,10 @@
             }
             header[role="banner"] {
                 margin-left: 0;
+            }
+            #mainMenu.offcanvas {
+                top: var(--header-height);
+                height: calc(100vh - var(--header-height));
             }
         }
         .cta { background-color: var(--color-accent); color: var(--color-primary); }
