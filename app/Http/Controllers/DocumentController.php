@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Document;
-use App\Models\DocumentVersion;
-use App\Models\DocumentLog;
 use App\Models\DocumentCategory;
-use Illuminate\Validation\Rule;
+use App\Models\DocumentLog;
+use App\Models\DocumentVersion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
 class DocumentController extends Controller
@@ -52,6 +53,7 @@ class DocumentController extends Controller
     public function create()
     {
         $categories = DocumentCategory::where('is_active', true)->get();
+
         return view('documents.create', compact('categories'));
     }
 
@@ -67,6 +69,7 @@ class DocumentController extends Controller
         }
 
         $document->load(['versions.uploader', 'auditTrails.user']);
+
         return view('documents.show', compact('document'));
     }
 
@@ -84,18 +87,23 @@ class DocumentController extends Controller
         $data['user_id'] = $request->user()->id;
         $data['department'] = $request->user()->department;
         $document = Document::create($data);
-        $path = $request->file('file')->store('documents');
-        DocumentVersion::create([
-            'document_id' => $document->id,
-            'version' => 1,
-            'path' => $path,
-            'uploaded_by' => $request->user()->id,
-        ]);
+        try {
+            $path = $request->file('file')->store('documents');
+            DocumentVersion::create([
+                'document_id' => $document->id,
+                'version' => 1,
+                'path' => $path,
+                'uploaded_by' => $request->user()->id,
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('Failed to store initial document version: '.$e->getMessage());
+        }
         DocumentLog::create([
             'document_id' => $document->id,
             'user_id' => $request->user()->id,
             'action' => 'upload',
         ]);
+
         return redirect()->route('documents.index');
     }
 
@@ -106,6 +114,7 @@ class DocumentController extends Controller
         }
         $document->load('auditTrails.user');
         $categories = DocumentCategory::where('is_active', true)->get();
+
         return view('documents.edit', compact('document', 'categories'));
     }
 
@@ -125,22 +134,27 @@ class DocumentController extends Controller
         ]);
         $document->update($data);
         if ($request->hasFile('file')) {
-            $path = $request->file('file')->store('documents');
-            $version = $document->current_version + 1;
-            DocumentVersion::create([
-                'document_id' => $document->id,
-                'version' => $version,
-                'path' => $path,
-                'uploaded_by' => $request->user()->id,
-            ]);
-            $document->current_version = $version;
-            $document->save();
+            try {
+                $path = $request->file('file')->store('documents');
+                $version = $document->current_version + 1;
+                DocumentVersion::create([
+                    'document_id' => $document->id,
+                    'version' => $version,
+                    'path' => $path,
+                    'uploaded_by' => $request->user()->id,
+                ]);
+                $document->current_version = $version;
+                $document->save();
+            } catch (\Throwable $e) {
+                Log::error('Failed to store new document version for document '.$document->id.': '.$e->getMessage());
+            }
         }
         DocumentLog::create([
             'document_id' => $document->id,
             'user_id' => $request->user()->id,
             'action' => 'update',
         ]);
+
         return redirect()->route('documents.index');
     }
 
@@ -158,6 +172,7 @@ class DocumentController extends Controller
             'user_id' => $request->user()->id,
             'action' => 'delete',
         ]);
+
         return redirect()->route('documents.index');
     }
 

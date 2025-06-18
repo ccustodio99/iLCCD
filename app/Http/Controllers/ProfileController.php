@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
@@ -12,6 +13,7 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = Auth::user();
+
         return view('profile.edit', compact('user'));
     }
 
@@ -20,7 +22,7 @@ class ProfileController extends Controller
         $user = Auth::user();
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'email' => 'required|email|unique:users,email,'.$user->id,
             'contact_info' => 'nullable|string|max:255',
             'profile_photo' => 'nullable|image|max:2048',
             'password' => ['nullable', 'confirmed', 'min:8', 'regex:/[A-Za-z]/', 'regex:/[0-9]/', 'regex:/[^A-Za-z0-9]/'],
@@ -33,15 +35,21 @@ class ProfileController extends Controller
         $removePhoto = $data['remove_photo'] ?? false;
 
         if ($request->hasFile('profile_photo')) {
-            if ($user->profile_photo_path) {
-                Storage::disk('public')->delete($user->profile_photo_path);
+            $oldPath = $user->profile_photo_path;
+            try {
+                if ($oldPath) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+                $user->profile_photo_path = $request->file('profile_photo')->store('profile_photos', 'public');
+            } catch (\Throwable $e) {
+                Log::error('Failed to replace profile photo for user '.$user->id.': '.$e->getMessage());
+                $user->profile_photo_path = $oldPath;
             }
-            $user->profile_photo_path = $request->file('profile_photo')->store('profile_photos', 'public');
         } elseif ($removePhoto && $user->profile_photo_path) {
             Storage::disk('public')->delete($user->profile_photo_path);
             $user->profile_photo_path = null;
         }
-        if (!empty($data['password'])) {
+        if (! empty($data['password'])) {
             $user->password = Hash::make($data['password']);
         }
         $user->save();
