@@ -71,7 +71,7 @@ Deliver a holistic, faith-driven digital backbone for LCCD, empowering every use
 6. Configure database settings in `.env` then run `php artisan migrate --seed` to create tables and demo data.
    The migrations add and then remove a column on the `audit_trails` table. Run
    them in chronological order or see [Migration Sequence](docs/migration-sequence.md) for details.
-7. Run `php artisan storage:link` so uploaded profile photos and attachments are accessible.
+7. Ensure `public/storage` is linked. The `composer dev` script checks and runs `php artisan storage:link` if needed.
 8. Start the local server using `php artisan serve` or `composer dev` for hot reloading.
 9. Execute the test suite with `php artisan test` to verify the setup.
 
