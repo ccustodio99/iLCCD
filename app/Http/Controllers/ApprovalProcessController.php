@@ -27,8 +27,9 @@ class ApprovalProcessController extends Controller
             ->distinct()
             ->orderBy('department')
             ->pluck('department');
+        $users = User::orderBy('name')->get();
 
-        return view('settings.approval-processes.create', compact('modules', 'departments'));
+        return view('settings.approval-processes.create', compact('modules', 'departments', 'users'));
     }
 
     public function store(Request $request)
@@ -36,9 +37,17 @@ class ApprovalProcessController extends Controller
         $data = $request->validate([
             'module' => 'required|string|max:255',
             'department' => 'required|string|max:255',
+            'stages' => 'required|array|min:1',
+            'stages.*.name' => 'required|string|max:255',
+            'stages.*.position' => 'required|integer|min:1',
+            'stages.*.assigned_user_id' => 'nullable|exists:users,id',
         ]);
 
-        ApprovalProcess::create($data);
+        $stages = $data['stages'];
+        unset($data['stages']);
+
+        $process = ApprovalProcess::create($data);
+        $process->stages()->createMany($stages);
 
         return redirect()
             ->route('approval-processes.index')
@@ -73,6 +82,10 @@ class ApprovalProcessController extends Controller
             'module' => 'required|string|max:255',
             'department' => 'required|string|max:255',
         ]);
+
+        if ($approvalProcess->stages()->count() === 0) {
+            return back()->withErrors(['stages' => 'At least one stage is required.'])->withInput();
+        }
 
         $approvalProcess->update($data);
 
