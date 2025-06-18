@@ -70,8 +70,8 @@ Route::middleware('auth')->group(function () {
     Route::post('job-orders/{jobOrder}/materials', [JobOrderController::class, 'requestMaterials'])->name('job-orders.materials');
 
     Route::get('job-order-types/{parent}/children', [JobOrderTypeController::class, 'children'])->name('job-order-types.children');
-    Route::get('job-orders/approvals', [JobOrderController::class, 'approvals'])->name('job-orders.approvals')->middleware('role:head,president,finance');
-    Route::put('job-orders/{jobOrder}/approve', [JobOrderController::class, 'approve'])->name('job-orders.approve')->middleware('role:head,president,finance');
+    Route::get('job-orders/approvals', [JobOrderController::class, 'approvals'])->name('job-orders.approvals')->middleware('role:head');
+    Route::put('job-orders/{jobOrder}/approve', [JobOrderController::class, 'approve'])->name('job-orders.approve')->middleware('role:head');
     Route::put('job-orders/{jobOrder}/return', [JobOrderController::class, 'returnToPending'])->name('job-orders.return')->middleware('role:head');
     Route::get('job-orders/assignments', [JobOrderController::class, 'assignments'])->name('job-orders.assignments')->middleware('role:itrc,admin');
     Route::put('job-orders/{jobOrder}/assign', [JobOrderController::class, 'assign'])->name('job-orders.assign')->middleware('role:itrc,admin');
@@ -79,10 +79,10 @@ Route::middleware('auth')->group(function () {
     Route::put('job-orders/{jobOrder}/start', [JobOrderController::class, 'start'])->name('job-orders.start');
     Route::put('job-orders/{jobOrder}/finish', [JobOrderController::class, 'finish'])->name('job-orders.finish');
     Route::get('requisitions/approvals', [RequisitionController::class,'approvals'])
-        ->middleware('role:head,president,finance')
+        ->middleware('role:head')
         ->name('requisitions.approvals');
     Route::put('requisitions/{requisition}/approve', [RequisitionController::class,'approve'])
-        ->middleware('role:head,president,finance')
+        ->middleware('role:head')
         ->name('requisitions.approve');
     Route::put('requisitions/{requisition}/return', [RequisitionController::class,'returnToPending'])
         ->middleware('role:head')

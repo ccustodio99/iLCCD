@@ -37,7 +37,7 @@ class UserFactory extends Factory
                 'Non-Teaching Department',
                 'ITRC',
                 'Finance Office',
-                'Administration',
+                'President Department',
             ]),
             'is_active' => true,
         ];

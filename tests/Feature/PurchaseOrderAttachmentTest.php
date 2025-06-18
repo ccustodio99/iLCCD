@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 it('stores attachment when creating purchase order', function () {
     Storage::fake('public');
-    $user = User::factory()->create(['role' => 'finance']);
+    $user = User::factory()->create(['role' => 'head', 'department' => 'Finance Office']);
     $this->actingAs($user);
 
     $req = Requisition::factory()->for($user)->create();
@@ -29,7 +29,7 @@ it('stores attachment when creating purchase order', function () {
 
 it('allows owner to download purchase order attachment', function () {
     Storage::fake('public');
-    $user = User::factory()->create(['role' => 'finance']);
+    $user = User::factory()->create(['role' => 'head', 'department' => 'Finance Office']);
     $path = UploadedFile::fake()->create('file.txt', 1)->store('purchase_order_attachments', 'public');
     $order = PurchaseOrder::factory()->for($user)->create(['attachment_path' => $path]);
 
@@ -41,7 +41,7 @@ it('allows owner to download purchase order attachment', function () {
 
 it('prevents others from downloading purchase order attachment', function () {
     Storage::fake('public');
-    $owner = User::factory()->create(['role' => 'finance']);
+    $owner = User::factory()->create(['role' => 'head', 'department' => 'Finance Office']);
     $other = User::factory()->create();
     $path = UploadedFile::fake()->create('file.txt', 1)->store('purchase_order_attachments', 'public');
     $order = PurchaseOrder::factory()->for($owner)->create(['attachment_path' => $path]);
@@ -52,7 +52,7 @@ it('prevents others from downloading purchase order attachment', function () {
 
 it('allows admin to download any purchase order attachment', function () {
     Storage::fake('public');
-    $owner = User::factory()->create(['role' => 'finance']);
+    $owner = User::factory()->create(['role' => 'head', 'department' => 'Finance Office']);
     $admin = User::factory()->create(['role' => 'admin']);
     $path = UploadedFile::fake()->create('file.txt', 1)->store('purchase_order_attachments', 'public');
     $order = PurchaseOrder::factory()->for($owner)->create(['attachment_path' => $path]);

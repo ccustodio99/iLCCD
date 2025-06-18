@@ -6,7 +6,7 @@ use App\Models\Requisition;
 use App\Models\InventoryItem;
 
 it('restricts purchase order creation to finance or admin roles', function () {
-    $finance = User::factory()->create(['role' => 'finance']);
+    $finance = User::factory()->create(['role' => 'head', 'department' => 'Finance Office']);
     $staff = User::factory()->create(['role' => 'staff']);
     $req = Requisition::factory()->for($finance)->create();
     $item = InventoryItem::factory()->for($finance)->create();
@@ -74,7 +74,7 @@ it('allows admin to edit any purchase order', function () {
 });
 
 it('tracks status transitions when updated by finance', function () {
-    $finance = User::factory()->create(['role' => 'finance']);
+    $finance = User::factory()->create(['role' => 'head', 'department' => 'Finance Office']);
     $order = PurchaseOrder::factory()->for($finance)->create();
 
     $this->actingAs($finance);

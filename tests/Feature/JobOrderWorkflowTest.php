@@ -11,10 +11,10 @@ it('routes job order through approval and assignment workflow', function () {
     \App\Models\Setting::set('notify_job_order_status', true);
     \App\Models\Setting::set('template_job_order_status', '{{ message }}');
 
-    $requester = User::factory()->create(['role' => 'staff']);
-    $head = User::factory()->create(['role' => 'head']);
-    $president = User::factory()->create(['role' => 'president']);
-    $finance = User::factory()->create(['role' => 'finance']);
+    $requester = User::factory()->create(['role' => 'staff', 'department' => 'Nursing']);
+    $head = User::factory()->create(['role' => 'head', 'department' => 'Nursing']);
+    $president = User::factory()->create(['role' => 'head', 'department' => 'President Department']);
+    $finance = User::factory()->create(['role' => 'head', 'department' => 'Finance Office']);
     $assigner = User::factory()->create(['role' => 'itrc']);
     $technician = User::factory()->create(['role' => 'staff']);
     $parent = JobOrderType::factory()->create(['name' => 'Maintenance']);
