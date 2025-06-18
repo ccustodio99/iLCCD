@@ -64,6 +64,10 @@ DB_PASSWORD=secure-password
 | `CACHE_STORE` | Cache driver (default `database`) |
 | `BROADCAST_CONNECTION` | Real-time broadcast driver (`log` by default) |
 
+If `CACHE_STORE` is left as `database`, run `php artisan cache:table` so the
+cache table exists (you can switch `CACHE_STORE` to `file` instead). Running
+`php artisan migrate` afterward will automatically create the table.
+
 ## Mail
 
 Update the mail settings for your SMTP server in production.
