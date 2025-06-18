@@ -1,20 +1,19 @@
 <?php
+
 // Workflow: Ticket -> Job Order -> Requisition -> Inventory -> Purchase Order -> Document Management
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\SearchController;
 use App\Http\Controllers\HelpController;
-
+use App\Http\Controllers\SearchController;
+use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'landing')->name('home');
 
 Route::view('/app/{any?}', 'spa')
     ->where('any', '.*')
     ->name('spa');
-
 
 Route::get('/login', [LoginController::class, 'show'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate']);
@@ -29,25 +28,26 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink
 Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 Route::get('/help', [HelpController::class, 'index'])->name('help');
 
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\ApprovalProcessController;
+use App\Http\Controllers\AuditTrailController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\TicketController;
-use App\Http\Controllers\JobOrderController;
-use App\Http\Controllers\RequisitionController;
-use App\Http\Controllers\InventoryItemController;
-use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\DocumentCategoryController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DocumentDashboardController;
 use App\Http\Controllers\DocumentTrackingController;
-use App\Http\Controllers\AuditTrailController;
-use App\Http\Controllers\KpiAuditDashboardController;
-use App\Http\Controllers\TicketCategoryController;
-use App\Http\Controllers\JobOrderTypeController;
 use App\Http\Controllers\InventoryCategoryController;
-use App\Http\Controllers\DocumentCategoryController;
+use App\Http\Controllers\InventoryItemController;
+use App\Http\Controllers\JobOrderController;
+use App\Http\Controllers\JobOrderTypeController;
+use App\Http\Controllers\KpiAuditDashboardController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\RequisitionController;
 use App\Http\Controllers\SettingController;
-use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\TicketCategoryController;
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\UserController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -78,13 +78,13 @@ Route::middleware('auth')->group(function () {
     Route::get('job-orders/assigned', [JobOrderController::class, 'assigned'])->name('job-orders.assigned')->middleware('role:staff,itrc');
     Route::put('job-orders/{jobOrder}/start', [JobOrderController::class, 'start'])->name('job-orders.start');
     Route::put('job-orders/{jobOrder}/finish', [JobOrderController::class, 'finish'])->name('job-orders.finish');
-    Route::get('requisitions/approvals', [RequisitionController::class,'approvals'])
+    Route::get('requisitions/approvals', [RequisitionController::class, 'approvals'])
         ->middleware('role:head')
         ->name('requisitions.approvals');
-    Route::put('requisitions/{requisition}/approve', [RequisitionController::class,'approve'])
+    Route::put('requisitions/{requisition}/approve', [RequisitionController::class, 'approve'])
         ->middleware('role:head')
         ->name('requisitions.approve');
-    Route::put('requisitions/{requisition}/return', [RequisitionController::class,'returnToPending'])
+    Route::put('requisitions/{requisition}/return', [RequisitionController::class, 'returnToPending'])
         ->middleware('role:head')
         ->name('requisitions.return');
     Route::get('requisitions/{requisition}/attachment', [RequisitionController::class, 'downloadAttachment'])->name('requisitions.attachment');
@@ -126,6 +126,11 @@ Route::middleware('auth')->group(function () {
         Route::resource('inventory-categories', InventoryCategoryController::class)->except('show');
         Route::put('job-order-types/{jobOrderType}/disable', [JobOrderTypeController::class, 'disable'])->name('job-order-types.disable');
         Route::resource('job-order-types', JobOrderTypeController::class)->except('show');
+
+        Route::resource('approval-processes', ApprovalProcessController::class)->except('show');
+        Route::post('approval-processes/{approval_process}/stages', [ApprovalProcessController::class, 'storeStage'])->name('approval-processes.stages.store');
+        Route::put('approval-processes/{approval_process}/stages/{stage}', [ApprovalProcessController::class, 'updateStage'])->name('approval-processes.stages.update');
+        Route::delete('approval-processes/{approval_process}/stages/{stage}', [ApprovalProcessController::class, 'destroyStage'])->name('approval-processes.stages.destroy');
 
         Route::resource('announcements', AnnouncementController::class)->except('show');
     });
