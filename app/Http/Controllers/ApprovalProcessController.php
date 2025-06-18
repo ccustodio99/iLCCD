@@ -12,7 +12,9 @@ class ApprovalProcessController extends Controller
     public function index(Request $request)
     {
         $perPage = $this->getPerPage($request);
-        $processes = ApprovalProcess::with('stages')->paginate($perPage)->withQueryString();
+        $processes = ApprovalProcess::with('stages.assignedUser')
+            ->paginate($perPage)
+            ->withQueryString();
 
         return view('settings.approval-processes.index', compact('processes'));
     }

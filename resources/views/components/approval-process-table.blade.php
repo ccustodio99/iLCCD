@@ -6,6 +6,7 @@
             <th>Module</th>
             <th>Department</th>
             <th>Stages</th>
+            <th>Assigned Users</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -20,6 +21,11 @@
                 @endforeach
             </td>
             <td>
+                @foreach($process->stages->sortBy('position') as $stage)
+                    <div>{{ $stage->assignedUser?->name ?? '-- None --' }}</div>
+                @endforeach
+            </td>
+            <td>
                 <a href="{{ route('approval-processes.show', $process) }}" class="btn btn-sm btn-info">View</a>
                 <a href="{{ route('approval-processes.edit', $process) }}" class="btn btn-sm btn-primary">Edit</a>
                 <form action="{{ route('approval-processes.destroy', $process) }}" method="POST" class="d-inline">
@@ -31,7 +37,7 @@
         </tr>
         @empty
         <tr>
-            <td colspan="4" class="text-center">No approval processes found.</td>
+            <td colspan="5" class="text-center">No approval processes found.</td>
         </tr>
         @endforelse
     </tbody>
