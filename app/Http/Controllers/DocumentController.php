@@ -7,6 +7,7 @@ use App\Models\DocumentCategory;
 use App\Models\DocumentLog;
 use App\Models\DocumentVersion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -87,8 +88,11 @@ class DocumentController extends Controller
         ]);
         $data['user_id'] = $request->user()->id;
         $data['department'] = $request->user()->department;
-        $document = Document::create($data);
+
+        DB::beginTransaction();
         try {
+            $document = Document::create($data);
+
             $path = $request->file('file')->store('documents');
             DocumentVersion::create([
                 'document_id' => $document->id,
@@ -96,16 +100,27 @@ class DocumentController extends Controller
                 'path' => $path,
                 'uploaded_by' => $request->user()->id,
             ]);
-        } catch (\Throwable $e) {
-            Log::error('Failed to store initial document version: '.$e->getMessage());
-        }
-        DocumentLog::create([
-            'document_id' => $document->id,
-            'user_id' => $request->user()->id,
-            'action' => 'upload',
-        ]);
 
-        return redirect()->route('documents.index');
+            DocumentLog::create([
+                'document_id' => $document->id,
+                'user_id' => $request->user()->id,
+                'action' => 'upload',
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('documents.index');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            isset($document) && $document->delete();
+            if (isset($path)) {
+                Storage::delete($path);
+            }
+
+            Log::error('Failed to store document: '.$e->getMessage());
+
+            return response('Failed to store document', 500);
+        }
     }
 
     public function edit(Document $document)
@@ -134,9 +149,11 @@ class DocumentController extends Controller
             'file' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:10240',
 
         ]);
-        $document->update($data);
-        if ($request->hasFile('file')) {
-            try {
+        DB::beginTransaction();
+        try {
+            $document->update($data);
+
+            if ($request->hasFile('file')) {
                 $path = $request->file('file')->store('documents');
                 $version = $document->current_version + 1;
                 DocumentVersion::create([
@@ -147,17 +164,27 @@ class DocumentController extends Controller
                 ]);
                 $document->current_version = $version;
                 $document->save();
-            } catch (\Throwable $e) {
-                Log::error('Failed to store new document version for document '.$document->id.': '.$e->getMessage());
             }
-        }
-        DocumentLog::create([
-            'document_id' => $document->id,
-            'user_id' => $request->user()->id,
-            'action' => 'update',
-        ]);
 
-        return redirect()->route('documents.index');
+            DocumentLog::create([
+                'document_id' => $document->id,
+                'user_id' => $request->user()->id,
+                'action' => 'update',
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('documents.index');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            if (isset($path)) {
+                Storage::delete($path);
+            }
+
+            Log::error('Failed to update document '.$document->id.': '.$e->getMessage());
+
+            return response('Failed to update document', 500);
+        }
     }
 
     public function destroy(Request $request, Document $document)
@@ -174,6 +201,8 @@ class DocumentController extends Controller
             'user_id' => $request->user()->id,
             'action' => 'delete',
         ]);
+
+        $document->delete();
 
         return redirect()->route('documents.index');
     }

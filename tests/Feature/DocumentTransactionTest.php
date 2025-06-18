@@ -8,12 +8,21 @@ use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
-
 class FailingUploadedFile extends UploadedFile
 {
     public function store($path = '', $options = [])
     {
         throw new Exception('store failed');
+    }
+
+    public function guessExtension(): ?string
+    {
+        return 'pdf';
+    }
+
+    public function getMimeType(): ?string
+    {
+        return 'application/pdf';
     }
 }
 
@@ -25,7 +34,7 @@ it('rolls back when document upload fails', function () {
 
     $temp = tempnam(sys_get_temp_dir(), 'fail');
     file_put_contents($temp, 'content');
-    $file = new FailingUploadedFile($temp, 'fail.pdf', null, null, true);
+    $file = new FailingUploadedFile($temp, 'fail.pdf', 'application/pdf', null, true);
 
     $response = $this->post('/documents', [
         'title' => 'Policy',
@@ -46,7 +55,6 @@ it('rolls back when document update fails', function () {
     $this->actingAs($user);
     $category = DocumentCategory::factory()->create();
 
-
     $this->post('/documents', [
         'title' => 'Policy',
         'description' => 'Important',
@@ -58,7 +66,7 @@ it('rolls back when document update fails', function () {
 
     $temp = tempnam(sys_get_temp_dir(), 'fail');
     file_put_contents($temp, 'content');
-    $file = new FailingUploadedFile($temp, 'fail.pdf', null, null, true);
+    $file = new FailingUploadedFile($temp, 'fail.pdf', 'application/pdf', null, true);
 
     $response = $this->put("/documents/{$document->id}", [
         'title' => 'New Policy',
