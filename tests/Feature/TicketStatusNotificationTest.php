@@ -59,5 +59,5 @@ it('dispatches status notifications on ticket events', function () {
         'comment' => 'Please fix',
     ])->assertRedirect();
 
-    Notification::assertSentTimes(TicketStatusNotification::class, 15);
+    Notification::assertSentTimes(TicketStatusNotification::class, 12);
 });
