@@ -22,12 +22,15 @@ The **Requisition Management Module** enables LCCD stakeholders to request mater
   - Attachments may be up to 2 MB and are stored under `storage/app/public/requisition_attachments`. Only the requester can download them.
 
 ### 2. Multi-Level Approval Workflows
-- The system enforces a structured chain depending on the requester’s role:
+Approval chains are configured in **Settings → Approval Processes**.  Each module
+and department can define its own sequence of reviewers.  The default workflow for
+requisitions mirrors the standard hierarchy:
   - **Staff**: Department Head → President Department Head → Finance Department Head
   - **Department Head**: President Department Head → Finance Department Head
   - **President Department Head**: Finance Department Head only
-- Each approval stage records **remarks** from the reviewer and is logged in the audit trail.
-- Approvers simply advance the request to the next stage; the Finance office’s approval finalizes the requisition.
+Every stage captures **remarks** from the reviewer and is logged in the audit
+trail. Approvers advance the request through the configured stages until the
+Finance office’s approval finalizes the requisition.
 
 ### 3. Automated Routing, Statuses, and Notifications
   - Workflow engine automatically routes requests to the next required approver.
