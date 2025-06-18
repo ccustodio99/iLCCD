@@ -25,7 +25,7 @@
         <tbody>
             @foreach ($processes as $process)
             <tr>
-                <td>{{ $process->module }}</td>
+                <td>{{ \App\Models\ApprovalProcess::MODULES[$process->module] ?? $process->module }}</td>
                 <td>{{ $process->department }}</td>
                 <td>
                     @foreach($process->stages->sortBy('position') as $stage)
