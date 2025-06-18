@@ -99,12 +99,31 @@ The initial seed runs **`Database\\Seeders\\SettingSeeder`** which sets the foll
 The seed defaults also set `header_text` to "La Consolacion College Daet", `footer_text` to "Empowering Christ-centered digital transformation\n© {year} La Consolacion College Daet CMS", and `show_footer` to `true`.
 
 ## Approval Processes
-Workflow approvals for requisitions and job orders are configurable. Each process is tied to a module and department and contains ordered stages. Stages may optionally assign a specific user.
+Approval workflows ensure requests are reviewed by the proper people before they are finalized. Each module can define its own chain and scope it to a specific department.
 
-- **approval_processes** – defines the module (`requisitions` or `job_orders`) and department.
-- **approval_stages** – lists the stage name, position, and optional assigned user.
+### Creating an Approval Process
+1. Open **Settings → Approval Processes** and click **New**.
+2. Choose the **Module** (`requisitions`, `job_orders`, etc.) and select the **Department** that owns the workflow.
+3. Save the process and add approval stages.
 
-Administrators create and manage these records under **Settings → Approval Processes**. When an item moves through the workflow the application looks up the process and progresses to the next stage automatically.
+### Adding Stages
+1. From the process page click **Add Stage**.
+2. Enter a stage **Name** and **Order**.
+3. Optionally pick an assigned **User** for the step.
+4. Repeat for each stage in the chain.
+
+*A screenshot of the Approval Process editor is available in the ITRC Dropbox.*
+
+### Workflow Impact
+- Requisitions and job orders follow the stages for their module and department.
+- If no process exists, submissions remain pending until manually handled.
+- Other modules may reference these tables to implement similar approval flows.
+
+Example command to load the default processes:
+
+```bash
+php artisan db:seed --class=ApprovalProcessSeeder
+```
 
 ## Localization
 Set how dates and times appear across the application:
