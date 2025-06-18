@@ -19,7 +19,14 @@ class ApprovalProcessController extends Controller
 
     public function create()
     {
-        return view('settings.approval-processes.create');
+        $modules = ApprovalProcess::MODULES;
+        $departments = User::select('department')
+            ->whereNotNull('department')
+            ->distinct()
+            ->orderBy('department')
+            ->pluck('department');
+
+        return view('settings.approval-processes.create', compact('modules', 'departments'));
     }
 
     public function store(Request $request)
@@ -38,8 +45,14 @@ class ApprovalProcessController extends Controller
     {
         $approvalProcess->load('stages.assignedUser');
         $users = User::orderBy('name')->get();
+        $modules = ApprovalProcess::MODULES;
+        $departments = User::select('department')
+            ->whereNotNull('department')
+            ->distinct()
+            ->orderBy('department')
+            ->pluck('department');
 
-        return view('settings.approval-processes.edit', compact('approvalProcess', 'users'));
+        return view('settings.approval-processes.edit', compact('approvalProcess', 'users', 'modules', 'departments'));
     }
 
     public function update(Request $request, ApprovalProcess $approvalProcess)

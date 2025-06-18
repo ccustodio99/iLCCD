@@ -15,11 +15,19 @@
         @method('PUT')
         <div class="mb-3">
             <label class="form-label">Module</label>
-            <input type="text" name="module" class="form-control" value="{{ old('module', $approvalProcess->module) }}" required>
+            <select name="module" class="form-select" required>
+                @foreach($modules as $value => $label)
+                    <option value="{{ $value }}" {{ old('module', $approvalProcess->module) == $value ? 'selected' : '' }}>{{ $label }}</option>
+                @endforeach
+            </select>
         </div>
         <div class="mb-3">
             <label class="form-label">Department</label>
-            <input type="text" name="department" class="form-control" value="{{ old('department', $approvalProcess->department) }}" required>
+            <select name="department" class="form-select" required>
+                @foreach($departments as $dept)
+                    <option value="{{ $dept }}" {{ old('department', $approvalProcess->department) == $dept ? 'selected' : '' }}>{{ $dept }}</option>
+                @endforeach
+            </select>
         </div>
         <button type="submit" class="btn btn-primary me-2">Save</button>
         <a href="{{ route('approval-processes.index') }}" class="btn btn-secondary">Cancel</a>
