@@ -19,7 +19,8 @@ function renderTableBody(bodyId, rows) {
 
 async function loadDashboardData() {
     try {
-        const response = await axios.get('/dashboard/data');
+        // Preserve current query params so filters and pagination remain intact
+        const response = await axios.get('/dashboard/data' + window.location.search);
         const data = response.data;
 
         if (data.tickets && data.tickets.data) {
