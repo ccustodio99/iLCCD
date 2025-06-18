@@ -23,25 +23,9 @@
             background-color: #f8f9fa;
         }
         .cta { background-color: var(--color-accent); color: var(--color-primary); }
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: var(--color-primary);
-            color: #ffffff;
-            padding: 0.5rem;
-            z-index: 100;
-            transition: top 0.3s ease;
-        }
-        .skip-link:focus {
-            top: 0;
-        }
     </style>
 </head>
 <body>
-    @unless(isset($hideSkipLink) && $hideSkipLink)
-        <a href="#main-content" class="skip-link">Skip to main content</a>
-    @endunless
     @unless(isset($hideHeader) && $hideHeader)
         @include('layouts.header')
     @endunless
