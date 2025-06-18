@@ -72,10 +72,14 @@
                 <td>{{ ucfirst($ticket->status) }}</td>
                 <td>{{ optional($ticket->due_at)->format('Y-m-d') }}</td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#ticketModal{{ $ticket->id }}">Details</button>
-                    <button type="button" class="btn btn-sm btn-primary ms-1" data-bs-toggle="modal" data-bs-target="#editTicketModal{{ $ticket->id }}">Edit</button>
-                    <button type="button" class="btn btn-sm btn-secondary ms-1" data-bs-toggle="modal" data-bs-target="#convertJobOrderModal{{ $ticket->id }}">Job Order</button>
-                    <button type="button" class="btn btn-sm btn-warning ms-1" data-bs-toggle="modal" data-bs-target="#convertRequisitionModal{{ $ticket->id }}">Requisition</button>
+                    <button type="button" class="btn btn-sm btn-info" data-details-url="{{ route('tickets.modal-details', $ticket) }}">Details</button>
+                    <button type="button" class="btn btn-sm btn-primary ms-1" data-edit-url="{{ route('tickets.modal-edit', $ticket) }}">Edit</button>
+                    @if($ticket->jobOrder)
+                        <span class="visually-hidden">Job Order ID {{ $ticket->jobOrder->id }}</span>
+                    @endif
+                    @if($ticket->requisitions->count())
+                        <span class="visually-hidden">Requisitions {{ $ticket->requisitions->pluck('id')->implode(' ') }}</span>
+                    @endif
                     <form action="{{ route('tickets.destroy', $ticket) }}" method="POST" class="d-inline ms-1">
                         @csrf
                         @method('DELETE')
@@ -167,315 +171,32 @@
         </div>
     </div>
 
-    @foreach ($tickets as $ticket)
-    <div class="modal fade" id="ticketModal{{ $ticket->id }}" tabindex="-1" aria-labelledby="ticketModalLabel{{ $ticket->id }}" aria-hidden="true" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 id="ticketModalLabel{{ $ticket->id }}" class="modal-title">Ticket Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Category:</strong> {{ $ticket->ticketCategory->name }}</p>
-                    <p><strong>Subject:</strong> {{ $ticket->formatted_subject }}</p>
-                    <p><strong>Description:</strong> {{ $ticket->description }}</p>
-                    @if($ticket->attachment_path)
-                        <p><strong>Attachment:</strong> <a href="{{ route('tickets.attachment', $ticket) }}" target="_blank">Download</a></p>
-                    @endif
-                    <p><strong>Status:</strong> {{ ucfirst($ticket->status) }}</p>
-                    <p><strong>Assigned To:</strong> {{ optional($ticket->assignedTo)->name ?? 'Unassigned' }}</p>
-                    <p><strong>Watchers:</strong>
-                        @foreach($ticket->watchers as $w)
-                            <span class="badge bg-secondary">{{ $w->name }}</span>
-                        @endforeach
-                    </p>
-                    <p><strong>Created:</strong> {{ $ticket->created_at->format('Y-m-d H:i') }}</p>
-                    <p><strong>Updated:</strong> {{ $ticket->updated_at->format('Y-m-d H:i') }}</p>
-                    <p><strong>Escalated:</strong> {{ optional($ticket->escalated_at)->format('Y-m-d H:i') }}</p>
-                    <p><strong>Resolved:</strong> {{ optional($ticket->resolved_at)->format('Y-m-d H:i') }}</p>
-                    <p><strong>Due:</strong> {{ optional($ticket->due_at)->format('Y-m-d H:i') }}</p>
-
-                    @if($ticket->jobOrder)
-                        <p><strong>Job Order ID:</strong>
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#jobOrderModal{{ $ticket->jobOrder->id }}">
-                                {{ $ticket->jobOrder->id }}
-                            </a>
-                        </p>
-                    @endif
-
-                    @if($ticket->requisitions->count())
-                        <h6>Requisitions</h6>
-                        <ul>
-                            @foreach($ticket->requisitions as $req)
-                                <li>
-                                    <a href="{{ route('requisitions.edit', $req) }}">#{{ $req->id }}</a>
-                                    - {{ ucfirst(str_replace('_', ' ', $req->status)) }}
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endif
-
-                    @include('audit_trails._list', ['logs' => $ticket->auditTrails])
-
-                    @if($ticket->comments->isNotEmpty())
-                        <h6 class="mt-3">Comments</h6>
-                        <ul class="list-group mb-3">
-                            @foreach($ticket->comments as $comment)
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between">
-                                        <span>{{ $comment->created_at->format('Y-m-d H:i') }}</span>
-                                        <span>{{ $comment->user->name }}</span>
-                                    </div>
-                                    <p class="mb-0 mt-1">{{ $comment->comment }}</p>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endif
-
-                    @if(auth()->id() === $ticket->user_id || auth()->id() === $ticket->assigned_to_id || $ticket->watchers->contains(auth()->id()))
-                        <form action="{{ route('tickets.comment', $ticket) }}" method="POST" class="mb-3">
-                            @csrf
-                            <textarea name="comment" class="form-control mb-2" rows="2" required></textarea>
-                            <button type="submit" class="btn btn-primary btn-sm">Add Comment</button>
-                        </form>
-                    @endif
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="editTicketModal{{ $ticket->id }}" tabindex="-1" aria-labelledby="editTicketModalLabel{{ $ticket->id }}" aria-hidden="true" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 id="editTicketModalLabel{{ $ticket->id }}" class="modal-title">Edit Ticket</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="{{ route('tickets.update', $ticket) }}" method="POST" enctype="multipart/form-data" class="ticket-form">
-                    @csrf
-                    @method('PUT')
-                    <div class="modal-body">
-                        @php
-                            $editSub = old('ticket_category_id', $ticket->ticket_category_id);
-                            $editCat = null;
-                            foreach ($categories as $cat) {
-                                if ($cat->children->contains('id', $editSub)) {
-                                    $editCat = $cat->id;
-                                    break;
-                                }
-                            }
-                            $categoryData = $categories->mapWithKeys(function($cat) {
-                                return [$cat->id => $cat->children->map(fn($c) => ['id' => $c->id, 'name' => $c->name])];
-                            });
-                        @endphp
-                        <div class="mb-3">
-                            <label class="form-label">Category</label>
-                            <select class="form-select category-select mb-2" data-categories='@json($categoryData)' required>
-                                <option value="">Select Category</option>
-                                @foreach($categories as $cat)
-                                    <option value="{{ $cat->id }}" {{ (string)$editCat === (string)$cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
-                                @endforeach
-                            </select>
-                            <select name="ticket_category_id" class="form-select subcategory-select" data-selected="{{ $editSub }}" required></select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Subject</label>
-                            <input type="text" name="subject" class="form-control" value="{{ old('subject', $ticket->subject) }}" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Description</label>
-                            <textarea name="description" class="form-control" rows="4" required>{{ old('description', $ticket->description) }}</textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Attachment</label>
-                            <input type="file" name="attachment" class="form-control">
-                            @if($ticket->attachment_path)
-                                <small class="text-muted">Current: <a href="{{ route('tickets.attachment', $ticket) }}" target="_blank">Download</a></small>
-                            @endif
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Assign To</label>
-                            <select name="assigned_to_id" class="form-select">
-                                <option value="">Unassigned</option>
-                                @foreach($users as $u)
-                                    <option value="{{ $u->id }}" {{ old('assigned_to_id', $ticket->assigned_to_id) == $u->id ? 'selected' : '' }}>{{ $u->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Watchers</label>
-                            <select name="watchers[]" class="form-select" multiple>
-                                @php($selected = old('watchers', $ticket->watchers->pluck('id')->toArray()))
-                                @foreach($users as $u)
-                                    <option value="{{ $u->id }}" {{ in_array($u->id, $selected) ? 'selected' : '' }}>{{ $u->name }}</option>
-                                @endforeach
-                            </select>
-                            <small class="text-muted">Hold Ctrl or Command to select multiple users</small>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Status</label>
-                            <select name="status" class="form-select" required>
-                                @php($statuses = [
-                                    'pending_head' => 'Pending Head',
-                                    'open' => 'Open',
-                                    'escalated' => 'Escalated',
-                                    'converted' => 'Converted',
-                                    'closed' => 'Closed',
-                                ])
-                                @foreach($statuses as $value => $label)
-                                    <option value="{{ $value }}" {{ old('status', $ticket->status) === $value ? 'selected' : '' }}>{{ $label }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Due Date</label>
-                            <input type="date" name="due_at" class="form-control" value="{{ old('due_at', optional($ticket->due_at)->format('Y-m-d')) }}">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Save</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="convertJobOrderModal{{ $ticket->id }}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">New Job Order</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="{{ route('tickets.convert', $ticket) }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Type</label>
-                            <select name="type_parent" id="type_parent_convert_{{ $ticket->id }}" class="form-select" required>
-                                <option value="">Select Type</option>
-                                @foreach($types as $type)
-                                    <option value="{{ $type->id }}" {{ old('type_parent') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Sub Type</label>
-                            <select name="job_type" id="job_type_convert_{{ $ticket->id }}" class="form-select" required disabled>
-                                <option value="">Select Sub Type</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Description</label>
-                            <textarea name="description" class="form-control" rows="4" required>{{ 'Ticket #' . $ticket->id . ' - ' . $ticket->subject . "\n" . $ticket->description }}</textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Attachment</label>
-                            <input type="file" name="attachment" class="form-control">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </form>
-                <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const parent{{ $ticket->id }} = document.getElementById('type_parent_convert_{{ $ticket->id }}');
-                    const child{{ $ticket->id }} = document.getElementById('job_type_convert_{{ $ticket->id }}');
-
-                    function loadChildren{{ $ticket->id }}(id, selected) {
-                        child{{ $ticket->id }}.innerHTML = '<option value="">Select Sub Type</option>';
-                        if (!id) {
-                            child{{ $ticket->id }}.disabled = true;
-                            return;
-                        }
-                        child{{ $ticket->id }}.disabled = false;
-                        fetch(`/job-order-types/${id}/children`)
-                            .then(r => r.json())
-                            .then(data => {
-                                data.forEach(c => {
-                                    const opt = document.createElement('option');
-                                    opt.value = c.name;
-                                    opt.textContent = c.name;
-                                    if (selected === c.name) opt.selected = true;
-                                    child{{ $ticket->id }}.appendChild(opt);
-                                });
-                            });
-                    }
-
-                    parent{{ $ticket->id }}.addEventListener('change', () => loadChildren{{ $ticket->id }}(parent{{ $ticket->id }}.value));
-                    loadChildren{{ $ticket->id }}(parent{{ $ticket->id }}.value, '{{ old('job_type') }}');
-                });
-                </script>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="convertRequisitionModal{{ $ticket->id }}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">New Requisition</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="{{ route('tickets.requisition', $ticket) }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-body">
-                        <div id="items-container-{{ $ticket->id }}">
-                            <div class="row g-2 mb-3 item-row">
-                                <div class="col-md-5">
-                                    <label class="form-label">Item</label>
-                                    <input type="text" name="item[]" class="form-control" value="{{ $ticket->subject }}" required>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label">Quantity</label>
-                                    <input type="number" name="quantity[]" class="form-control" value="1" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label">Specification</label>
-                                    <input type="text" name="specification[]" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <button type="button" id="add-item-{{ $ticket->id }}" class="btn btn-secondary mb-3">Add Item</button>
-                        <div class="mb-3">
-                            <label class="form-label">Purpose</label>
-                            <textarea name="purpose" class="form-control" rows="3" required>{{ 'Ticket #' . $ticket->id . ' - ' . $ticket->subject . "\n" . $ticket->description }}</textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Remarks</label>
-                            <textarea name="remarks" class="form-control" rows="2"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Attachment</label>
-                            <input type="file" name="attachment" class="form-control">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </form>
-                <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const container{{ $ticket->id }} = document.getElementById('items-container-{{ $ticket->id }}');
-                    const add{{ $ticket->id }} = document.getElementById('add-item-{{ $ticket->id }}');
-                    add{{ $ticket->id }}.addEventListener('click', function () {
-                        const row = container{{ $ticket->id }}.querySelector('.item-row').cloneNode(true);
-                        row.querySelectorAll('input').forEach(input => {
-                            if (input.name.includes('item')) input.value = '';
-                            if (input.type === 'number') input.value = 1;
-                        });
-                        container{{ $ticket->id }}.appendChild(row);
-                    });
-                });
-                </script>
-            </div>
-        </div>
-    </div>
-    @endforeach
+    <div class="modal fade" id="dynamicTicketModal" tabindex="-1" aria-hidden="true" role="dialog"></div>
     @include('partials.category-dropdown-script')
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modalEl = document.getElementById('dynamicTicketModal');
+        document.querySelectorAll('[data-details-url]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                fetch(btn.dataset.detailsUrl)
+                    .then(r => r.text())
+                    .then(html => {
+                        modalEl.innerHTML = html;
+                        new bootstrap.Modal(modalEl).show();
+                    });
+            });
+        });
+        document.querySelectorAll('[data-edit-url]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                fetch(btn.dataset.editUrl)
+                    .then(r => r.text())
+                    .then(html => {
+                        modalEl.innerHTML = html;
+                        new bootstrap.Modal(modalEl).show();
+                    });
+            });
+        });
+    });
+    </script>
 </div>
 @endsection
