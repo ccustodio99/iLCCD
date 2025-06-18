@@ -95,7 +95,7 @@ return [
     |
     */
 
-    'default_profile_photo' => env('APP_DEFAULT_PROFILE_PHOTO', 'https://via.placeholder.com/150'),
+    'default_profile_photo' => env('APP_DEFAULT_PROFILE_PHOTO', '/assets/images/default-avatar.png'),
 
     /*
     |--------------------------------------------------------------------------
