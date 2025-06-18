@@ -3,12 +3,6 @@
 @section('title', 'Profile')
 
 @section('content')
-@php
-    $breadcrumbs = [
-        ['label' => 'Dashboard', 'url' => route('dashboard')],
-        ['label' => 'Profile'],
-    ];
-@endphp
 <div class="container" style="max-width: 500px;">
     <h1 class="mb-4">My Profile</h1>
     @if ($errors->any())
