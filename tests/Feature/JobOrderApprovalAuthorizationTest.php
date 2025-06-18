@@ -20,7 +20,7 @@ it('enforces role restrictions during approval workflow', function () {
     $this->put("/job-orders/{$order->id}/approve")->assertForbidden();
 
     $this->actingAs($head);
-    $this->put("/job-orders/{$order->id}/approve")->assertRedirect('/job-orders/approvals');
+    $this->put("/job-orders/{$order->id}/approve")->assertRedirect('/job-orders');
 
     $order->refresh();
     expect($order->status)->toBe(JobOrder::STATUS_PENDING_PRESIDENT);
@@ -39,4 +39,3 @@ it('enforces role restrictions during approval workflow', function () {
     $order->refresh();
     expect($order->status)->toBe(JobOrder::STATUS_APPROVED);
 });
-

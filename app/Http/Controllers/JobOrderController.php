@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\JobOrder;
 use App\Models\InventoryItem;
+use App\Models\InventoryTransaction;
+use App\Models\JobOrder;
 use App\Models\JobOrderType;
 use App\Models\Requisition;
-use App\Models\InventoryTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +30,7 @@ class JobOrderController extends Controller
                 }
             });
 
-        if (!$request->boolean('closed')) {
+        if (! $request->boolean('closed')) {
             $query->where('status', '!=', JobOrder::STATUS_CLOSED);
         }
 
@@ -53,7 +53,7 @@ class JobOrderController extends Controller
         }
 
         if ($request->filled('search')) {
-            $query->where('description', 'like', '%' . $request->input('search') . '%');
+            $query->where('description', 'like', '%'.$request->input('search').'%');
         }
 
         $jobOrders = $query
@@ -106,6 +106,7 @@ class JobOrderController extends Controller
         }
         unset($data['type_parent']);
         JobOrder::create($data);
+
         return redirect()->route('job-orders.index');
     }
 
@@ -126,7 +127,7 @@ class JobOrderController extends Controller
         $child = JobOrderType::where('name', $jobOrder->job_type)->first();
         $parentId = $child?->parent_id;
 
-        return view('job_orders.edit', compact('jobOrder', 'types', 'parentId')); 
+        return view('job_orders.edit', compact('jobOrder', 'types', 'parentId'));
     }
 
     public function update(Request $request, JobOrder $jobOrder)
@@ -160,6 +161,7 @@ class JobOrderController extends Controller
         }
         unset($data['type_parent']);
         $jobOrder->update($data);
+
         return redirect()->route('job-orders.index');
     }
 
@@ -204,6 +206,7 @@ class JobOrderController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $jobOrder->delete();
+
         return redirect()->route('job-orders.index');
     }
 
@@ -323,7 +326,7 @@ class JobOrderController extends Controller
 
         // notify requester
         $jobOrder->user->notify(new \App\Notifications\JobOrderStatusNotification(
-            "Your job order #{$jobOrder->id} status is now " . str_replace('_', ' ', $jobOrder->status)
+            "Your job order #{$jobOrder->id} status is now ".str_replace('_', ' ', $jobOrder->status)
         ));
 
         // notify next approver
@@ -333,7 +336,7 @@ class JobOrderController extends Controller
             ));
         }
 
-        return redirect()->route('job-orders.approvals');
+        return redirect()->route('job-orders.index');
     }
 
     /**
