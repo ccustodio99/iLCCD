@@ -5,6 +5,7 @@ Welcome to the documentation hub for the LCCD Integrated Information System. Thi
 - [User Manual](user_manual.md)
 - [Access Control Module](Access_Control_Module.md)
 - [User Management Module](user.md)
+- [Profile Photo Setup & Troubleshooting](profile-photo-guide.md)
 - [User Interface & Branding](user-interface-branding.md)
 - [Ticketing System Module](Ticketing_System_Module.md)
 - [Ticket Categories](ticket-categories.md)
