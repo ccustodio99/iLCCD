@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\Document;
-use App\Models\DocumentVersion;
 use App\Models\DocumentCategory;
+use App\Models\DocumentVersion;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -42,6 +42,24 @@ it('rejects inactive document categories', function () {
     ]);
 
     $response->assertSessionHasErrors('document_category_id');
+    expect(Document::count())->toBe(0);
+});
+
+it('rejects unsupported file types when creating document', function () {
+    Storage::fake('local');
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $category = DocumentCategory::factory()->create();
+
+    $response = $this->post('/documents', [
+        'title' => 'Bad File',
+        'description' => 'Important',
+        'document_category_id' => $category->id,
+        'file' => UploadedFile::fake()->create('virus.exe', 10),
+    ]);
+
+    $response->assertSessionHasErrors('file');
     expect(Document::count())->toBe(0);
 });
 
@@ -111,6 +129,31 @@ it('allows downloading document versions', function () {
     $response->assertStatus(200);
 });
 
+it('rejects unsupported file types when updating document', function () {
+    Storage::fake('local');
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $category = DocumentCategory::factory()->create();
+    $this->post('/documents', [
+        'title' => 'Policy',
+        'description' => 'Important',
+        'document_category_id' => $category->id,
+        'file' => UploadedFile::fake()->create('policy.pdf', 10),
+    ]);
+
+    $document = Document::first();
+
+    $response = $this->put("/documents/{$document->id}", [
+        'title' => 'Policy',
+        'description' => 'Updated',
+        'document_category_id' => $category->id,
+        'file' => UploadedFile::fake()->create('malware.exe', 10),
+    ]);
+
+    $response->assertSessionHasErrors('file');
+});
+
 it('filters documents by category', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
@@ -121,7 +164,7 @@ it('filters documents by category', function () {
     Document::factory()->for($user)->for($catA)->create(['title' => 'Cat A']);
     Document::factory()->for($user)->for($catB)->create(['title' => 'Cat B']);
 
-    $response = $this->get('/documents?category=' . $catA->id);
+    $response = $this->get('/documents?category='.$catA->id);
     $response->assertSee('Cat A');
     $response->assertDontSee('Cat B');
 });
@@ -159,7 +202,50 @@ it('filters documents by date range', function () {
     $from = now()->subDays(5)->format('Y-m-d');
     $to = now()->format('Y-m-d');
 
-    $response = $this->get('/documents?from=' . $from . '&to=' . $to);
+    $response = $this->get('/documents?from='.$from.'&to='.$to);
     $response->assertSee('New Doc');
     $response->assertDontSee('Old Doc');
+});
+
+it('rejects unsupported file types when uploading document', function () {
+    Storage::fake('local');
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $category = DocumentCategory::factory()->create();
+
+    $response = $this->from('/documents/create')->post('/documents', [
+        'title' => 'Invalid',
+        'description' => 'Bad',
+        'document_category_id' => $category->id,
+        'file' => UploadedFile::fake()->create('file.txt', 10),
+    ]);
+
+    $response->assertSessionHasErrors('file');
+    expect(Document::count())->toBe(0);
+});
+
+it('rejects unsupported file types when updating document', function () {
+    Storage::fake('local');
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $category = DocumentCategory::factory()->create();
+    $this->post('/documents', [
+        'title' => 'Valid',
+        'description' => 'Ok',
+        'document_category_id' => $category->id,
+        'file' => UploadedFile::fake()->create('valid.pdf', 10),
+    ]);
+
+    $document = Document::first();
+
+    $response = $this->from("/documents/{$document->id}/edit")->put("/documents/{$document->id}", [
+        'title' => 'Valid',
+        'description' => 'Ok',
+        'document_category_id' => $category->id,
+        'file' => UploadedFile::fake()->create('bad.txt', 10),
+    ]);
+
+    $response->assertSessionHasErrors('file');
 });
