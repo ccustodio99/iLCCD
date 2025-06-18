@@ -51,8 +51,8 @@
 @endsection
 
 @push('scripts')
-<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css" />
-<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+<link rel="stylesheet" href="{{ asset('vendor/easymde/easymde.min.css') }}" />
+<script src="{{ asset('vendor/easymde/easymde.min.js') }}"></script>
 <script>
     new EasyMDE({ element: document.getElementById('template_ticket_updates') });
     new EasyMDE({ element: document.getElementById('template_job_order_status') });
