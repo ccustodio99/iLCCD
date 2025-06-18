@@ -303,7 +303,12 @@ class RequisitionController extends Controller
         $stages = $process?->stages->sortBy('position')->values();
 
         $currentIndex = $stages->search(fn ($s) => $s->name === $requisition->status);
-        $nextStage = $currentIndex !== false ? $stages->get($currentIndex + 1) : null;
+
+        if ($stages->isEmpty() || $currentIndex === false) {
+            abort(Response::HTTP_INTERNAL_SERVER_ERROR, 'Approval process misconfigured.');
+        }
+
+        $nextStage = $stages->get($currentIndex + 1);
         $nextApprover = null;
 
         if ($nextStage) {
