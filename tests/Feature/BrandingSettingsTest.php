@@ -5,6 +5,7 @@ use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
+
 it('replaces old logo when uploading new one', function () {
     Storage::fake('public');
     Setting::set('logo_path', 'storage/'.UploadedFile::fake()->image('oldlogo.png')->store('branding', 'public'));

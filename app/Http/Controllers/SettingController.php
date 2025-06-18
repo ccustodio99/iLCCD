@@ -138,6 +138,7 @@ class SettingController extends Controller
         ]);
 
         if ($request->hasFile('logo')) {
+
             $oldLogo = setting('logo_path');
             if ($oldLogo) {
                 Storage::disk('public')->delete(str_replace('storage/', '', $oldLogo));
@@ -150,6 +151,7 @@ class SettingController extends Controller
             $oldFavicon = setting('favicon_path');
             if ($oldFavicon) {
                 Storage::disk('public')->delete(str_replace('storage/', '', $oldFavicon));
+
             }
             $path = $request->file('favicon')->store('branding', 'public');
             \App\Models\Setting::set('favicon_path', 'storage/'.$path);
