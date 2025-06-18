@@ -317,7 +317,13 @@
                         <div class="mb-3">
                             <label class="form-label">Status</label>
                             <select name="status" class="form-select" required>
-                                @php($statuses = ['open' => 'Open', 'escalated' => 'Escalated', 'converted' => 'Converted', 'closed' => 'Closed'])
+                                @php($statuses = [
+                                    'pending_head' => 'Pending Head',
+                                    'open' => 'Open',
+                                    'escalated' => 'Escalated',
+                                    'converted' => 'Converted',
+                                    'closed' => 'Closed',
+                                ])
                                 @foreach($statuses as $value => $label)
                                     <option value="{{ $value }}" {{ old('status', $ticket->status) === $value ? 'selected' : '' }}>{{ $label }}</option>
                                 @endforeach

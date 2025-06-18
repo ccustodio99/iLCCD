@@ -15,6 +15,22 @@ class Ticket extends Model
 {
     use HasFactory, SoftDeletes, LogsAudit, ClearsDashboardCache;
 
+    /** Ticket status values */
+    public const STATUS_PENDING_HEAD = 'pending_head';
+    public const STATUS_OPEN = 'open';
+    public const STATUS_ESCALATED = 'escalated';
+    public const STATUS_CONVERTED = 'converted';
+    public const STATUS_CLOSED = 'closed';
+
+    /** All possible statuses */
+    public const STATUSES = [
+        self::STATUS_PENDING_HEAD,
+        self::STATUS_OPEN,
+        self::STATUS_ESCALATED,
+        self::STATUS_CONVERTED,
+        self::STATUS_CLOSED,
+    ];
+
     const DELETED_AT = 'archived_at';
 
     protected $fillable = [
@@ -28,6 +44,8 @@ class Ticket extends Model
         'due_at',
         'escalated_at',
         'resolved_at',
+        'approved_by_id',
+        'approved_at',
         'edit_request_reason',
         'edit_requested_at',
         'edit_requested_by',
@@ -41,6 +59,7 @@ class Ticket extends Model
             'resolved_at' => 'datetime',
             'archived_at' => 'datetime',
             'edit_requested_at' => 'datetime',
+            'approved_at' => 'datetime',
         ];
     }
 
@@ -62,6 +81,11 @@ class Ticket extends Model
     public function assignedTo(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_to_id');
+    }
+
+    public function approvedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'approved_by_id');
     }
 
     public function watchers(): BelongsToMany

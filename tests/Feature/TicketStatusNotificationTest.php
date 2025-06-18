@@ -27,12 +27,17 @@ it('dispatches status notifications on ticket events', function () {
     ])->assertRedirect('/tickets');
     $ticket = Ticket::first();
 
+    // approve
+    $this->actingAs($assignee);
+    $this->put("/tickets/{$ticket->id}/approve");
+
     // update
+    $this->actingAs($assignee);
     $this->put("/tickets/{$ticket->id}", [
         'ticket_category_id' => $category->id,
         'subject' => 'Printer',
         'description' => 'Really broken',
-        'status' => 'open',
+        'status' => Ticket::STATUS_OPEN,
         'assigned_to_id' => $assignee->id,
         'watchers' => [$watcher->id],
     ])->assertRedirect('/tickets');

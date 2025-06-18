@@ -26,7 +26,7 @@ class TicketFactory extends Factory
             'subject' => fake()->sentence(4),
             'description' => fake()->paragraph(),
             'attachment_path' => null,
-            'status' => 'open',
+            'status' => \App\Models\Ticket::STATUS_PENDING_HEAD,
             'due_at' => now()->addDays(3),
             'escalated_at' => null,
             'resolved_at' => null,
