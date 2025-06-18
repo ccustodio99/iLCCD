@@ -239,6 +239,7 @@ Every action is traceable; every step is value-aligned.
 - [Purchase Order System](docs/purchase-order-module.md)
 - [Codebase Overview](docs/codebase_overview.md)
 - [Testing Guide](docs/testing.md)
+- [Troubleshooting](docs/troubleshooting.md)
 - [Contributor Guidelines](AGENTS.md)
 - [Documentation Index](docs/README.md)
 - Need help? Email: `itrc@lccd.edu.ph`
