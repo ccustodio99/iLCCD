@@ -139,7 +139,6 @@ class DocumentController extends Controller
             try {
                 $path = $request->file('file')->store('documents');
                 $version = $document->current_version + 1;
-
                 DocumentVersion::create([
                     'document_id' => $document->id,
                     'version' => $version,
