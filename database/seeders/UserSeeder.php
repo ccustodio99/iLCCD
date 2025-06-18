@@ -19,6 +19,9 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('Password1'),
                 'role' => 'admin',
                 'department' => 'ITRC',
+                'designation' => 'System Administrator',
+                'contact_info' => '09170000000',
+                'profile_photo_path' => 'profile_photos/WJgnAHDtvniFszaj0BtsWmU8PyUww2o5hhA4LpK2.png',
             ]
         );
 
@@ -30,6 +33,8 @@ class UserSeeder extends Seeder
                 'role' => 'head',
                 'department' => 'President Department',
                 'designation' => 'President',
+                'contact_info' => '09170000001',
+                'profile_photo_path' => 'profile_photos/MRIwDpqyCOwJjX7oIeOjI6ZTFwWXNlRVqQ5h0Sk6.jpg',
             ]
         );
 
@@ -41,6 +46,8 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('Password1'),
                 'role' => 'staff',
                 'department' => 'Finance Office',
+                'designation' => 'Finance Staff',
+                'contact_info' => '09170000002',
             ]
         );
 
@@ -57,15 +64,18 @@ class UserSeeder extends Seeder
 
 
         foreach ($departments as $index => $dept) {
+            $headEmail = $index === 0 ? 'head@example.com' : Str::slug($dept) . '.head@example.com';
 
             // Department head
             User::updateOrCreate(
-                ['email' => $index === 0 ? 'head@example.com' : Str::slug($dept) . '.head@example.com'],
+                ['email' => $headEmail],
                 [
                     'name' => $dept . ' Head',
                     'password' => Hash::make('Password1'),
                     'role' => 'head',
                     'department' => $dept,
+                    'designation' => 'Department Head',
+                    'contact_info' => '09170000' . str_pad((string) $index, 2, '0', STR_PAD_LEFT),
                 ]
             );
 
@@ -83,6 +93,8 @@ class UserSeeder extends Seeder
                     'password' => Hash::make('Password1'),
                     'role' => 'staff',
                     'department' => $dept,
+                    'designation' => 'Staff',
+                    'contact_info' => '09170001' . str_pad((string) $index, 2, '0', STR_PAD_LEFT),
                 ]
             );
         }

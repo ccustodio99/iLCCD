@@ -210,6 +210,14 @@ class DemoSeeder extends Seeder
             ]);
         });
 
+        // Example edit request on the first ticket
+        $editTicket = $tickets->first();
+        $editTicket->update([
+            'edit_request_reason' => 'Update asset tag details',
+            'edit_requested_at' => now()->subDay(),
+            'edit_requested_by' => $editTicket->user_id,
+        ]);
+
         // Job Orders linked to random tickets
         $jobOrders = collect($jobOrderData)->map(function ($data) use ($tickets, $staff) {
             $ticket = $tickets->random();
