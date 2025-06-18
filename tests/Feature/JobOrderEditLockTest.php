@@ -5,8 +5,8 @@ use App\Models\User;
 use App\Models\JobOrderType;
 
 it('locks requester editing after head approval until returned', function () {
-    $requester = User::factory()->create(['role' => 'staff']);
-    $head = User::factory()->create(['role' => 'head']);
+    $requester = User::factory()->create(['role' => 'staff', 'department' => 'Nursing']);
+    $head = User::factory()->create(['role' => 'head', 'department' => 'Nursing']);
     $parent = JobOrderType::factory()->create();
     $type = JobOrderType::factory()->create(['parent_id' => $parent->id]);
 

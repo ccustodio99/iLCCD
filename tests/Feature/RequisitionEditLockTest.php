@@ -4,11 +4,13 @@ use App\Models\Requisition;
 use App\Models\User;
 
 it('locks requester editing after head approval until returned', function () {
-    $requester = User::factory()->create(['role' => 'staff']);
-    $head = User::factory()->create(['role' => 'head']);
+    $requester = User::factory()->create(['role' => 'staff', 'department' => 'Nursing']);
+    $head = User::factory()->create(['role' => 'head', 'department' => 'Nursing']);
 
     $this->actingAs($requester);
-    $requisition = Requisition::factory()->for($requester)->create();
+    $requisition = Requisition::factory()->for($requester)->create([
+        'department' => 'Nursing',
+    ]);
 
     $this->actingAs($head);
     $this->put("/requisitions/{$requisition->id}/approve");

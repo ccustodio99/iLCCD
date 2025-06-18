@@ -4,13 +4,14 @@ use App\Models\JobOrder;
 use App\Models\User;
 
 it('enforces role restrictions during approval workflow', function () {
-    $order = JobOrder::factory()->create([
+    $requester = User::factory()->create(['role' => 'staff', 'department' => 'Nursing']);
+    $order = JobOrder::factory()->for($requester)->create([
         'status' => JobOrder::STATUS_PENDING_HEAD,
     ]);
 
-    $president = User::factory()->create(['role' => 'president']);
-    $finance = User::factory()->create(['role' => 'finance']);
-    $head = User::factory()->create(['role' => 'head']);
+    $head = User::factory()->create(['role' => 'head', 'department' => 'Nursing']);
+    $president = User::factory()->create(['role' => 'head', 'department' => 'President Department']);
+    $finance = User::factory()->create(['role' => 'head', 'department' => 'Finance Office']);
 
     $this->actingAs($president);
     $this->put("/job-orders/{$order->id}/approve")->assertForbidden();

@@ -4,10 +4,10 @@ use App\Models\Requisition;
 use App\Models\User;
 
 it('enforces approval chain and displays remarks', function () {
-    $requester = User::factory()->create(['role' => 'staff']);
-    $head = User::factory()->create(['role' => 'head']);
-    $president = User::factory()->create(['role' => 'president']);
-    $finance = User::factory()->create(['role' => 'finance']);
+    $requester = User::factory()->create(['role' => 'staff', 'department' => 'Nursing']);
+    $head = User::factory()->create(['role' => 'head', 'department' => 'Nursing']);
+    $president = User::factory()->create(['role' => 'head', 'department' => 'President Department']);
+    $finance = User::factory()->create(['role' => 'head', 'department' => 'Finance Office']);
 
     $this->actingAs($requester);
     $this->post('/requisitions', [

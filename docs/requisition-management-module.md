@@ -23,9 +23,9 @@ The **Requisition Management Module** enables LCCD stakeholders to request mater
 
 ### 2. Multi-Level Approval Workflows
 - The system enforces a structured chain depending on the requester’s role:
-  - **Staff**: Head → President → Finance
-  - **Department Head**: President → Finance
-  - **President**: Finance only
+  - **Staff**: Department Head → President Department Head → Finance Department Head
+  - **Department Head**: President Department Head → Finance Department Head
+  - **President Department Head**: Finance Department Head only
 - Each approval stage records **remarks** from the reviewer and is logged in the audit trail.
 - Approvers simply advance the request to the next stage; the Finance office’s approval finalizes the requisition.
 

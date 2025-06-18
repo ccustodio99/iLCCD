@@ -272,20 +272,27 @@ class JobOrderController extends Controller
     public function approvals(Request $request)
     {
         $perPage = $this->getPerPage($request);
-        $role = auth()->user()->role;
-        $statusMap = [
-            'head' => JobOrder::STATUS_PENDING_HEAD,
-            'president' => JobOrder::STATUS_PENDING_PRESIDENT,
-            'finance' => JobOrder::STATUS_PENDING_FINANCE,
-        ];
+        $user = auth()->user();
 
-        $status = $statusMap[$role] ?? null;
-        abort_if(!$status, Response::HTTP_FORBIDDEN, 'Access denied');
+        abort_if($user->role !== 'head', Response::HTTP_FORBIDDEN, 'Access denied');
 
-        $jobOrders = JobOrder::with('user')
-            ->where('status', $status)
-            ->paginate($perPage)
-            ->withQueryString();
+        if ($user->department === 'President Department') {
+            $status = JobOrder::STATUS_PENDING_PRESIDENT;
+        } elseif ($user->department === 'Finance Office') {
+            $status = JobOrder::STATUS_PENDING_FINANCE;
+        } else {
+            $status = JobOrder::STATUS_PENDING_HEAD;
+        }
+
+        $query = JobOrder::with('user')->where('status', $status);
+
+        if ($status === JobOrder::STATUS_PENDING_HEAD) {
+            $query->whereHas('user', function ($q) use ($user) {
+                $q->where('department', $user->department);
+            });
+        }
+
+        $jobOrders = $query->paginate($perPage)->withQueryString();
 
         return view('job_orders.approvals', compact('jobOrders'));
     }
@@ -295,13 +302,19 @@ class JobOrderController extends Controller
     {
         $this->authorizeApproval($jobOrder);
 
-        $nextRole = null;
+        $nextApprover = null;
         if ($jobOrder->status === JobOrder::STATUS_PENDING_HEAD) {
             $jobOrder->status = JobOrder::STATUS_PENDING_PRESIDENT;
-            $nextRole = 'president';
+            $nextApprover = \App\Models\User::where([
+                'role' => 'head',
+                'department' => 'President Department',
+            ])->first();
         } elseif ($jobOrder->status === JobOrder::STATUS_PENDING_PRESIDENT) {
             $jobOrder->status = JobOrder::STATUS_PENDING_FINANCE;
-            $nextRole = 'finance';
+            $nextApprover = \App\Models\User::where([
+                'role' => 'head',
+                'department' => 'Finance Office',
+            ])->first();
         } elseif ($jobOrder->status === JobOrder::STATUS_PENDING_FINANCE) {
             $jobOrder->status = JobOrder::STATUS_APPROVED;
             $jobOrder->approved_at = now();
@@ -314,13 +327,10 @@ class JobOrderController extends Controller
         ));
 
         // notify next approver
-        if ($nextRole) {
-            $approver = \App\Models\User::where('role', $nextRole)->first();
-            if ($approver) {
-                $approver->notify(new \App\Notifications\JobOrderStatusNotification(
-                    "Job order #{$jobOrder->id} requires your approval."
-                ));
-            }
+        if ($nextApprover) {
+            $nextApprover->notify(new \App\Notifications\JobOrderStatusNotification(
+                "Job order #{$jobOrder->id} requires your approval."
+            ));
         }
 
         return redirect()->route('job-orders.approvals');
@@ -437,12 +447,17 @@ class JobOrderController extends Controller
 
     private function authorizeApproval(JobOrder $jobOrder): void
     {
-        $role = auth()->user()->role;
-        $allowed = (
-            ($role === 'head' && $jobOrder->status === JobOrder::STATUS_PENDING_HEAD) ||
-            ($role === 'president' && $jobOrder->status === JobOrder::STATUS_PENDING_PRESIDENT) ||
-            ($role === 'finance' && $jobOrder->status === JobOrder::STATUS_PENDING_FINANCE)
-        );
+        $user = auth()->user();
+        $allowed = false;
+        if ($user->role === 'head') {
+            if ($jobOrder->status === JobOrder::STATUS_PENDING_HEAD && $user->department === $jobOrder->user->department) {
+                $allowed = true;
+            } elseif ($jobOrder->status === JobOrder::STATUS_PENDING_PRESIDENT && $user->department === 'President Department') {
+                $allowed = true;
+            } elseif ($jobOrder->status === JobOrder::STATUS_PENDING_FINANCE && $user->department === 'Finance Office') {
+                $allowed = true;
+            }
+        }
 
         abort_unless($allowed, Response::HTTP_FORBIDDEN, 'Access denied');
     }

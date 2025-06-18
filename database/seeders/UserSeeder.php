@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
                 'name' => 'Demo President',
                 'password' => Hash::make('Password1'),
                 'role' => 'head',
-                'department' => 'Administration',
+                'department' => 'President Department',
                 'designation' => 'President',
             ]
         );
@@ -52,6 +52,7 @@ class UserSeeder extends Seeder
             'Non-Teaching Department',
             'ITRC',
             'Finance Office',
+            'President Department',
         ];
 
 
@@ -69,8 +70,8 @@ class UserSeeder extends Seeder
             );
 
 
-            // Skip creating another staff for finance office
-            if ($dept === 'Finance Office') {
+            // Skip creating another staff for finance office or president department
+            if ($dept === 'Finance Office' || $dept === 'President Department') {
                 continue;
             }
 

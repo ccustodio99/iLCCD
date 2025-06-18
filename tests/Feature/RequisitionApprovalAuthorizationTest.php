@@ -8,9 +8,9 @@ it('enforces role restrictions during requisition approval workflow', function (
         'status' => Requisition::STATUS_PENDING_HEAD,
     ]);
 
-    $president = User::factory()->create(['role' => 'president']);
-    $finance = User::factory()->create(['role' => 'finance']);
-    $head = User::factory()->create(['role' => 'head']);
+    $president = User::factory()->create(['role' => 'head', 'department' => 'President Department']);
+    $finance = User::factory()->create(['role' => 'head', 'department' => 'Finance Office']);
+    $head = User::factory()->create(['role' => 'head', 'department' => $req->department]);
 
     $this->actingAs($president);
     $this->put("/requisitions/{$req->id}/approve")->assertForbidden();

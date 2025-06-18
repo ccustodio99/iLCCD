@@ -223,20 +223,25 @@ class RequisitionController extends Controller
     public function approvals(Request $request)
     {
         $perPage = $this->getPerPage($request);
-        $role = auth()->user()->role;
-        $statusMap = [
-            'head' => Requisition::STATUS_PENDING_HEAD,
-            'president' => Requisition::STATUS_PENDING_PRESIDENT,
-            'finance' => Requisition::STATUS_PENDING_FINANCE,
-        ];
+        $user = auth()->user();
 
-        $status = $statusMap[$role] ?? null;
-        abort_if(!$status, Response::HTTP_FORBIDDEN, 'Access denied');
+        abort_if($user->role !== 'head', Response::HTTP_FORBIDDEN, 'Access denied');
 
-        $requisitions = Requisition::with('user')
-            ->where('status', $status)
-            ->paginate($perPage)
-            ->withQueryString();
+        if ($user->department === 'President Department') {
+            $status = Requisition::STATUS_PENDING_PRESIDENT;
+        } elseif ($user->department === 'Finance Office') {
+            $status = Requisition::STATUS_PENDING_FINANCE;
+        } else {
+            $status = Requisition::STATUS_PENDING_HEAD;
+        }
+
+        $query = Requisition::with('user')->where('status', $status);
+
+        if ($status === Requisition::STATUS_PENDING_HEAD) {
+            $query->where('department', $user->department);
+        }
+
+        $requisitions = $query->paginate($perPage)->withQueryString();
 
         return view('requisitions.approvals', compact('requisitions'));
     }
@@ -246,13 +251,19 @@ class RequisitionController extends Controller
     {
         $this->authorizeApproval($requisition);
 
-        $nextRole = null;
+        $nextApprover = null;
         if ($requisition->status === Requisition::STATUS_PENDING_HEAD) {
             $requisition->status = Requisition::STATUS_PENDING_PRESIDENT;
-            $nextRole = 'president';
+            $nextApprover = \App\Models\User::where([
+                'role' => 'head',
+                'department' => 'President Department',
+            ])->first();
         } elseif ($requisition->status === Requisition::STATUS_PENDING_PRESIDENT) {
             $requisition->status = Requisition::STATUS_PENDING_FINANCE;
-            $nextRole = 'finance';
+            $nextApprover = \App\Models\User::where([
+                'role' => 'head',
+                'department' => 'Finance Office',
+            ])->first();
         } elseif ($requisition->status === Requisition::STATUS_PENDING_FINANCE) {
             $requisition->status = Requisition::STATUS_APPROVED;
             $requisition->approved_at = now();
@@ -266,13 +277,10 @@ class RequisitionController extends Controller
         ));
 
         // notify next approver
-        if ($nextRole) {
-            $approver = \App\Models\User::where('role', $nextRole)->first();
-            if ($approver) {
-                $approver->notify(new \App\Notifications\RequisitionStatusNotification(
-                    "Requisition #{$requisition->id} requires your approval."
-                ));
-            }
+        if ($nextApprover) {
+            $nextApprover->notify(new \App\Notifications\RequisitionStatusNotification(
+                "Requisition #{$requisition->id} requires your approval."
+            ));
         }
 
         return redirect()->route('requisitions.approvals');
@@ -301,12 +309,17 @@ class RequisitionController extends Controller
 
     private function authorizeApproval(Requisition $requisition): void
     {
-        $role = auth()->user()->role;
-        $allowed = (
-            ($role === 'head' && $requisition->status === Requisition::STATUS_PENDING_HEAD) ||
-            ($role === 'president' && $requisition->status === Requisition::STATUS_PENDING_PRESIDENT) ||
-            ($role === 'finance' && $requisition->status === Requisition::STATUS_PENDING_FINANCE)
-        );
+        $user = auth()->user();
+        $allowed = false;
+        if ($user->role === 'head') {
+            if ($requisition->status === Requisition::STATUS_PENDING_HEAD && $user->department === $requisition->department) {
+                $allowed = true;
+            } elseif ($requisition->status === Requisition::STATUS_PENDING_PRESIDENT && $user->department === 'President Department') {
+                $allowed = true;
+            } elseif ($requisition->status === Requisition::STATUS_PENDING_FINANCE && $user->department === 'Finance Office') {
+                $allowed = true;
+            }
+        }
 
         abort_unless($allowed, Response::HTTP_FORBIDDEN, 'Access denied');
     }

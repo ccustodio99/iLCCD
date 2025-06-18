@@ -28,7 +28,7 @@ class DocumentFactory extends Factory
                 'Non-Teaching Department',
                 'ITRC',
                 'Finance Office',
-                'Administration',
+                'President Department',
             ]),
             'current_version' => 1,
         ];

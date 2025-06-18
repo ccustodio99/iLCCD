@@ -12,7 +12,7 @@ class PurchaseOrderController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('role:finance,admin')->except(['index', 'downloadAttachment']);
+        $this->middleware('role:head,admin')->except(['index', 'downloadAttachment']);
     }
     public function index(Request $request)
     {
@@ -20,8 +20,9 @@ class PurchaseOrderController extends Controller
 
         $query = PurchaseOrder::with(['auditTrails.user', 'user']);
 
-        if (!in_array(auth()->user()->role, ['finance', 'admin'], true)) {
-            $query->where('user_id', auth()->id());
+        $user = auth()->user();
+        if (!($user->role === 'admin' || ($user->role === 'head' && $user->department === 'Finance Office'))) {
+            $query->where('user_id', $user->id);
         }
 
         if ($request->filled('status')) {
@@ -91,7 +92,8 @@ class PurchaseOrderController extends Controller
     public function edit(PurchaseOrder $purchaseOrder)
     {
         $user = auth()->user();
-        if ($purchaseOrder->user_id !== $user->id && !in_array($user->role, ['finance', 'admin'], true)) {
+        $allowed = $user->role === 'admin' || ($user->role === 'head' && $user->department === 'Finance Office');
+        if ($purchaseOrder->user_id !== $user->id && !$allowed) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $purchaseOrder->load('auditTrails.user');
@@ -101,7 +103,8 @@ class PurchaseOrderController extends Controller
     public function update(Request $request, PurchaseOrder $purchaseOrder)
     {
         $user = auth()->user();
-        if ($purchaseOrder->user_id !== $user->id && !in_array($user->role, ['finance', 'admin'], true)) {
+        $allowed = $user->role === 'admin' || ($user->role === 'head' && $user->department === 'Finance Office');
+        if ($purchaseOrder->user_id !== $user->id && !$allowed) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $data = $request->validate([
@@ -142,7 +145,8 @@ class PurchaseOrderController extends Controller
     public function destroy(PurchaseOrder $purchaseOrder)
     {
         $user = auth()->user();
-        if ($purchaseOrder->user_id !== $user->id && !in_array($user->role, ['finance', 'admin'], true)) {
+        $allowed = $user->role === 'admin' || ($user->role === 'head' && $user->department === 'Finance Office');
+        if ($purchaseOrder->user_id !== $user->id && !$allowed) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $purchaseOrder->delete();
@@ -156,7 +160,8 @@ class PurchaseOrderController extends Controller
         }
 
         $user = auth()->user();
-        if ($purchaseOrder->user_id !== $user->id && !in_array($user->role, ['finance', 'admin'], true)) {
+        $allowed = $user->role === 'admin' || ($user->role === 'head' && $user->department === 'Finance Office');
+        if ($purchaseOrder->user_id !== $user->id && !$allowed) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
