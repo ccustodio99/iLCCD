@@ -103,8 +103,9 @@ Approval workflows ensure requests are reviewed by the proper people before they
 
 ### Creating an Approval Process
 1. Open **Settings → Approval Processes** and click **New**.
-2. Choose the **Module** (`requisitions`, `job_orders`, etc.) and select the **Department** that owns the workflow.
+2. Choose the **Module** from the dropdown (`requisitions`, `job_orders`, etc.) and select the **Department** from the list of user departments.
 3. Save the process and add approval stages.
+4. When editing a process, the same dropdowns are used for Module and Department.
 
 ### Adding Stages
 1. From the process page click **Add Stage**.

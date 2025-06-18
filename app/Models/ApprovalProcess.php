@@ -10,6 +10,18 @@ class ApprovalProcess extends Model
 {
     use HasFactory;
 
+    /**
+     * Available modules that can have approval workflows.
+     * The array keys are stored in the database while the labels
+     * are used in dropdowns.
+     *
+     * @var array<string,string>
+     */
+    public const MODULES = [
+        'requisitions' => 'Requisitions',
+        'job_orders' => 'Job Orders',
+    ];
+
     protected $fillable = [
         'module',
         'department',
