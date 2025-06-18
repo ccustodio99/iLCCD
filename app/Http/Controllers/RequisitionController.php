@@ -10,6 +10,7 @@ use App\Models\PurchaseOrder;
 use App\Models\Requisition;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
@@ -164,43 +165,45 @@ class RequisitionController extends Controller
         }
 
         if ($data['status'] === Requisition::STATUS_APPROVED && $requisition->approved_at === null) {
-            $requisition->approved_at = now();
-            $requisition->approved_by_id = auth()->id();
-            $requisition->save();
+            DB::transaction(function () use ($requisition) {
+                $requisition->approved_at = now();
+                $requisition->approved_by_id = auth()->id();
+                $requisition->save();
 
-            foreach ($requisition->items as $reqItem) {
-                $item = InventoryItem::where('name', $reqItem->item)->first();
-                if (! $item || $item->quantity < $reqItem->quantity) {
-                    PurchaseOrder::create([
-                        'user_id' => auth()->id(),
-                        'requisition_id' => $requisition->id,
-                        'inventory_item_id' => $item?->id,
-                        'item' => $reqItem->item,
-                        'quantity' => $reqItem->quantity,
-                        'status' => PurchaseOrder::STATUS_DRAFT,
-                    ]);
-                } else {
-                    $item->decrement('quantity', $reqItem->quantity);
-                    InventoryTransaction::create([
-                        'inventory_item_id' => $item->id,
-                        'user_id' => auth()->id(),
-                        'requisition_id' => $requisition->id,
-                        'action' => 'issue',
-                        'quantity' => $reqItem->quantity,
-                        'purpose' => $requisition->purpose,
-                    ]);
+                foreach ($requisition->items as $reqItem) {
+                    $item = InventoryItem::where('name', $reqItem->item)->first();
+                    if (! $item || $item->quantity < $reqItem->quantity) {
+                        PurchaseOrder::create([
+                            'user_id' => auth()->id(),
+                            'requisition_id' => $requisition->id,
+                            'inventory_item_id' => $item?->id,
+                            'item' => $reqItem->item,
+                            'quantity' => $reqItem->quantity,
+                            'status' => PurchaseOrder::STATUS_DRAFT,
+                        ]);
+                    } else {
+                        $item->decrement('quantity', $reqItem->quantity);
+                        InventoryTransaction::create([
+                            'inventory_item_id' => $item->id,
+                            'user_id' => auth()->id(),
+                            'requisition_id' => $requisition->id,
+                            'action' => 'issue',
+                            'quantity' => $reqItem->quantity,
+                            'purpose' => $requisition->purpose,
+                        ]);
+                    }
                 }
-            }
 
-            if ($requisition->job_order_id) {
-                $jobOrder = $requisition->jobOrder;
-                if ($jobOrder && $jobOrder->status !== JobOrder::STATUS_APPROVED) {
-                    $jobOrder->update([
-                        'status' => JobOrder::STATUS_APPROVED,
-                        'approved_at' => now(),
-                    ]);
+                if ($requisition->job_order_id) {
+                    $jobOrder = $requisition->jobOrder;
+                    if ($jobOrder && $jobOrder->status !== JobOrder::STATUS_APPROVED) {
+                        $jobOrder->update([
+                            'status' => JobOrder::STATUS_APPROVED,
+                            'approved_at' => now(),
+                        ]);
+                    }
                 }
-            }
+            });
         }
 
         return redirect()->route('requisitions.index');
