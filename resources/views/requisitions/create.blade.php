@@ -14,10 +14,14 @@
                     <input type="text" name="item[]" class="form-control" required>
                 </div>
                 <div class="col-md-3">
+                    <label class="form-label">SKU</label>
+                    <input type="text" name="sku[]" class="form-control">
+                </div>
+                <div class="col-md-2">
                     <label class="form-label">Quantity</label>
                     <input type="number" name="quantity[]" class="form-control" value="1" required>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <label class="form-label">Specification</label>
                     <input type="text" name="specification[]" class="form-control">
                 </div>
