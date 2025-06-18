@@ -17,7 +17,7 @@ class RequisitionFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'department' => $this->faker->randomElement(['IT', 'HR', 'Admin']),
+            'department' => null,
             'purpose' => $this->faker->sentence(),
             'attachment_path' => null,
             'status' => Requisition::STATUS_PENDING_HEAD,
@@ -29,10 +29,16 @@ class RequisitionFactory extends Factory
 
     public function configure(): static
     {
-        return $this->afterCreating(function (Requisition $requisition) {
-            \App\Models\RequisitionItem::factory()
-                ->count(1)
-                ->create(['requisition_id' => $requisition->id]);
-        });
+        return $this
+            ->afterMaking(function (Requisition $requisition) {
+                if ($requisition->user && ! $requisition->department) {
+                    $requisition->department = $requisition->user->department;
+                }
+            })
+            ->afterCreating(function (Requisition $requisition) {
+                \App\Models\RequisitionItem::factory()
+                    ->count(1)
+                    ->create(['requisition_id' => $requisition->id]);
+            });
     }
 }

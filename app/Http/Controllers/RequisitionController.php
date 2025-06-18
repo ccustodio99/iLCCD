@@ -158,6 +158,9 @@ class RequisitionController extends Controller
         if ($requisition->user_id !== auth()->id()) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
+        if (auth()->user()->department !== $requisition->department) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
         if ($requisition->status === Requisition::STATUS_APPROVED) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
