@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\RequisitionItem;
 use App\Models\Requisition;
+use App\Models\RequisitionItem;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +18,7 @@ class RequisitionItemFactory extends Factory
         return [
             'requisition_id' => Requisition::factory(),
             'item' => $this->faker->words(2, true),
+            'sku' => null,
             'quantity' => $this->faker->numberBetween(1, 5),
             'specification' => $this->faker->sentence(),
         ];
