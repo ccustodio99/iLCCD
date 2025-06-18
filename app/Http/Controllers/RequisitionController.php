@@ -68,6 +68,7 @@ class RequisitionController extends Controller
     {
         $data = $request->validate([
             'item.*' => 'required|string|max:255',
+            'sku.*' => 'nullable|string|max:255',
             'quantity.*' => 'required|integer|min:1',
             'specification.*' => 'nullable|string',
             'purpose' => 'required|string',
@@ -90,6 +91,7 @@ class RequisitionController extends Controller
             'status' => $firstStage->name ?? Requisition::STATUS_PENDING_HEAD,
         ];
 
+
         if ($request->hasFile('attachment')) {
             try {
                 $requisitionData['attachment_path'] = $request->file('attachment')
@@ -99,14 +101,43 @@ class RequisitionController extends Controller
             }
         }
 
-        $requisition = Requisition::create($requisitionData);
 
-        foreach ($data['item'] as $i => $name) {
-            $requisition->items()->create([
-                'item' => $name,
-                'quantity' => $data['quantity'][$i] ?? 1,
-                'specification' => $data['specification'][$i] ?? null,
-            ]);
+        try {
+            if ($request->hasFile('attachment')) {
+                try {
+                    $requisitionData['attachment_path'] = $request->file('attachment')
+                        ->store('requisition_attachments', 'public');
+                } catch (\Throwable $e) {
+                    DB::rollBack();
+
+
+                    return back()
+                        ->withErrors(['attachment' => 'Failed to upload attachment.'])
+                        ->withInput();
+                }
+            }
+
+            $requisition = Requisition::create($requisitionData);
+
+            foreach ($data['item'] as $i => $name) {
+                $requisition->items()->create([
+                    'item' => $name,
+                    'quantity' => $data['quantity'][$i] ?? 1,
+                    'specification' => $data['specification'][$i] ?? null,
+                ]);
+            }
+
+            DB::commit();
+        } catch (\Throwable $e) {
+            if (! empty($requisitionData['attachment_path'] ?? null)) {
+                Storage::disk('public')->delete($requisitionData['attachment_path']);
+            }
+
+            DB::rollBack();
+
+            return back()
+                ->withErrors(['error' => 'Failed to create requisition.'])
+                ->withInput();
         }
 
         return redirect()->route('requisitions.index');
@@ -135,6 +166,7 @@ class RequisitionController extends Controller
         }
         $data = $request->validate([
             'item.*' => 'required|string|max:255',
+            'sku.*' => 'nullable|string|max:255',
             'quantity.*' => 'required|integer|min:1',
             'specification.*' => 'nullable|string',
             'purpose' => 'required|string',
@@ -169,6 +201,7 @@ class RequisitionController extends Controller
         foreach ($data['item'] as $i => $name) {
             $requisition->items()->create([
                 'item' => $name,
+                'sku' => $data['sku'][$i] ?? null,
                 'quantity' => $data['quantity'][$i] ?? 1,
                 'specification' => $data['specification'][$i] ?? null,
             ]);
@@ -180,26 +213,36 @@ class RequisitionController extends Controller
             $requisition->save();
 
             foreach ($requisition->items as $reqItem) {
-                $item = InventoryItem::where('name', $reqItem->item)->first();
-                if (! $item || $item->quantity < $reqItem->quantity) {
-                    PurchaseOrder::create([
-                        'user_id' => auth()->id(),
-                        'requisition_id' => $requisition->id,
-                        'inventory_item_id' => $item?->id,
-                        'item' => $reqItem->item,
-                        'quantity' => $reqItem->quantity,
-                        'status' => PurchaseOrder::STATUS_DRAFT,
-                    ]);
-                } else {
-                    $item->decrement('quantity', $reqItem->quantity);
-                    InventoryTransaction::create([
-                        'inventory_item_id' => $item->id,
-                        'user_id' => auth()->id(),
-                        'requisition_id' => $requisition->id,
-                        'action' => 'issue',
-                        'quantity' => $reqItem->quantity,
-                        'purpose' => $requisition->purpose,
-                    ]);
+
+                try {
+                    $item = InventoryItem::where('name', $reqItem->item)->first();
+
+                    if (! $item || $item->quantity < $reqItem->quantity) {
+                        PurchaseOrder::create([
+                            'user_id' => auth()->id(),
+                            'requisition_id' => $requisition->id,
+                            'inventory_item_id' => $item?->id,
+                            'item' => $reqItem->item,
+                            'quantity' => $reqItem->quantity,
+                            'status' => PurchaseOrder::STATUS_DRAFT,
+                        ]);
+                    } else {
+                        $item->decrement('quantity', $reqItem->quantity);
+                        InventoryTransaction::create([
+                            'inventory_item_id' => $item->id,
+                            'user_id' => auth()->id(),
+                            'requisition_id' => $requisition->id,
+                            'action' => 'issue',
+                            'quantity' => $reqItem->quantity,
+                            'purpose' => $requisition->purpose,
+                        ]);
+                    }
+                } catch (\Throwable $e) {
+                    Log::error(
+                        'Requisition '.$requisition->id.' item '.$reqItem->item.
+                        ' qty '.$reqItem->quantity.' error: '.$e->getMessage()
+                    );
+                    throw $e;
                 }
             }
 

@@ -1,12 +1,12 @@
 <?php
 
-use App\Models\JobOrder;
-use App\Models\User;
 use App\Models\InventoryItem;
-use App\Models\Requisition;
 use App\Models\InventoryTransaction;
+use App\Models\JobOrder;
 use App\Models\JobOrderType;
+use App\Models\Requisition;
 use App\Models\TicketCategory;
+use App\Models\User;
 
 it('allows authenticated user to create job order', function () {
     $user = User::factory()->create();
@@ -91,6 +91,7 @@ it('deducts inventory if materials available', function () {
 
     $response = $this->post("/job-orders/{$order->id}/materials", [
         'item' => 'Cable',
+        'item_sku' => $item->sku,
         'quantity' => 3,
         'purpose' => 'Setup network',
     ]);
@@ -112,6 +113,7 @@ it('creates requisition when materials not in stock', function () {
 
     $response = $this->post("/job-orders/{$order->id}/materials", [
         'item' => 'Switch',
+        'item_sku' => null,
         'quantity' => 1,
         'purpose' => 'New network install',
     ]);
@@ -119,7 +121,7 @@ it('creates requisition when materials not in stock', function () {
     $response->assertRedirect('/job-orders');
 
     expect(Requisition::where('job_order_id', $order->id)
-        ->whereHas('items', fn($q) => $q->where('item', 'Switch'))
+        ->whereHas('items', fn ($q) => $q->where('item', 'Switch'))
         ->exists())->toBeTrue();
 });
 

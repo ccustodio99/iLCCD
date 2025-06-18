@@ -82,7 +82,8 @@ class DocumentController extends Controller
                 'required',
                 Rule::exists('document_categories', 'id')->where('is_active', true),
             ],
-            'file' => 'required|file',
+
+            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:10240',
         ]);
         $data['user_id'] = $request->user()->id;
         $data['department'] = $request->user()->department;
@@ -130,13 +131,15 @@ class DocumentController extends Controller
                 'required',
                 Rule::exists('document_categories', 'id')->where('is_active', true),
             ],
-            'file' => 'nullable|file',
+            'file' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:10240',
+
         ]);
         $document->update($data);
         if ($request->hasFile('file')) {
             try {
                 $path = $request->file('file')->store('documents');
                 $version = $document->current_version + 1;
+
                 DocumentVersion::create([
                     'document_id' => $document->id,
                     'version' => $version,
@@ -166,7 +169,7 @@ class DocumentController extends Controller
         foreach ($document->versions as $version) {
             Storage::delete($version->path);
         }
-        $document->delete();
+
         DocumentLog::create([
             'document_id' => $document->id,
             'user_id' => $request->user()->id,

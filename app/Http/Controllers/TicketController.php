@@ -295,7 +295,11 @@ class TicketController extends Controller
         }
         $originalWatchers = $ticket->watchers()->pluck('users.id')->toArray();
         $ticket->watchers()->sync($watcherIds);
-        if ($watcherIds !== array_values($originalWatchers)) {
+        $sortedOriginal = $originalWatchers;
+        sort($sortedOriginal);
+        $sortedNew = $watcherIds;
+        sort($sortedNew);
+        if ($sortedNew !== $sortedOriginal) {
             $oldWatcherNames = User::whereIn('id', $originalWatchers)->pluck('name')->join(', ');
             $newWatcherNames = User::whereIn('id', $watcherIds)->pluck('name')->join(', ');
             AuditTrail::create([

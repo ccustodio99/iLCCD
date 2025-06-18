@@ -69,6 +69,8 @@ Deliver a holistic, faith-driven digital backbone for LCCD, empowering every use
 4. Run `php artisan key:generate` to create the application encryption key.
 5. (Optional) Set `APP_DEFAULT_PROFILE_PHOTO` in `.env` to override the placeholder path (`/assets/images/default-avatar.png`).
 6. Configure database settings in `.env` then run `php artisan migrate --seed` to create tables and demo data.
+   The migrations add and then remove a column on the `audit_trails` table. Run
+   them in chronological order or see [Migration Sequence](docs/migration-sequence.md) for details.
 7. Run `php artisan storage:link` so uploaded profile photos and attachments are accessible.
 8. Start the local server using `php artisan serve` or `composer dev` for hot reloading.
 9. Execute the test suite with `php artisan test` to verify the setup.
