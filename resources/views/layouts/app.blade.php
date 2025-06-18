@@ -128,19 +128,6 @@
             display: none;
             z-index: 1000;
         }
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: var(--color-primary);
-            color: #ffffff;
-            padding: 0.5rem;
-            z-index: 100;
-            transition: top 0.3s ease;
-        }
-        .skip-link:focus {
-            top: 0;
-        }
         .card-quick {
             border-radius: 1rem;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -181,7 +168,6 @@
 </head>
 <body>
     @include('components.hamburger-menu')
-    <a href="#main-content" class="skip-link">Skip to main content</a>
     @auth
         @include('components.site-header', ['showSidebar' => true])
     @else
