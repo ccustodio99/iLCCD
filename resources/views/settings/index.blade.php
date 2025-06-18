@@ -52,6 +52,9 @@
                         <div class="col">
                             <x-settings-link :href="route('settings.localization')" icon="schedule" label="Localization" />
                         </div>
+                        <div class="col">
+                            <x-settings-link :href="route('approval-processes.index')" icon="account_tree" label="Approval Processes" />
+                        </div>
                     </div>
                 </div>
             </div>
