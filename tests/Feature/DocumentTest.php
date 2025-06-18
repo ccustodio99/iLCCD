@@ -129,7 +129,7 @@ it('allows downloading document versions', function () {
     $response->assertStatus(200);
 });
 
-it('rejects unsupported file types when updating document', function () {
+it('rejects unsupported file types when updating document from edit page', function () {
     Storage::fake('local');
     $user = User::factory()->create();
     $this->actingAs($user);
@@ -225,7 +225,7 @@ it('rejects unsupported file types when uploading document', function () {
     expect(Document::count())->toBe(0);
 });
 
-it('rejects unsupported file types when updating document', function () {
+it('rejects unsupported file types when updating document via edit form', function () {
     Storage::fake('local');
     $user = User::factory()->create();
     $this->actingAs($user);
