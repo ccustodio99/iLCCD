@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Requisition;
+use App\Models\ApprovalProcess;
 use App\Models\InventoryItem;
-use App\Models\PurchaseOrder;
 use App\Models\InventoryTransaction;
 use App\Models\JobOrder;
-use Illuminate\Support\Facades\Storage;
+use App\Models\PurchaseOrder;
+use App\Models\Requisition;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -72,12 +74,19 @@ class RequisitionController extends Controller
             'attachment' => 'nullable|file|max:2048',
         ]);
 
+        $process = ApprovalProcess::where('module', 'requisitions')
+            ->where('department', $request->user()->department)
+            ->with('stages')
+            ->first();
+
+        $firstStage = $process?->stages->sortBy('position')->first();
+
         $requisitionData = [
             'user_id' => $request->user()->id,
             'department' => $request->user()->department,
             'purpose' => $data['purpose'],
             'remarks' => $data['remarks'] ?? null,
-            'status' => Requisition::STATUS_PENDING_HEAD,
+            'status' => $firstStage->name ?? Requisition::STATUS_PENDING_HEAD,
         ];
 
         if ($request->hasFile('attachment')) {
@@ -94,6 +103,7 @@ class RequisitionController extends Controller
                 'specification' => $data['specification'][$i] ?? null,
             ]);
         }
+
         return redirect()->route('requisitions.index');
     }
 
@@ -103,6 +113,7 @@ class RequisitionController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $requisition->load(['items', 'auditTrails.user']);
+
         return view('requisitions.edit', compact('requisition'));
     }
 
@@ -159,7 +170,7 @@ class RequisitionController extends Controller
 
             foreach ($requisition->items as $reqItem) {
                 $item = InventoryItem::where('name', $reqItem->item)->first();
-                if (!$item || $item->quantity < $reqItem->quantity) {
+                if (! $item || $item->quantity < $reqItem->quantity) {
                     PurchaseOrder::create([
                         'user_id' => auth()->id(),
                         'requisition_id' => $requisition->id,
@@ -191,6 +202,7 @@ class RequisitionController extends Controller
                 }
             }
         }
+
         return redirect()->route('requisitions.index');
     }
 
@@ -203,6 +215,7 @@ class RequisitionController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         $requisition->delete();
+
         return redirect()->route('requisitions.index');
     }
 
@@ -227,17 +240,20 @@ class RequisitionController extends Controller
 
         abort_if($user->role !== 'head', Response::HTTP_FORBIDDEN, 'Access denied');
 
+        $process = ApprovalProcess::where('module', 'requisitions')->first();
+        $stages = $process?->stages->sortBy('position');
+
         if ($user->department === 'President Department') {
-            $status = Requisition::STATUS_PENDING_PRESIDENT;
+            $status = $stages->get(1)?->name ?? Requisition::STATUS_PENDING_PRESIDENT;
         } elseif ($user->department === 'Finance Office') {
-            $status = Requisition::STATUS_PENDING_FINANCE;
+            $status = $stages->get(2)?->name ?? Requisition::STATUS_PENDING_FINANCE;
         } else {
-            $status = Requisition::STATUS_PENDING_HEAD;
+            $status = $stages->get(0)?->name ?? Requisition::STATUS_PENDING_HEAD;
         }
 
         $query = Requisition::with('user')->where('status', $status);
 
-        if ($status === Requisition::STATUS_PENDING_HEAD) {
+        if ($stages->get(0)?->name === $status) {
             $query->where('department', $user->department);
         }
 
@@ -251,29 +267,50 @@ class RequisitionController extends Controller
     {
         $this->authorizeApproval($requisition);
 
+        $process = ApprovalProcess::where('module', 'requisitions')
+            ->where('department', $requisition->department)
+            ->with('stages')
+            ->first();
+        $stages = $process?->stages->sortBy('position')->values();
+
+        $currentIndex = $stages->search(fn ($s) => $s->name === $requisition->status);
+        $nextStage = $currentIndex !== false ? $stages->get($currentIndex + 1) : null;
         $nextApprover = null;
-        if ($requisition->status === Requisition::STATUS_PENDING_HEAD) {
-            $requisition->status = Requisition::STATUS_PENDING_PRESIDENT;
-            $nextApprover = \App\Models\User::where([
-                'role' => 'head',
-                'department' => 'President Department',
-            ])->first();
-        } elseif ($requisition->status === Requisition::STATUS_PENDING_PRESIDENT) {
-            $requisition->status = Requisition::STATUS_PENDING_FINANCE;
-            $nextApprover = \App\Models\User::where([
-                'role' => 'head',
-                'department' => 'Finance Office',
-            ])->first();
-        } elseif ($requisition->status === Requisition::STATUS_PENDING_FINANCE) {
+
+        if ($nextStage) {
+            $requisition->status = $nextStage->name;
+            $nextApprover = $nextStage->assigned_user_id
+                ? User::find($nextStage->assigned_user_id)
+                : null;
+            if (! $nextApprover) {
+                if ($nextStage->name === Requisition::STATUS_PENDING_HEAD) {
+                    $nextApprover = User::where([
+                        'role' => 'head',
+                        'department' => $requisition->department,
+                    ])->first();
+                } elseif ($nextStage->name === Requisition::STATUS_PENDING_PRESIDENT) {
+                    $nextApprover = User::where([
+                        'role' => 'head',
+                        'department' => 'President Department',
+                    ])->first();
+                } elseif ($nextStage->name === Requisition::STATUS_PENDING_FINANCE) {
+                    $nextApprover = User::where([
+                        'role' => 'head',
+                        'department' => 'Finance Office',
+                    ])->first();
+                }
+            }
+        } else {
             $requisition->status = Requisition::STATUS_APPROVED;
             $requisition->approved_at = now();
             $requisition->approved_by_id = auth()->id();
         }
+
         $requisition->save();
 
         // notify requester
         $requisition->user->notify(new \App\Notifications\RequisitionStatusNotification(
-            "Your requisition #{$requisition->id} status is now " . str_replace('_', ' ', $requisition->status)
+            "Your requisition #{$requisition->id} status is now ".str_replace('_', ' ', $requisition->status)
         ));
 
         // notify next approver
@@ -295,8 +332,14 @@ class RequisitionController extends Controller
 
         $data = $request->validate(['remarks' => 'required|string']);
 
+        $process = ApprovalProcess::where('module', 'requisitions')
+            ->where('department', $requisition->department)
+            ->with('stages')
+            ->first();
+        $firstStage = $process?->stages->sortBy('position')->first();
+
         $requisition->update([
-            'status' => Requisition::STATUS_PENDING_HEAD,
+            'status' => $firstStage->name ?? Requisition::STATUS_PENDING_HEAD,
             'remarks' => $data['remarks'],
         ]);
 
@@ -311,12 +354,21 @@ class RequisitionController extends Controller
     {
         $user = auth()->user();
         $allowed = false;
-        if ($user->role === 'head') {
-            if ($requisition->status === Requisition::STATUS_PENDING_HEAD && $user->department === $requisition->department) {
+
+        $process = ApprovalProcess::where('module', 'requisitions')
+            ->where('department', $requisition->department)
+            ->with('stages')
+            ->first();
+        $stage = $process?->stages->firstWhere('name', $requisition->status);
+
+        if ($user->role === 'head' && $stage) {
+            if ($stage->assigned_user_id) {
+                $allowed = $user->id === $stage->assigned_user_id;
+            } elseif ($stage->name === Requisition::STATUS_PENDING_HEAD && $user->department === $requisition->department) {
                 $allowed = true;
-            } elseif ($requisition->status === Requisition::STATUS_PENDING_PRESIDENT && $user->department === 'President Department') {
+            } elseif ($stage->name === Requisition::STATUS_PENDING_PRESIDENT && $user->department === 'President Department') {
                 $allowed = true;
-            } elseif ($requisition->status === Requisition::STATUS_PENDING_FINANCE && $user->department === 'Finance Office') {
+            } elseif ($stage->name === Requisition::STATUS_PENDING_FINANCE && $user->department === 'Finance Office') {
                 $allowed = true;
             }
         }

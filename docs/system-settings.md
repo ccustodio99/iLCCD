@@ -98,6 +98,14 @@ The initial seed runs **`Database\\Seeders\\SettingSeeder`** which sets the foll
 
 The seed defaults also set `header_text` to "La Consolacion College Daet", `footer_text` to "Empowering Christ-centered digital transformation\n© {year} La Consolacion College Daet CMS", and `show_footer` to `true`.
 
+## Approval Processes
+Workflow approvals for requisitions and job orders are configurable. Each process is tied to a module and department and contains ordered stages. Stages may optionally assign a specific user.
+
+- **approval_processes** – defines the module (`requisitions` or `job_orders`) and department.
+- **approval_stages** – lists the stage name, position, and optional assigned user.
+
+Administrators create and manage these records under **Settings → Approval Processes**. When an item moves through the workflow the application looks up the process and progresses to the next stage automatically.
+
 ## Localization
 Set how dates and times appear across the application:
 

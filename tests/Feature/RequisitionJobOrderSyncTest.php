@@ -1,10 +1,30 @@
 <?php
 
-use App\Models\Requisition;
+use App\Models\ApprovalProcess;
 use App\Models\JobOrder;
+use App\Models\Requisition;
 use App\Models\User;
 
 it('updates job order when linked requisition is approved', function () {
+    $procReq = ApprovalProcess::create([
+        'module' => 'requisitions',
+        'department' => 'IT',
+    ]);
+    $procReq->stages()->createMany([
+        ['name' => Requisition::STATUS_PENDING_HEAD, 'position' => 1],
+        ['name' => Requisition::STATUS_PENDING_PRESIDENT, 'position' => 2],
+        ['name' => Requisition::STATUS_PENDING_FINANCE, 'position' => 3],
+    ]);
+
+    $procJob = ApprovalProcess::create([
+        'module' => 'job_orders',
+        'department' => 'IT',
+    ]);
+    $procJob->stages()->createMany([
+        ['name' => JobOrder::STATUS_PENDING_HEAD, 'position' => 1],
+        ['name' => JobOrder::STATUS_PENDING_PRESIDENT, 'position' => 2],
+        ['name' => JobOrder::STATUS_PENDING_FINANCE, 'position' => 3],
+    ]);
     $user = User::factory()->create(['department' => 'IT']);
     $jobOrder = JobOrder::factory()->for($user)->create([
         'status' => JobOrder::STATUS_PENDING_FINANCE,

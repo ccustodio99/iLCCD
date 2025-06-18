@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ApprovalProcess;
 use App\Models\InventoryItem;
 use App\Models\InventoryTransaction;
 use App\Models\JobOrder;
 use App\Models\JobOrderType;
 use App\Models\Requisition;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
@@ -98,8 +100,14 @@ class JobOrderController extends Controller
             'description' => 'required|string',
             'attachment' => 'nullable|file|max:2048',
         ]);
+        $process = ApprovalProcess::where('module', 'job_orders')
+            ->where('department', $request->user()->department)
+            ->with('stages')
+            ->first();
+        $firstStage = $process?->stages->sortBy('position')->first();
+
         $data['user_id'] = $request->user()->id;
-        $data['status'] = JobOrder::STATUS_PENDING_HEAD;
+        $data['status'] = $firstStage->name ?? JobOrder::STATUS_PENDING_HEAD;
         if ($request->hasFile('attachment')) {
             $data['attachment_path'] = $request->file('attachment')
                 ->store('job_order_attachments', 'public');
@@ -279,17 +287,20 @@ class JobOrderController extends Controller
 
         abort_if($user->role !== 'head', Response::HTTP_FORBIDDEN, 'Access denied');
 
+        $process = ApprovalProcess::where('module', 'job_orders')->first();
+        $stages = $process?->stages->sortBy('position');
+
         if ($user->department === 'President Department') {
-            $status = JobOrder::STATUS_PENDING_PRESIDENT;
+            $status = $stages->get(1)?->name ?? JobOrder::STATUS_PENDING_PRESIDENT;
         } elseif ($user->department === 'Finance Office') {
-            $status = JobOrder::STATUS_PENDING_FINANCE;
+            $status = $stages->get(2)?->name ?? JobOrder::STATUS_PENDING_FINANCE;
         } else {
-            $status = JobOrder::STATUS_PENDING_HEAD;
+            $status = $stages->get(0)?->name ?? JobOrder::STATUS_PENDING_HEAD;
         }
 
         $query = JobOrder::with('user')->where('status', $status);
 
-        if ($status === JobOrder::STATUS_PENDING_HEAD) {
+        if ($stages->get(0)?->name === $status) {
             $query->whereHas('user', function ($q) use ($user) {
                 $q->where('department', $user->department);
             });
@@ -305,23 +316,44 @@ class JobOrderController extends Controller
     {
         $this->authorizeApproval($jobOrder);
 
+        $process = ApprovalProcess::where('module', 'job_orders')
+            ->where('department', $jobOrder->user->department)
+            ->with('stages')
+            ->first();
+        $stages = $process?->stages->sortBy('position')->values();
+
+        $currentIndex = $stages->search(fn ($s) => $s->name === $jobOrder->status);
+        $nextStage = $currentIndex !== false ? $stages->get($currentIndex + 1) : null;
         $nextApprover = null;
-        if ($jobOrder->status === JobOrder::STATUS_PENDING_HEAD) {
-            $jobOrder->status = JobOrder::STATUS_PENDING_PRESIDENT;
-            $nextApprover = \App\Models\User::where([
-                'role' => 'head',
-                'department' => 'President Department',
-            ])->first();
-        } elseif ($jobOrder->status === JobOrder::STATUS_PENDING_PRESIDENT) {
-            $jobOrder->status = JobOrder::STATUS_PENDING_FINANCE;
-            $nextApprover = \App\Models\User::where([
-                'role' => 'head',
-                'department' => 'Finance Office',
-            ])->first();
-        } elseif ($jobOrder->status === JobOrder::STATUS_PENDING_FINANCE) {
+
+        if ($nextStage) {
+            $jobOrder->status = $nextStage->name;
+            $nextApprover = $nextStage->assigned_user_id
+                ? User::find($nextStage->assigned_user_id)
+                : null;
+            if (! $nextApprover) {
+                if ($nextStage->name === JobOrder::STATUS_PENDING_HEAD) {
+                    $nextApprover = User::where([
+                        'role' => 'head',
+                        'department' => $jobOrder->user->department,
+                    ])->first();
+                } elseif ($nextStage->name === JobOrder::STATUS_PENDING_PRESIDENT) {
+                    $nextApprover = User::where([
+                        'role' => 'head',
+                        'department' => 'President Department',
+                    ])->first();
+                } elseif ($nextStage->name === JobOrder::STATUS_PENDING_FINANCE) {
+                    $nextApprover = User::where([
+                        'role' => 'head',
+                        'department' => 'Finance Office',
+                    ])->first();
+                }
+            }
+        } else {
             $jobOrder->status = JobOrder::STATUS_APPROVED;
             $jobOrder->approved_at = now();
         }
+
         $jobOrder->save();
 
         // notify requester
@@ -348,8 +380,14 @@ class JobOrderController extends Controller
 
         $request->validate(['remarks' => 'required|string']);
 
+        $process = ApprovalProcess::where('module', 'job_orders')
+            ->where('department', $jobOrder->user->department)
+            ->with('stages')
+            ->first();
+        $firstStage = $process?->stages->sortBy('position')->first();
+
         $jobOrder->update([
-            'status' => JobOrder::STATUS_PENDING_HEAD,
+            'status' => $firstStage->name ?? JobOrder::STATUS_PENDING_HEAD,
         ]);
 
         $jobOrder->user->notify(new \App\Notifications\JobOrderStatusNotification(
@@ -452,12 +490,21 @@ class JobOrderController extends Controller
     {
         $user = auth()->user();
         $allowed = false;
-        if ($user->role === 'head') {
-            if ($jobOrder->status === JobOrder::STATUS_PENDING_HEAD && $user->department === $jobOrder->user->department) {
+
+        $process = ApprovalProcess::where('module', 'job_orders')
+            ->where('department', $jobOrder->user->department)
+            ->with('stages')
+            ->first();
+        $stage = $process?->stages->firstWhere('name', $jobOrder->status);
+
+        if ($user->role === 'head' && $stage) {
+            if ($stage->assigned_user_id) {
+                $allowed = $user->id === $stage->assigned_user_id;
+            } elseif ($stage->name === JobOrder::STATUS_PENDING_HEAD && $user->department === $jobOrder->user->department) {
                 $allowed = true;
-            } elseif ($jobOrder->status === JobOrder::STATUS_PENDING_PRESIDENT && $user->department === 'President Department') {
+            } elseif ($stage->name === JobOrder::STATUS_PENDING_PRESIDENT && $user->department === 'President Department') {
                 $allowed = true;
-            } elseif ($jobOrder->status === JobOrder::STATUS_PENDING_FINANCE && $user->department === 'Finance Office') {
+            } elseif ($stage->name === JobOrder::STATUS_PENDING_FINANCE && $user->department === 'Finance Office') {
                 $allowed = true;
             }
         }
