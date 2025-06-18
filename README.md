@@ -204,6 +204,7 @@ Every action is traceable; every step is value-aligned.
 ├── config/              # Config files
 ├── database/            # Migrations, seeders, factories, SQLite data
 ├── public/              # Public assets (images, css, js) & index.php
+│   └── vendor/          # Third-party libraries (e.g., EasyMDE in vendor/easymde)
 ├── resources/           # Views, Blade templates, language files
 │   ├── views/
 │   └── lang/
