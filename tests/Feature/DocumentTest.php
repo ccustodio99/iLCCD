@@ -206,3 +206,46 @@ it('filters documents by date range', function () {
     $response->assertSee('New Doc');
     $response->assertDontSee('Old Doc');
 });
+
+it('rejects unsupported file types when uploading document', function () {
+    Storage::fake('local');
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $category = DocumentCategory::factory()->create();
+
+    $response = $this->from('/documents/create')->post('/documents', [
+        'title' => 'Invalid',
+        'description' => 'Bad',
+        'document_category_id' => $category->id,
+        'file' => UploadedFile::fake()->create('file.txt', 10),
+    ]);
+
+    $response->assertSessionHasErrors('file');
+    expect(Document::count())->toBe(0);
+});
+
+it('rejects unsupported file types when updating document', function () {
+    Storage::fake('local');
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $category = DocumentCategory::factory()->create();
+    $this->post('/documents', [
+        'title' => 'Valid',
+        'description' => 'Ok',
+        'document_category_id' => $category->id,
+        'file' => UploadedFile::fake()->create('valid.pdf', 10),
+    ]);
+
+    $document = Document::first();
+
+    $response = $this->from("/documents/{$document->id}/edit")->put("/documents/{$document->id}", [
+        'title' => 'Valid',
+        'description' => 'Ok',
+        'document_category_id' => $category->id,
+        'file' => UploadedFile::fake()->create('bad.txt', 10),
+    ]);
+
+    $response->assertSessionHasErrors('file');
+});

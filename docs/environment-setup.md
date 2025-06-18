@@ -64,6 +64,10 @@ DB_PASSWORD=secure-password
 | `CACHE_STORE` | Cache driver (default `database`) |
 | `BROADCAST_CONNECTION` | Real-time broadcast driver (`log` by default) |
 
+If `CACHE_STORE` is left as `database`, run `php artisan cache:table` so the
+cache table exists (you can switch `CACHE_STORE` to `file` instead). Running
+`php artisan migrate` afterward will automatically create the table.
+
 ## Mail
 
 Update the mail settings for your SMTP server in production.
@@ -107,7 +111,8 @@ APP_DEFAULT_PROFILE_PHOTO=/assets/images/default-avatar.png
 1. Keep the `.env` file out of version control.
 2. Set `APP_ENV=production` and `APP_DEBUG=false` on your live server.
 3. Use secure database and mail credentials.
-4. Run `php artisan config:cache` after updating the environment file for better performance.
+4. Run `php artisan migrate --seed` after customizing `.env` to create tables and demo data.
+5. Run `php artisan config:cache` after updating the environment file for better performance.
 
 For more details, refer to [codebase_overview.md](codebase_overview.md) and [system-settings.md](system-settings.md).
 
