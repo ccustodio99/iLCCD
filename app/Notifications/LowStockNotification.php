@@ -5,14 +5,14 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\HtmlString;
+use League\CommonMark\CommonMarkConverter;
 
 class LowStockNotification extends Notification
 {
     use Queueable;
 
-    public function __construct(public string $itemName, public int $quantity)
-    {
-    }
+    public function __construct(public string $itemName, public int $quantity) {}
 
     public function via(object $notifiable): array
     {
@@ -25,7 +25,10 @@ class LowStockNotification extends Notification
         $message = "Inventory item {$this->itemName} is low on stock. Remaining quantity: {$this->quantity}";
         $content = str_replace('{{ message }}', $message, $template);
 
+        $converter = new CommonMarkConverter;
+        $html = $converter->convert($content)->getContent();
+
         return (new MailMessage)
-            ->markdown('mail::message', ['slot' => $content]);
+            ->view(fn () => new HtmlString($html));
     }
 }

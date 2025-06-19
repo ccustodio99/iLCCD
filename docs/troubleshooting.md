@@ -51,4 +51,4 @@ Old images sometimes remained when paths lacked the `storage/` prefix. Paths are
 `Setting::get()` previously cached missing keys forever. It now only caches existing records. Run `php artisan cache:clear` if you add settings manually.
 
 ### Unsanitized notification templates
-Notification templates are stripped of HTML tags on save to prevent injection.
+Notification templates are stored in Markdown format and converted to HTML when messages are generated. This ensures the raw Markdown is never rendered directly.
