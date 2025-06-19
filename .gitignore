@@ -3,11 +3,13 @@
 /node_modules
 /public/hot
 /public/storage
+/public/build
 /storage/*.key
 /storage/pail
 /storage/logs
 /storage/framework
 /storage/app/public
+/bootstrap/cache
 .phpunit.result.cache
 .phpunit.cache
 .env
