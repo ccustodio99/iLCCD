@@ -1,4 +1,5 @@
 <?php
+
 use App\Models\JobOrderType;
 use App\Models\User;
 
@@ -49,4 +50,18 @@ it('allows admin to delete job order type', function () {
 
     $response->assertRedirect('/settings/job-order-types');
     expect(JobOrderType::where('id', $type->id)->exists())->toBeFalse();
+});
+
+it('rejects duplicate job order type names', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+    JobOrderType::factory()->create(['name' => 'Repair']);
+    $this->actingAs($admin);
+
+    $response = $this->from('/settings/job-order-types/create')
+        ->post('/settings/job-order-types', [
+            'name' => 'Repair',
+            'is_active' => true,
+        ]);
+
+    $response->assertSessionHasErrors('name');
 });
