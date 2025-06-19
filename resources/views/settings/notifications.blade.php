@@ -18,7 +18,7 @@
         </div>
         <div class="mb-3">
             <label for="template_ticket_updates" class="form-label">Ticket Update Template</label>
-            <textarea id="template_ticket_updates" name="template_ticket_updates" rows="6" class="form-control">{{ setting('template_ticket_updates', '{{ '{{ message }}' }}') }}</textarea>
+            <textarea id="template_ticket_updates" name="template_ticket_updates" rows="6" class="form-control">{{ setting('template_ticket_updates', '{{ message }}') }}</textarea>
         </div>
         <div class="form-check form-switch mb-3">
             <input class="form-check-input" type="checkbox" role="switch" id="notify_job_order_status" name="notify_job_order_status" value="1" {{ setting('notify_job_order_status', true) ? 'checked' : '' }}>
@@ -26,7 +26,7 @@
         </div>
         <div class="mb-3">
             <label for="template_job_order_status" class="form-label">Job Order Template</label>
-            <textarea id="template_job_order_status" name="template_job_order_status" rows="6" class="form-control">{{ setting('template_job_order_status', '{{ '{{ message }}' }}') }}</textarea>
+            <textarea id="template_job_order_status" name="template_job_order_status" rows="6" class="form-control">{{ setting('template_job_order_status', '{{ message }}') }}</textarea>
         </div>
         <div class="form-check form-switch mb-3">
             <input class="form-check-input" type="checkbox" role="switch" id="notify_requisition_status" name="notify_requisition_status" value="1" {{ setting('notify_requisition_status', true) ? 'checked' : '' }}>
@@ -34,7 +34,7 @@
         </div>
         <div class="mb-3">
             <label for="template_requisition_status" class="form-label">Requisition Template</label>
-            <textarea id="template_requisition_status" name="template_requisition_status" rows="6" class="form-control">{{ setting('template_requisition_status', '{{ '{{ message }}' }}') }}</textarea>
+            <textarea id="template_requisition_status" name="template_requisition_status" rows="6" class="form-control">{{ setting('template_requisition_status', '{{ message }}') }}</textarea>
         </div>
         <div class="form-check form-switch mb-3">
             <input class="form-check-input" type="checkbox" role="switch" id="notify_low_stock" name="notify_low_stock" value="1" {{ setting('notify_low_stock', true) ? 'checked' : '' }}>
@@ -42,7 +42,7 @@
         </div>
         <div class="mb-3">
             <label for="template_low_stock" class="form-label">Low Stock Template</label>
-            <textarea id="template_low_stock" name="template_low_stock" rows="6" class="form-control">{{ setting('template_low_stock', '{{ '{{ message }}' }}') }}</textarea>
+            <textarea id="template_low_stock" name="template_low_stock" rows="6" class="form-control">{{ setting('template_low_stock', '{{ message }}') }}</textarea>
         </div>
         <button type="submit" class="btn btn-primary me-2">Save</button>
         <a href="{{ route('settings.index') }}" class="btn btn-secondary">Cancel</a>
