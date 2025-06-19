@@ -11,6 +11,7 @@ use App\Models\TicketCategory;
 use App\Models\User;
 use App\Notifications\TicketStatusNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -523,20 +524,29 @@ class TicketController extends Controller
         $data['ticket_id'] = $ticket->id;
         $data['status'] = JobOrder::STATUS_PENDING_HEAD;
 
-        if ($request->hasFile('attachment')) {
-            try {
-                $data['attachment_path'] = $request->file('attachment')
-                    ->store('job_order_attachments', 'public');
-            } catch (\Throwable $e) {
-                Log::error('Failed to store job order attachment from ticket: '.$e->getMessage());
+        $attachmentPath = null;
+
+        try {
+            DB::transaction(function () use ($request, &$data, $ticket, &$attachmentPath) {
+                if ($request->hasFile('attachment')) {
+                    $attachmentPath = $request->file('attachment')
+                        ->store('job_order_attachments', 'public');
+                    $data['attachment_path'] = $attachmentPath;
+                }
+
+                unset($data['type_parent']);
+
+                JobOrder::create($data);
+
+                $ticket->update(['status' => 'converted']);
+            });
+        } catch (\Throwable $e) {
+            if ($attachmentPath) {
+                Storage::disk('public')->delete($attachmentPath);
             }
+            Log::error('Failed to convert ticket to job order: '.$e->getMessage());
+            throw $e;
         }
-
-        unset($data['type_parent']);
-
-        JobOrder::create($data);
-
-        $ticket->update(['status' => 'converted']);
 
         return redirect()->route('job-orders.index');
     }
@@ -565,26 +575,35 @@ class TicketController extends Controller
             'status' => Requisition::STATUS_PENDING_HEAD,
         ];
 
-        if ($request->hasFile('attachment')) {
-            try {
-                $requisitionData['attachment_path'] = $request->file('attachment')
-                    ->store('requisition_attachments', 'public');
-            } catch (\Throwable $e) {
-                Log::error('Failed to store requisition attachment from ticket: '.$e->getMessage());
+        $attachmentPath = null;
+
+        try {
+            DB::transaction(function () use ($request, &$requisitionData, $ticket, $data, &$attachmentPath) {
+                if ($request->hasFile('attachment')) {
+                    $attachmentPath = $request->file('attachment')
+                        ->store('requisition_attachments', 'public');
+                    $requisitionData['attachment_path'] = $attachmentPath;
+                }
+
+                $requisition = Requisition::create($requisitionData);
+
+                foreach ($data['item'] as $i => $name) {
+                    $requisition->items()->create([
+                        'item' => $name,
+                        'quantity' => $data['quantity'][$i] ?? 1,
+                        'specification' => $data['specification'][$i] ?? null,
+                    ]);
+                }
+
+                $ticket->update(['status' => 'converted']);
+            });
+        } catch (\Throwable $e) {
+            if ($attachmentPath) {
+                Storage::disk('public')->delete($attachmentPath);
             }
+            Log::error('Failed to convert ticket to requisition: '.$e->getMessage());
+            throw $e;
         }
-
-        $requisition = Requisition::create($requisitionData);
-
-        foreach ($data['item'] as $i => $name) {
-            $requisition->items()->create([
-                'item' => $name,
-                'quantity' => $data['quantity'][$i] ?? 1,
-                'specification' => $data['specification'][$i] ?? null,
-            ]);
-        }
-
-        $ticket->update(['status' => 'converted']);
 
         return redirect()->route('requisitions.index');
     }
