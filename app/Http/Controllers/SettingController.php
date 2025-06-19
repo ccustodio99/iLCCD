@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Drivers\Gd\Driver as GdDriver;
+use Intervention\Image\ImageManager;
 
 class SettingController extends Controller
 {
@@ -127,7 +129,12 @@ class SettingController extends Controller
                 }
                 Storage::disk('public')->delete($oldLogo);
             }
-            $path = $request->file('logo')->store('branding', 'public');
+
+            $manager = new ImageManager(new GdDriver);
+            $image = $manager->read($request->file('logo')->getRealPath())->resize(300);
+            $path = 'branding/'.Str::uuid().'.'.$request->file('logo')->extension();
+            $encoded = $image->encodeByPath($path);
+            Storage::disk('public')->put($path, $encoded->toString());
             \App\Models\Setting::set('logo_path', 'storage/'.$path);
         }
 
@@ -140,7 +147,11 @@ class SettingController extends Controller
                 Storage::disk('public')->delete($oldFavicon);
 
             }
-            $path = $request->file('favicon')->store('branding', 'public');
+            $manager = new ImageManager(new GdDriver);
+            $image = $manager->read($request->file('favicon')->getRealPath())->resize(32);
+            $path = 'branding/'.Str::uuid().'.'.$request->file('favicon')->extension();
+            $encoded = $image->encodeByPath($path);
+            Storage::disk('public')->put($path, $encoded->toString());
             \App\Models\Setting::set('favicon_path', 'storage/'.$path);
         }
 
