@@ -19,7 +19,7 @@ it('filters job orders by status', function () {
     ]);
 
     $this->actingAs($user);
-    $response = $this->get('/job-orders?status=' . JobOrder::STATUS_APPROVED);
+    $response = $this->get('/job-orders?status='.JobOrder::STATUS_APPROVED);
     $response->assertSee('approved');
     $response->assertDontSee('<td>pending</td>', false);
 });
@@ -35,7 +35,22 @@ it('filters job orders by type', function () {
     JobOrder::factory()->for($user)->create(['job_type' => $childB->name, 'description' => 'B']);
 
     $this->actingAs($user);
-    $response = $this->get('/job-orders?type_parent=' . $parentA->id);
+    $response = $this->get('/job-orders?type_parent='.$parentA->id);
+    $response->assertSee('A');
+    $response->assertDontSee('<td>B</td>', false);
+});
+
+it('filters job orders by parent when no children exist', function () {
+    $user = User::factory()->create();
+    $parentA = JobOrderType::factory()->create(['name' => 'General']);
+    JobOrder::factory()->for($user)->create(['job_type' => $parentA->name, 'description' => 'A']);
+
+    $parentB = JobOrderType::factory()->create(['name' => 'Other']);
+    $childB = JobOrderType::factory()->create(['parent_id' => $parentB->id, 'name' => 'OtherChild']);
+    JobOrder::factory()->for($user)->create(['job_type' => $childB->name, 'description' => 'B']);
+
+    $this->actingAs($user);
+    $response = $this->get('/job-orders?type_parent='.$parentA->id);
     $response->assertSee('A');
     $response->assertDontSee('<td>B</td>', false);
 });
@@ -60,7 +75,7 @@ it('filters job orders by assignee', function () {
     ]);
 
     $this->actingAs($requester);
-    $response = $this->get('/job-orders?assigned_to_id=' . $assigneeA->id);
+    $response = $this->get('/job-orders?assigned_to_id='.$assigneeA->id);
     $response->assertSee('A');
     $response->assertDontSee('<td>B</td>', false);
 });
