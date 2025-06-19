@@ -16,12 +16,15 @@ class Setting extends Model
     {
         $cacheKey = "setting:{$key}";
 
-        $value = Cache::rememberForever($cacheKey, function () use ($key) {
-            return static::query()->where('key', $key)->value('value');
-        });
-
-        if ($value === null) {
-            return $default;
+        if (Cache::has($cacheKey)) {
+            $value = Cache::get($cacheKey);
+        } else {
+            $value = static::query()->where('key', $key)->value('value');
+            if ($value !== null) {
+                Cache::forever($cacheKey, $value);
+            } else {
+                return $default;
+            }
         }
 
         if ($value === '1' || $value === 1) {
