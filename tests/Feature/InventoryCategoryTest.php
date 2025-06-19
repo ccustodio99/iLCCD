@@ -1,4 +1,5 @@
 <?php
+
 use App\Models\InventoryCategory;
 use App\Models\User;
 use Database\Seeders\InventoryCategorySeeder;
@@ -54,5 +55,6 @@ it('allows admin to delete inventory category', function () {
     $response = $this->delete("/settings/inventory-categories/{$category->id}");
 
     $response->assertRedirect('/settings/inventory-categories');
+    $response->assertSessionHas('success');
     expect(InventoryCategory::where('id', $category->id)->exists())->toBeFalse();
 });

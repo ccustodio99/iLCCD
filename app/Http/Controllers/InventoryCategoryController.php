@@ -66,9 +66,15 @@ class InventoryCategoryController extends Controller
 
     public function destroy(InventoryCategory $inventoryCategory)
     {
+        if ($inventoryCategory->inventoryItems()->exists()) {
+            return redirect()->route('inventory-categories.index')
+                ->with('error', 'Category is referenced by inventory items and cannot be deleted.');
+        }
+
         $inventoryCategory->delete();
 
-        return redirect()->route('inventory-categories.index');
+        return redirect()->route('inventory-categories.index')
+            ->with('success', 'Category deleted.');
     }
 
     public function disable(InventoryCategory $inventoryCategory)
