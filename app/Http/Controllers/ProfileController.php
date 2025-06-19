@@ -23,10 +23,12 @@ class ProfileController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,'.$user->id,
-            'contact_info' => 'nullable|string|max:255',
+            'contact_info' => ['nullable', 'string', 'max:255', 'regex:/^\+?[0-9\s\-\(\)]{7,20}$/'],
             'profile_photo' => 'nullable|image|max:2048',
             'password' => ['nullable', 'confirmed', 'min:8', 'regex:/[A-Za-z]/', 'regex:/[0-9]/', 'regex:/[^A-Za-z0-9]/'],
             'remove_photo' => 'boolean',
+        ], [
+            'contact_info.regex' => 'Contact information must be a valid phone number.',
         ]);
 
         $user->name = $data['name'];
