@@ -41,6 +41,18 @@ it('allows admin to disable job order type', function () {
     expect($type->fresh()->is_active)->toBeFalse();
 });
 
+it('disables child types when parent disabled', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+    $parent = JobOrderType::factory()->create();
+    $child = JobOrderType::factory()->create(['parent_id' => $parent->id]);
+    $this->actingAs($admin);
+
+    $this->put("/settings/job-order-types/{$parent->id}/disable")
+        ->assertRedirect('/settings/job-order-types');
+
+    expect($child->fresh()->is_active)->toBeFalse();
+});
+
 it('allows admin to delete job order type', function () {
     $admin = User::factory()->create(['role' => 'admin']);
     $type = JobOrderType::factory()->create();
