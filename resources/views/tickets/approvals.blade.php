@@ -20,7 +20,7 @@
         <tbody>
             @forelse($tickets as $ticket)
             <tr>
-                <td>{{ $ticket->ticketCategory->name }}</td>
+                <td>{{ optional($ticket->ticketCategory)->name ?? 'N/A' }}</td>
                 <td>{{ $ticket->formatted_subject }}</td>
                 <td>{{ $ticket->user->name }}</td>
                 <td>
