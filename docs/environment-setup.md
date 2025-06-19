@@ -2,6 +2,10 @@
 
 This guide documents the main `.env` variables used by the LCCD Integrated Information System. Adjust the values depending on whether you are running **local development** or **production** deployment.
 
+## Prerequisites
+
+Install PHP 8.2 and ensure the **GD** extension (`php-gd` package) is available for image handling.
+
 ## Base Configuration
 
 Copy `.env.example` to `.env` and update the following keys:
