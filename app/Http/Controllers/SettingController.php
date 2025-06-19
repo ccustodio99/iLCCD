@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SettingController extends Controller
 {
@@ -100,6 +101,7 @@ class SettingController extends Controller
         \App\Models\Setting::set('date_format', $data['date_format']);
 
         config(['app.timezone' => setting('timezone')]);
+        date_default_timezone_set($data['timezone']);
 
         return redirect()->route('settings.localization')->with('success', 'Localization settings updated');
     }
@@ -120,7 +122,8 @@ class SettingController extends Controller
 
             $oldLogo = setting('logo_path');
             if ($oldLogo) {
-                Storage::disk('public')->delete(str_replace('storage/', '', $oldLogo));
+                $publicPath = Str::after($oldLogo, 'storage/');
+                Storage::disk('public')->delete($publicPath);
             }
             $path = $request->file('logo')->store('branding', 'public');
             \App\Models\Setting::set('logo_path', 'storage/'.$path);
@@ -129,7 +132,8 @@ class SettingController extends Controller
         if ($request->hasFile('favicon')) {
             $oldFavicon = setting('favicon_path');
             if ($oldFavicon) {
-                Storage::disk('public')->delete(str_replace('storage/', '', $oldFavicon));
+                $publicPath = Str::after($oldFavicon, 'storage/');
+                Storage::disk('public')->delete($publicPath);
 
             }
             $path = $request->file('favicon')->store('branding', 'public');
@@ -161,10 +165,10 @@ class SettingController extends Controller
         \App\Models\Setting::set('notify_job_order_status', $request->boolean('notify_job_order_status'));
         \App\Models\Setting::set('notify_requisition_status', $request->boolean('notify_requisition_status'));
         \App\Models\Setting::set('notify_low_stock', $request->boolean('notify_low_stock'));
-        \App\Models\Setting::set('template_ticket_updates', $data['template_ticket_updates']);
-        \App\Models\Setting::set('template_job_order_status', $data['template_job_order_status']);
-        \App\Models\Setting::set('template_requisition_status', $data['template_requisition_status']);
-        \App\Models\Setting::set('template_low_stock', $data['template_low_stock']);
+        \App\Models\Setting::set('template_ticket_updates', strip_tags($data['template_ticket_updates']));
+        \App\Models\Setting::set('template_job_order_status', strip_tags($data['template_job_order_status']));
+        \App\Models\Setting::set('template_requisition_status', strip_tags($data['template_requisition_status']));
+        \App\Models\Setting::set('template_low_stock', strip_tags($data['template_low_stock']));
 
         return redirect()->route('settings.notifications')->with('success', 'Notification settings updated');
     }
