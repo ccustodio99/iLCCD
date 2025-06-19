@@ -67,6 +67,10 @@ class TicketCategoryController extends Controller
 
     public function destroy(TicketCategory $ticketCategory)
     {
+        if ($ticketCategory->children()->exists()) {
+            $ticketCategory->children()->delete();
+        }
+
         $ticketCategory->delete();
 
         return redirect()->route('ticket-categories.index');
