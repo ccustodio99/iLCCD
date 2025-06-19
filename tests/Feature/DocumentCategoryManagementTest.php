@@ -59,7 +59,7 @@ it('rejects duplicate document category names', function () {
     $response->assertSessionHasErrors('name');
 });
 
-it('deletes documents and files when removing category', function () {
+it('prevents deleting category with documents', function () {
     Storage::fake('local');
     $admin = User::factory()->create(['role' => 'admin']);
     $this->actingAs($admin);
@@ -75,10 +75,12 @@ it('deletes documents and files when removing category', function () {
         'uploaded_by' => $admin->id,
     ]);
 
-    $this->delete("/settings/document-categories/{$category->id}")
-        ->assertRedirect('/settings/document-categories');
+    $this->from('/settings/document-categories')
+        ->delete("/settings/document-categories/{$category->id}")
+        ->assertRedirect('/settings/document-categories')
+        ->assertSessionHas('error');
 
-    Storage::disk('local')->assertMissing($path);
-    expect(Document::count())->toBe(0);
-    expect(DocumentCategory::where('id', $category->id)->exists())->toBeFalse();
+    Storage::disk('local')->assertExists($path);
+    expect(Document::count())->toBe(1);
+    expect(DocumentCategory::find($category->id))->not->toBeNull();
 });
