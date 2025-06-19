@@ -43,8 +43,8 @@ class SettingController extends Controller
     public function updateTheme(Request $request)
     {
         $data = $request->validate([
-            'color_primary' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
-            'color_accent' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
+            'color_primary' => ['required', 'regex:/^#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/'],
+            'color_accent' => ['required', 'regex:/^#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/'],
             'font_primary' => 'required|in:Poppins,Roboto,Montserrat',
             'font_secondary' => 'required|in:Poppins,Roboto,Montserrat',
             'home_heading' => 'required|string',
