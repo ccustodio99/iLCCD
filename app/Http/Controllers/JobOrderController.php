@@ -11,7 +11,6 @@ use App\Models\Requisition;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
 class JobOrderController extends Controller
@@ -87,16 +86,32 @@ class JobOrderController extends Controller
 
     public function store(Request $request)
     {
+        $childrenExist = JobOrderType::where('parent_id', $request->type_parent)
+            ->where('is_active', true)
+            ->exists();
+
         $data = $request->validate([
             'type_parent' => ['required', 'exists:job_order_types,id'],
             'job_type' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::exists('job_order_types', 'name')->where(function ($q) use ($request) {
-                    $q->where('parent_id', $request->type_parent)
-                        ->where('is_active', true);
-                }),
+                function ($attribute, $value, $fail) use ($request, $childrenExist) {
+                    if ($childrenExist) {
+                        $exists = JobOrderType::where('parent_id', $request->type_parent)
+                            ->where('is_active', true)
+                            ->where('name', $value)
+                            ->exists();
+                        if (! $exists) {
+                            $fail('The selected subtype is invalid.');
+                        }
+                    } else {
+                        $parent = JobOrderType::find($request->type_parent);
+                        if (! $parent || $parent->name !== $value) {
+                            $fail('The selected type is invalid.');
+                        }
+                    }
+                },
             ],
             'description' => 'required|string',
             'attachment' => 'nullable|file|max:2048',
@@ -151,16 +166,32 @@ class JobOrderController extends Controller
         if ($jobOrder->status !== JobOrder::STATUS_PENDING_HEAD && auth()->user()->role !== 'head') {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
+        $childrenExist = JobOrderType::where('parent_id', $request->type_parent)
+            ->where('is_active', true)
+            ->exists();
+
         $data = $request->validate([
             'type_parent' => ['required', 'exists:job_order_types,id'],
             'job_type' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::exists('job_order_types', 'name')->where(function ($q) use ($request) {
-                    $q->where('parent_id', $request->type_parent)
-                        ->where('is_active', true);
-                }),
+                function ($attribute, $value, $fail) use ($request, $childrenExist) {
+                    if ($childrenExist) {
+                        $exists = JobOrderType::where('parent_id', $request->type_parent)
+                            ->where('is_active', true)
+                            ->where('name', $value)
+                            ->exists();
+                        if (! $exists) {
+                            $fail('The selected subtype is invalid.');
+                        }
+                    } else {
+                        $parent = JobOrderType::find($request->type_parent);
+                        if (! $parent || $parent->name !== $value) {
+                            $fail('The selected type is invalid.');
+                        }
+                    }
+                },
             ],
             'description' => 'required|string',
             'attachment' => 'nullable|file|max:2048',

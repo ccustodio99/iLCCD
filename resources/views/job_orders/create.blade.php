@@ -49,6 +49,15 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(`/job-order-types/${id}/children`)
             .then(r => r.json())
             .then(data => {
+                if (data.length === 0) {
+                    const name = parent.options[parent.selectedIndex].text;
+                    const opt = document.createElement('option');
+                    opt.value = name;
+                    opt.textContent = name;
+                    opt.selected = true;
+                    child.appendChild(opt);
+                    return;
+                }
                 data.forEach(c => {
                     const opt = document.createElement('option');
                     opt.value = c.name;
