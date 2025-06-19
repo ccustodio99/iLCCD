@@ -67,7 +67,7 @@ Deliver a holistic, faith-driven digital backbone for LCCD, empowering every use
 2. Build the frontend assets with `npm run build` (or `npm run dev` while developing).
 3. Copy `.env.example` to `.env` (see `.env` in the [Directory Structure](#directory-structure-laravel)).
 4. Run `php artisan key:generate` to create the application encryption key.
-5. (Optional) Set `APP_DEFAULT_PROFILE_PHOTO` in `.env` to override the placeholder path (`/assets/images/default-avatar.png`).
+5. (Optional) Set `APP_DEFAULT_PROFILE_PHOTO` in `.env` to override the placeholder path (`/assets/images/default-avatar.png`). Ensure the file exists or the app will log a warning and revert to the bundled image.
 6. Configure database settings in `.env` then run `php artisan migrate --seed` to create tables and demo data.
    The migrations add and then remove a column on the `audit_trails` table. Run
    them in chronological order or see [Migration Sequence](docs/migration-sequence.md) for details.
