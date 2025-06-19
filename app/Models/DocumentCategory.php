@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Traits\LogsAudit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\LogsAudit;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class DocumentCategory extends Model
 {
@@ -36,5 +37,10 @@ class DocumentCategory extends Model
         return [
             'is_active' => 'boolean',
         ];
+    }
+
+    public function documents(): HasMany
+    {
+        return $this->hasMany(Document::class);
     }
 }
