@@ -20,6 +20,7 @@ class JobOrderTypeController extends Controller
     public function create()
     {
         $parents = JobOrderType::whereNull('parent_id')
+            ->where('is_active', true)
             ->orderBy('name')
             ->get();
 
@@ -43,6 +44,7 @@ class JobOrderTypeController extends Controller
     public function edit(JobOrderType $jobOrderType)
     {
         $parents = JobOrderType::whereNull('parent_id')
+            ->where('is_active', true)
             ->where('id', '!=', $jobOrderType->id)
             ->orderBy('name')
             ->get();
