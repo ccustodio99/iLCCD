@@ -28,3 +28,13 @@ Artisan::command('ensure:storage-link', function () {
         $this->call('storage:link');
     }
 })->purpose('Ensure the public/storage link exists');
+
+Artisan::command('settings:clear-cache', function () {
+    $keys = \App\Models\Setting::pluck('key');
+
+    foreach ($keys as $key) {
+        \Illuminate\Support\Facades\Cache::forget("setting:{$key}");
+    }
+
+    $this->info('Settings cache cleared');
+})->purpose('Clear cached values for all settings');

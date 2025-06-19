@@ -76,6 +76,14 @@ If `CACHE_STORE` is left as `database`, run `php artisan cache:table` so the
 cache table exists (you can switch `CACHE_STORE` to `file` instead). Running
 `php artisan migrate` afterward will automatically create the table.
 
+Whenever you add rows directly to the `settings` table (for example via an SQL
+script or custom seeder that does not call `Setting::set()`), clear the cache so
+new values are returned:
+
+```bash
+php artisan cache:clear
+```
+
 ## Mail
 
 Update the mail settings for your SMTP server in production.
