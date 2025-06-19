@@ -66,6 +66,14 @@ class JobOrderTypeController extends Controller
 
     public function destroy(JobOrderType $jobOrderType)
     {
+        $inUse = \App\Models\JobOrder::where('job_type', $jobOrderType->name)
+            ->exists();
+
+        if ($inUse) {
+            return redirect()->route('job-order-types.index')
+                ->with('error', 'Job order type is referenced by job orders and cannot be deleted.');
+        }
+
         $jobOrderType->delete();
 
         return redirect()->route('job-order-types.index');
