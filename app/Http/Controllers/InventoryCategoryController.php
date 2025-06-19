@@ -31,7 +31,7 @@ class InventoryCategoryController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:inventory_categories,name',
             'parent_id' => ['nullable', 'exists:inventory_categories,id', new NoCategoryCycle],
             'is_active' => 'boolean',
         ]);
@@ -55,7 +55,12 @@ class InventoryCategoryController extends Controller
     public function update(Request $request, InventoryCategory $inventoryCategory)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('inventory_categories', 'name')->ignore($inventoryCategory->id),
+            ],
             'parent_id' => ['nullable', 'exists:inventory_categories,id', Rule::notIn([$inventoryCategory->id]), new NoCategoryCycle($inventoryCategory)],
             'is_active' => 'boolean',
         ]);
