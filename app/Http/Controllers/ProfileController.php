@@ -42,12 +42,15 @@ class ProfileController extends Controller
                 }
                 $user->profile_photo_path = $request->file('profile_photo')->store('profile_photos', 'public');
             } catch (\Throwable $e) {
-                Log::error('Failed to replace profile photo for user '.$user->id.': '.$e->getMessage());
+                Log::error(
+                    'Failed to replace profile photo for user '.$user->id.': '.$e->getMessage(),
+                    ['exception' => $e]
+                );
                 $user->profile_photo_path = $oldPath;
 
                 return redirect()->back()
-                    ->withErrors('Unable to upload new profile photo.')
-                    ->with('error', 'Unable to upload new profile photo.');
+                    ->withErrors('Unable to upload new profile photo. Please try again later.')
+                    ->with('error', 'Unable to upload new profile photo. Please try again later.');
             }
         } elseif ($removePhoto && $user->profile_photo_path) {
             Storage::disk('public')->delete($user->profile_photo_path);

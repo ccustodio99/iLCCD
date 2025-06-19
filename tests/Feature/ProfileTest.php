@@ -3,6 +3,7 @@
 use App\Models\User;
 use Illuminate\Auth\Events\OtherDeviceLogout;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Http\UploadedFile as BaseUploadedFile;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -115,4 +116,45 @@ it('invalidates old sessions when password is updated', function () {
     ])->assertRedirect('/profile');
 
     Event::assertDispatched(OtherDeviceLogout::class);
+});
+
+class FailingImage extends BaseUploadedFile
+{
+    public function store($path = '', $options = [])
+    {
+        throw new Exception('store failed');
+    }
+
+    public function guessExtension(): ?string
+    {
+        return 'jpg';
+    }
+
+    public function getMimeType(): ?string
+    {
+        return 'image/jpeg';
+    }
+}
+
+it('shows error when profile photo upload fails', function () {
+    Storage::fake('public');
+    $user = User::factory()->create([
+        'profile_photo_path' => UploadedFile::fake()->image('photo.jpg')->store('profile_photos', 'public'),
+    ]);
+    $this->actingAs($user);
+
+    $temp = tempnam(sys_get_temp_dir(), 'fail');
+    file_put_contents($temp, 'content');
+    $file = new FailingImage($temp, 'fail.jpg', 'image/jpeg', null, true);
+
+    $response = $this->from('/profile')->put('/profile', [
+        'name' => $user->name,
+        'email' => $user->email,
+        'profile_photo' => $file,
+    ]);
+
+    $response->assertRedirect('/profile');
+    $response->assertSessionHas('error', 'Unable to upload new profile photo. Please try again later.');
+    $user->refresh();
+    Storage::disk('public')->assertMissing($user->profile_photo_path);
 });
