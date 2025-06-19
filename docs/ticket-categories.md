@@ -44,3 +44,10 @@ This document provides a quick reference to the ticket category hierarchy. Each 
   - Usability Suggestions
 - **Other / General Inquiry**
   - General Inquiry
+
+## Deleting Categories
+
+When removing a parent ticket category from the system, the application checks
+if it has child categories using `$ticketCategory->children()->exists()`.
+If any are found, those subcategories are soft deleted at the same time so
+that no orphaned records remain.
