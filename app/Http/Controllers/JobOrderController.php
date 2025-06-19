@@ -41,9 +41,16 @@ class JobOrderController extends Controller
         }
 
         if ($request->filled('type_parent')) {
-            $typeIds = JobOrderType::where('parent_id', $request->input('type_parent'))
+            $children = JobOrderType::where('parent_id', $request->input('type_parent'))
                 ->pluck('name');
-            $query->whereIn('job_type', $typeIds);
+
+            if ($children->isEmpty()) {
+                $parentName = JobOrderType::where('id', $request->input('type_parent'))
+                    ->value('name');
+                $query->where('job_type', $parentName);
+            } else {
+                $query->whereIn('job_type', $children);
+            }
         }
 
         if ($request->filled('job_type')) {
