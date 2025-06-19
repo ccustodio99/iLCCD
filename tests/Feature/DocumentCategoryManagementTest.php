@@ -1,7 +1,11 @@
 <?php
 
+use App\Models\Document;
 use App\Models\DocumentCategory;
+use App\Models\DocumentVersion;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 it('allows admin to create document category', function () {
     $admin = User::factory()->create(['role' => 'admin']);
@@ -53,4 +57,28 @@ it('rejects duplicate document category names', function () {
         ]);
 
     $response->assertSessionHasErrors('name');
+});
+
+it('deletes documents and files when removing category', function () {
+    Storage::fake('local');
+    $admin = User::factory()->create(['role' => 'admin']);
+    $this->actingAs($admin);
+
+    $category = DocumentCategory::factory()->create();
+    $document = Document::factory()->for($admin)->for($category)->create();
+
+    $path = UploadedFile::fake()->create('file.pdf', 10)->store('documents');
+    DocumentVersion::create([
+        'document_id' => $document->id,
+        'version' => 1,
+        'path' => $path,
+        'uploaded_by' => $admin->id,
+    ]);
+
+    $this->delete("/settings/document-categories/{$category->id}")
+        ->assertRedirect('/settings/document-categories');
+
+    Storage::disk('local')->assertMissing($path);
+    expect(Document::count())->toBe(0);
+    expect(DocumentCategory::where('id', $category->id)->exists())->toBeFalse();
 });
