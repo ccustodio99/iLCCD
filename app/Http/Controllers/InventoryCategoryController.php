@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\InventoryCategory;
 use App\Rules\NoCategoryCycle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class InventoryCategoryController extends Controller
@@ -88,7 +89,10 @@ class InventoryCategoryController extends Controller
 
     public function disable(InventoryCategory $inventoryCategory)
     {
-        $inventoryCategory->update(['is_active' => false]);
+        DB::transaction(function () use ($inventoryCategory) {
+            $inventoryCategory->update(['is_active' => false]);
+            $inventoryCategory->children()->update(['is_active' => false]);
+        });
 
         return redirect()->route('inventory-categories.index');
     }

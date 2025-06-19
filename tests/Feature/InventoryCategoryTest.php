@@ -46,6 +46,18 @@ it('allows admin to disable inventory category', function () {
     expect($category->fresh()->is_active)->toBeFalse();
 });
 
+it('disables child categories when parent disabled', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+    $parent = InventoryCategory::factory()->create();
+    $child = InventoryCategory::factory()->create(['parent_id' => $parent->id]);
+    $this->actingAs($admin);
+
+    $this->put("/settings/inventory-categories/{$parent->id}/disable")
+        ->assertRedirect('/settings/inventory-categories');
+
+    expect($child->fresh()->is_active)->toBeFalse();
+});
+
 it('allows admin to delete inventory category', function () {
     $this->seed([UserSeeder::class, InventoryCategorySeeder::class]);
     $admin = User::firstWhere('role', 'admin');

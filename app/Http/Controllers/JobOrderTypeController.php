@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\JobOrderType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class JobOrderTypeController extends Controller
 {
@@ -83,7 +84,10 @@ class JobOrderTypeController extends Controller
 
     public function disable(JobOrderType $jobOrderType)
     {
-        $jobOrderType->update(['is_active' => false]);
+        DB::transaction(function () use ($jobOrderType) {
+            $jobOrderType->update(['is_active' => false]);
+            $jobOrderType->children()->update(['is_active' => false]);
+        });
 
         return redirect()->route('job-order-types.index');
     }
