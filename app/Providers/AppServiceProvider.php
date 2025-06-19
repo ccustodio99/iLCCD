@@ -31,5 +31,9 @@ class AppServiceProvider extends ServiceProvider
             Log::warning("Default profile photo missing at {$photoPath}, using bundled fallback.");
             config(['app.default_profile_photo' => '/assets/images/default-avatar.png']);
         }
+
+        if (! extension_loaded('gd')) {
+            Log::error('PHP GD extension is not loaded. Image processing features will be unavailable.');
+        }
     }
 }

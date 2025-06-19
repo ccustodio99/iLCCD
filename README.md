@@ -59,21 +59,22 @@ Deliver a holistic, faith-driven digital backbone for LCCD, empowering every use
 
 ## 🔧 Local Setup
 
-1. Install PHP and JavaScript dependencies:
+1. Ensure the PHP GD extension is installed (e.g. `sudo apt-get install php-gd`).
+2. Install PHP and JavaScript dependencies:
    ```bash
    composer install
    npm install
    ```
-2. Build the frontend assets with `npm run build` (or `npm run dev` while developing).
-3. Copy `.env.example` to `.env` (see `.env` in the [Directory Structure](#directory-structure-laravel)).
-4. Run `php artisan key:generate` to create the application encryption key.
-5. (Optional) Set `APP_DEFAULT_PROFILE_PHOTO` in `.env` to override the placeholder path (`/assets/images/default-avatar.png`). Ensure the file exists or the app will log a warning and revert to the bundled image.
-6. Configure database settings in `.env` then run `php artisan migrate --seed` to create tables and demo data.
+3. Build the frontend assets with `npm run build` (or `npm run dev` while developing).
+4. Copy `.env.example` to `.env` (see `.env` in the [Directory Structure](#directory-structure-laravel)).
+5. Run `php artisan key:generate` to create the application encryption key.
+6. (Optional) Set `APP_DEFAULT_PROFILE_PHOTO` in `.env` to override the placeholder path (`/assets/images/default-avatar.png`). Ensure the file exists or the app will log a warning and revert to the bundled image.
+7. Configure database settings in `.env` then run `php artisan migrate --seed` to create tables and demo data.
    The migrations add and then remove a column on the `audit_trails` table. Run
    them in chronological order or see [Migration Sequence](docs/migration-sequence.md) for details.
-7. Ensure `public/storage` is linked. The `composer dev` script checks and runs `php artisan storage:link` if needed.
-8. Start the local server using `php artisan serve` or `composer dev` for hot reloading.
-9. Execute the test suite with `php artisan test` to verify the setup.
+8. Ensure `public/storage` is linked. The `composer dev` script checks and runs `php artisan storage:link` if needed.
+9. Start the local server using `php artisan serve` or `composer dev` for hot reloading.
+10. Execute the test suite with `php artisan test` to verify the setup.
 
 ---
 
