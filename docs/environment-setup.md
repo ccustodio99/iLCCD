@@ -121,6 +121,7 @@ APP_DEFAULT_PROFILE_PHOTO=/assets/images/default-avatar.png
 3. Use secure database and mail credentials.
 4. Run `php artisan migrate --seed` after customizing `.env` to create tables and demo data.
 5. Run `php artisan config:cache` after updating the environment file for better performance.
+6. Verify that `public/storage` exists. If not, run `php artisan storage:link`.
 
 For more details, refer to [codebase_overview.md](codebase_overview.md) and [system-settings.md](system-settings.md).
 
