@@ -9,6 +9,12 @@
         ['label' => 'Ticket Categories']
     ]])
     <h1 class="mb-4">Ticket Categories</h1>
+    @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     @include('components.per-page-selector')
     <div class="mb-3 d-flex flex-wrap gap-2">
         <a href="{{ route('settings.index') }}" class="btn btn-secondary btn-sm">Back to Settings</a>
