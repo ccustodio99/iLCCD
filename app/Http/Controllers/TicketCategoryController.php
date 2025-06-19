@@ -61,19 +61,40 @@ class TicketCategoryController extends Controller
         ]);
         $data['is_active'] = $data['is_active'] ?? false;
 
+        if ($ticketCategory->is_active && ! $data['is_active']) {
+            $inUse = \App\Models\Ticket::where('ticket_category_id', $ticketCategory->id)
+                ->whereNull('archived_at')
+                ->exists();
+
+            if ($inUse) {
+                return back()
+                    ->withInput()
+                    ->with('error', 'Category is referenced by active tickets and cannot be deactivated.');
+            }
+        }
+
         $ticketCategory->update($data);
 
-        return redirect()->route('ticket-categories.index');
+        return redirect()->route('ticket-categories.index')->with('success', 'Category updated.');
     }
 
     public function destroy(TicketCategory $ticketCategory)
     {
+        $inUse = \App\Models\Ticket::where('ticket_category_id', $ticketCategory->id)
+            ->whereNull('archived_at')
+            ->exists();
+
+        if ($inUse) {
+            return redirect()->route('ticket-categories.index')
+                ->with('error', 'Category is referenced by active tickets and cannot be archived.');
+        }
+
         if ($ticketCategory->children()->exists()) {
             $ticketCategory->children()->delete();
         }
 
         $ticketCategory->delete();
 
-        return redirect()->route('ticket-categories.index');
+        return redirect()->route('ticket-categories.index')->with('success', 'Category archived.');
     }
 }
