@@ -12,6 +12,7 @@ class TicketCategoryController extends Controller
     {
         $perPage = $this->getPerPage($request);
         $categories = TicketCategory::with('parent')
+            ->orderBy('name')
             ->paginate($perPage)
             ->withQueryString();
 
