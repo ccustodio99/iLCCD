@@ -37,6 +37,7 @@
                                 <span id="accent_color_preview" class="border rounded" style="width: 2rem; height: 2rem; background: {{ $accent }};"></span>
                             </div>
                             <div id="accent_help" class="form-text">Preview of the accent color</div>
+                            <div id="contrast_warning" class="form-text text-danger d-none"></div>
                         </div>
                         <div class="mb-3">
                             <label for="font_primary" class="form-label">Primary Font</label>
