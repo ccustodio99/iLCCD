@@ -180,6 +180,12 @@ class SettingController extends Controller
         \App\Models\Setting::set('notify_job_order_status', $request->boolean('notify_job_order_status'));
         \App\Models\Setting::set('notify_requisition_status', $request->boolean('notify_requisition_status'));
         \App\Models\Setting::set('notify_low_stock', $request->boolean('notify_low_stock'));
+
+        $data['template_ticket_updates'] = ltrim($data['template_ticket_updates'], '@');
+        $data['template_job_order_status'] = ltrim($data['template_job_order_status'], '@');
+        $data['template_requisition_status'] = ltrim($data['template_requisition_status'], '@');
+        $data['template_low_stock'] = ltrim($data['template_low_stock'], '@');
+
         \App\Models\Setting::set('template_ticket_updates', $data['template_ticket_updates']);
         \App\Models\Setting::set('template_job_order_status', $data['template_job_order_status']);
         \App\Models\Setting::set('template_requisition_status', $data['template_requisition_status']);
