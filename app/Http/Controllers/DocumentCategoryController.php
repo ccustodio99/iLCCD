@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Document;
 use App\Models\DocumentCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class DocumentCategoryController extends Controller
 {
@@ -53,7 +56,19 @@ class DocumentCategoryController extends Controller
 
     public function destroy(DocumentCategory $documentCategory)
     {
-        $documentCategory->delete();
+        DB::transaction(function () use ($documentCategory) {
+            $documents = Document::where('document_category_id', $documentCategory->id)->get();
+
+            foreach ($documents as $document) {
+                foreach ($document->versions as $version) {
+                    Storage::delete($version->path);
+                }
+
+                $document->delete();
+            }
+
+            $documentCategory->delete();
+        });
 
         return redirect()->route('document-categories.index');
     }
