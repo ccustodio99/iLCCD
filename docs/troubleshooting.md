@@ -42,7 +42,7 @@ php artisan view:clear
 ```
 
 ### Timezone change not applied immediately
-`updateLocalization()` now calls `date_default_timezone_set()` so changes apply to the current request. Refresh after saving to verify the timezone.
+`updateLocalization()` now calls `date_default_timezone_set()` so the timezone is updated for **the current request only**. Refresh after saving to verify the timezone and restart any queue workers or scheduled tasks so they pick up the new value.
 
 ### Brand image cleanup fails
 Old images sometimes remained when paths lacked the `storage/` prefix. Paths are normalized on deletion so files are removed correctly.
