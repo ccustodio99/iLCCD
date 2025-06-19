@@ -1,3 +1,5 @@
+<?php $__env->startSection('title', 'Outgoing Documents'); ?>
+
 <?php $__env->startSection('content'); ?>
 <div class="container">
     <h1 class="mb-4">Outgoing Documents</h1>

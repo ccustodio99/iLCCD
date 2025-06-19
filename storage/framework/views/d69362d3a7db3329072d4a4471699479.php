@@ -1,3 +1,5 @@
+<?php $__env->startSection('title', 'Documents for Approval'); ?>
+
 <?php $__env->startSection('content'); ?>
 <div class="container">
     <h1 class="mb-4">Documents for Approval/Checking</h1>

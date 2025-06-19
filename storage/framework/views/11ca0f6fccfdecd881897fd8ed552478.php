@@ -4,7 +4,6 @@
 
 <?php $__env->startSection('content'); ?>
 <div class="container">
-    <h1 class="mb-4 text-center">Dashboard</h1>
 
     <?php if($announcements->count()): ?>
     <div class="mb-4">
@@ -25,7 +24,8 @@
         <?php $__currentLoopData = request()->except(['ticket_status','tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $name => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <input type="hidden" name="<?php echo e($name); ?>" value="<?php echo e($value); ?>">
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        <select name="ticket_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
+        <label for="ticket_status" class="visually-hidden">Ticket Status</label>
+        <select id="ticket_status" name="ticket_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
             <option value="">All Statuses</option>
             <?php $__currentLoopData = ['open' => 'Open', 'escalated' => 'Escalated', 'converted' => 'Converted']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $val => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <option value="<?php echo e($val); ?>" <?php echo e(request('ticket_status') === $val ? 'selected' : ''); ?>><?php echo e($label); ?></option>
@@ -63,7 +63,8 @@
         <?php $__currentLoopData = request()->except(['job_status','tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $name => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <input type="hidden" name="<?php echo e($name); ?>" value="<?php echo e($value); ?>">
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        <select name="job_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
+        <label for="job_status" class="visually-hidden">Job Status</label>
+        <select id="job_status" name="job_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
             <option value="">All Statuses</option>
             <?php $__currentLoopData = [
                 'pending_head' => 'Pending Head',
@@ -110,7 +111,8 @@
         <?php $__currentLoopData = request()->except(['requisition_status','tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $name => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <input type="hidden" name="<?php echo e($name); ?>" value="<?php echo e($value); ?>">
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        <select name="requisition_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
+        <label for="requisition_status" class="visually-hidden">Requisition Status</label>
+        <select id="requisition_status" name="requisition_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
             <option value="">All Statuses</option>
             <?php $__currentLoopData = [\App\Models\Requisition::STATUS_PENDING_HEAD => 'Pending Head', \App\Models\Requisition::STATUS_APPROVED => 'Approved']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $val => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <option value="<?php echo e($val); ?>" <?php echo e(request('requisition_status') === $val ? 'selected' : ''); ?>><?php echo e($label); ?></option>
@@ -146,7 +148,8 @@
         <?php $__currentLoopData = request()->except(['po_status','tickets_page','job_orders_page','requisitions_page','purchase_orders_page','incoming_docs_page','outgoing_docs_page','for_approval_docs_page']); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $name => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <input type="hidden" name="<?php echo e($name); ?>" value="<?php echo e($value); ?>">
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        <select name="po_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
+        <label for="po_status" class="visually-hidden">PO Status</label>
+        <select id="po_status" name="po_status" class="form-select w-auto d-inline" onchange="this.form.submit()">
             <option value="">All Statuses</option>
             <?php $__currentLoopData = \App\Models\PurchaseOrder::STATUSES; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <option value="<?php echo e($status); ?>" <?php echo e(request('po_status') === $status ? 'selected' : ''); ?>>

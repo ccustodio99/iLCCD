@@ -2,7 +2,18 @@
 
 <?php $__env->startSection('content'); ?>
 <div class="container">
+    <?php echo $__env->make('components.breadcrumbs', ['links' => [
+        ['label' => 'Settings', 'url' => route('settings.index')],
+        ['label' => 'Ticket Categories']
+    ]], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <h1 class="mb-4">Ticket Categories</h1>
+    <?php if(session('error')): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?php echo e(session('error')); ?>
+
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
     <?php echo $__env->make('components.per-page-selector', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <div class="mb-3 d-flex flex-wrap gap-2">
         <a href="<?php echo e(route('settings.index')); ?>" class="btn btn-secondary btn-sm">Back to Settings</a>

@@ -4,6 +4,35 @@
 <div class="container">
     <h1 class="mb-4">My Requisitions</h1>
     <?php echo $__env->make('components.per-page-selector', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <div class="mb-3">
+        <form method="GET" class="row row-cols-lg-auto g-2 align-items-end">
+            <div class="col">
+                <label for="filter-status" class="form-label">Status</label>
+                <select id="filter-status" name="status" class="form-select">
+                    <option value="">Any</option>
+                    <?php if(isset($statuses)): ?>
+                        <?php $__currentLoopData = $statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($status); ?>" <?php if(request('status') === $status): echo 'selected'; endif; ?>>
+                                <?php echo e(ucfirst(str_replace('_', ' ', $status))); ?>
+
+                            </option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-ticket" class="form-label">Ticket ID</label>
+                <input id="filter-ticket" type="number" name="ticket_id" value="<?php echo e(request('ticket_id')); ?>" class="form-control">
+            </div>
+            <div class="col">
+                <label for="filter-search" class="form-label">Search</label>
+                <input id="filter-search" type="text" name="search" value="<?php echo e(request('search')); ?>" class="form-control" placeholder="Purpose, remarks or item">
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-secondary">Filter</button>
+            </div>
+        </form>
+    </div>
     <a href="<?php echo e(route('requisitions.create')); ?>" class="btn btn-primary mb-3">New Requisition</a>
     <div class="table-responsive">
     <table class="table table-striped">

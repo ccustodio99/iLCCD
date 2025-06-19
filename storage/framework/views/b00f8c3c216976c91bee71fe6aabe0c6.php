@@ -2,6 +2,10 @@
 
 <?php $__env->startSection('content'); ?>
 <div class="container">
+    <?php echo $__env->make('components.breadcrumbs', ['links' => [
+        ['label' => 'Settings', 'url' => route('settings.index')],
+        ['label' => 'Job Order Types']
+    ]], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <h1 class="mb-4">Job Order Types</h1>
     <?php echo $__env->make('components.per-page-selector', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <a href="<?php echo e(route('job-order-types.create')); ?>" class="btn btn-sm btn-primary mb-3">Add Type</a>

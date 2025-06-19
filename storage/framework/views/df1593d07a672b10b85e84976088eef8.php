@@ -2,8 +2,50 @@
 
 <?php $__env->startSection('content'); ?>
 <div class="container">
-    <h1 class="mb-4">My Job Orders</h1>
+    <h1 class="mb-4">Job Orders</h1>
     <?php echo $__env->make('components.per-page-selector', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <div class="mb-3">
+        <form method="GET" class="row row-cols-lg-auto g-2 align-items-end">
+            <div class="col">
+                <label for="filter-status" class="form-label">Status</label>
+                <select id="filter-status" name="status" class="form-select">
+                    <option value="">Any</option>
+                    <?php $__currentLoopData = $statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($status); ?>" <?php if(request('status') === $status): echo 'selected'; endif; ?>><?php echo e(ucfirst(str_replace('_', ' ', $status))); ?></option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-type" class="form-label">Type</label>
+                <select id="filter-type" name="type_parent" class="form-select">
+                    <option value="">Any</option>
+                    <?php $__currentLoopData = $types; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($type->id); ?>" <?php if((string)request('type_parent') === (string)$type->id): echo 'selected'; endif; ?>><?php echo e($type->name); ?></option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-assigned" class="form-label">Assigned To</label>
+                <select id="filter-assigned" name="assigned_to_id" class="form-select">
+                    <option value="">Any</option>
+                    <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $u): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($u->id); ?>" <?php if((string)request('assigned_to_id') === (string)$u->id): echo 'selected'; endif; ?>><?php echo e($u->name); ?></option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </select>
+            </div>
+            <div class="col">
+                <label for="filter-search" class="form-label">Search</label>
+                <input id="filter-search" type="text" name="search" value="<?php echo e(request('search')); ?>" class="form-control" placeholder="Description">
+            </div>
+            <div class="col form-check mt-4">
+                <input class="form-check-input" type="checkbox" value="1" id="filter-closed" name="closed" <?php echo e(request('closed') ? 'checked' : ''); ?>>
+                <label class="form-check-label" for="filter-closed">Include Closed</label>
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-secondary">Filter</button>
+            </div>
+        </form>
+    </div>
     <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#newJobOrderModal">New Job Order</button>
     <div class="table-responsive">
     <table class="table table-striped">
@@ -38,6 +80,19 @@
                             <?php echo csrf_field(); ?>
                             <?php echo method_field('PUT'); ?>
                             <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Mark this job order as complete?')">Job Complete</button>
+                        </form>
+                    <?php endif; ?>
+                    <?php if(auth()->user()->role === 'head' && (
+                            ($jobOrder->status === \App\Models\JobOrder::STATUS_PENDING_HEAD && auth()->user()->department === $jobOrder->user->department) ||
+                            ($jobOrder->status === \App\Models\JobOrder::STATUS_PENDING_PRESIDENT && auth()->user()->department === 'President Department') ||
+                            ($jobOrder->status === \App\Models\JobOrder::STATUS_PENDING_FINANCE && auth()->user()->department === 'Finance Office')
+                        )): ?>
+                        <form action="<?php echo e(route('job-orders.approve', $jobOrder)); ?>" method="POST" class="d-inline">
+                            <?php echo csrf_field(); ?>
+                            <?php echo method_field('PUT'); ?>
+
+                            <button type="submit" class="btn btn-sm btn-primary" onclick="return confirm('Approve this job order?')">Approve</button>
+
                         </form>
                     <?php endif; ?>
                 </td>
@@ -140,21 +195,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Status</label>
-                            <select name="status" class="form-select" required>
-                                <?php ($statuses = [
-                                    'pending_head' => 'Pending Head',
-                                    'pending_president' => 'Pending President',
-                                    'pending_finance' => 'Pending Finance',
-                                    'approved' => 'Approved',
-                                    'assigned' => 'Assigned',
-                                    'in_progress' => 'In Progress',
-                                    'completed' => 'Completed',
-                                    'closed' => 'Closed'
-                                ]); ?>
-                                <?php $__currentLoopData = $statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($value); ?>" <?php echo e(old('status', $jobOrder->status) === $value ? 'selected' : ''); ?>><?php echo e($label); ?></option>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </select>
+                            <input type="text" class="form-control" value="<?php echo e(ucfirst(str_replace('_', ' ', $jobOrder->status))); ?>" disabled>
                         </div>
                     </div>
                     <div class="modal-footer">

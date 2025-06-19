@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo $__env->yieldContent('title', config('app.name', 'LCCD IIS')); ?></title>
+    <link rel="icon" href="<?php echo e(asset(setting('favicon_path', 'favicon.ico'))); ?>">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <!-- Material Icons -->
@@ -14,8 +15,14 @@
         :root {
             --color-primary: <?php echo e(setting('color_primary', '#1B2660')); ?>;
             --color-accent: <?php echo e(setting('color_accent', '#FFCD38')); ?>;
+            --font-primary: '<?php echo e(setting('font_primary', 'Poppins')); ?>';
+            --font-secondary: '<?php echo e(setting('font_secondary', 'Roboto')); ?>';
+            --header-height: 56px;
         }
-        body { font-family: '<?php echo e(setting('font_primary', 'Poppins')); ?>', '<?php echo e(setting('font_secondary', 'Roboto')); ?>', 'Montserrat', sans-serif; background-color: #f8f9fa; }
+        body {
+            font-family: var(--font-primary), var(--font-secondary), 'Montserrat', sans-serif;
+            background-color: #f8f9fa;
+        }
         .sidebar {
             width: 200px;
             min-height: 100vh;
@@ -25,16 +32,25 @@
             left: 0;
             transition: left 0.3s ease;
         }
+        #mainMenu.offcanvas {
+            width: 200px;
+        }
         #menu-toggle {
-            display: none;
+            display: block;
             background: transparent;
             border: none;
-            color: var(--color-primary);
+            color: #fff;
             font-size: 1.5rem;
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 1100;
+            margin-right: 0.5rem;
+        }
+        #menu-toggle:hover {
+            color: var(--color-accent);
+        }
+
+        @media (min-width: 992px) {
+            #menu-toggle {
+                display: none;
+            }
         }
         .sidebar a {
             color: #ffffff;
@@ -52,48 +68,62 @@
             color: var(--color-primary);
         }
         .content-wrapper {
-            margin-left: 200px;
             padding-left: 1rem;
+            padding-bottom: 5rem;
         }
 
-        @media (max-width: 768px) {
-            .sidebar {
-                left: -200px;
-            }
-            .sidebar.active {
-                left: 0;
-            }
-            nav.sidebar.active + .content-wrapper {
+        @media (min-width: 992px) {
+            header[role="banner"],
+            .content-wrapper {
                 margin-left: 200px;
+            }
+            #mainMenu {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                transform: none !important;
+            }
+        }
+
+        @media (max-width: 992px) {
+            /* Let Bootstrap's offcanvas control the menu position */
+            .sidebar {
+                left: 0;
             }
             .content-wrapper {
                 margin-left: 0;
             }
-            #menu-toggle {
-                display: block;
+            header[role="banner"] {
+                margin-left: 0;
+            }
+            #mainMenu.offcanvas {
+                top: var(--header-height);
+                height: calc(100vh - var(--header-height));
             }
         }
         .cta { background-color: var(--color-accent); color: var(--color-primary); }
-        footer { background-color: var(--color-primary); color: #ffffff; padding: 1rem 0; }
+        footer {
+            background-color: var(--color-primary);
+            color: #ffffff;
+            padding: 1rem 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+        #toggle-footer {
+            position: fixed;
+            bottom: 4rem;
+            right: 1rem;
+            z-index: 1000;
+        }
         #back-to-top {
             position: fixed;
             bottom: 1rem;
             right: 1rem;
             display: none;
             z-index: 1000;
-        }
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: var(--color-primary);
-            color: #ffffff;
-            padding: 0.5rem;
-            z-index: 100;
-            transition: top 0.3s ease;
-        }
-        .skip-link:focus {
-            top: 0;
         }
         .card-quick {
             border-radius: 1rem;
@@ -107,63 +137,64 @@
             font-size: 2.5rem;
             color: var(--color-primary);
         }
+        header[role="banner"] {
+            background-color: var(--color-primary);
+            color: #ffffff;
+            border-bottom: 4px solid var(--color-accent);
+            font-family: var(--font-primary), var(--font-secondary), sans-serif;
+            padding: 0.5rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1090;
+        }
+        .modal-dialog {
+            margin-top: 5rem;
+        }
+        header[role="banner"] .notification-area {
+            color: var(--color-accent);
+        }
+        .header-title {
+
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+
+        }
     </style>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    <button id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    <?php echo $__env->make('components.hamburger-menu', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <?php if(auth()->guard()->check()): ?>
+        <?php echo $__env->make('components.site-header', ['showSidebar' => true], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <?php else: ?>
+        <?php echo $__env->make('layouts.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <?php endif; ?>
     <div class="d-flex">
-        <nav class="sidebar" aria-label="Main navigation">
-            <a class="navbar-brand d-flex align-items-center mb-3" href="<?php echo e(route('home')); ?>">
-                <img src="<?php echo e(asset('assets/images/LCCD.jpg')); ?>" alt="LCCD Logo" width="40" class="me-2">
-                <img src="<?php echo e(asset('assets/images/CCS.jpg')); ?>" alt="CCS Department Logo" width="40" class="me-2">
-            </a>
-            <ul class="nav flex-column">
-                <?php if(auth()->guard()->check()): ?>
-                    <li class="nav-item"><a class="nav-link <?php if(request()->routeIs('dashboard')): ?> active <?php endif; ?>" href="<?php echo e(route('dashboard')); ?>" <?php if(request()->routeIs('dashboard')): ?> aria-current="page" <?php endif; ?>>Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link <?php if(request()->routeIs('tickets.*')): ?> active <?php endif; ?>" href="<?php echo e(route('tickets.index')); ?>" <?php if(request()->routeIs('tickets.*')): ?> aria-current="page" <?php endif; ?>>Tickets</a></li>
-                    <li class="nav-item"><a class="nav-link <?php if(request()->routeIs('job-orders.*')): ?> active <?php endif; ?>" href="<?php echo e(route('job-orders.index')); ?>" <?php if(request()->routeIs('job-orders.*')): ?> aria-current="page" <?php endif; ?>>Job Orders</a></li>
-                    <li class="nav-item"><a class="nav-link <?php if(request()->routeIs('requisitions.*')): ?> active <?php endif; ?>" href="<?php echo e(route('requisitions.index')); ?>" <?php if(request()->routeIs('requisitions.*')): ?> aria-current="page" <?php endif; ?>>Requisitions</a></li>
-                    <li class="nav-item"><a class="nav-link <?php if(request()->routeIs('inventory.*')): ?> active <?php endif; ?>" href="<?php echo e(route('inventory.index')); ?>" <?php if(request()->routeIs('inventory.*')): ?> aria-current="page" <?php endif; ?>>Inventory</a></li>
-                    <li class="nav-item"><a class="nav-link <?php if(request()->routeIs('purchase-orders.*')): ?> active <?php endif; ?>" href="<?php echo e(route('purchase-orders.index')); ?>" <?php if(request()->routeIs('purchase-orders.*')): ?> aria-current="page" <?php endif; ?>>Purchase Orders</a></li>
-                    <li class="nav-item"><a class="nav-link <?php if(request()->routeIs('documents.*')): ?> active <?php endif; ?>" href="<?php echo e(route('documents.index')); ?>" <?php if(request()->routeIs('documents.*')): ?> aria-current="page" <?php endif; ?>>Documents</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php if(request()->routeIs('documents.dashboard')): ?> active <?php endif; ?>" href="<?php echo e(route('documents.dashboard')); ?>">
-                            Document KPI
-                        </a>
-                    </li>
-                    <li class="nav-item"><a class="nav-link <?php if(request()->routeIs('kpi.dashboard')): ?> active <?php endif; ?>" href="<?php echo e(route('kpi.dashboard')); ?>" <?php if(request()->routeIs('kpi.dashboard')): ?> aria-current="page" <?php endif; ?>>KPI Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link <?php if(request()->routeIs('audit-trails.*')): ?> active <?php endif; ?>" href="<?php echo e(route('audit-trails.index')); ?>" <?php if(request()->routeIs('audit-trails.*')): ?> aria-current="page" <?php endif; ?>>Audit Trail</a></li>
-                    <?php if(auth()->user()->role === 'admin'): ?>
-                        <li class="nav-item"><a class="nav-link <?php if(request()->routeIs('users.*')): ?> active <?php endif; ?>" href="<?php echo e(route('users.index')); ?>" <?php if(request()->routeIs('users.*')): ?> aria-current="page" <?php endif; ?>>Users</a></li>
-                        <li class="nav-item">
-                            <a class="nav-link <?php if(request()->routeIs('settings.*')): ?> active <?php endif; ?>" href="<?php echo e(route('settings.index')); ?>" data-bs-toggle="modal" data-bs-target="#settingsModal" <?php if(request()->routeIs('settings.*')): ?> aria-current="page" <?php endif; ?>>
-                                Settings
-                            </a>
-                        </li>
-                    <?php endif; ?>
-                    <li class="nav-item"><a class="nav-link <?php if(request()->routeIs('profile.*')): ?> active <?php endif; ?>" href="<?php echo e(route('profile.edit')); ?>" <?php if(request()->routeIs('profile.*')): ?> aria-current="page" <?php endif; ?>>Profile</a></li>
-                    <li class="nav-item">
-                        <form method="POST" action="<?php echo e(route('logout')); ?>">
-                            <?php echo csrf_field(); ?>
-                            <button type="submit" class="nav-link btn btn-link p-0">Logout</button>
-                        </form>
-                    </li>
-                <?php else: ?>
-                    <li class="nav-item"><a class="nav-link" href="<?php echo e(route('login')); ?>">Login</a></li>
-                <?php endif; ?>
-            </ul>
-        </nav>
         <div class="content-wrapper flex-grow-1">
             <main id="main-content" class="py-5">
+                <?php if(session('success')): ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <?php echo e(session('success')); ?>
+
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php endif; ?>
+                <div id="flash-container"></div>
                 <?php echo $__env->yieldContent('content'); ?>
             </main>
-            <footer class="text-center">
-                &copy; <?php echo e(date('Y')); ?> La Consolacion College Daet CMS
+            <footer id="app-footer" class="text-center" style="<?php echo e(setting('show_footer', true) ? '' : 'display:none;'); ?>">
+
+                <div class="mb-1"><?php echo nl2br(e(str_replace('{year}', date('Y'), setting('footer_text')))); ?></div>
+
             </footer>
+            <button id="toggle-footer" class="btn btn-secondary" aria-label="Toggle footer">
+                <?php echo e(setting('show_footer', true) ? 'Hide Footer' : 'Show Footer'); ?>
+
+            </button>
         </div>
     </div>
-    <?php echo $__env->make('settings.partials.settings-modal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <?php echo $__env->make('partials.notifications-modal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 <button id="back-to-top" class="btn btn-secondary" aria-label="Back to top">&uarr;</button>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <?php if(file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot'))): ?>
@@ -178,12 +209,50 @@
         window.scrollTo({top: 0, behavior: 'smooth'});
     });
     const menuToggle = document.getElementById('menu-toggle');
-    const sidebar = document.querySelector('.sidebar');
-    menuToggle.addEventListener('click', () => {
-        const expanded = sidebar.classList.toggle('active');
-        menuToggle.setAttribute('aria-expanded', expanded);
+    const mainMenuEl = document.getElementById('mainMenu');
+    if (menuToggle && mainMenuEl) {
+        const offcanvasMenu = new bootstrap.Offcanvas(mainMenuEl, { backdrop: false, scroll: true });
+        if (window.innerWidth >= 992) {
+            offcanvasMenu.show();
+        } else {
+            offcanvasMenu.hide();
+        }
+        const toggleOffcanvas = () => {
+            if (window.innerWidth < 992) {
+                offcanvasMenu.toggle();
+                const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+                menuToggle.setAttribute('aria-expanded', (!expanded).toString());
+            }
+        };
+       menuToggle.addEventListener('click', toggleOffcanvas);
+        mainMenuEl.addEventListener('hide.bs.offcanvas', (event) => {
+            if (window.innerWidth >= 992) {
+                event.preventDefault();
+            }
+        });
+        mainMenuEl.addEventListener('hidden.bs.offcanvas', () => {
+            if (window.innerWidth < 992) {
+                menuToggle.setAttribute('aria-expanded', 'false');
+                menuToggle.focus();
+            }
+        });
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 992) {
+                offcanvasMenu.show();
+            } else {
+                offcanvasMenu.hide();
+            }
+        });
+    }
+    const toggleFooterBtn = document.getElementById('toggle-footer');
+    const footer = document.getElementById('app-footer');
+    toggleFooterBtn.addEventListener('click', () => {
+        const visible = footer.style.display !== 'none';
+        footer.style.display = visible ? 'none' : 'block';
+        toggleFooterBtn.textContent = visible ? 'Show Footer' : 'Hide Footer';
     });
 </script>
+<?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
 </html>
 <?php /**PATH E:\SynologyDrive\MIT Studies\xampp\htdocs\iLCCD\resources\views/layouts/app.blade.php ENDPATH**/ ?>

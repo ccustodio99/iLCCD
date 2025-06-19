@@ -1,3 +1,5 @@
+<?php $__env->startSection('title', 'Document Reports'); ?>
+
 <?php $__env->startSection('content'); ?>
 <div class="container">
     <h1 class="mb-4">Other Reports</h1>

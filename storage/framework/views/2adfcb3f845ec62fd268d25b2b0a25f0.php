@@ -2,44 +2,251 @@
 
 <?php $__env->startSection('content'); ?>
 <div class="container">
+    <?php echo $__env->make('components.breadcrumbs', ['links' => [
+        ['label' => 'Settings']
+    ]], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <h1 class="mb-2">System Settings</h1>
     <p class="text-muted mb-4">Administrators manage system defaults and theme settings here.</p>
-    <div class="row row-cols-1 row-cols-md-2 g-3">
-        <div class="col">
-            <a href="<?php echo e(route('ticket-categories.index')); ?>" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Ticket Categories">
-                <span class="material-symbols-outlined d-block mb-2" aria-hidden="true">category</span>
-                <span class="fw-semibold">Ticket Categories</span>
-            </a>
+
+    <div class="accordion" id="settingsAccordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingCategories">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCategories" aria-expanded="true" aria-controls="collapseCategories">
+                    Categories
+                </button>
+            </h2>
+            <div id="collapseCategories" class="accordion-collapse collapse show" aria-labelledby="headingCategories" data-bs-parent="#settingsAccordion">
+                <div class="accordion-body">
+                    <div class="row row-cols-1 row-cols-md-2 g-3">
+                        <div class="col">
+                            <?php if (isset($component)) { $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.settings-link','data' => ['href' => route('ticket-categories.index'),'icon' => 'category','label' => 'Ticket Categories']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('settings-link'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('ticket-categories.index')),'icon' => 'category','label' => 'Ticket Categories']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $attributes = $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $component = $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+                        </div>
+                        <div class="col">
+                            <?php if (isset($component)) { $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.settings-link','data' => ['href' => route('job-order-types.index'),'icon' => 'work','label' => 'Job Order Types']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('settings-link'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('job-order-types.index')),'icon' => 'work','label' => 'Job Order Types']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $attributes = $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $component = $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+                        </div>
+                        <div class="col">
+                            <?php if (isset($component)) { $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.settings-link','data' => ['href' => route('inventory-categories.index'),'icon' => 'inventory_2','label' => 'Inventory Categories']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('settings-link'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('inventory-categories.index')),'icon' => 'inventory_2','label' => 'Inventory Categories']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $attributes = $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $component = $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+                        </div>
+                        <div class="col">
+                            <?php if (isset($component)) { $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.settings-link','data' => ['href' => route('document-categories.index'),'icon' => 'folder','label' => 'Document Categories']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('settings-link'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('document-categories.index')),'icon' => 'folder','label' => 'Document Categories']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $attributes = $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $component = $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col">
-            <a href="<?php echo e(route('job-order-types.index')); ?>" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Job Order Types">
-                <span class="material-symbols-outlined d-block mb-2" aria-hidden="true">work</span>
-                <span class="fw-semibold">Job Order Types</span>
-            </a>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingSystem">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSystem" aria-expanded="false" aria-controls="collapseSystem">
+                    System Options
+                </button>
+            </h2>
+            <div id="collapseSystem" class="accordion-collapse collapse" aria-labelledby="headingSystem" data-bs-parent="#settingsAccordion">
+                <div class="accordion-body">
+                    <div class="row row-cols-1 row-cols-md-2 g-3">
+                        <div class="col">
+                            <?php if (isset($component)) { $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.settings-link','data' => ['href' => route('settings.theme'),'icon' => 'color_lens','label' => 'Appearance']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('settings-link'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('settings.theme')),'icon' => 'color_lens','label' => 'Appearance']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $attributes = $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $component = $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+                        </div>
+                        <div class="col">
+                            <?php if (isset($component)) { $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.settings-link','data' => ['href' => route('settings.localization'),'icon' => 'schedule','label' => 'Localization']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('settings-link'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('settings.localization')),'icon' => 'schedule','label' => 'Localization']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $attributes = $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $component = $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+                        </div>
+                        <div class="col">
+                            <?php if (isset($component)) { $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.settings-link','data' => ['href' => route('approval-processes.index'),'icon' => 'account_tree','label' => 'Approval Processes']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('settings-link'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('approval-processes.index')),'icon' => 'account_tree','label' => 'Approval Processes']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $attributes = $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $component = $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col">
-            <a href="<?php echo e(route('inventory-categories.index')); ?>" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Inventory Categories">
-                <span class="material-symbols-outlined d-block mb-2" aria-hidden="true">inventory_2</span>
-                <span class="fw-semibold">Inventory Categories</span>
-            </a>
-        </div>
-        <div class="col">
-            <a href="<?php echo e(route('document-categories.index')); ?>" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Document Categories">
-                <span class="material-symbols-outlined d-block mb-2" aria-hidden="true">folder</span>
-                <span class="fw-semibold">Document Categories</span>
-            </a>
-        </div>
-        <div class="col">
-            <a href="<?php echo e(route('announcements.index')); ?>" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Announcements">
-                <span class="material-symbols-outlined d-block mb-2" aria-hidden="true">campaign</span>
-                <span class="fw-semibold">Announcements</span>
-            </a>
-        </div>
-        <div class="col">
-            <a href="<?php echo e(route('settings.theme')); ?>" class="card card-quick text-center text-decoration-none p-4 h-100" aria-label="Theme">
-                <span class="material-symbols-outlined d-block mb-2" aria-hidden="true">color_lens</span>
-                <span class="fw-semibold">Theme</span>
-            </a>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingCommunication">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCommunication" aria-expanded="false" aria-controls="collapseCommunication">
+                    Communication
+                </button>
+            </h2>
+            <div id="collapseCommunication" class="accordion-collapse collapse" aria-labelledby="headingCommunication" data-bs-parent="#settingsAccordion">
+                <div class="accordion-body">
+                    <div class="row row-cols-1 row-cols-md-2 g-3">
+                        <div class="col">
+                            <?php if (isset($component)) { $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.settings-link','data' => ['href' => route('announcements.index'),'icon' => 'campaign','label' => 'Announcements']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('settings-link'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('announcements.index')),'icon' => 'campaign','label' => 'Announcements']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $attributes = $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $component = $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+                        </div>
+                        <div class="col">
+                            <?php if (isset($component)) { $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.settings-link','data' => ['href' => route('settings.notifications'),'icon' => 'notifications','label' => 'Notifications']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('settings-link'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('settings.notifications')),'icon' => 'notifications','label' => 'Notifications']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $attributes = $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $component = $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
