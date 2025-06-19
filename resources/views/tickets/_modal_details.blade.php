@@ -5,7 +5,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <p><strong>Category:</strong> {{ $ticket->ticketCategory->name }}</p>
+            <p><strong>Category:</strong> {{ optional($ticket->ticketCategory)->name ?? 'N/A' }}</p>
             <p><strong>Subject:</strong> {{ $ticket->formatted_subject }}</p>
             <p><strong>Description:</strong> {{ $ticket->description }}</p>
             @if($ticket->attachment_path)

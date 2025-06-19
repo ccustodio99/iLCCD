@@ -2,24 +2,27 @@
 
 namespace App\Models;
 
+use App\Traits\ClearsDashboardCache;
+use App\Traits\LogsAudit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use App\Models\TicketComment;
-use App\Traits\LogsAudit;
-use App\Traits\ClearsDashboardCache;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Ticket extends Model
 {
-    use HasFactory, SoftDeletes, LogsAudit, ClearsDashboardCache;
+    use ClearsDashboardCache, HasFactory, LogsAudit, SoftDeletes;
 
     /** Ticket status values */
     public const STATUS_PENDING_HEAD = 'pending_head';
+
     public const STATUS_OPEN = 'open';
+
     public const STATUS_ESCALATED = 'escalated';
+
     public const STATUS_CONVERTED = 'converted';
+
     public const STATUS_CLOSED = 'closed';
 
     /** All possible statuses */
@@ -100,7 +103,7 @@ class Ticket extends Model
 
     public function ticketCategory(): BelongsTo
     {
-        return $this->belongsTo(TicketCategory::class);
+        return $this->belongsTo(TicketCategory::class)->withTrashed();
     }
 
     /**
@@ -108,6 +111,8 @@ class Ticket extends Model
      */
     public function getFormattedSubjectAttribute(): string
     {
-        return $this->ticketCategory->name.' - '.$this->subject.' - '.$this->id;
+        $category = $this->ticketCategory?->name ?? 'N/A';
+
+        return $category.' - '.$this->subject.' - '.$this->id;
     }
 }
