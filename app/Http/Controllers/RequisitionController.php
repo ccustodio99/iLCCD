@@ -10,9 +10,7 @@ use App\Models\PurchaseOrder;
 use App\Models\Requisition;
 use App\Models\User;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
@@ -93,7 +91,6 @@ class RequisitionController extends Controller
             'status' => $firstStage->name ?? Requisition::STATUS_PENDING_HEAD,
         ];
 
-
         if ($request->hasFile('attachment')) {
             try {
                 $requisitionData['attachment_path'] = $request->file('attachment')
@@ -103,7 +100,6 @@ class RequisitionController extends Controller
             }
         }
 
-
         try {
             if ($request->hasFile('attachment')) {
                 try {
@@ -111,7 +107,6 @@ class RequisitionController extends Controller
                         ->store('requisition_attachments', 'public');
                 } catch (\Throwable $e) {
                     DB::rollBack();
-
 
                     return back()
                         ->withErrors(['attachment' => 'Failed to upload attachment.'])
@@ -397,12 +392,14 @@ class RequisitionController extends Controller
 
         // notify requester
         $requisition->user->notify(new \App\Notifications\RequisitionStatusNotification(
+            $requisition->id,
             "Your requisition #{$requisition->id} status is now ".str_replace('_', ' ', $requisition->status)
         ));
 
         // notify next approver
         if ($nextApprover) {
             $nextApprover->notify(new \App\Notifications\RequisitionStatusNotification(
+                $requisition->id,
                 "Requisition #{$requisition->id} requires your approval."
             ));
         }
@@ -431,6 +428,7 @@ class RequisitionController extends Controller
         ]);
 
         $requisition->user->notify(new \App\Notifications\RequisitionStatusNotification(
+            $requisition->id,
             "Requisition #{$requisition->id} was returned for revisions."
         ));
 

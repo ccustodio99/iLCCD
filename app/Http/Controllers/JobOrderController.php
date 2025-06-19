@@ -445,12 +445,14 @@ class JobOrderController extends Controller
 
         // notify requester
         $jobOrder->user->notify(new \App\Notifications\JobOrderStatusNotification(
+            $jobOrder->id,
             "Your job order #{$jobOrder->id} status is now ".str_replace('_', ' ', $jobOrder->status)
         ));
 
         // notify next approver
         if ($nextApprover) {
             $nextApprover->notify(new \App\Notifications\JobOrderStatusNotification(
+                $jobOrder->id,
                 "Job order #{$jobOrder->id} requires your approval."
             ));
         }
@@ -478,6 +480,7 @@ class JobOrderController extends Controller
         ]);
 
         $jobOrder->user->notify(new \App\Notifications\JobOrderStatusNotification(
+            $jobOrder->id,
             "Job order #{$jobOrder->id} was returned for revisions."
         ));
 
@@ -510,11 +513,13 @@ class JobOrderController extends Controller
 
         // notify requester and assignee
         $jobOrder->user->notify(new \App\Notifications\JobOrderStatusNotification(
+            $jobOrder->id,
             "Your job order #{$jobOrder->id} has been assigned."
         ));
 
         if ($jobOrder->assignedTo) {
             $jobOrder->assignedTo->notify(new \App\Notifications\JobOrderStatusNotification(
+                $jobOrder->id,
                 "Job order #{$jobOrder->id} has been assigned to you."
             ));
         }

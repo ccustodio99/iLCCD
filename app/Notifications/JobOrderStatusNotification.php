@@ -12,7 +12,7 @@ class JobOrderStatusNotification extends Notification
 {
     use Queueable;
 
-    public function __construct(public string $message) {}
+    public function __construct(public int $jobOrderId, public string $message) {}
 
     public function via(object $notifiable): array
     {
@@ -28,6 +28,7 @@ class JobOrderStatusNotification extends Notification
         $html = $converter->convert($content)->getContent();
 
         return (new MailMessage)
+            ->subject("Job Order #{$this->jobOrderId} Update")
             ->view(fn () => new HtmlString($html));
     }
 }
