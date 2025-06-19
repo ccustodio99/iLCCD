@@ -1,8 +1,10 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\OtherDeviceLogout;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 it('allows user to view profile page', function () {
@@ -97,4 +99,20 @@ it('redirects guest to login when updating profile', function () {
     $response = $this->put('/profile');
 
     $response->assertRedirect('/login');
+});
+
+it('invalidates old sessions when password is updated', function () {
+    Event::fake();
+
+    $user = User::factory()->create(['password' => Hash::make('Password1!')]);
+    $this->actingAs($user);
+
+    $this->put('/profile', [
+        'name' => $user->name,
+        'email' => $user->email,
+        'password' => 'NewPassword1!',
+        'password_confirmation' => 'NewPassword1!',
+    ])->assertRedirect('/profile');
+
+    Event::assertDispatched(OtherDeviceLogout::class);
 });
