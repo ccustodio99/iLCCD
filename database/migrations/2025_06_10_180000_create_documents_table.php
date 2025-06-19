@@ -10,13 +10,14 @@ return new class extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnSoftDelete();
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('category');
             $table->string('department');
             $table->integer('current_version')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

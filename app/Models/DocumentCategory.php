@@ -6,10 +6,11 @@ use App\Traits\LogsAudit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DocumentCategory extends Model
 {
-    use HasFactory, LogsAudit;
+    use HasFactory, LogsAudit, SoftDeletes;
 
     /**
      * Default categories created during initial seeding.
