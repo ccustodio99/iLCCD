@@ -31,3 +31,24 @@ php artisan optimize:clear
 ```
 
 Reload the page after running these commands and the error should disappear.
+
+## Common Settings Issues
+
+### Stale compiled views
+If a settings page fails with a missing Blade view error after pulling changes, clear the compiled templates:
+
+```bash
+php artisan view:clear
+```
+
+### Timezone change not applied immediately
+`updateLocalization()` now calls `date_default_timezone_set()` so changes apply to the current request. Refresh after saving to verify the timezone.
+
+### Brand image cleanup fails
+Old images sometimes remained when paths lacked the `storage/` prefix. Paths are normalized on deletion so files are removed correctly.
+
+### Cache keeps outdated settings
+`Setting::get()` previously cached missing keys forever. It now only caches existing records. Run `php artisan cache:clear` if you add settings manually.
+
+### Unsanitized notification templates
+Notification templates are stripped of HTML tags on save to prevent injection.
