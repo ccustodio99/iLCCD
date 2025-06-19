@@ -91,27 +91,12 @@ class RequisitionController extends Controller
             'status' => $firstStage->name ?? Requisition::STATUS_PENDING_HEAD,
         ];
 
-        if ($request->hasFile('attachment')) {
-            try {
-                $requisitionData['attachment_path'] = $request->file('attachment')
-                    ->store('requisition_attachments', 'public');
-            } catch (\Throwable $e) {
-                Log::error('Failed to store requisition attachment: '.$e->getMessage());
-            }
-        }
+        DB::beginTransaction();
 
         try {
             if ($request->hasFile('attachment')) {
-                try {
-                    $requisitionData['attachment_path'] = $request->file('attachment')
-                        ->store('requisition_attachments', 'public');
-                } catch (\Throwable $e) {
-                    DB::rollBack();
-
-                    return back()
-                        ->withErrors(['attachment' => 'Failed to upload attachment.'])
-                        ->withInput();
-                }
+                $requisitionData['attachment_path'] = $request->file('attachment')
+                    ->store('requisition_attachments', 'public');
             }
 
             $requisition = Requisition::create($requisitionData);
