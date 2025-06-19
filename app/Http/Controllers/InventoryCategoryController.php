@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\InventoryCategory;
+use App\Rules\NoCategoryCycle;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class InventoryCategoryController extends Controller
 {
@@ -30,7 +32,7 @@ class InventoryCategoryController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'parent_id' => 'nullable|exists:inventory_categories,id',
+            'parent_id' => ['nullable', 'exists:inventory_categories,id', new NoCategoryCycle],
             'is_active' => 'boolean',
         ]);
         $data['is_active'] = $data['is_active'] ?? false;
@@ -54,7 +56,7 @@ class InventoryCategoryController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'parent_id' => 'nullable|exists:inventory_categories,id',
+            'parent_id' => ['nullable', 'exists:inventory_categories,id', Rule::notIn([$inventoryCategory->id]), new NoCategoryCycle($inventoryCategory)],
             'is_active' => 'boolean',
         ]);
         $data['is_active'] = $data['is_active'] ?? false;
