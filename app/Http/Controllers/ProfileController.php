@@ -58,6 +58,11 @@ class ProfileController extends Controller
         }
         $user->save();
 
+        if (! empty($data['password'])) {
+            Auth::logoutOtherDevices($data['password']);
+            $request->session()->regenerate();
+        }
+
         return redirect()->route('profile.edit')
             ->with('success', 'Profile updated successfully.');
     }
