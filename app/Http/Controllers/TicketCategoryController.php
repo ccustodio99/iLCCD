@@ -22,6 +22,7 @@ class TicketCategoryController extends Controller
     public function create()
     {
         $parents = TicketCategory::whereNull('parent_id')
+            ->where('is_active', true)
             ->orderBy('name')
             ->get();
 
@@ -45,6 +46,7 @@ class TicketCategoryController extends Controller
     public function edit(TicketCategory $ticketCategory)
     {
         $parents = TicketCategory::whereNull('parent_id')
+            ->where('is_active', true)
             ->where('id', '!=', $ticketCategory->id)
             ->orderBy('name')
             ->get();

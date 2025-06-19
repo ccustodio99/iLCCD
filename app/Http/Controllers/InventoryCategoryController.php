@@ -22,6 +22,7 @@ class InventoryCategoryController extends Controller
     public function create()
     {
         $parents = InventoryCategory::whereNull('parent_id')
+            ->where('is_active', true)
             ->orderBy('name')
             ->get();
 
@@ -45,6 +46,7 @@ class InventoryCategoryController extends Controller
     public function edit(InventoryCategory $inventoryCategory)
     {
         $parents = InventoryCategory::whereNull('parent_id')
+            ->where('is_active', true)
             ->where('id', '!=', $inventoryCategory->id)
             ->orderBy('name')
             ->get();
