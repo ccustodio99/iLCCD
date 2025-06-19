@@ -29,6 +29,7 @@ class LowStockNotification extends Notification
         $html = $converter->convert($content)->getContent();
 
         return (new MailMessage)
+            ->subject("Low Stock Alert: {$this->itemName}")
             ->view(fn () => new HtmlString($html));
     }
 }

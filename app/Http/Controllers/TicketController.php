@@ -29,7 +29,7 @@ class TicketController extends Controller
         $recipients = $recipients->merge($ticket->watchers)->unique('id');
 
         foreach ($recipients as $user) {
-            $user->notify(new TicketStatusNotification($message));
+            $user->notify(new TicketStatusNotification($ticket->id, $message));
         }
     }
 
