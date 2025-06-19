@@ -59,10 +59,11 @@ Deliver a holistic, faith-driven digital backbone for LCCD, empowering every use
 
 ## 🔧 Local Setup
 
-1. Ensure the PHP GD extension is installed (e.g. `sudo apt-get install php-gd`).
+1. Ensure the PHP GD and Zip extensions are installed (e.g. `sudo apt-get install php-gd php-zip`).
+   If the Zip extension isn't available, append `--ignore-platform-req=ext-zip` to the Composer command in the next step.
 2. Install PHP and JavaScript dependencies:
    ```bash
-   composer install
+   composer install # add --ignore-platform-req=ext-zip if the Zip extension is unavailable
    npm install
    ```
 3. Build the frontend assets with `npm run build` (or `npm run dev` while developing).
