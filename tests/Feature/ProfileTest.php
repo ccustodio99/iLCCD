@@ -158,3 +158,17 @@ it('shows error when profile photo upload fails', function () {
     $user->refresh();
     Storage::disk('public')->assertMissing($user->profile_photo_path);
 });
+
+it('rejects invalid contact information', function () {
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $response = $this->from('/profile')->put('/profile', [
+        'name' => $user->name,
+        'email' => 'updated@example.com',
+        'contact_info' => 'invalid!!',
+    ]);
+
+    $response->assertRedirect('/profile');
+    $response->assertSessionHasErrors('contact_info');
+});

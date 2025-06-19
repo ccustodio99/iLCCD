@@ -39,6 +39,9 @@
         <div class="mb-3">
             <label for="contact_info" class="form-label">Contact Information</label>
             <input id="contact_info" type="text" name="contact_info" class="form-control" value="{{ old('contact_info', $user->contact_info) }}">
+            @error('contact_info')
+                <div class="text-danger small">{{ $message }}</div>
+            @enderror
         </div>
         <div class="mb-3">
             <label for="profile_photo" class="form-label">Profile Photo</label>
