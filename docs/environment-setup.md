@@ -108,7 +108,10 @@ VITE_APP_NAME="${APP_NAME}"
 
 ## Assets
 
-Set `APP_DEFAULT_PROFILE_PHOTO` to change the fallback profile picture path:
+Set `APP_DEFAULT_PROFILE_PHOTO` to change the fallback profile picture path.
+The image referenced here **must** exist inside the `public` directory so it can
+be served by the web server. By default the application expects
+`public/assets/images/default-avatar.png`:
 
 ```
 APP_DEFAULT_PROFILE_PHOTO=/assets/images/default-avatar.png
