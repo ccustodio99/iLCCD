@@ -9,6 +9,12 @@
         ['label' => 'Inventory Categories']
     ]])
     <h1 class="mb-4">Inventory Categories</h1>
+    @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     @include('components.per-page-selector')
     <a href="{{ route('inventory-categories.create') }}" class="btn btn-sm btn-primary mb-3">Add Category</a>
     <div class="table-responsive">
