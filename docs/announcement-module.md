@@ -8,7 +8,7 @@ Announcements are managed under **Settings → Announcements**. Admins may creat
 
 ## Key Features
 - CRUD interface within System Settings
-- Only active announcements show on the dashboard
+- Only the latest five active announcements show on the dashboard
 - Soft deletes preserve history via the `archived_at` column
 
 ---

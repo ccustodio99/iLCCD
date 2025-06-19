@@ -54,6 +54,7 @@ class DashboardController extends Controller
         return $repository->remember($cacheKey, 300, function () use ($request, $perPage) {
             $announcements = Announcement::where('is_active', true)
                 ->latest()
+                ->limit(5)
                 ->get();
 
             $tickets = Ticket::query()
