@@ -142,6 +142,6 @@ Access this screen under **Settings → Localization**.
 Manage the email alerts sent to users:
 
 - **Email Toggles** – enable or disable notifications for tickets, job orders, and more
-- **Templates** – customize the wording of outgoing messages
+- **Templates** – customize the wording of outgoing messages. Template text is stored as Markdown and converted to HTML via the [league/commonmark](https://commonmark.thephpleague.com/) parser when emails are sent.
 
 Visit **Settings → Notifications** to adjust these settings.
