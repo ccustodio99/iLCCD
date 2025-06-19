@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TicketCategory;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TicketCategoryController extends Controller
 {
@@ -29,7 +30,7 @@ class TicketCategoryController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => ['required', 'string', 'max:255', Rule::unique('ticket_categories', 'name')],
             'parent_id' => 'nullable|exists:ticket_categories,id',
             'is_active' => 'boolean',
         ]);
@@ -53,7 +54,7 @@ class TicketCategoryController extends Controller
     public function update(Request $request, TicketCategory $ticketCategory)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => ['required', 'string', 'max:255', Rule::unique('ticket_categories', 'name')->ignore($ticketCategory->id)],
             'parent_id' => 'nullable|exists:ticket_categories,id',
             'is_active' => 'boolean',
         ]);
