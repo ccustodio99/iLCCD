@@ -29,7 +29,7 @@ class JobOrderTypeController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:job_order_types,name',
             'parent_id' => 'nullable|exists:job_order_types,id',
             'is_active' => 'boolean',
         ]);
@@ -53,7 +53,7 @@ class JobOrderTypeController extends Controller
     public function update(Request $request, JobOrderType $jobOrderType)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:job_order_types,name,'.$jobOrderType->id,
             'parent_id' => 'nullable|exists:job_order_types,id',
             'is_active' => 'boolean',
         ]);
