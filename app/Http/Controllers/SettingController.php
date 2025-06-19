@@ -160,7 +160,8 @@ class SettingController extends Controller
 
     public function editNotifications()
     {
-        return view('settings.notifications');
+        $placeholder = '{{ message }}';
+        return view('settings.notifications', compact('placeholder'));
     }
 
     public function updateNotifications(Request $request)
