@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DocumentCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class DocumentCategoryController extends Controller
 {
@@ -22,6 +23,10 @@ class DocumentCategoryController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge([
+            'name' => Str::ucfirst(trim((string) $request->input('name'))),
+        ]);
+
         $data = $request->validate([
             'name' => 'required|string|max:255|unique:document_categories,name',
             'is_active' => 'boolean',
@@ -40,6 +45,10 @@ class DocumentCategoryController extends Controller
 
     public function update(Request $request, DocumentCategory $documentCategory)
     {
+        $request->merge([
+            'name' => Str::ucfirst(trim((string) $request->input('name'))),
+        ]);
+
         $data = $request->validate([
             'name' => 'required|string|max:255|unique:document_categories,name,'.$documentCategory->id,
             'is_active' => 'boolean',
