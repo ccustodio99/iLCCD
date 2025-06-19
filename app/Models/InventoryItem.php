@@ -47,12 +47,14 @@ class InventoryItem extends Model
         'quantity',
         'minimum_stock',
         'status',
+        'low_stock_notified_at',
     ];
 
     protected function casts(): array
     {
         return [
             'purchase_date' => 'date',
+            'low_stock_notified_at' => 'datetime',
         ];
     }
 

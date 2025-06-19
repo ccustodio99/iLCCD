@@ -116,7 +116,7 @@ it('highlights out of stock items on index', function () {
     $response->assertSee('table-danger', false);
 });
 
-it('dispatches low stock notification when issuing causes quantity to drop below minimum', function () {
+it('dispatches low stock notification only once when quantity crosses minimum', function () {
     Notification::fake();
     \App\Models\Setting::set('notify_low_stock', true);
     \App\Models\Setting::set('template_low_stock', '{{ message }}');
@@ -127,19 +127,27 @@ it('dispatches low stock notification when issuing causes quantity to drop below
 
     $item = InventoryItem::factory()->for($user)->create([
         'department' => 'IT',
-        'quantity' => 5,
+        'quantity' => 6,
         'minimum_stock' => 5,
     ]);
 
     $this->actingAs($user);
 
-    $request = Illuminate\Http\Request::create('/', 'POST', ['quantity' => 1]);
+    $request = Illuminate\Http\Request::create('/', 'POST', ['quantity' => 2]);
     $request->setUserResolver(fn () => $user);
     $controller = new App\Http\Controllers\InventoryItemController;
     $controller->issue($request, $item);
 
     Notification::assertSentTimes(LowStockNotification::class, 2);
     Notification::assertSentTo([$head, $custodian], LowStockNotification::class);
+    $item->refresh();
+    expect($item->low_stock_notified_at)->not->toBeNull();
+
+    $request = Illuminate\Http\Request::create('/', 'POST', ['quantity' => 1]);
+    $request->setUserResolver(fn () => $user);
+    $controller->issue($request, $item);
+
+    Notification::assertSentTimes(LowStockNotification::class, 2);
 });
 
 it('blocks unauthorized roles from inventory actions', function () {

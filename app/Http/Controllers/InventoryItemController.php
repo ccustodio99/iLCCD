@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\InventoryCategory;
 use App\Models\InventoryItem;
 use App\Models\InventoryTransaction;
+use App\Models\User;
+use App\Notifications\LowStockNotification;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
@@ -125,7 +127,10 @@ class InventoryItemController extends Controller
             'minimum_stock' => 'required|integer|min:0',
             'status' => ['required', Rule::in(InventoryItem::STATUSES)],
         ]);
+        $previousQuantity = $inventoryItem->quantity;
         $inventoryItem->update($data);
+        $inventoryItem->refresh();
+        $this->handleLowStock($inventoryItem, $previousQuantity, $request->user()->id);
 
         return redirect()->route('inventory.index');
     }
@@ -158,21 +163,11 @@ class InventoryItemController extends Controller
             return back()->withErrors(['quantity' => 'Not enough stock']);
         }
 
+        $previousQuantity = $inventoryItem->quantity;
+
         $inventoryItem->decrement('quantity', $data['quantity']);
         $inventoryItem->refresh();
-
-        if ($inventoryItem->quantity <= $inventoryItem->minimum_stock) {
-            $recipients = \App\Models\User::where('department', $inventoryItem->department)
-                ->whereIn('role', ['staff', 'head'])
-                ->where('id', '<>', $request->user()->id)
-                ->get();
-            foreach ($recipients as $recipient) {
-                $recipient->notify(new \App\Notifications\LowStockNotification(
-                    $inventoryItem->name,
-                    $inventoryItem->quantity
-                ));
-            }
-        }
+        $this->handleLowStock($inventoryItem, $previousQuantity, $request->user()->id);
 
         InventoryTransaction::create([
             'inventory_item_id' => $inventoryItem->id,
@@ -199,21 +194,11 @@ class InventoryItemController extends Controller
             'purpose' => 'nullable|string',
         ]);
 
+        $previousQuantity = $inventoryItem->quantity;
+
         $inventoryItem->increment('quantity', $data['quantity']);
         $inventoryItem->refresh();
-
-        if ($inventoryItem->quantity <= $inventoryItem->minimum_stock) {
-            $recipients = \App\Models\User::where('department', $inventoryItem->department)
-                ->whereIn('role', ['staff', 'head'])
-                ->where('id', '<>', $request->user()->id)
-                ->get();
-            foreach ($recipients as $recipient) {
-                $recipient->notify(new \App\Notifications\LowStockNotification(
-                    $inventoryItem->name,
-                    $inventoryItem->quantity
-                ));
-            }
-        }
+        $this->handleLowStock($inventoryItem, $previousQuantity, $request->user()->id);
 
         InventoryTransaction::create([
             'inventory_item_id' => $inventoryItem->id,
@@ -224,5 +209,27 @@ class InventoryItemController extends Controller
         ]);
 
         return redirect()->route('inventory.index');
+    }
+
+    private function handleLowStock(InventoryItem $item, int $previousQuantity, int $actorId): void
+    {
+        $crossedBelow = $previousQuantity > $item->minimum_stock
+            && $item->quantity <= $item->minimum_stock
+            && $item->low_stock_notified_at === null;
+
+        if ($crossedBelow) {
+            $recipients = User::where('department', $item->department)
+                ->whereIn('role', ['staff', 'head'])
+                ->where('id', '<>', $actorId)
+                ->get();
+
+            foreach ($recipients as $recipient) {
+                $recipient->notify(new LowStockNotification($item->name, $item->quantity));
+            }
+
+            $item->update(['low_stock_notified_at' => now()]);
+        } elseif ($item->quantity > $item->minimum_stock && $item->low_stock_notified_at) {
+            $item->update(['low_stock_notified_at' => null]);
+        }
     }
 }
