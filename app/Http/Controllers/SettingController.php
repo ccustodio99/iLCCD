@@ -122,8 +122,10 @@ class SettingController extends Controller
 
             $oldLogo = setting('logo_path');
             if ($oldLogo) {
-                $publicPath = Str::after($oldLogo, 'storage/');
-                Storage::disk('public')->delete($publicPath);
+                if (Str::startsWith($oldLogo, 'storage/')) {
+                    $oldLogo = Str::replaceFirst('storage/', '', $oldLogo);
+                }
+                Storage::disk('public')->delete($oldLogo);
             }
             $path = $request->file('logo')->store('branding', 'public');
             \App\Models\Setting::set('logo_path', 'storage/'.$path);
@@ -132,8 +134,10 @@ class SettingController extends Controller
         if ($request->hasFile('favicon')) {
             $oldFavicon = setting('favicon_path');
             if ($oldFavicon) {
-                $publicPath = Str::after($oldFavicon, 'storage/');
-                Storage::disk('public')->delete($publicPath);
+                if (Str::startsWith($oldFavicon, 'storage/')) {
+                    $oldFavicon = Str::replaceFirst('storage/', '', $oldFavicon);
+                }
+                Storage::disk('public')->delete($oldFavicon);
 
             }
             $path = $request->file('favicon')->store('branding', 'public');
