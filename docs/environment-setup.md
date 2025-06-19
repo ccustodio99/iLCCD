@@ -117,6 +117,9 @@ be served by the web server. By default the application expects
 APP_DEFAULT_PROFILE_PHOTO=/assets/images/default-avatar.png
 ```
 
+The application verifies this path on startup. If the image is missing, it logs
+a warning and automatically falls back to the bundled avatar above.
+
 ## Deployment Tips
 
 1. Keep the `.env` file out of version control.
