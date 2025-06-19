@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\LogsAudit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Traits\LogsAudit;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DocumentVersion extends Model
 {
-    use HasFactory, LogsAudit;
+    use HasFactory, LogsAudit, SoftDeletes;
 
     protected $fillable = [
         'document_id',
@@ -20,7 +21,7 @@ class DocumentVersion extends Model
 
     public function document(): BelongsTo
     {
-        return $this->belongsTo(Document::class);
+        return $this->belongsTo(Document::class)->withTrashed();
     }
 
     public function uploader(): BelongsTo

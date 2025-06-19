@@ -66,7 +66,7 @@ Interface colors and typography come from the database so the same scheme applie
 </style>
 ```
 
-`SettingController` loads these values via `appearanceData()` and saves updates from the **Settings → Appearance** form. A live preview powered by `resources/js/theme-preview.js` lets administrators test colors and fonts before saving. Uploaded logos and favicons are stored in `storage/branding/`, while header and footer text are managed through the same screen with the `updateInstitution()` action.
+`SettingController` loads these values via `appearanceData()` and saves updates from the **Settings → Appearance** form. A live preview powered by `resources/js/theme-preview.js` lets administrators test colors and fonts before saving. Uploaded logos and favicons are automatically resized (logos to 300&nbsp;px wide and favicons to 32&nbsp;px) and stored in `storage/branding/`, while header and footer text are managed through the same screen with the `updateInstitution()` action.
 ---
 
 ## 🚀 Navigation

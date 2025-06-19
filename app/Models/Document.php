@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
+use App\Traits\LogsAudit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Traits\LogsAudit;
-use App\Models\DocumentCategory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Document extends Model
 {
-    use HasFactory, LogsAudit;
+    use HasFactory, LogsAudit, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -32,8 +32,39 @@ class Document extends Model
         return $this->hasMany(DocumentVersion::class);
     }
 
+    public function logs(): HasMany
+    {
+        return $this->hasMany(DocumentLog::class);
+    }
+
     public function documentCategory(): BelongsTo
     {
-        return $this->belongsTo(DocumentCategory::class);
+        return $this->belongsTo(DocumentCategory::class)->withTrashed();
+    }
+
+    public function delete()
+    {
+        $this->versions()->get()->each(function (DocumentVersion $version) {
+            $version->delete();
+        });
+
+        $this->logs()->get()->each(function (DocumentLog $log) {
+            $log->delete();
+        });
+
+        return parent::delete();
+    }
+
+    public function restore()
+    {
+        $this->versions()->withTrashed()->get()->each(function (DocumentVersion $version) {
+            $version->restore();
+        });
+
+        $this->logs()->withTrashed()->get()->each(function (DocumentLog $log) {
+            $log->restore();
+        });
+
+        return parent::restore();
     }
 }

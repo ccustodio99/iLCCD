@@ -59,6 +59,34 @@ it('rejects duplicate document category names', function () {
     $response->assertSessionHasErrors('name');
 });
 
+it('rejects duplicate names with extra spaces', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+    DocumentCategory::factory()->create(['name' => 'Policies']);
+    $this->actingAs($admin);
+
+    $response = $this->from('/settings/document-categories/create')
+        ->post('/settings/document-categories', [
+            'name' => '  Policies  ',
+            'is_active' => true,
+        ]);
+
+    $response->assertSessionHasErrors('name');
+});
+
+it('rejects duplicate names regardless of case', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+    DocumentCategory::factory()->create(['name' => 'Policies']);
+    $this->actingAs($admin);
+
+    $response = $this->from('/settings/document-categories/create')
+        ->post('/settings/document-categories', [
+            'name' => 'policies',
+            'is_active' => true,
+        ]);
+
+    $response->assertSessionHasErrors('name');
+});
+
 it('prevents deleting category with documents', function () {
     Storage::fake('local');
     $admin = User::factory()->create(['role' => 'admin']);
