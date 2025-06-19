@@ -10,11 +10,12 @@ return new class extends Migration
     {
         Schema::create('document_versions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('document_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('document_id')->constrained()->cascadeOnSoftDelete();
             $table->integer('version');
             $table->string('path');
-            $table->foreignId('uploaded_by')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('uploaded_by')->constrained('users')->cascadeOnSoftDelete();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

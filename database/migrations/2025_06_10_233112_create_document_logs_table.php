@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('document_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('document_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('document_id')->constrained()->cascadeOnSoftDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnSoftDelete();
             $table->string('action');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

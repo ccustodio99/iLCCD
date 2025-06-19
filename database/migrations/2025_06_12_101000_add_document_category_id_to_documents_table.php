@@ -12,7 +12,8 @@ return new class extends Migration
             $table->foreignId('document_category_id')
                 ->nullable()
                 ->after('description')
-                ->constrained('document_categories');
+                ->constrained('document_categories')
+                ->cascadeOnSoftDelete();
             $table->dropColumn('category');
         });
     }
