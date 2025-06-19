@@ -27,15 +27,9 @@ class Setting extends Model
             }
         }
 
-        if ($value === '1' || $value === 1) {
-            return true;
-        }
+        $bool = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
-        if ($value === '0' || $value === 0) {
-            return false;
-        }
-
-        return $value;
+        return $bool !== null ? $bool : $value;
     }
 
     public static function set(string $key, $value): void
