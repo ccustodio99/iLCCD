@@ -82,3 +82,35 @@ it('handles old favicon path without storage prefix', function () {
     expect($newPath)->not()->toBe($oldPath);
     Storage::disk('public')->assertExists(str_replace('storage/', '', $newPath));
 });
+
+it('resizes logo to 300px width', function () {
+    Storage::fake('public');
+    $admin = User::factory()->create(['role' => 'admin']);
+    $this->actingAs($admin);
+
+    $response = $this->put('/settings/branding', [
+        'logo' => UploadedFile::fake()->image('wide.png', 600, 400),
+    ]);
+
+    $response->assertRedirect('/settings/branding');
+    $path = str_replace('storage/', '', setting('logo_path'));
+    $file = Storage::disk('public')->path($path);
+    [$width] = getimagesize($file);
+    expect($width)->toBe(300);
+});
+
+it('resizes favicon to 32px width', function () {
+    Storage::fake('public');
+    $admin = User::factory()->create(['role' => 'admin']);
+    $this->actingAs($admin);
+
+    $response = $this->put('/settings/branding', [
+        'favicon' => UploadedFile::fake()->image('icon.png', 100, 100),
+    ]);
+
+    $response->assertRedirect('/settings/branding');
+    $path = str_replace('storage/', '', setting('favicon_path'));
+    $file = Storage::disk('public')->path($path);
+    [$width] = getimagesize($file);
+    expect($width)->toBe(32);
+});
