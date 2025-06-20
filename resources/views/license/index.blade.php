@@ -16,6 +16,9 @@
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('status') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            @if (session('status') === 'License activated')
+                <div class="mt-2">Redirecting to home in <span id="license-countdown">30</span> seconds...</div>
+            @endif
         </div>
     @endif
 
@@ -65,8 +68,27 @@
             <button type="submit" class="btn btn-outline-danger">Remove License</button>
         </form>
     @endif
-            </div>
-        </div>
-    </div>
+</div>
+</div>
+</div>
 </div>
 @endsection
+
+@push('scripts')
+@if (session('status') === 'License activated')
+<script>
+    let countdown = 30;
+    const el = document.getElementById('license-countdown');
+    const timer = setInterval(() => {
+        if (el && countdown > 0) {
+            countdown--;
+            el.textContent = countdown;
+        }
+        if (countdown <= 0) {
+            clearInterval(timer);
+            window.location.href = {{ json_encode(url('/')) }};
+        }
+    }, 1000);
+</script>
+@endif
+@endpush
