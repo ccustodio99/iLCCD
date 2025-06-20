@@ -38,7 +38,6 @@ specify its validity using --days, --months, or --years.';
         $signature = hash_hmac('sha256', $data, config('license.secret'));
         $licenseString = base64_encode($data.'|'.$signature);
 
-
         DB::transaction(function () use ($key, $signature, $expires) {
             License::query()->update(['active' => false]);
             License::create([
@@ -49,12 +48,12 @@ specify its validity using --days, --months, or --years.';
             ]);
         });
 
-
         $filename = $generated->format('Ymd').'-'.$expires->format('Ymd').'.lic';
         Storage::disk('local')->put("licenses/{$filename}", $licenseString);
 
         $this->info('License file created:');
         $this->line(Storage::disk('local')->path("licenses/{$filename}"));
+        $this->line($licenseString);
 
         return self::SUCCESS;
     }

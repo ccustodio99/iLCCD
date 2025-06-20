@@ -10,13 +10,13 @@ For a fresh installation, run the command without flags to create the initial li
 php artisan license:generate
 ```
 
-The command prints an encoded string. If you generated that string on another server, open `/license` on the target instance and submit it to activate. The `/license` route is reachable even without a license because the `CheckLicense` middleware excludes it from verification.
+The command prints the full path to the new license file followed by the encoded string. If you generated that string on another server, open `/license` on the target instance and submit it to activate. The `/license` route is reachable even without a license because the `CheckLicense` middleware excludes it from verification.
 
 1. **Generate a license**
    ```bash
    php artisan license:generate --days=30
    ```
-   The command stores the license in the database and prints the encoded string which can be used for activation.
+   The command stores the license in the database and prints both the file path and encoded string, which can be used for activation.
 2. **Activate or renew**
    Submit the encoded string through the activation or renewal form.  The application verifies the signature and expiry before enabling the license.
 3. **Runtime checks**
