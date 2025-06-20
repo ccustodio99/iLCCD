@@ -161,3 +161,22 @@ Automated SLA checks mark overdue tickets as escalated. Configure these options:
 
 Visit **Settings → Ticket Escalation** (under the **General** section) to adjust these settings.
 
+## Email Configuration
+Specify how the application sends outbound messages:
+
+- **SMTP Host/Port** – mail server connection details
+- **Username/Password** – credentials if required by your mail service
+- **Encryption** – transport scheme such as `tls` or `ssl`
+- **From Address/Name** – default sender information
+
+Navigate to **Settings → Email** (under **Communication**) to modify these values.
+
+## Additional Configuration Points
+The following features are planned but not yet exposed in the System Settings UI:
+
+- **Two-Factor Authentication** – toggling 2FA and choosing verification methods
+- **Default Profile Photo Path** – update the `APP_DEFAULT_PROFILE_PHOTO` fallback image
+- **Contact Information Fields** – global phone number or address for notification footers
+
+These items may be added in future updates to improve flexibility.
+

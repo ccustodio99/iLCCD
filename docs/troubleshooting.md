@@ -50,5 +50,8 @@ Old images sometimes remained when paths lacked the `storage/` prefix. Paths are
 ### Cache keeps outdated settings
 `Setting::get()` previously cached missing keys forever. It now only caches existing records. Run `php artisan cache:clear` if you add settings manually.
 
+### Numeric values returned as strings
+The `Setting` model automatically casts integer strings to integers. Clear the cache if you still receive a string for values like `sla_interval`.
+
 ### Unsanitized notification templates
 Notification templates are stored in Markdown format and converted to HTML when messages are generated. This ensures the raw Markdown is never rendered directly.
