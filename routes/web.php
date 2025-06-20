@@ -29,6 +29,7 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink
 Route::get('/license', [LicenseController::class, 'index'])->name('license.index');
 Route::post('/license/activate', [LicenseController::class, 'activate'])->name('license.activate');
 Route::post('/license/renew', [LicenseController::class, 'renew'])->name('license.renew');
+Route::delete('/license', [LicenseController::class, 'destroy'])->name('license.destroy');
 
 Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 Route::get('/help', [HelpController::class, 'index'])->name('help');

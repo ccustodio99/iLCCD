@@ -1,10 +1,16 @@
-@extends('layouts.app')
+@php($hideHeader = true)
+@extends('layouts.guest')
 
 @section('title', 'License Activation')
 
 @section('content')
-<div class="container" style="max-width: 500px;">
-    <h1 class="mb-4">License Activation</h1>
+<div class="modal show d-block" tabindex="-1" id="licenseModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">License Activation</h1>
+            </div>
+            <div class="modal-body">
 
     @if (session('status'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -38,15 +44,31 @@
         <p class="mb-3"><span class="badge bg-danger">No active license</span></p>
     @endif
 
-    <form method="POST" action="{{ $license ? route('license.renew') : route('license.activate') }}">
+    <form method="POST" action="{{ $license ? route('license.renew') : route('license.activate') }}" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
-            <label for="license" class="form-label">Encoded License</label>
-            <input id="license" type="text" name="license" class="form-control" required>
+            <label for="license_text" class="form-label">License Text</label>
+            <textarea id="license_text" name="license_text" rows="4" class="form-control"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="license_file" class="form-label">License File</label>
+            <input id="license_file" type="file" name="license_file" class="form-control">
         </div>
         <div class="d-grid">
             <button type="submit" class="btn cta">{{ $license ? 'Renew License' : 'Activate License' }}</button>
         </div>
     </form>
+            </div>
+        </div>
+    </div>
 </div>
+@if($license)
+    <div class="text-center mt-3">
+        <form method="POST" action="{{ route('license.destroy') }}">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-outline-danger">Remove License</button>
+        </form>
+    </div>
+@endif
 @endsection
