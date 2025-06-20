@@ -1,10 +1,17 @@
 # System Settings
 
-Administrators manage system defaults and theme settings here from the **Settings** section of the navigation menu. Each record includes an `is_active` flag so items may be disabled without deletion. The Settings link is visible only for users with the **admin** role.
+Administrators manage system defaults and theme settings here from the **Settings** link in the profile dropdown. Each record includes an `is_active` flag so items may be disabled without deletion. The Settings link is visible only for users with the **admin** role.
 
 ## Interface Layout
 
-The landing page presents a responsive grid of cards that link to each configuration area. Icons and concise labels help users quickly find what they need, and every card includes an accessible name. Breadcrumbs keep the current context visible and all forms provide a **Cancel** button. These patterns align with the project's [UX Design Principles](user-interface-branding.md#ux-design-principles).
+The landing page organizes options into an accordion with four sections:
+
+1. **Categories** – manage ticket, job order, inventory, and document categories.
+2. **General** – appearance, localization, and ticket escalation settings.
+3. **Workflow** – approval process configuration.
+4. **Communication** – announcements and notification templates.
+
+Icons and concise labels help users quickly find what they need, and every card includes an accessible name. Breadcrumbs keep the current context visible and all forms provide a **Cancel** button. These patterns align with the project's [UX Design Principles](user-interface-branding.md#ux-design-principles).
 
 ## Default Records
 The seeders populate several baseline records used throughout the system.
@@ -152,4 +159,5 @@ Automated SLA checks mark overdue tickets as escalated. Configure these options:
 - **Enable Escalation** – toggle the background scheduler on or off
 - **Check Interval** – how many minutes between SLA checks (1–60)
 
-Visit **Settings → Ticket Escalation** to adjust these settings.
+Visit **Settings → Ticket Escalation** (under the **General** section) to adjust these settings.
+
