@@ -6,10 +6,10 @@ Administrators manage system defaults and theme settings here from the **Setting
 
 The landing page organizes options into an accordion with four sections:
 
-1. **Categories** – manage ticket, job order, inventory, and document categories.
-2. **General** – appearance, localization, and ticket escalation settings.
-3. **Workflow** – approval process configuration.
-4. **Communication** – announcements and notification templates.
+1. **Categories** – Ticket Categories, Job Order Types, Inventory Categories and Document Categories.
+2. **General** – Appearance, Localization and Ticket Escalation.
+3. **Workflow** – Approval Processes.
+4. **Communication** – Announcements, Notifications and Email.
 
 Icons and concise labels help users quickly find what they need, and every card includes an accessible name. Breadcrumbs keep the current context visible and all forms provide a **Cancel** button. These patterns align with the project's [UX Design Principles](user-interface-branding.md#ux-design-principles).
 
@@ -90,6 +90,7 @@ All appearance settings are grouped together so administrators can update the co
 ### Brand Images
 - **Logo** – appears in the navigation menu header
 - **Favicon** – used in the browser tab and bookmarks
+- **Profile Photo Fallback** – default image for accounts without a custom photo
 
 Open **Settings → Appearance** in the navigation menu to modify these values. Color pickers let administrators select the Primary and Accent shades, dropdown menus list available font families, simple text boxes set the Home Page Heading and Tagline, and file upload fields manage logos and favicons. *A screenshot of the Appearance Settings form is available in the ITRC Dropbox.*
 
@@ -171,11 +172,45 @@ Specify how the application sends outbound messages:
 
 Navigate to **Settings → Email** (under **Communication**) to modify these values.
 
+## Seeded Configuration Keys
+The following settings are created by `Database\\Seeders\\SettingSeeder`:
+
+| Key | Default Value |
+| --- | ------------- |
+| `color_primary` | `#1B2660` |
+| `color_accent` | `#FFCD38` |
+| `font_primary` | `Poppins` |
+| `font_secondary` | `Roboto` |
+| `home_heading` | "Welcome to the LCCD Integrated Information System" |
+| `home_tagline` | "Empowering Christ-centered digital transformation for La Consolacion College Daet—where technology, transparency, and service unite." |
+| `header_text` | "La Consolacion College Daet" |
+| `footer_text` | "Empowering Christ-centered digital transformation\n© {year} La Consolacion College Daet CMS" |
+| `show_footer` | `true` |
+| `default_profile_photo` | value from `app.default_profile_photo` |
+| `timezone` | `Asia/Manila` |
+| `date_format` | `Y-m-d` |
+| `notify_ticket_updates` | `true` |
+| `notify_job_order_status` | `true` |
+| `notify_requisition_status` | `true` |
+| `notify_low_stock` | `true` |
+| `template_ticket_updates` | `{{ message }}` |
+| `template_job_order_status` | `{{ message }}` |
+| `template_requisition_status` | `{{ message }}` |
+| `template_low_stock` | `{{ message }}` |
+| `sla_enabled` | `true` |
+| `sla_interval` | `1` |
+| `mail_host` | value from `mail.mailers.smtp.host` |
+| `mail_port` | value from `mail.mailers.smtp.port` |
+| `mail_username` | value from `mail.mailers.smtp.username` |
+| `mail_password` | value from `mail.mailers.smtp.password` |
+| `mail_encryption` | value from `mail.mailers.smtp.scheme` |
+| `mail_from_address` | value from `mail.from.address` |
+| `mail_from_name` | value from `mail.from.name` |
+
 ## Additional Configuration Points
 The following features are planned but not yet exposed in the System Settings UI:
 
 - **Two-Factor Authentication** – toggling 2FA and choosing verification methods
-- **Default Profile Photo Path** – update the `APP_DEFAULT_PROFILE_PHOTO` fallback image
 - **Contact Information Fields** – global phone number or address for notification footers
 
 These items may be added in future updates to improve flexibility.

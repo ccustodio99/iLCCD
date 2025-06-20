@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withSchedule(function (\Illuminate\Console\Scheduling\Schedule $schedule) {
         if (setting('sla_enabled', true)) {
-            $interval = (int) setting('sla_interval', 1);
+            $interval = setting('sla_interval', 1);
             $interval = $interval > 0 ? $interval : 1;
             $schedule->command('tickets:check-sla')->cron("*/{$interval} * * * *");
         }

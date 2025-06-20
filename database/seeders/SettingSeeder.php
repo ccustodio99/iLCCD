@@ -18,6 +18,7 @@ class SettingSeeder extends Seeder
         Setting::set('header_text', 'La Consolacion College Daet');
         Setting::set('footer_text', "Empowering Christ-centered digital transformation\n© {year} La Consolacion College Daet CMS");
         Setting::set('show_footer', true);
+        Setting::set('default_profile_photo', config('app.default_profile_photo'));
         Setting::set('timezone', 'Asia/Manila');
         Setting::set('date_format', 'Y-m-d');
         Setting::set('notify_ticket_updates', true);
