@@ -21,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Ensure once() cached table checks reset each request
+        license_table_cache_clear();
+
         Paginator::useBootstrapFive();
         view()->share('breadcrumbs', []);
 
