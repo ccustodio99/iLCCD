@@ -194,6 +194,24 @@ class SettingController extends Controller
         return redirect()->route('settings.email')->with('success', 'Email settings updated');
     }
 
+    public function editContact()
+    {
+        return view('settings.contact');
+    }
+
+    public function updateContact(Request $request)
+    {
+        $data = $request->validate([
+            'contact_email' => 'nullable|email',
+            'contact_phone' => 'nullable|string',
+        ]);
+
+        \App\Models\Setting::set('contact_email', $data['contact_email']);
+        \App\Models\Setting::set('contact_phone', $data['contact_phone']);
+
+        return redirect()->route('settings.contact')->with('success', 'Contact information updated');
+    }
+
     public function updateNotifications(Request $request)
     {
         $data = $request->validate([
