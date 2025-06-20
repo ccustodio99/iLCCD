@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\License;
 use Closure;
+use Illuminate\Support\Facades\Schema;
 
 class CheckLicense
 {
@@ -14,7 +15,6 @@ class CheckLicense
         if ($request->is('license', 'license/*')) {
             return $next($request);
         }
-
 
         if (self::$hasTable === null) {
             self::$hasTable = Schema::hasTable('licenses');
