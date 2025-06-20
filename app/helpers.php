@@ -7,7 +7,11 @@ use Illuminate\Support\Once;
 if (! function_exists('setting')) {
     function setting(string $key, $default = null)
     {
-        return Setting::get($key, $default);
+        if (settings_table_exists()) {
+            return Setting::get($key, $default);
+        }
+
+        return $default;
     }
 }
 
@@ -24,6 +28,20 @@ if (! function_exists('license_table_exists')) {
     function license_table_exists(): bool
     {
         return once(fn () => Schema::hasTable('licenses'));
+    }
+}
+
+if (! function_exists('settings_table_exists')) {
+    function settings_table_exists(): bool
+    {
+        return once(fn () => Schema::hasTable('settings'));
+    }
+}
+
+if (! function_exists('settings_table_cache_clear')) {
+    function settings_table_cache_clear(): void
+    {
+        Once::flush();
     }
 }
 
