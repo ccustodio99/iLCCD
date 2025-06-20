@@ -56,6 +56,9 @@ class LicenseController extends Controller
         return view('license.manage', ['licenses' => $licenses]);
     }
 
+    /**
+     * Validate and store a license string.
+     */
     protected function storeLicense(string $encoded): bool
     {
         $raw = base64_decode($encoded, true);
@@ -63,7 +66,12 @@ class LicenseController extends Controller
             return false;
         }
 
-        [$key, $timestamp, $signature] = explode('|', $raw);
+        $parts = explode('|', $raw);
+        if (count($parts) !== 3) {
+            return false;
+        }
+
+        [$key, $timestamp, $signature] = $parts;
 
         $expected = hash_hmac('sha256', "{$key}|{$timestamp}", config('app.key'));
         if (! hash_equals($expected, $signature)) {
