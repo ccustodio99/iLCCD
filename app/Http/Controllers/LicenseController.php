@@ -69,7 +69,7 @@ class LicenseController extends Controller
 
         $license = License::current();
         if ($license) {
-            $license->update(['active' => false]);
+            $license->delete();
         }
 
         return back()->with('status', 'License removed');
