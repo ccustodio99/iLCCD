@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\License;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class GenerateLicense extends Command
@@ -16,6 +17,7 @@ class GenerateLicense extends Command
     {
         $days = (int) $this->option('days');
         $key = (string) Str::uuid();
+        $generated = now();
         $expires = now()->addDays($days);
         $data = $key.'|'.$expires->timestamp;
         $signature = hash_hmac('sha256', $data, config('app.key'));
@@ -28,8 +30,11 @@ class GenerateLicense extends Command
             'active' => true,
         ]);
 
-        $this->info('License generated:');
-        $this->line($licenseString);
+        $filename = $generated->format('Ymd').'-'.$expires->format('Ymd').'.lic';
+        Storage::disk('local')->put("licenses/{$filename}", $licenseString);
+
+        $this->info('License file created:');
+        $this->line(Storage::disk('local')->path("licenses/{$filename}"));
 
         return self::SUCCESS;
     }
