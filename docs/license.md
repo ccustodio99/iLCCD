@@ -24,6 +24,19 @@ The command prints the full path to the new license file followed by the encoded
 4. **Scheduled validation**
    A daily task in `app/Console/Kernel.php` disables the system once the license expires.
 
+### Cache Invalidation After Migrations
+
+The helper that checks for the `licenses` table caches the result using Laravel's
+`once()` utility. If your migrations create or drop the table while the
+application is running, clear this cache so subsequent requests detect the change:
+
+```php
+// inside a migration's up() or down()
+license_table_cache_clear();
+```
+
+Running `php artisan optimize:clear` after migrations has the same effect.
+
 For commercial deployments, ensure a valid license is generated and kept up to date.
 
 ## Removing a License
