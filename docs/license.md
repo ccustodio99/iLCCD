@@ -1,6 +1,14 @@
 # Licensing Workflow
 
-The system requires a valid license record to operate. Licenses are created using the `license:generate` Artisan command which outputs a signed key.  The key encodes the license ID and expiry timestamp and is protected using an HMAC signature.
+The system requires a valid license record to operate. Licenses are created using the `license:generate` Artisan command which outputs a signed key. The key encodes the license ID and expiry timestamp and is protected using an HMAC signature.
+
+For a fresh installation, run the command without flags to create the initial license:
+
+```bash
+php artisan license:generate
+```
+
+The command prints an encoded string. If you generated that string on another server, open `/license` on the target instance and submit it to activate. The `/license` route is reachable even without a license because the `CheckLicense` middleware excludes it from verification.
 
 1. **Generate a license**
    ```bash
