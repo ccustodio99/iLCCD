@@ -126,6 +126,9 @@ Route::middleware('auth')->group(function () {
         Route::get('notifications', [SettingController::class, 'editNotifications'])->name('settings.notifications');
         Route::put('notifications', [SettingController::class, 'updateNotifications'])->name('settings.notifications.update');
 
+        Route::get('sla', [SettingController::class, 'editSla'])->name('settings.sla');
+        Route::put('sla', [SettingController::class, 'updateSla'])->name('settings.sla.update');
+
         Route::resource('ticket-categories', TicketCategoryController::class)->except('show');
         Route::resource('document-categories', DocumentCategoryController::class)->except('show');
         Route::put('inventory-categories/{inventoryCategory}/disable', [InventoryCategoryController::class, 'disable'])->name('inventory-categories.disable');

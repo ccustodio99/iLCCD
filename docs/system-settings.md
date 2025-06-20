@@ -145,3 +145,11 @@ Manage the email alerts sent to users:
 - **Templates** – customize the wording of outgoing messages. Template text is stored as Markdown and converted to HTML via the [league/commonmark](https://commonmark.thephpleague.com/) parser when emails are sent.
 
 Visit **Settings → Notifications** to adjust these settings.
+
+## Ticket Escalation
+Automated SLA checks mark overdue tickets as escalated. Configure these options:
+
+- **Enable Escalation** – toggle the background scheduler on or off
+- **Check Interval** – how many minutes between SLA checks (1–60)
+
+Visit **Settings → Ticket Escalation** to adjust these settings.
