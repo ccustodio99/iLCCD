@@ -104,6 +104,25 @@ MAIL_FROM_NAME="${APP_NAME}"
 
 For production, configure actual credentials and set `MAIL_MAILER` to `smtp`.
 
+### Using Gmail/Google Workspace
+
+If you plan to use Gmail or Google Workspace as your mail provider you must
+create an **App Password**. Regular account passwords will not work with SMTP.
+Once generated, update your `.env` like so:
+
+```
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=youraddress@gmail.com
+MAIL_PASSWORD=your_app_password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS="youraddress@gmail.com"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+The `MAIL_ENCRYPTION` value of `tls` works for most Gmail setups.
+
 ## AWS & Vite
 
 These keys are optional unless you store files in Amazon S3 or use additional Vite settings.
