@@ -31,6 +31,12 @@ specify its validity using --days, --months, or --years.';
 
             return self::FAILURE;
         }
+
+        if (! license_table_exists()) {
+            $this->error('Run migrations first');
+
+            return self::FAILURE;
+        }
         $key = (string) Str::uuid();
         $generated = now();
         $expires = now()->addDays($days)->addMonths($months)->addYears($years);
