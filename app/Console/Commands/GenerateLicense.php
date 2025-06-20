@@ -16,6 +16,12 @@ class GenerateLicense extends Command
     public function handle(): int
     {
         $days = (int) $this->option('days');
+
+        if ($days < 1) {
+            $this->error('The number of days must be at least 1.');
+
+            return self::FAILURE;
+        }
         $key = (string) Str::uuid();
         $generated = now();
         $expires = now()->addDays($days);
