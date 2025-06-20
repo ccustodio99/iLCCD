@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HelpController;
+use App\Http\Controllers\LicenseController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
