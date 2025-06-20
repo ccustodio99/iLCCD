@@ -61,6 +61,7 @@ Route::middleware('auth')->group(function () {
         ->middleware('role:admin');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/data', [DashboardController::class, 'data'])->name('dashboard.data');
+    Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
     Route::resource('users', UserController::class)
         ->except(['show'])
         ->middleware('role:admin');
