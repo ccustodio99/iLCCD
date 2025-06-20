@@ -39,7 +39,7 @@ it('redirects back when destroying without license table', function () {
     $response->assertSessionHasErrors('license');
 });
 
-it('redirects back when managing without license table', function () {
+it('shows message when managing without license table', function () {
     if (Schema::hasTable('licenses')) {
         Schema::drop('licenses');
     }
@@ -50,6 +50,6 @@ it('redirects back when managing without license table', function () {
 
     $response = $this->get('/admin/licenses');
 
-    $response->assertRedirect();
-    $response->assertSessionHasErrors('license');
+    $response->assertStatus(200);
+    $response->assertSee('License table missing');
 });
