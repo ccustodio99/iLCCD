@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Ticket;
-use App\Models\User;
-use App\Models\TicketCategory;
 use App\Models\JobOrderType;
+use App\Models\Ticket;
+use App\Models\TicketCategory;
+use App\Models\User;
 
 it('allows authenticated user to create ticket', function () {
     $user = User::factory()->create();
@@ -104,7 +104,7 @@ it('converts ticket to requisition', function () {
 
     $response->assertRedirect('/requisitions');
 
-    $req = App\Models\Requisition::whereHas('items', fn($q) => $q->where('item', 'Projector Bulb'))->first();
+    $req = App\Models\Requisition::whereHas('items', fn ($q) => $q->where('item', 'Projector Bulb'))->first();
     expect($req)->not->toBeNull();
     expect($req->ticket_id)->toBe($ticket->id);
     $ticket->refresh();
@@ -211,6 +211,8 @@ it('shows requisition on ticket details after conversion', function () {
 it('archives ticket and marks it closed', function () {
     $user = User::factory()->create();
     $ticket = Ticket::factory()->for($user)->create(['status' => 'open']);
+    $watcher = User::factory()->create();
+    $ticket->watchers()->attach($watcher);
     $this->actingAs($user);
 
     $this->delete("/tickets/{$ticket->id}")->assertRedirect('/tickets');
@@ -219,6 +221,7 @@ it('archives ticket and marks it closed', function () {
     expect($archived->archived_at)->not->toBeNull();
     expect($archived->status)->toBe('closed');
     expect($archived->resolved_at)->not->toBeNull();
+    expect($archived->watchers()->where('users.id', $watcher->id)->exists())->toBeTrue();
 });
 
 it('filters tickets by status', function () {
