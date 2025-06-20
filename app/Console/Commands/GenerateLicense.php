@@ -9,22 +9,30 @@ use Illuminate\Support\Str;
 
 class GenerateLicense extends Command
 {
-    protected $signature = 'license:generate {--days=30 : Number of days the license is valid}';
+    protected $signature = 'license:generate
+        {--days=30 : Number of days the license is valid}
+        {--months=0 : Number of months the license is valid}
+        {--years=0 : Number of years the license is valid}';
 
     protected $description = 'Generate a signed license key';
+
+    protected $help = 'Create a license file in storage/app/licenses. You may
+specify its validity using --days, --months, or --years.';
 
     public function handle(): int
     {
         $days = (int) $this->option('days');
+        $months = (int) $this->option('months');
+        $years = (int) $this->option('years');
 
-        if ($days < 1) {
-            $this->error('The number of days must be at least 1.');
+        if ($days < 0 || $months < 0 || $years < 0 || ($days === 0 && $months === 0 && $years === 0)) {
+            $this->error('Specify a positive value for days, months, or years.');
 
             return self::FAILURE;
         }
         $key = (string) Str::uuid();
         $generated = now();
-        $expires = now()->addDays($days);
+        $expires = now()->addDays($days)->addMonths($months)->addYears($years);
         $data = $key.'|'.$expires->timestamp;
         $signature = hash_hmac('sha256', $data, config('app.key'));
         $licenseString = base64_encode($data.'|'.$signature);
