@@ -23,6 +23,12 @@ class LicenseController extends Controller
 
     public function activate(Request $request)
     {
+        if (! license_table_exists()) {
+            return back()->withErrors([
+                'license' => 'License table missing. Please run migrations.',
+            ]);
+        }
+
         $encoded = $request->input('license_text')
             ?? $request->input('license');
 
@@ -44,11 +50,23 @@ class LicenseController extends Controller
 
     public function renew(Request $request)
     {
+        if (! license_table_exists()) {
+            return back()->withErrors([
+                'license' => 'License table missing. Please run migrations.',
+            ]);
+        }
+
         return $this->activate($request);
     }
 
     public function destroy()
     {
+        if (! license_table_exists()) {
+            return back()->withErrors([
+                'license' => 'License table missing. Please run migrations.',
+            ]);
+        }
+
         $license = License::current();
         if ($license) {
             $license->update(['active' => false]);
@@ -59,6 +77,12 @@ class LicenseController extends Controller
 
     public function manage()
     {
+        if (! license_table_exists()) {
+            return back()->withErrors([
+                'license' => 'License table missing. Please run migrations.',
+            ]);
+        }
+
         $licenses = License::orderByDesc('created_at')->get();
 
         return view('license.manage', ['licenses' => $licenses]);
