@@ -6,6 +6,7 @@ use App\Models\License;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use RuntimeException;
 
 class LicenseController extends Controller
 {
@@ -117,6 +118,7 @@ class LicenseController extends Controller
         }
 
         DB::transaction(function () use ($key, $signature, $expires) {
+            License::where('active', true)->lockForUpdate()->get();
             License::query()->update(['active' => false]);
             License::updateOrCreate(
                 ['key' => $key],
@@ -126,6 +128,10 @@ class LicenseController extends Controller
                     'active' => true,
                 ]
             );
+
+            if (License::where('active', true)->count() > 1) {
+                throw new RuntimeException('Multiple active licenses detected');
+            }
         });
 
         return true;
