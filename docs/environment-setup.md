@@ -23,6 +23,7 @@ Copy `.env.example` to `.env` and update the following keys:
 | `APP_MAINTENANCE_DRIVER` | Maintenance mode driver | `file` | |
 | `PHP_CLI_SERVER_WORKERS` | PHP built-in workers | `4` | |
 | `BCRYPT_ROUNDS` | Password hashing rounds | `12` | Lower or equal for dev |
+| `LICENSE_ENABLED` | Toggle license check | `true` | Set `false` for local dev |
 
 > **Important:** Set `APP_URL` to the base address of your application (for example `http://localhost:8000` when using `php artisan serve`). After updating `.env`, run the following command so Laravel reloads the value:
 

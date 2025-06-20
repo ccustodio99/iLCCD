@@ -4,6 +4,8 @@ The system requires a valid license record to operate. Licenses are created usin
 
 The signing secret is read from the `LICENSE_SECRET` environment variable. If this variable is not set, Laravel's `APP_KEY` will be used instead. Set `LICENSE_SECRET` to the same value on every server so that generated licenses can be validated elsewhere.
 
+For local development you may disable the middleware check by setting `LICENSE_ENABLED=false` in your `.env` file. This leaves the license commands available while bypassing runtime validation.
+
 For a fresh installation, run the command without flags to create the initial license:
 
 ```bash
