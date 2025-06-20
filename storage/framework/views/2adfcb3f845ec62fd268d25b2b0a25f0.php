@@ -112,12 +112,12 @@
         </div>
 
         <div class="accordion-item">
-            <h2 class="accordion-header" id="headingSystem">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSystem" aria-expanded="false" aria-controls="collapseSystem">
-                    System Options
+            <h2 class="accordion-header" id="headingGeneral">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGeneral" aria-expanded="false" aria-controls="collapseGeneral">
+                    General
                 </button>
             </h2>
-            <div id="collapseSystem" class="accordion-collapse collapse" aria-labelledby="headingSystem" data-bs-parent="#settingsAccordion">
+            <div id="collapseGeneral" class="accordion-collapse collapse" aria-labelledby="headingGeneral" data-bs-parent="#settingsAccordion">
                 <div class="accordion-body">
                     <div class="row row-cols-1 row-cols-md-2 g-3">
                         <div class="col">
@@ -167,6 +167,42 @@
                         <div class="col">
                             <?php if (isset($component)) { $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.settings-link','data' => ['href' => route('settings.sla'),'icon' => 'priority_high','label' => 'Ticket Escalation']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('settings-link'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('settings.sla')),'icon' => 'priority_high','label' => 'Ticket Escalation']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $attributes = $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $component = $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingWorkflow">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWorkflow" aria-expanded="false" aria-controls="collapseWorkflow">
+                    Workflow
+                </button>
+            </h2>
+            <div id="collapseWorkflow" class="accordion-collapse collapse" aria-labelledby="headingWorkflow" data-bs-parent="#settingsAccordion">
+                <div class="accordion-body">
+                    <div class="row row-cols-1 row-cols-md-2 g-3">
+                        <div class="col">
+                            <?php if (isset($component)) { $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.settings-link','data' => ['href' => route('approval-processes.index'),'icon' => 'account_tree','label' => 'Approval Processes']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('settings-link'); ?>
 <?php if ($component->shouldRender()): ?>
@@ -175,6 +211,28 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('approval-processes.index')),'icon' => 'account_tree','label' => 'Approval Processes']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $attributes = $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $component = $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+                        </div>
+                        <div class="col">
+                            <?php if (isset($component)) { $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.settings-link','data' => ['href' => route('settings.sla'),'icon' => 'priority_high','label' => 'Ticket Escalation']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('settings-link'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('settings.sla')),'icon' => 'priority_high','label' => 'Ticket Escalation']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>

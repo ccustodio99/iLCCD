@@ -65,7 +65,7 @@
         <tbody>
             <?php $__currentLoopData = $tickets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ticket): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <tr>
-                <td><?php echo e($ticket->ticketCategory->name); ?></td>
+                <td><?php echo e(optional($ticket->ticketCategory)->name ?? 'N/A'); ?></td>
                 <td><?php echo e($ticket->formatted_subject); ?></td>
                 <td><?php echo e(ucfirst($ticket->status)); ?></td>
                 <td><?php echo e(optional($ticket->due_at)->format('Y-m-d')); ?></td>
