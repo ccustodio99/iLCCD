@@ -20,9 +20,10 @@ class SettingController extends Controller
         return view('settings.index');
     }
 
-    private function appearanceData(): array
+    private function appearanceData(string $active = 'theme'): array
     {
         return [
+            'active' => $active,
             'primary' => setting('color_primary', '#1B2660'),
             'accent' => setting('color_accent', '#FFCD38'),
             'font_primary' => setting('font_primary', 'Poppins'),
@@ -39,7 +40,7 @@ class SettingController extends Controller
 
     public function editTheme()
     {
-        return view('settings.appearance', $this->appearanceData());
+        return view('settings.appearance', $this->appearanceData('theme'));
     }
 
     public function updateTheme(Request $request)
@@ -65,7 +66,7 @@ class SettingController extends Controller
 
     public function editInstitution()
     {
-        return view('settings.appearance', $this->appearanceData());
+        return view('settings.appearance', $this->appearanceData('institution'));
     }
 
     public function updateInstitution(Request $request)
@@ -110,7 +111,7 @@ class SettingController extends Controller
 
     public function editBranding()
     {
-        return view('settings.appearance', $this->appearanceData());
+        return view('settings.appearance', $this->appearanceData('branding'));
     }
 
     public function updateBranding(Request $request)
@@ -161,6 +162,7 @@ class SettingController extends Controller
     public function editNotifications()
     {
         $placeholder = '{{ message }}';
+
         return view('settings.notifications', compact('placeholder'));
     }
 
