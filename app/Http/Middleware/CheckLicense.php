@@ -4,13 +4,17 @@ namespace App\Http\Middleware;
 
 use App\Models\License;
 use Closure;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Schema;
 
 class CheckLicense
 {
     public function handle($request, Closure $next)
     {
         if ($request->is('license', 'license/*')) {
+            return $next($request);
+        }
+
+        if (! Schema::hasTable('licenses')) {
             return $next($request);
         }
 
