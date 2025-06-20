@@ -17,7 +17,9 @@ class CheckLicense
         $license = License::current();
 
         if (! $license || ! $license->isValid()) {
-            abort(Response::HTTP_FORBIDDEN, 'License expired or invalid.');
+            return redirect()
+                ->route('license.index')
+                ->withErrors(['license' => 'License expired or invalid.']);
         }
 
         return $next($request);
