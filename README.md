@@ -281,7 +281,8 @@ For additional testing tips, see the [Testing Guide](docs/testing.md).
 
 ## 📜 License
 
-Released under the [MIT License](LICENSE).
+Released under the [MIT License](LICENSE). Commercial deployments must also
+obtain a valid activation key. See [docs/license.md](docs/license.md).
 
 ---
 

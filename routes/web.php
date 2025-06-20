@@ -25,6 +25,10 @@ Route::post('/register', [RegisterController::class, 'store']);
 Route::get('/forgot-password', [ForgotPasswordController::class, 'show'])->name('password.request');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 
+Route::get('/license', [LicenseController::class, 'index'])->name('license.index');
+Route::post('/license/activate', [LicenseController::class, 'activate'])->name('license.activate');
+Route::post('/license/renew', [LicenseController::class, 'renew'])->name('license.renew');
+
 Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 Route::get('/help', [HelpController::class, 'index'])->name('help');
 
@@ -50,6 +54,9 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
 
 Route::middleware('auth')->group(function () {
+    Route::get('/admin/licenses', [LicenseController::class, 'manage'])
+        ->name('license.manage')
+        ->middleware('role:admin');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/data', [DashboardController::class, 'data'])->name('dashboard.data');
     Route::resource('users', UserController::class)
