@@ -21,8 +21,10 @@ class LicenseController extends Controller
             ?? $request->input('license');
 
         if (! $encoded && $request->hasFile('license_file')) {
-            $encoded = trim($request->file('license_file')->get());
+            $encoded = $request->file('license_file')->get();
         }
+
+        $encoded = trim((string) $encoded);
 
         $request->merge(['license' => $encoded]);
         $request->validate(['license' => 'required|string']);
