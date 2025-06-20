@@ -95,6 +95,9 @@
                         <div class="col">
                             <x-settings-link :href="route('settings.email')" icon="mail" label="Email" />
                         </div>
+                        <div class="col">
+                            <x-settings-link :href="route('settings.contact')" icon="contact_mail" label="Contact Info" />
+                        </div>
                     </div>
                 </div>
             </div>

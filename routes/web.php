@@ -127,6 +127,8 @@ Route::middleware('auth')->group(function () {
         Route::put('notifications', [SettingController::class, 'updateNotifications'])->name('settings.notifications.update');
         Route::get('email', [SettingController::class, 'editEmail'])->name('settings.email');
         Route::put('email', [SettingController::class, 'updateEmail'])->name('settings.email.update');
+        Route::get('contact', [SettingController::class, 'editContact'])->name('settings.contact');
+        Route::put('contact', [SettingController::class, 'updateContact'])->name('settings.contact.update');
 
         Route::get('sla', [SettingController::class, 'editSla'])->name('settings.sla');
         Route::put('sla', [SettingController::class, 'updateSla'])->name('settings.sla.update');

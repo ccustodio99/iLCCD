@@ -9,7 +9,7 @@ The landing page organizes options into an accordion with four sections:
 1. **Categories** – Ticket Categories, Job Order Types, Inventory Categories and Document Categories.
 2. **General** – Appearance, Localization and Ticket Escalation.
 3. **Workflow** – Approval Processes.
-4. **Communication** – Announcements, Notifications and Email.
+4. **Communication** – Announcements, Notifications, Email and Contact Info.
 
 Icons and concise labels help users quickly find what they need, and every card includes an accessible name. Breadcrumbs keep the current context visible and all forms provide a **Cancel** button. These patterns align with the project's [UX Design Principles](user-interface-branding.md#ux-design-principles).
 
@@ -172,6 +172,14 @@ Specify how the application sends outbound messages:
 
 Navigate to **Settings → Email** (under **Communication**) to modify these values.
 
+## Contact Information
+Set a global phone number and email address displayed in notification footers and other communications.
+
+- **Email** – main contact address for site inquiries
+- **Phone** – optional hotline number or extension
+
+Access this screen under **Settings → Contact Info**.
+
 ## Seeded Configuration Keys
 The following settings are created by `Database\\Seeders\\SettingSeeder`:
 
@@ -206,12 +214,11 @@ The following settings are created by `Database\\Seeders\\SettingSeeder`:
 | `mail_encryption` | value from `mail.mailers.smtp.scheme` |
 | `mail_from_address` | value from `mail.from.address` |
 | `mail_from_name` | value from `mail.from.name` |
+| `contact_email` | `null` |
+| `contact_phone` | `null` |
 
 ## Additional Configuration Points
 The following features are planned but not yet exposed in the System Settings UI:
-
 - **Two-Factor Authentication** – toggling 2FA and choosing verification methods
-- **Contact Information Fields** – global phone number or address for notification footers
 
 These items may be added in future updates to improve flexibility.
-
