@@ -58,12 +58,14 @@ class LicenseController extends Controller
         }
 
         License::query()->update(['active' => false]);
-        License::create([
-            'key' => $key,
-            'signature' => $signature,
-            'expires_at' => $expires,
-            'active' => true,
-        ]);
+        License::updateOrCreate(
+            ['key' => $key],
+            [
+                'signature' => $signature,
+                'expires_at' => $expires,
+                'active' => true,
+            ]
+        );
 
         return true;
     }
