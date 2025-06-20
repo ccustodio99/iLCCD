@@ -17,9 +17,17 @@ class LicenseController extends Controller
 
     public function activate(Request $request)
     {
+        $encoded = $request->input('license_text')
+            ?? $request->input('license');
+
+        if (! $encoded && $request->hasFile('license_file')) {
+            $encoded = trim($request->file('license_file')->get());
+        }
+
+        $request->merge(['license' => $encoded]);
         $request->validate(['license' => 'required|string']);
 
-        if (! $this->storeLicense($request->input('license'))) {
+        if (! $this->storeLicense($encoded)) {
             return back()->withErrors(['license' => 'Invalid license.']);
         }
 
@@ -29,6 +37,16 @@ class LicenseController extends Controller
     public function renew(Request $request)
     {
         return $this->activate($request);
+    }
+
+    public function destroy()
+    {
+        $license = License::current();
+        if ($license) {
+            $license->update(['active' => false]);
+        }
+
+        return back()->with('status', 'License removed');
     }
 
     public function manage()
