@@ -8,13 +8,19 @@ use Illuminate\Support\Facades\Schema;
 
 class CheckLicense
 {
+    protected static ?bool $hasTable = null;
+
     public function handle($request, Closure $next)
     {
         if ($request->is('license', 'license/*')) {
             return $next($request);
         }
 
-        if (! Schema::hasTable('licenses')) {
+        if (self::$hasTable === null) {
+            self::$hasTable = Schema::hasTable('licenses');
+        }
+
+        if (! self::$hasTable) {
             return $next($request);
         }
 
