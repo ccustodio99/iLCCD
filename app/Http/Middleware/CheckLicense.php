@@ -10,7 +10,7 @@ class CheckLicense
 {
     public function handle($request, Closure $next)
     {
-        if ($request->routeIs('license.index', 'license.activate', 'license.renew')) {
+        if ($request->is('license', 'license/*')) {
             return $next($request);
         }
 
