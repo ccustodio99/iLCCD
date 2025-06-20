@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Storage;
 
 use function Pest\Laravel\artisan;
 
+
 it('fails when no positive duration is provided', function () {
     Storage::fake('local');
 
