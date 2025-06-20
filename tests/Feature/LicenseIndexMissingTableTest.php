@@ -6,6 +6,7 @@ it('shows message when license table is missing', function () {
     if (Schema::hasTable('licenses')) {
         Schema::drop('licenses');
     }
+    license_table_cache_clear();
 
     $response = $this->get('/license');
 
