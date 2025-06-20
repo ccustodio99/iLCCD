@@ -78,9 +78,10 @@ class LicenseController extends Controller
     public function manage()
     {
         if (! license_table_exists()) {
-            return back()->withErrors([
-                'license' => 'License table missing. Please run migrations.',
-            ]);
+            return view('license.manage', ['licenses' => collect()])
+                ->withErrors([
+                    'license' => 'License table missing. Please run migrations.',
+                ]);
         }
 
         $licenses = License::orderByDesc('created_at')->get();
