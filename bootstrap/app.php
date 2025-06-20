@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Console\Kernel as ConsoleKernel;
+use Illuminate\Contracts\Console\Kernel as KernelContract;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -21,7 +23,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => App\Http\Middleware\RoleMiddleware::class,
         ]);
+
+        $middleware->append(App\Http\Middleware\CheckLicense::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
+
+$app->singleton(KernelContract::class, ConsoleKernel::class);
+
+return $app;
