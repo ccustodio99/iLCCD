@@ -222,28 +222,6 @@
 <?php unset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
 <?php endif; ?>
                         </div>
-                        <div class="col">
-                            <?php if (isset($component)) { $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.settings-link','data' => ['href' => route('settings.sla'),'icon' => 'priority_high','label' => 'Ticket Escalation']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('settings-link'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('settings.sla')),'icon' => 'priority_high','label' => 'Ticket Escalation']); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
-<?php $attributes = $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
-<?php unset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
-<?php $component = $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
-<?php unset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
-<?php endif; ?>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -291,6 +269,28 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('settings.notifications')),'icon' => 'notifications','label' => 'Notifications']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $attributes = $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>
+<?php $component = $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d; ?>
+<?php unset($__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d); ?>
+<?php endif; ?>
+                        </div>
+                        <div class="col">
+                            <?php if (isset($component)) { $__componentOriginala5b6f3c1f2c2f072f32d90f107fd361d = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.settings-link','data' => ['href' => route('settings.email'),'icon' => 'mail','label' => 'Email']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('settings-link'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('settings.email')),'icon' => 'mail','label' => 'Email']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginala5b6f3c1f2c2f072f32d90f107fd361d)): ?>

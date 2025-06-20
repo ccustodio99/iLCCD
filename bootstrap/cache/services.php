@@ -34,7 +34,8 @@
     30 => 'Pest\\Laravel\\PestServiceProvider',
     31 => 'App\\Providers\\AppServiceProvider',
     32 => 'App\\Providers\\TimezoneServiceProvider',
-    33 => 'App\\Providers\\AppServiceProvider',
+    33 => 'App\\Providers\\MailSettingServiceProvider',
+    34 => 'App\\Providers\\AppServiceProvider',
   ),
   'eager' => 
   array (
@@ -56,7 +57,8 @@
     15 => 'Pest\\Laravel\\PestServiceProvider',
     16 => 'App\\Providers\\AppServiceProvider',
     17 => 'App\\Providers\\TimezoneServiceProvider',
-    18 => 'App\\Providers\\AppServiceProvider',
+    18 => 'App\\Providers\\MailSettingServiceProvider',
+    19 => 'App\\Providers\\AppServiceProvider',
   ),
   'deferred' => 
   array (
