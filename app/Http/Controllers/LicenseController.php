@@ -94,7 +94,7 @@ class LicenseController extends Controller
     protected function storeLicense(string $encoded): bool
     {
         $raw = base64_decode($encoded, true);
-        if (! $raw) {
+        if ($raw === false) {
             return false;
         }
 
