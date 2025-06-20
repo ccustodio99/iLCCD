@@ -18,6 +18,7 @@ it('allows request when licenses table is missing', function () {
     if (Schema::hasTable('licenses')) {
         Schema::drop('licenses');
     }
+    license_table_cache_clear();
 
     $middleware = new CheckLicense;
     $request = Request::create('/dummy', 'GET');
