@@ -46,16 +46,6 @@ it('shows user tickets', function () {
     $response->assertSee('Network issue');
 });
 
-it('prevents editing others tickets', function () {
-    $user = User::factory()->create();
-    $other = User::factory()->create();
-    $ticket = Ticket::factory()->for($other)->create();
-    $this->actingAs($user);
-
-    $response = $this->get("/tickets/{$ticket->id}/edit");
-    $response->assertForbidden();
-});
-
 it('converts ticket to job order', function () {
     $user = User::factory()->create();
     $cat = TicketCategory::factory()->create(['name' => 'Facilities']);

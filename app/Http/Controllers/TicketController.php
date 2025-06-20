@@ -205,21 +205,6 @@ class TicketController extends Controller
         return redirect()->route('tickets.index');
     }
 
-    public function edit(Ticket $ticket)
-    {
-        if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
-            abort(Response::HTTP_FORBIDDEN, 'Access denied');
-        }
-        $users = User::orderBy('name')->get();
-        $categories = TicketCategory::whereNull('parent_id')
-            ->with('children')
-            ->where('is_active', true)
-            ->orderBy('name')
-            ->get();
-
-        return view('tickets.edit', compact('ticket', 'users', 'categories'));
-    }
-
     public function update(Request $request, Ticket $ticket)
     {
         if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
