@@ -160,3 +160,4 @@ Automated SLA checks mark overdue tickets as escalated. Configure these options:
 - **Check Interval** – how many minutes between SLA checks (1–60)
 
 Visit **Settings → Ticket Escalation** (under the **General** section) to adjust these settings.
+
