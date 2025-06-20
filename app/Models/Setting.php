@@ -28,8 +28,15 @@ class Setting extends Model
         }
 
         $bool = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        if ($bool !== null) {
+            return $bool;
+        }
 
-        return $bool !== null ? $bool : $value;
+        if (is_numeric($value) && ctype_digit((string) $value)) {
+            return (int) $value;
+        }
+
+        return $value;
     }
 
     public static function set(string $key, $value): void

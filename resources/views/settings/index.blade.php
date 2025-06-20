@@ -72,9 +72,6 @@
                         <div class="col">
                             <x-settings-link :href="route('approval-processes.index')" icon="account_tree" label="Approval Processes" />
                         </div>
-                        <div class="col">
-                            <x-settings-link :href="route('settings.sla')" icon="priority_high" label="Ticket Escalation" />
-                        </div>
                     </div>
                 </div>
             </div>
@@ -94,6 +91,9 @@
                         </div>
                         <div class="col">
                             <x-settings-link :href="route('settings.notifications')" icon="notifications" label="Notifications" />
+                        </div>
+                        <div class="col">
+                            <x-settings-link :href="route('settings.email')" icon="mail" label="Email" />
                         </div>
                     </div>
                 </div>
