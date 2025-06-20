@@ -11,7 +11,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withSchedule(function (\Illuminate\Console\Scheduling\Schedule $schedule) {
-        $schedule->command('tickets:check-sla')->everyMinute();
+        if (setting('sla_enabled', true)) {
+            $interval = (int) setting('sla_interval', 1);
+            $interval = $interval > 0 ? $interval : 1;
+            $schedule->command('tickets:check-sla')->cron("*/{$interval} * * * *");
+        }
     })
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([

@@ -28,5 +28,7 @@ class SettingSeeder extends Seeder
         Setting::set('template_job_order_status', '{{ message }}');
         Setting::set('template_requisition_status', '{{ message }}');
         Setting::set('template_low_stock', '{{ message }}');
+        Setting::set('sla_enabled', true);
+        Setting::set('sla_interval', 1);
     }
 }
