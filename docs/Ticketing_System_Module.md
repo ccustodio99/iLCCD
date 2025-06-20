@@ -20,9 +20,10 @@ The interface uses Bootstrap 5 with official LCCD branding and is secured throug
 - Ticket subjects display as `[Category] - [Issue Summary] - Ticket ID` for easy reference.
 - Tickets are listed on the My Tickets page.
 - Users can filter tickets by status, category, assigned user, and choose whether to include archived tickets. The search box checks both the ticket subject and description.
-- Automatic SLA monitoring escalates overdue tickets every minute. The background
-  scheduler runs the `tickets:check-sla` console command to mark overdue tickets
-  as escalated.
+- Automatic SLA monitoring escalates overdue tickets on a configurable schedule.
+  The background scheduler runs the `tickets:check-sla` console command according
+  to the interval set under **Settings → Ticket Escalation** (found in the **General** section). By default it checks
+  every minute to mark overdue tickets as escalated.
 - Ticket categories are configurable under **Settings → Ticket Categories**.
 - KPI logs capture escalation timestamps for dashboard reporting.
 

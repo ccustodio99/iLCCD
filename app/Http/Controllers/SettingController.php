@@ -194,4 +194,25 @@ class SettingController extends Controller
 
         return redirect()->route('settings.notifications')->with('success', 'Notification settings updated');
     }
+
+    public function editSla()
+    {
+        return view('settings.sla', [
+            'enabled' => setting('sla_enabled', true),
+            'interval' => setting('sla_interval', 1),
+        ]);
+    }
+
+    public function updateSla(Request $request)
+    {
+        $data = $request->validate([
+            'sla_enabled' => 'sometimes|boolean',
+            'sla_interval' => 'required|integer|min:1|max:60',
+        ]);
+
+        \App\Models\Setting::set('sla_enabled', $request->boolean('sla_enabled'));
+        \App\Models\Setting::set('sla_interval', $data['sla_interval']);
+
+        return redirect()->route('settings.sla')->with('success', 'Escalation settings updated');
+    }
 }

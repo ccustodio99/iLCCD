@@ -38,12 +38,12 @@
         </div>
 
         <div class="accordion-item">
-            <h2 class="accordion-header" id="headingSystem">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSystem" aria-expanded="false" aria-controls="collapseSystem">
-                    System Options
+            <h2 class="accordion-header" id="headingGeneral">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGeneral" aria-expanded="false" aria-controls="collapseGeneral">
+                    General
                 </button>
             </h2>
-            <div id="collapseSystem" class="accordion-collapse collapse" aria-labelledby="headingSystem" data-bs-parent="#settingsAccordion">
+            <div id="collapseGeneral" class="accordion-collapse collapse" aria-labelledby="headingGeneral" data-bs-parent="#settingsAccordion">
                 <div class="accordion-body">
                     <div class="row row-cols-1 row-cols-md-2 g-3">
                         <div class="col">
@@ -52,6 +52,23 @@
                         <div class="col">
                             <x-settings-link :href="route('settings.localization')" icon="schedule" label="Localization" />
                         </div>
+                        <div class="col">
+                            <x-settings-link :href="route('settings.sla')" icon="priority_high" label="Ticket Escalation" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingWorkflow">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWorkflow" aria-expanded="false" aria-controls="collapseWorkflow">
+                    Workflow
+                </button>
+            </h2>
+            <div id="collapseWorkflow" class="accordion-collapse collapse" aria-labelledby="headingWorkflow" data-bs-parent="#settingsAccordion">
+                <div class="accordion-body">
+                    <div class="row row-cols-1 row-cols-md-2 g-3">
                         <div class="col">
                             <x-settings-link :href="route('approval-processes.index')" icon="account_tree" label="Approval Processes" />
                         </div>
