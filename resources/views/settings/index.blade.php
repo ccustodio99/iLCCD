@@ -92,6 +92,9 @@
                         <div class="col">
                             <x-settings-link :href="route('settings.notifications')" icon="notifications" label="Notifications" />
                         </div>
+                        <div class="col">
+                            <x-settings-link :href="route('settings.email')" icon="mail" label="Email" />
+                        </div>
                     </div>
                 </div>
             </div>

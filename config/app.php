@@ -156,6 +156,7 @@ return [
         // Application Service Providers...
         App\Providers\AppServiceProvider::class,
         App\Providers\TimezoneServiceProvider::class,
+        App\Providers\MailSettingServiceProvider::class,
     ])->merge([
         // Added Service Providers (Do not remove this line)...
     ])->toArray(),
