@@ -41,4 +41,4 @@ For commercial deployments, ensure a valid license is generated and kept up to d
 
 ## Removing a License
 
-If you need to deactivate the system, navigate to `/license` while logged in. When an active license exists, a **Remove License** button appears below the activation form. Submitting this form deletes the license record, immediately disabling all protected routes until a new license is activated.
+If you need to deactivate the system, open `/license`. This page is accessible even without logging in. When an active license exists, a **Remove License** button appears below the activation form. Submitting this form deletes the license record, immediately disabling all protected routes until a new license is activated.
