@@ -23,3 +23,7 @@ The command prints an encoded string. If you generated that string on another se
    A daily task in `app/Console/Kernel.php` disables the system once the license expires.
 
 For commercial deployments, ensure a valid license is generated and kept up to date.
+
+## Removing a License
+
+If you need to deactivate the system, navigate to `/license` while logged in. When an active license exists, a **Remove License** button appears below the activation form. Submitting this form deletes the license record, immediately disabling all protected routes until a new license is activated.

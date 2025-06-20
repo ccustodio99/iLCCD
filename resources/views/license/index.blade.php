@@ -58,17 +58,15 @@
             <button type="submit" class="btn cta">{{ $license ? 'Renew License' : 'Activate License' }}</button>
         </div>
     </form>
-            </div>
-        </div>
-    </div>
-</div>
-@if($license)
-    <div class="text-center mt-3">
-        <form method="POST" action="{{ route('license.destroy') }}">
+    @if($license)
+        <form method="POST" action="{{ route('license.destroy') }}" class="mt-3 text-center">
             @csrf
             @method('DELETE')
             <button type="submit" class="btn btn-outline-danger">Remove License</button>
         </form>
+    @endif
+            </div>
+        </div>
     </div>
-@endif
+</div>
 @endsection
