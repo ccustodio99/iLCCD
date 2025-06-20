@@ -20,9 +20,10 @@ class SettingController extends Controller
         return view('settings.index');
     }
 
-    private function appearanceData(): array
+    private function appearanceData(string $active = 'theme'): array
     {
         return [
+            'active' => $active,
             'primary' => setting('color_primary', '#1B2660'),
             'accent' => setting('color_accent', '#FFCD38'),
             'font_primary' => setting('font_primary', 'Poppins'),
@@ -39,7 +40,7 @@ class SettingController extends Controller
 
     public function editTheme()
     {
-        return view('settings.appearance', $this->appearanceData());
+        return view('settings.appearance', $this->appearanceData('theme'));
     }
 
     public function updateTheme(Request $request)
@@ -65,7 +66,7 @@ class SettingController extends Controller
 
     public function editInstitution()
     {
-        return view('settings.appearance', $this->appearanceData());
+        return view('settings.appearance', $this->appearanceData('institution'));
     }
 
     public function updateInstitution(Request $request)
@@ -110,7 +111,7 @@ class SettingController extends Controller
 
     public function editBranding()
     {
-        return view('settings.appearance', $this->appearanceData());
+        return view('settings.appearance', $this->appearanceData('branding'));
     }
 
     public function updateBranding(Request $request)
@@ -161,7 +162,32 @@ class SettingController extends Controller
     public function editNotifications()
     {
         $placeholder = '{{ message }}';
+
         return view('settings.notifications', compact('placeholder'));
+    }
+
+    public function editEmail()
+    {
+        return view('settings.email');
+    }
+
+    public function updateEmail(Request $request)
+    {
+        $data = $request->validate([
+            'mail_host' => 'required|string',
+            'mail_port' => 'required|integer',
+            'mail_username' => 'nullable|string',
+            'mail_password' => 'nullable|string',
+            'mail_encryption' => 'nullable|string',
+            'mail_from_address' => 'required|email',
+            'mail_from_name' => 'required|string',
+        ]);
+
+        foreach ($data as $key => $value) {
+            \App\Models\Setting::set($key, $value);
+        }
+
+        return redirect()->route('settings.email')->with('success', 'Email settings updated');
     }
 
     public function updateNotifications(Request $request)

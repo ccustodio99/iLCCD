@@ -8,16 +8,17 @@
         ['label' => 'Settings', 'url' => route('settings.index')],
         ['label' => 'Appearance']
     ]])
+    @php($active = $active ?? 'theme')
     <h1 class="mb-4">Appearance Settings</h1>
 
     <div class="accordion mb-4" id="appearanceAccordion">
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingTheme">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTheme" aria-expanded="true" aria-controls="collapseTheme">
+                <button class="accordion-button {{ $active !== 'theme' ? 'collapsed' : '' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTheme" aria-expanded="{{ $active === 'theme' ? 'true' : 'false' }}" aria-controls="collapseTheme">
                     Theme Options
                 </button>
             </h2>
-            <div id="collapseTheme" class="accordion-collapse collapse show" aria-labelledby="headingTheme" data-bs-parent="#appearanceAccordion">
+            <div id="collapseTheme" class="accordion-collapse collapse {{ $active === 'theme' ? 'show' : '' }}" aria-labelledby="headingTheme" data-bs-parent="#appearanceAccordion">
                 <div class="accordion-body">
                     <form action="{{ route('settings.theme.update') }}" method="POST" class="mb-4">
                         @csrf
@@ -75,11 +76,11 @@
 
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingBranding">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBranding" aria-expanded="false" aria-controls="collapseBranding">
+                <button class="accordion-button {{ $active !== 'branding' ? 'collapsed' : '' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBranding" aria-expanded="{{ $active === 'branding' ? 'true' : 'false' }}" aria-controls="collapseBranding">
                     Brand Images
                 </button>
             </h2>
-            <div id="collapseBranding" class="accordion-collapse collapse" aria-labelledby="headingBranding" data-bs-parent="#appearanceAccordion">
+            <div id="collapseBranding" class="accordion-collapse collapse {{ $active === 'branding' ? 'show' : '' }}" aria-labelledby="headingBranding" data-bs-parent="#appearanceAccordion">
                 <div class="accordion-body">
                     <form action="{{ route('settings.branding.update') }}" method="POST" enctype="multipart/form-data" class="mb-4">
                         @csrf
@@ -110,11 +111,11 @@
 
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingInstitution">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstitution" aria-expanded="false" aria-controls="collapseInstitution">
+                <button class="accordion-button {{ $active !== 'institution' ? 'collapsed' : '' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstitution" aria-expanded="{{ $active === 'institution' ? 'true' : 'false' }}" aria-controls="collapseInstitution">
                     Institution Text
                 </button>
             </h2>
-            <div id="collapseInstitution" class="accordion-collapse collapse" aria-labelledby="headingInstitution" data-bs-parent="#appearanceAccordion">
+            <div id="collapseInstitution" class="accordion-collapse collapse {{ $active === 'institution' ? 'show' : '' }}" aria-labelledby="headingInstitution" data-bs-parent="#appearanceAccordion">
                 <div class="accordion-body">
                     <form action="{{ route('settings.institution.update') }}" method="POST" class="mb-4">
                         @csrf
