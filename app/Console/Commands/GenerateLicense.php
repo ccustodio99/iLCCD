@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\License;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -37,12 +38,15 @@ specify its validity using --days, --months, or --years.';
         $signature = hash_hmac('sha256', $data, config('license.secret'));
         $licenseString = base64_encode($data.'|'.$signature);
 
-        License::create([
-            'key' => $key,
-            'signature' => $signature,
-            'expires_at' => $expires,
-            'active' => true,
-        ]);
+        DB::transaction(function () use ($key, $signature, $expires) {
+            License::query()->update(['active' => false]);
+            License::create([
+                'key' => $key,
+                'signature' => $signature,
+                'expires_at' => $expires,
+                'active' => true,
+            ]);
+        });
 
         $filename = $generated->format('Ymd').'-'.$expires->format('Ymd').'.lic';
         Storage::disk('local')->put("licenses/{$filename}", $licenseString);

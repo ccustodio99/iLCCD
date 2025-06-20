@@ -23,7 +23,9 @@ class License extends Model
 
     public static function current(): ?self
     {
-        return static::where('active', true)->first();
+        return static::where('active', true)
+            ->orderByDesc('created_at')
+            ->first();
     }
 
     public function isValid(): bool
