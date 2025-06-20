@@ -37,6 +37,7 @@ specify its validity using --days, --months, or --years.';
         $signature = hash_hmac('sha256', $data, config('license.secret'));
         $licenseString = base64_encode($data.'|'.$signature);
 
+        License::query()->update(['active' => false]);
         License::create([
             'key' => $key,
             'signature' => $signature,
