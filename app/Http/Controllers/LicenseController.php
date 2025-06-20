@@ -5,11 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\License;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Schema;
 
 class LicenseController extends Controller
 {
     public function index()
     {
+        if (! Schema::hasTable('licenses')) {
+            return view('license.index', ['license' => null])
+                ->withErrors(['license' => 'License table missing. Please run migrations.']);
+        }
+
         $license = License::current();
 
         return view('license.index', ['license' => $license]);
