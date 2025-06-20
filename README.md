@@ -75,7 +75,8 @@ Deliver a holistic, faith-driven digital backbone for LCCD, empowering every use
    them in chronological order or see [Migration Sequence](docs/migration-sequence.md) for details.
 8. Ensure `public/storage` is linked. The `composer dev` script checks and runs `php artisan storage:link` if needed.
 9. Start the local server using `php artisan serve` or `composer dev` for hot reloading.
-10. Execute the test suite with `php artisan test` to verify the setup.
+10. Run a queue worker with `php artisan queue:work` so queued notifications are processed.
+11. Execute the test suite with `php artisan test` to verify the setup.
 
 ---
 

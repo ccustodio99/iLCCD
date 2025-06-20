@@ -3,12 +3,13 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\HtmlString;
 use League\CommonMark\CommonMarkConverter;
 
-class TicketStatusNotification extends Notification
+class TicketStatusNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -16,7 +17,13 @@ class TicketStatusNotification extends Notification
 
     public function via(object $notifiable): array
     {
-        return setting('notify_ticket_updates', true) ? ['mail'] : [];
+        $channels = ['database'];
+
+        if (setting('notify_ticket_updates', true)) {
+            $channels[] = 'mail';
+        }
+
+        return $channels;
     }
 
     public function toMail(object $notifiable): MailMessage
@@ -30,5 +37,13 @@ class TicketStatusNotification extends Notification
         return (new MailMessage)
             ->subject("Ticket #{$this->ticketId} Update")
             ->view(fn () => new HtmlString($html));
+    }
+
+    public function toArray(object $notifiable): array
+    {
+        return [
+            'ticket_id' => $this->ticketId,
+            'message' => $this->message,
+        ];
     }
 }
