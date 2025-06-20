@@ -10,6 +10,10 @@ class CheckLicense
 {
     public function handle($request, Closure $next)
     {
+        if ($request->routeIs('license.index', 'license.activate', 'license.renew')) {
+            return $next($request);
+        }
+
         $license = License::current();
 
         if (! $license || ! $license->isValid()) {
