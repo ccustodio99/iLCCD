@@ -103,6 +103,10 @@
                             @endif
                             <input type="file" id="favicon" name="favicon" class="form-control">
                         </div>
+                        <div class="mb-3">
+                            <label for="default_profile_photo" class="form-label">Profile Photo Fallback Path</label>
+                            <input type="text" id="default_profile_photo" name="default_profile_photo" value="{{ $default_profile_photo }}" class="form-control">
+                        </div>
                         <button type="submit" class="btn btn-primary btn-sm">Save</button>
                     </form>
                 </div>

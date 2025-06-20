@@ -35,6 +35,7 @@ class SettingController extends Controller
             'show_footer' => setting('show_footer', true),
             'logo' => setting('logo_path'),
             'favicon' => setting('favicon_path'),
+            'default_profile_photo' => setting('default_profile_photo', config('app.default_profile_photo')),
         ];
     }
 
@@ -119,6 +120,7 @@ class SettingController extends Controller
         $request->validate([
             'logo' => 'nullable|image|max:2048',
             'favicon' => 'nullable|image|max:1024',
+            'default_profile_photo' => 'nullable|string',
         ]);
 
         if ($request->hasFile('logo')) {
@@ -155,6 +157,8 @@ class SettingController extends Controller
             Storage::disk('public')->put($path, $encoded->toString());
             \App\Models\Setting::set('favicon_path', 'storage/'.$path);
         }
+
+        \App\Models\Setting::set('default_profile_photo', $request->input('default_profile_photo'));
 
         return redirect()->route('settings.branding')->with('success', 'Branding updated');
     }

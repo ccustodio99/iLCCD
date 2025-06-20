@@ -90,6 +90,7 @@ All appearance settings are grouped together so administrators can update the co
 ### Brand Images
 - **Logo** – appears in the navigation menu header
 - **Favicon** – used in the browser tab and bookmarks
+- **Profile Photo Fallback** – default image for accounts without a custom photo
 
 Open **Settings → Appearance** in the navigation menu to modify these values. Color pickers let administrators select the Primary and Accent shades, dropdown menus list available font families, simple text boxes set the Home Page Heading and Tagline, and file upload fields manage logos and favicons. *A screenshot of the Appearance Settings form is available in the ITRC Dropbox.*
 
@@ -185,6 +186,7 @@ The following settings are created by `Database\\Seeders\\SettingSeeder`:
 | `header_text` | "La Consolacion College Daet" |
 | `footer_text` | "Empowering Christ-centered digital transformation\n© {year} La Consolacion College Daet CMS" |
 | `show_footer` | `true` |
+| `default_profile_photo` | value from `app.default_profile_photo` |
 | `timezone` | `Asia/Manila` |
 | `date_format` | `Y-m-d` |
 | `notify_ticket_updates` | `true` |
@@ -209,7 +211,6 @@ The following settings are created by `Database\\Seeders\\SettingSeeder`:
 The following features are planned but not yet exposed in the System Settings UI:
 
 - **Two-Factor Authentication** – toggling 2FA and choosing verification methods
-- **Default Profile Photo Path** – update the `APP_DEFAULT_PROFILE_PHOTO` fallback image
 - **Contact Information Fields** – global phone number or address for notification footers
 
 These items may be added in future updates to improve flexibility.
