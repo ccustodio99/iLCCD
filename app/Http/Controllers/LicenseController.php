@@ -75,7 +75,7 @@ class LicenseController extends Controller
 
         [$key, $timestamp, $signature] = $parts;
 
-        $expected = hash_hmac('sha256', "{$key}|{$timestamp}", config('app.key'));
+        $expected = hash_hmac('sha256', "{$key}|{$timestamp}", config('license.secret'));
         if (! hash_equals($expected, $signature)) {
             return false;
         }

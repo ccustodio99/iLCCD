@@ -2,6 +2,8 @@
 
 The system requires a valid license record to operate. Licenses are created using the `license:generate` Artisan command which outputs a signed key. The key encodes the license ID and expiry timestamp and is protected using an HMAC signature.
 
+The signing secret is read from the `LICENSE_SECRET` environment variable. If this variable is not set, Laravel's `APP_KEY` will be used instead. Set `LICENSE_SECRET` to the same value on every server so that generated licenses can be validated elsewhere.
+
 For a fresh installation, run the command without flags to create the initial license:
 
 ```bash

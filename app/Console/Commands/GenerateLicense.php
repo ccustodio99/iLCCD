@@ -34,7 +34,7 @@ specify its validity using --days, --months, or --years.';
         $generated = now();
         $expires = now()->addDays($days)->addMonths($months)->addYears($years);
         $data = $key.'|'.$expires->timestamp;
-        $signature = hash_hmac('sha256', $data, config('app.key'));
+        $signature = hash_hmac('sha256', $data, config('license.secret'));
         $licenseString = base64_encode($data.'|'.$signature);
 
         License::create([

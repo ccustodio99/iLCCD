@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 it('does not duplicate license key on renewal', function () {
     $key = (string) Str::uuid();
     $expires = Carbon::now()->addDay();
-    $signature = hash_hmac('sha256', "{$key}|{$expires->timestamp}", config('app.key'));
+    $signature = hash_hmac('sha256', "{$key}|{$expires->timestamp}", config('license.secret'));
     $encoded = base64_encode("{$key}|{$expires->timestamp}|{$signature}");
 
     $this->post('/license/activate', ['license' => $encoded]);
