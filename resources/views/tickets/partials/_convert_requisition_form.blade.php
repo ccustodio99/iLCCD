@@ -1,5 +1,5 @@
 <div class="mt-3">
-    <h6>Convert to Requisition</h6>
+
     @if ($errors->convertRequisition->any())
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <ul class="mb-0">
