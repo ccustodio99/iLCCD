@@ -43,7 +43,7 @@
     </form>
 </div>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+(function () {
     const parent = document.getElementById('type_parent');
     const child = document.getElementById('job_type');
 
@@ -78,6 +78,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     parent.addEventListener('change', () => loadChildren(parent.value));
     loadChildren(parent.value, '{{ old('job_type', $jobOrder->job_type) }}');
-});
+})();
 </script>
 @endsection

@@ -38,6 +38,6 @@ function initCategoryDropdown(form) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+(function () {
     document.querySelectorAll('.ticket-form').forEach(initCategoryDropdown);
-});
+})();

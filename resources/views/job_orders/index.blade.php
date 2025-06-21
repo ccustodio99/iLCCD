@@ -204,7 +204,7 @@
                     </div>
                 </form>
                 <script>
-                document.addEventListener('DOMContentLoaded', function () {
+                (function () {
                     const parent{{ $jobOrder->id }} = document.getElementById('type_parent_{{ $jobOrder->id }}');
                     const child{{ $jobOrder->id }} = document.getElementById('job_type_{{ $jobOrder->id }}');
 
@@ -230,7 +230,7 @@
 
                     parent{{ $jobOrder->id }}.addEventListener('change', () => loadChildren{{ $jobOrder->id }}(parent{{ $jobOrder->id }}.value));
                     loadChildren{{ $jobOrder->id }}(parent{{ $jobOrder->id }}.value, '{{ old('job_type', $jobOrder->job_type) }}');
-                });
+                })();
                 </script>
             </div>
         </div>
@@ -281,7 +281,7 @@
     </div>
 </div>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+(function () {
     const parent = document.getElementById('new_type_parent');
     const child = document.getElementById('new_job_type');
 
@@ -307,6 +307,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     parent.addEventListener('change', () => loadChildren(parent.value));
     loadChildren(parent.value, '{{ old('job_type') }}');
-});
+})();
 </script>
 @endsection

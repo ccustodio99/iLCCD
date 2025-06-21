@@ -54,4 +54,6 @@ function initStageForms() {
     attachHandlers();
 }
 
-document.addEventListener('DOMContentLoaded', initStageForms);
+(function () {
+    initStageForms();
+})();
