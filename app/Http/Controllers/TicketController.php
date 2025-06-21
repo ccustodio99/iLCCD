@@ -433,6 +433,8 @@ class TicketController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
+        $ticket->load('ticketCategory.parent');
+
         $repository = Cache::getStore() instanceof TaggableStore
             ? Cache::tags('tickets')
             : Cache::store();
