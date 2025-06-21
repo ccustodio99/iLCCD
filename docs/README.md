@@ -22,6 +22,7 @@ Welcome to the documentation hub for the LCCD Integrated Information System. Thi
 - [Demo Guide](demo-guide.md)
 - [Purchase Order System](purchase-order-module.md)
 - [Codebase Overview](codebase_overview.md)
+- [UML Overview](uml/app_overview.svg)
 - [Environment Setup](environment-setup.md)
 - [Migration Sequence](migration-sequence.md)
 - [Testing Guide](testing.md)
