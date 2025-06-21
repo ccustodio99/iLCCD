@@ -17,14 +17,11 @@
                             break;
                         }
                     }
-                    $categoryData = $categories->mapWithKeys(function($cat) {
-                        return [$cat->id => $cat->children->map(fn($c) => ['id' => $c->id, 'name' => $c->name])];
-                    });
                 @endphp
                 @include('partials.ticket-categories-script', ['categories' => $categories])
                 <div class="mb-3">
                     <label class="form-label">Category</label>
-                    <select class="form-select category-select mb-2" data-categories='@json($categoryData)' required>
+                    <select class="form-select category-select mb-2" required>
                         <option value="">Select Category</option>
                         @foreach($categories as $cat)
                             <option value="{{ $cat->id }}" {{ (string)$editCat === (string)$cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
