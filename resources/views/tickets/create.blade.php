@@ -53,16 +53,6 @@
             </select>
         </div>
         <div class="mb-3">
-            <label class="form-label">Watchers</label>
-            <select name="watchers[]" class="form-select watcher-select" data-search-url="{{ route('users.search') }}" multiple>
-                @php($selectedWatchers = old('watchers', []))
-                @foreach(App\Models\User::whereIn('id', $selectedWatchers)->orderBy('name')->get() as $u)
-                    <option value="{{ $u->id }}" selected>{{ $u->name }}</option>
-                @endforeach
-            </select>
-            <small class="text-muted">Search to add multiple users</small>
-        </div>
-        <div class="mb-3">
             <label class="form-label">Due Date</label>
             <input type="date" name="due_at" class="form-control" value="{{ old('due_at') }}">
         </div>
@@ -70,6 +60,5 @@
         <a href="{{ route('tickets.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
     @include('partials.category-dropdown-script')
-    @include('partials.user-select-script')
 </div>
 @endsection
