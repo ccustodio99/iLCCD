@@ -24,6 +24,17 @@
             <p><strong>Resolved:</strong> {{ optional($ticket->resolved_at)->format('Y-m-d H:i') }}</p>
             <p><strong>Due:</strong> {{ optional($ticket->due_at)->format('Y-m-d H:i') }}</p>
 
+            @if(in_array(auth()->id(), [$ticket->user_id, $ticket->assigned_to_id]) && $ticket->status !== 'converted')
+                <div class="mb-3">
+                    <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#convertJobOrderModal{{ $ticket->id }}">
+                        Convert to Job Order
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#convertRequisitionModal{{ $ticket->id }}">
+                        Convert to Requisition
+                    </button>
+                </div>
+            @endif
+
             @if($ticket->jobOrder)
                 <p><strong>Job Order ID:</strong> {{ $ticket->jobOrder->id }}</p>
             @endif
@@ -67,6 +78,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-    </div>
 </div>
+</div>
+@include('tickets.partials._modal_convert_job_order', ['ticket' => $ticket, 'jobOrderTypes' => $jobOrderTypes, 'typeMap' => $typeMap])
+@include('tickets.partials._modal_convert_requisition', ['ticket' => $ticket])
