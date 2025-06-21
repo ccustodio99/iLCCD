@@ -32,11 +32,9 @@ begins.
    - Both the assignee and requester receive notifications.
 
 4. **Requesting Materials**
-   - When a job requires supplies, the system first checks [Inventory Module](inventory-module.md).
-   - Available stock is deducted immediately and noted on the job order.
-   - If items are missing, a linked [Requisition Management Module](requisition-management-module.md) is created so the materials can be procured.
-   - The job order remains in its current approval stage until the requisition is approved.
-   - Once the requisition reaches **approved** and items are issued, the job order automatically advances to **approved** so it can be assigned.
+   - When a job requires supplies, the requester submits a [Requisition Management Module](requisition-management-module.md) entry for the needed items.
+   - The requisition follows the normal approval workflow. Inventory is deducted only after the request is **approved**.
+   - Once items are issued, the job order automatically advances to **approved** so it can be assigned.
 
 5. **Evaluation and Execution Logging**
    - Jobs move through these workflow states:

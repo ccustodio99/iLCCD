@@ -79,7 +79,7 @@ it('prevents editing others job orders', function () {
     $response->assertForbidden();
 });
 
-it('deducts inventory if materials available', function () {
+it('creates requisition even when materials in stock', function () {
     $user = User::factory()->create(['department' => 'IT']);
     $this->actingAs($user);
 
@@ -98,11 +98,11 @@ it('deducts inventory if materials available', function () {
 
     $response->assertRedirect('/job-orders');
     $item->refresh();
-    expect($item->quantity)->toBe(2);
-    expect(InventoryTransaction::where('job_order_id', $order->id)
-        ->where('action', 'issue')
-        ->where('purpose', 'Setup network')
+    expect($item->quantity)->toBe(5);
+    expect(Requisition::where('job_order_id', $order->id)
+        ->whereHas('items', fn ($q) => $q->where('item', 'Cable'))
         ->exists())->toBeTrue();
+    expect(InventoryTransaction::where('job_order_id', $order->id)->exists())->toBeFalse();
 });
 
 it('creates requisition when materials not in stock', function () {
