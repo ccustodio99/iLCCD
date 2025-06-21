@@ -4,14 +4,7 @@
 
 @section('content')
 <div class="container">
-    @php
-        $categoryData = $categories->mapWithKeys(function ($cat) {
-            return [$cat->id => $cat->children->map(fn($c) => ['id' => $c->id, 'name' => $c->name])];
-        });
-    @endphp
-    <script>
-        window.ticketCategories = @json($categoryData);
-    </script>
+    @include('partials.ticket-categories-script', ['categories' => $categories])
     <h1 class="mb-4">My Tickets</h1>
     @include('components.per-page-selector')
     <div class="mb-3">
