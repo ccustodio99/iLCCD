@@ -91,7 +91,12 @@ class TicketController extends Controller
 
         $cacheKey = 'tickets:index:'.md5($request->fullUrl());
         $tickets = $repository->remember($cacheKey, 300, function () use ($query, $perPage) {
-            return $query->with('assignedTo')
+            return $query->with([
+                'assignedTo',
+                'ticketCategory',
+                'jobOrder',
+                'requisitions',
+            ])
                 ->paginate($perPage)
                 ->withQueryString();
         });
