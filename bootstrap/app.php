@@ -3,6 +3,7 @@
 use App\Console\Kernel as ConsoleKernel;
 use Illuminate\Contracts\Console\Kernel as KernelContract;
 use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Bootstrap\LoadConfiguration;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
@@ -24,9 +25,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => App\Http\Middleware\RoleMiddleware::class,
         ]);
 
-        if (config('license.enabled')) {
-            $middleware->web(append: App\Http\Middleware\CheckLicense::class);
-        }
+        app()->afterBootstrapping(LoadConfiguration::class, function () use ($middleware) {
+            if (config('license.enabled')) {
+                $middleware->web(append: App\Http\Middleware\CheckLicense::class);
+            }
+        });
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
