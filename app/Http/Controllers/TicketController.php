@@ -153,8 +153,6 @@ class TicketController extends Controller
             'assigned_to_id' => 'nullable|exists:users,id',
             'due_at' => 'nullable|date',
             'attachment' => 'nullable|file|max:2048',
-            'watchers' => 'array',
-            'watchers.*' => 'exists:users,id',
         ]);
         $data['user_id'] = $request->user()->id;
         $data['status'] = Ticket::STATUS_PENDING_HEAD;
@@ -175,8 +173,8 @@ class TicketController extends Controller
         if ($head) {
             $watcherIds[] = $head->id;
         }
-        if (isset($data['watchers'])) {
-            $watcherIds = array_unique(array_merge($watcherIds, $data['watchers']));
+        if ($request->has('watchers')) {
+            $watcherIds = array_unique(array_merge($watcherIds, $request->input('watchers', [])));
         }
         $ticket->watchers()->sync($watcherIds);
 
@@ -253,8 +251,6 @@ class TicketController extends Controller
             'status' => 'required|string',
             'due_at' => 'nullable|date',
             'attachment' => 'nullable|file|max:2048',
-            'watchers' => 'array',
-            'watchers.*' => 'exists:users,id',
         ]);
 
         if ($request->user()->role === 'staff' && $request->input('status') !== $ticket->status) {
@@ -293,38 +289,39 @@ class TicketController extends Controller
             $ticket->resolved_at = now();
             $ticket->save();
         }
-        $watcherIds = User::whereIn('role', ['admin', 'itrc'])->pluck('id')->toArray();
-        $head = User::where('role', 'head')
-            ->where('department', $ticket->user->department)
-            ->first();
-        if ($head) {
-            $watcherIds[] = $head->id;
-        }
-        if (isset($data['watchers'])) {
-            $watcherIds = array_unique(array_merge($watcherIds, $data['watchers']));
-        }
-        $originalWatchers = $ticket->watchers()->pluck('users.id')->toArray();
-        $ticket->watchers()->sync($watcherIds);
-        $sortedOriginal = $originalWatchers;
-        sort($sortedOriginal);
-        $sortedNew = $watcherIds;
-        sort($sortedNew);
-        if ($sortedNew !== $sortedOriginal) {
-            $oldWatcherNames = User::whereIn('id', $originalWatchers)->pluck('name')->join(', ');
-            $newWatcherNames = User::whereIn('id', $watcherIds)->pluck('name')->join(', ');
-            AuditTrail::create([
-                'auditable_id' => $ticket->id,
-                'auditable_type' => Ticket::class,
-                'user_id' => $request->user()->id,
-                'ip_address' => $request->ip(),
-                'action' => 'watchers_updated',
-                'changes' => [
-                    'watchers' => [
-                        'old' => $oldWatcherNames,
-                        'new' => $newWatcherNames,
+        if ($request->has('watchers')) {
+            $watcherIds = User::whereIn('role', ['admin', 'itrc'])->pluck('id')->toArray();
+            $head = User::where('role', 'head')
+                ->where('department', $ticket->user->department)
+                ->first();
+            if ($head) {
+                $watcherIds[] = $head->id;
+            }
+            $watcherIds = array_unique(array_merge($watcherIds, $request->input('watchers', [])));
+
+            $originalWatchers = $ticket->watchers()->pluck('users.id')->toArray();
+            $ticket->watchers()->sync($watcherIds);
+            $sortedOriginal = $originalWatchers;
+            sort($sortedOriginal);
+            $sortedNew = $watcherIds;
+            sort($sortedNew);
+            if ($sortedNew !== $sortedOriginal) {
+                $oldWatcherNames = User::whereIn('id', $originalWatchers)->pluck('name')->join(', ');
+                $newWatcherNames = User::whereIn('id', $watcherIds)->pluck('name')->join(', ');
+                AuditTrail::create([
+                    'auditable_id' => $ticket->id,
+                    'auditable_type' => Ticket::class,
+                    'user_id' => $request->user()->id,
+                    'ip_address' => $request->ip(),
+                    'action' => 'watchers_updated',
+                    'changes' => [
+                        'watchers' => [
+                            'old' => $oldWatcherNames,
+                            'new' => $newWatcherNames,
+                        ],
                     ],
-                ],
-            ]);
+                ]);
+            }
         }
 
         $ticket->load('watchers', 'assignedTo', 'user');
