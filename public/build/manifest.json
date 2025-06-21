@@ -4,7 +4,7 @@
     "name": "bootstrap"
   },
   "resources/css/app.css": {
-    "file": "assets/app-CgKScHSy.css",
+    "file": "assets/app-CSB7aReV.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -18,7 +18,7 @@
     ]
   },
   "resources/js/approval-stages.js": {
-    "file": "assets/approval-stages-Brh1xYIm.js",
+    "file": "assets/approval-stages-D9X4yDj_.js",
     "name": "approval-stages",
     "src": "resources/js/approval-stages.js",
     "isEntry": true,
@@ -27,7 +27,7 @@
     ]
   },
   "resources/js/category-dropdown.js": {
-    "file": "assets/category-dropdown-SUoNSrOu.js",
+    "file": "assets/category-dropdown-uA9N7iWr.js",
     "name": "category-dropdown",
     "src": "resources/js/category-dropdown.js",
     "isEntry": true,
@@ -36,7 +36,7 @@
     ]
   },
   "resources/js/dashboard.js": {
-    "file": "assets/dashboard-BnQqNJNq.js",
+    "file": "assets/dashboard-DaudgZtI.js",
     "name": "dashboard",
     "src": "resources/js/dashboard.js",
     "isEntry": true,
@@ -45,7 +45,7 @@
     ]
   },
   "resources/js/theme-preview.js": {
-    "file": "assets/theme-preview-DVcsE5OU.js",
+    "file": "assets/theme-preview-DecHVgHc.js",
     "name": "theme-preview",
     "src": "resources/js/theme-preview.js",
     "isEntry": true

@@ -41,5 +41,13 @@ function initCategoryDropdown(form) {
 }
 
 (function () {
-    document.querySelectorAll('.ticket-form').forEach(initCategoryDropdown);
+    const setup = () => {
+        document.querySelectorAll('.ticket-form').forEach(initCategoryDropdown);
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setup);
+    } else {
+        setup();
+    }
 })();
