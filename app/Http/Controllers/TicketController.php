@@ -10,6 +10,7 @@ use App\Models\Ticket;
 use App\Models\TicketCategory;
 use App\Models\User;
 use App\Notifications\TicketStatusNotification;
+use Illuminate\Contracts\Cache\TaggableStore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -425,11 +426,17 @@ class TicketController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
-        $jobOrderTypes = JobOrderType::whereNull('parent_id')
-            ->where('is_active', true)
-            ->with('children')
-            ->orderBy('name')
-            ->get();
+        $repository = Cache::getStore() instanceof TaggableStore
+            ? Cache::tags('tickets')
+            : Cache::store();
+
+        $jobOrderTypes = $repository->remember('tickets:types', 300, function () {
+            return JobOrderType::whereNull('parent_id')
+                ->where('is_active', true)
+                ->orderBy('name')
+                ->with('children')
+                ->get();
+        });
 
         $typeMap = $jobOrderTypes->mapWithKeys(function ($type) {
             return [$type->id => $type->children->map(fn ($c) => ['name' => $c->name])];
@@ -468,11 +475,17 @@ class TicketController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
-        $jobOrderTypes = JobOrderType::whereNull('parent_id')
-            ->where('is_active', true)
-            ->with('children')
-            ->orderBy('name')
-            ->get();
+        $repository = Cache::getStore() instanceof TaggableStore
+            ? Cache::tags('tickets')
+            : Cache::store();
+
+        $jobOrderTypes = $repository->remember('tickets:types', 300, function () {
+            return JobOrderType::whereNull('parent_id')
+                ->where('is_active', true)
+                ->orderBy('name')
+                ->with('children')
+                ->get();
+        });
 
         $typeMap = $jobOrderTypes->mapWithKeys(function ($type) {
             return [$type->id => $type->children->map(fn ($c) => ['name' => $c->name])];
