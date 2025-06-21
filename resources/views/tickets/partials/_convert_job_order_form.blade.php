@@ -39,10 +39,11 @@
     </form>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    (function () {
         const parent = document.getElementById('job_order_type_parent');
         const child = document.getElementById('job_order_job_type');
         const typeMap = @json($typeMap ?? []);
+
         function loadChildren(id) {
             child.innerHTML = '<option value="">Select Sub Type</option>';
             if (!id) {
@@ -57,7 +58,8 @@
                 child.appendChild(opt);
             });
         }
+
         parent.addEventListener('change', () => loadChildren(parent.value));
         loadChildren(parent.value);
-    });
+    })();
 </script>

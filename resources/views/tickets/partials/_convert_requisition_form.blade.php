@@ -45,13 +45,14 @@
     </form>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    (function () {
         const addBtn = document.getElementById('req-add-item');
         const container = document.getElementById('req-items-container');
+
         addBtn.addEventListener('click', function () {
             const row = container.querySelector('.req-item-row').cloneNode(true);
-            row.querySelectorAll('input').forEach(i => i.value = i.type === 'number' ? 1 : '');
+            row.querySelectorAll('input').forEach(i => (i.value = i.type === 'number' ? 1 : ''));
             container.appendChild(row);
         });
-    });
+    })();
 </script>

@@ -180,49 +180,53 @@
     <div class="modal fade" id="dynamicTicketModal" tabindex="-1" aria-hidden="true" role="dialog"></div>
     @include('partials.category-dropdown-script')
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    (function () {
         const modalEl = document.getElementById('dynamicTicketModal');
+
+        function renderModal(html) {
+            modalEl.innerHTML = html;
+            modalEl.querySelectorAll('script').forEach(oldScript => {
+                const script = document.createElement('script');
+                if (oldScript.src) {
+                    script.src = oldScript.src;
+                } else {
+                    script.textContent = oldScript.textContent;
+                }
+                document.body.appendChild(script);
+                script.remove();
+            });
+            new bootstrap.Modal(modalEl).show();
+        }
+
         document.querySelectorAll('[data-details-url]').forEach(btn => {
             btn.addEventListener('click', () => {
                 fetch(btn.dataset.detailsUrl)
                     .then(r => r.text())
-                    .then(html => {
-                        modalEl.innerHTML = html;
-                        new bootstrap.Modal(modalEl).show();
-                    });
+                    .then(renderModal);
             });
         });
        document.querySelectorAll('[data-edit-url]').forEach(btn => {
            btn.addEventListener('click', () => {
                fetch(btn.dataset.editUrl)
                    .then(r => r.text())
-                   .then(html => {
-                       modalEl.innerHTML = html;
-                       new bootstrap.Modal(modalEl).show();
-                   });
+                   .then(renderModal);
            });
        });
         document.querySelectorAll('[data-convert-job-order-url]').forEach(btn => {
             btn.addEventListener('click', () => {
                 fetch(btn.dataset.convertJobOrderUrl)
                     .then(r => r.text())
-                    .then(html => {
-                        modalEl.innerHTML = html;
-                        new bootstrap.Modal(modalEl).show();
-                    });
+                    .then(renderModal);
             });
         });
         document.querySelectorAll('[data-convert-requisition-url]').forEach(btn => {
             btn.addEventListener('click', () => {
                 fetch(btn.dataset.convertRequisitionUrl)
                     .then(r => r.text())
-                    .then(html => {
-                        modalEl.innerHTML = html;
-                        new bootstrap.Modal(modalEl).show();
-                    });
+                    .then(renderModal);
             });
         });
-    });
+    })();
     </script>
 </div>
 @endsection
