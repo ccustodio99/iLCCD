@@ -9,7 +9,7 @@ The **Purchase Order (PO) System** manages the procurement workflow for out-of-s
 ## 🧩 Core Features
 
 ### 1. Automatic Generation for Out-of-Stock Items
-- When a requisition or job order requires items not available in inventory, the system:
+- When a requisition requires items not available in inventory, the system:
   - Flags the shortage and notifies purchasing/finance.
   - Automatically prepares a draft PO with item details and quantities.
   - Optionally consolidates similar requests for batch ordering.

@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\ApprovalProcess;
-use App\Models\InventoryItem;
-use App\Models\InventoryTransaction;
 use App\Models\JobOrder;
 use App\Models\JobOrderType;
 use App\Models\Requisition;
@@ -268,8 +266,8 @@ class JobOrderController extends Controller
     }
 
     /**
-     * Request materials for this job order. If inventory stock exists,
-     * it is deducted. Otherwise a linked requisition is created.
+     * Request materials for this job order.
+     * A requisition is created and must be approved before inventory is issued.
      */
     public function requestMaterials(Request $request, JobOrder $jobOrder)
     {
@@ -285,35 +283,20 @@ class JobOrderController extends Controller
             'purpose' => 'required|string',
         ]);
 
-        $item = $data['item_sku']
-            ? InventoryItem::where('sku', $data['item_sku'])->first()
-            : null;
-        if ($item && $item->quantity >= $data['quantity']) {
-            $item->decrement('quantity', $data['quantity']);
-            InventoryTransaction::create([
-                'inventory_item_id' => $item->id,
-                'user_id' => $request->user()->id,
-                'job_order_id' => $jobOrder->id,
-                'action' => 'issue',
-                'quantity' => $data['quantity'],
-                'purpose' => $data['purpose'],
-            ]);
-        } else {
-            $requisition = Requisition::create([
-                'user_id' => $request->user()->id,
-                'job_order_id' => $jobOrder->id,
-                'department' => $request->user()->department,
-                'purpose' => $data['purpose'],
-                'status' => Requisition::STATUS_PENDING_HEAD,
-            ]);
+        $requisition = Requisition::create([
+            'user_id' => $request->user()->id,
+            'job_order_id' => $jobOrder->id,
+            'department' => $request->user()->department,
+            'purpose' => $data['purpose'],
+            'status' => Requisition::STATUS_PENDING_HEAD,
+        ]);
 
-            $requisition->items()->create([
-                'item' => $data['item'],
-                'sku' => $data['item_sku'] ?? null,
-                'quantity' => $data['quantity'],
-                'specification' => $data['specification'] ?? null,
-            ]);
-        }
+        $requisition->items()->create([
+            'item' => $data['item'],
+            'sku' => $data['item_sku'] ?? null,
+            'quantity' => $data['quantity'],
+            'specification' => $data['specification'] ?? null,
+        ]);
 
         return redirect()->route('job-orders.index');
     }
