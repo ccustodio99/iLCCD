@@ -173,9 +173,6 @@ class TicketController extends Controller
         if ($head) {
             $watcherIds[] = $head->id;
         }
-        if ($request->has('watchers')) {
-            $watcherIds = array_unique(array_merge($watcherIds, $request->input('watchers', [])));
-        }
         $ticket->watchers()->sync($watcherIds);
 
         $watcherNames = User::whereIn('id', $watcherIds)->pluck('name')->join(', ');
