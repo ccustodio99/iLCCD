@@ -38,5 +38,7 @@ class SettingSeeder extends Seeder
         Setting::set('mail_encryption', config('mail.mailers.smtp.scheme'));
         Setting::set('mail_from_address', config('mail.from.address'));
         Setting::set('mail_from_name', config('mail.from.name'));
+        Setting::set('contact_email', null);
+        Setting::set('contact_phone', null);
     }
 }
