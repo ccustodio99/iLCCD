@@ -6,11 +6,13 @@ function initCategoryDropdown(form) {
     const subSelect = form.querySelector('.subcategory-select');
     if (!catSelect || !subSelect) return;
 
-    let categories = {};
-    try {
-        categories = JSON.parse(catSelect.dataset.categories || '{}');
-    } catch (e) {
-        console.error('Failed to parse categories JSON', e);
+    let categories = window.ticketCategories || {};
+    if (Object.keys(categories).length === 0) {
+        try {
+            categories = JSON.parse(catSelect.dataset.categories || '{}');
+        } catch (e) {
+            console.error('Failed to parse categories JSON', e);
+        }
     }
     const selected = subSelect.dataset.selected;
 
