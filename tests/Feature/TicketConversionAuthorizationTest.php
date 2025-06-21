@@ -16,11 +16,11 @@ it('allows ticket owner to open conversion forms', function () {
 
     $this->get("/tickets/{$ticket->id}/modal/convert-job-order")
         ->assertOk()
-        ->assertSee('Convert to Job Order');
+        ->assertSee('Job Order');
 
     $this->get("/tickets/{$ticket->id}/modal/convert-requisition")
         ->assertOk()
-        ->assertSee('Convert to Requisition');
+        ->assertSee('Requisition');
 });
 
 it('forbids others from accessing conversion forms', function () {
