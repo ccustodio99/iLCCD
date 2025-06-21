@@ -632,7 +632,6 @@ class TicketController extends Controller
             'quantity.*' => 'required|integer|min:1',
             'specification.*' => 'nullable|string',
             'purpose' => 'required|string',
-            'remarks' => 'nullable|string',
             'attachment' => 'nullable|file|max:2048',
         ]);
 
@@ -641,7 +640,6 @@ class TicketController extends Controller
             'ticket_id' => $ticket->id,
             'department' => $ticket->user->department,
             'purpose' => $data['purpose'],
-            'remarks' => $data['remarks'] ?? null,
             'status' => Requisition::STATUS_PENDING_HEAD,
         ];
 
