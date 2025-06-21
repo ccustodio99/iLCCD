@@ -47,7 +47,7 @@ Finance office’s approval finalizes the requisition.
   - Requesters can monitor their requisitions and remarks via their dashboard.
 
 ### 4. Integration with Other Modules
-  - **Job Order Module**: Created automatically when a job order needs materials not in stock and marked **approved** when the requisition is fulfilled.
+  - **Job Order Module**: Created automatically when a job order requests materials and marked **approved** once the requisition is fulfilled.
   - **Inventory Module**: Approved requisitions check stock levels, deduct available quantities, and log the transaction.
   - **Purchase Order Module**: If requested item is out of stock, the system auto-generates a draft Purchase Order (PO) for Finance.
   - **Audit Trail**: Every approval, modification, and comment is stored for compliance.

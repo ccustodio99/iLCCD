@@ -2,16 +2,17 @@
 
 ## 🎯 Purpose
 
-The **Purchase Order (PO) System** manages the procurement workflow for out-of-stock or newly required items, linking directly to approved requisitions and inventory levels. It ensures transparent, efficient purchasing, supports financial oversight, and helps maintain optimal stock for uninterrupted college operations.
+The **Purchase Order (PO) System** manages the procurement workflow for out-of-stock or low-stock items as well as newly required goods. Purchase orders link directly to approved requisitions and inventory levels. The module ensures transparent, efficient purchasing, supports financial oversight, and helps maintain optimal stock for uninterrupted college operations.
 
 ---
 
 ## 🧩 Core Features
 
-### 1. Automatic Generation for Out-of-Stock Items
-- When a requisition or job order requires items not available in inventory, the system:
-  - Flags the shortage and notifies purchasing/finance.
+### 1. Automatic Generation for Out-of-Stock or Low-Stock Items
+- When a requisition requires items that are unavailable or flagged as low stock, the system:
+  - Lists the affected inventory items so finance staff can select them for purchase.
   - Automatically prepares a draft PO with item details and quantities.
+  - Finance users may also add custom items that are not yet recorded in inventory.
   - Optionally consolidates similar requests for batch ordering.
 
 ### 2. Linkage to Approved Requisitions
@@ -19,8 +20,8 @@ The **Purchase Order (PO) System** manages the procurement workflow for out-of-s
 - PO records display linked requisition numbers, requesting department, justification, and approval trail.
 
 ### 3. Workflow from PO Creation to Approval and Fulfillment
-- **Creation:** PO is drafted from the requisition(s) and submitted for approval.
-- **Approval:** Follows the institution’s financial controls (typically routed through Finance, then President or designated signatory).
+- **Creation:** PO is drafted from the requisition(s) or built manually by selecting low/out-of-stock items. Additional items can be entered directly and the purchase order is submitted for approval.
+- **Approval:** The approval chain is configured in **Settings → Approval Processes**. The default flow routes to **Finance Department Staff**, then the **Finance Department Head**, and finally the **President Department Head**.
 - **Order Placement:** Upon approval, PO is sent to the supplier; status is tracked as "Ordered."
 - **Fulfillment:** Upon delivery, items are inspected and marked "Received" in the system.
 - **Automatic Dates:** The system stamps the `ordered_at` and `received_at` fields when those statuses are set.
