@@ -73,7 +73,9 @@
                 <td>{{ optional($ticket->due_at)->format('Y-m-d') }}</td>
                 <td>
                     <button type="button" class="btn btn-sm btn-info" data-details-url="{{ route('tickets.modal-details', $ticket) }}">Details</button>
-                    <button type="button" class="btn btn-sm btn-primary ms-1" data-edit-url="{{ route('tickets.modal-edit', $ticket) }}">Edit</button>
+                    @if ($ticket->user_id === auth()->id() || $ticket->assigned_to_id === auth()->id())
+                        <button type="button" class="btn btn-sm btn-primary ms-1" data-edit-url="{{ route('tickets.modal-edit', $ticket) }}">Edit</button>
+                    @endif
                     @if($ticket->jobOrder)
                         <span class="visually-hidden">Job Order ID {{ $ticket->jobOrder->id }}</span>
                     @endif
