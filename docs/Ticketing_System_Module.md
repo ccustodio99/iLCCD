@@ -69,7 +69,7 @@ View it in the portal to see details.
 4. If further changes are needed after approval, the requester uses **Request Edit**.
    They must provide a justification and the ticket status resets to **open** so approvals start over.
 
-5. Inside the **Details** modal, the owner or assigned user can launch a popup to convert the ticket into a **Job Order** or a **Requisition**.
+5. From the ticket list, the owner or assigned user can click **Convert to Job Order** or **Convert to Requisition** (visible while the ticket is unconverted). These buttons open modals to complete the conversion.
 6. Tickets requiring maintenance or repairs convert to **Job Orders**.
 7. If materials or tools are needed for the job, the system checks **Inventory**. When stock is missing, it automatically creates a linked **Requisition**.
 8. Once a requisition is approved, Inventory is checked again. Out‑of‑stock items trigger a **Purchase Order** for the Finance team; otherwise inventory is deducted.

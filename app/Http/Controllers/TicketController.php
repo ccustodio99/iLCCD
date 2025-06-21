@@ -431,6 +431,34 @@ class TicketController extends Controller
         return view('tickets._modal_edit', compact('ticket', 'users', 'categories'));
     }
 
+    public function modalConvertJobOrder(Ticket $ticket)
+    {
+        if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+
+        $jobOrderTypes = JobOrderType::whereNull('parent_id')
+            ->where('is_active', true)
+            ->with('children')
+            ->orderBy('name')
+            ->get();
+
+        $typeMap = $jobOrderTypes->mapWithKeys(function ($type) {
+            return [$type->id => $type->children->map(fn ($c) => ['name' => $c->name])];
+        });
+
+        return view('tickets.partials._modal_convert_job_order', compact('ticket', 'jobOrderTypes', 'typeMap'));
+    }
+
+    public function modalConvertRequisition(Ticket $ticket)
+    {
+        if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
+            abort(Response::HTTP_FORBIDDEN, 'Access denied');
+        }
+
+        return view('tickets.partials._modal_convert_requisition', compact('ticket'));
+    }
+
     /** Show tickets awaiting department head approval */
     public function approvals(Request $request)
     {
