@@ -81,7 +81,6 @@ class TicketController extends Controller
             });
         }
 
-
         $cacheKey = 'tickets:index:' . md5($request->fullUrl());
         $tickets = Cache::tags('tickets')->remember($cacheKey, 300, function () use ($query, $perPage) {
             return $query->with(['watchers', 'assignedTo'])

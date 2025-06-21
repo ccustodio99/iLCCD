@@ -57,13 +57,13 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Watchers</label>
-                    <select name="watchers[]" class="form-select" multiple>
+                    <select name="watchers[]" class="form-select watcher-select" data-search-url="{{ route('users.search') }}" multiple>
                         @php($selected = old('watchers', $ticket->watchers->pluck('id')->toArray()))
-                        @foreach($users as $u)
-                            <option value="{{ $u->id }}" {{ in_array($u->id, $selected) ? 'selected' : '' }}>{{ $u->name }}</option>
+                        @foreach(App\Models\User::whereIn('id', $selected)->orderBy('name')->get() as $u)
+                            <option value="{{ $u->id }}" selected>{{ $u->name }}</option>
                         @endforeach
                     </select>
-                    <small class="text-muted">Hold Ctrl or Command to select multiple users</small>
+                    <small class="text-muted">Search to add multiple users</small>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Status</label>
@@ -93,3 +93,4 @@
     </div>
 </div>
 @include('partials.category-dropdown-script')
+@include('partials.user-select-script')

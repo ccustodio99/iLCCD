@@ -49,12 +49,13 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Watchers</label>
-            <select name="watchers[]" class="form-select" multiple>
-                @foreach($users as $u)
-                    <option value="{{ $u->id }}" {{ collect(old('watchers'))->contains($u->id) ? 'selected' : '' }}>{{ $u->name }}</option>
+            <select name="watchers[]" class="form-select watcher-select" data-search-url="{{ route('users.search') }}" multiple>
+                @php($selectedWatchers = old('watchers', []))
+                @foreach(App\Models\User::whereIn('id', $selectedWatchers)->orderBy('name')->get() as $u)
+                    <option value="{{ $u->id }}" selected>{{ $u->name }}</option>
                 @endforeach
             </select>
-            <small class="text-muted">Hold Ctrl or Command to select multiple users</small>
+            <small class="text-muted">Search to add multiple users</small>
         </div>
         <div class="mb-3">
             <label class="form-label">Due Date</label>
@@ -64,5 +65,6 @@
         <a href="{{ route('tickets.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
     @include('partials.category-dropdown-script')
+    @include('partials.user-select-script')
 </div>
 @endsection
