@@ -29,7 +29,7 @@
         </div>
         <div class="mb-2">
             <label class="form-label">Description</label>
-            <textarea name="description" class="form-control" rows="3" required></textarea>
+            <textarea name="description" class="form-control" rows="3" required>{{ old('description', $ticket->description) }}</textarea>
         </div>
         <div class="mb-3">
             <label class="form-label">Attachment</label>
