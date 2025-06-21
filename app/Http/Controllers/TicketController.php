@@ -223,7 +223,11 @@ class TicketController extends Controller
 
     public function update(Request $request, Ticket $ticket)
     {
-        if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
+        if (
+            $ticket->user_id !== auth()->id() &&
+            $ticket->assigned_to_id !== auth()->id() &&
+            ! (auth()->user()->role === 'head' && auth()->user()->department === $ticket->user->department)
+        ) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         if (auth()->user()->role !== 'head') {
@@ -433,7 +437,11 @@ class TicketController extends Controller
 
     public function modalEdit(Ticket $ticket)
     {
-        if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
+        if (
+            $ticket->user_id !== auth()->id() &&
+            $ticket->assigned_to_id !== auth()->id() &&
+            ! (auth()->user()->role === 'head' && auth()->user()->department === $ticket->user->department)
+        ) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
@@ -449,7 +457,11 @@ class TicketController extends Controller
 
     public function modalConvertJobOrder(Ticket $ticket)
     {
-        if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
+        if (
+            $ticket->user_id !== auth()->id() &&
+            $ticket->assigned_to_id !== auth()->id() &&
+            ! (auth()->user()->role === 'head' && auth()->user()->department === $ticket->user->department)
+        ) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
@@ -468,7 +480,11 @@ class TicketController extends Controller
 
     public function modalConvertRequisition(Ticket $ticket)
     {
-        if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
+        if (
+            $ticket->user_id !== auth()->id() &&
+            $ticket->assigned_to_id !== auth()->id() &&
+            ! (auth()->user()->role === 'head' && auth()->user()->department === $ticket->user->department)
+        ) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
@@ -514,7 +530,11 @@ class TicketController extends Controller
 
     public function destroy(Ticket $ticket)
     {
-        if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
+        if (
+            $ticket->user_id !== auth()->id() &&
+            $ticket->assigned_to_id !== auth()->id() &&
+            ! (auth()->user()->role === 'head' && auth()->user()->department === $ticket->user->department)
+        ) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
         if (auth()->user()->role !== 'head') {
@@ -540,7 +560,11 @@ class TicketController extends Controller
 
     public function convertToJobOrder(Request $request, Ticket $ticket)
     {
-        if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
+        if (
+            $ticket->user_id !== auth()->id() &&
+            $ticket->assigned_to_id !== auth()->id() &&
+            ! (auth()->user()->role === 'head' && auth()->user()->department === $ticket->user->department)
+        ) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
@@ -592,7 +616,11 @@ class TicketController extends Controller
 
     public function convertToRequisition(Request $request, Ticket $ticket)
     {
-        if ($ticket->user_id !== auth()->id() && $ticket->assigned_to_id !== auth()->id()) {
+        if (
+            $ticket->user_id !== auth()->id() &&
+            $ticket->assigned_to_id !== auth()->id() &&
+            ! (auth()->user()->role === 'head' && auth()->user()->department === $ticket->user->department)
+        ) {
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
