@@ -70,5 +70,3 @@
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 </div>
 </div>
-@include('tickets.partials._modal_convert_job_order', ['ticket' => $ticket, 'jobOrderTypes' => $jobOrderTypes, 'typeMap' => $typeMap])
-@include('tickets.partials._modal_convert_requisition', ['ticket' => $ticket])
