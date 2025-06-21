@@ -8,6 +8,7 @@ The **Purchase Order (PO) System** manages the procurement workflow for out-of-s
 
 ## 🧩 Core Features
 
+
 ### 1. Automatic Generation for Out-of-Stock or Low-Stock Items
 - When a requisition requires items that are unavailable or flagged as low stock, the system:
   - Lists the affected inventory items so finance staff can select them for purchase.
