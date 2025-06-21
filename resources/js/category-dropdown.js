@@ -37,6 +37,14 @@ function initCategoryDropdown(form) {
 
     if (catSelect.value) {
         populate(catSelect.value);
+    } else if (selected) {
+        for (const [pid, subs] of Object.entries(categories)) {
+            if (subs.some(s => String(s.id) === String(selected))) {
+                catSelect.value = pid;
+                populate(pid);
+                break;
+            }
+        }
     }
 }
 

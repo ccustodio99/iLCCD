@@ -4,7 +4,7 @@
     "name": "bootstrap"
   },
   "resources/css/app.css": {
-    "file": "assets/app-CSB7aReV.css",
+    "file": "assets/app-CkdDV6SL.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -27,7 +27,7 @@
     ]
   },
   "resources/js/category-dropdown.js": {
-    "file": "assets/category-dropdown-uA9N7iWr.js",
+    "file": "assets/category-dropdown-CAJbMtAG.js",
     "name": "category-dropdown",
     "src": "resources/js/category-dropdown.js",
     "isEntry": true,
