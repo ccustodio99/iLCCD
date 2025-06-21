@@ -75,6 +75,10 @@
                     <button type="button" class="btn btn-sm btn-info" data-details-url="{{ route('tickets.modal-details', $ticket) }}">Details</button>
                     @if ($ticket->user_id === auth()->id() || $ticket->assigned_to_id === auth()->id())
                         <button type="button" class="btn btn-sm btn-primary ms-1" data-edit-url="{{ route('tickets.modal-edit', $ticket) }}">Edit</button>
+                        @if($ticket->status !== 'converted')
+                            <button type="button" class="btn btn-sm btn-outline-primary ms-1" data-convert-job-order-url="{{ route('tickets.modal-convert-job-order', $ticket) }}">Convert to Job Order</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary ms-1" data-convert-requisition-url="{{ route('tickets.modal-convert-requisition', $ticket) }}">Convert to Requisition</button>
+                        @endif
                     @endif
                     @if($ticket->jobOrder)
                         <span class="visually-hidden">Job Order ID {{ $ticket->jobOrder->id }}</span>
@@ -188,9 +192,29 @@
                     });
             });
         });
-        document.querySelectorAll('[data-edit-url]').forEach(btn => {
+       document.querySelectorAll('[data-edit-url]').forEach(btn => {
+           btn.addEventListener('click', () => {
+               fetch(btn.dataset.editUrl)
+                   .then(r => r.text())
+                   .then(html => {
+                       modalEl.innerHTML = html;
+                       new bootstrap.Modal(modalEl).show();
+                   });
+           });
+       });
+        document.querySelectorAll('[data-convert-job-order-url]').forEach(btn => {
             btn.addEventListener('click', () => {
-                fetch(btn.dataset.editUrl)
+                fetch(btn.dataset.convertJobOrderUrl)
+                    .then(r => r.text())
+                    .then(html => {
+                        modalEl.innerHTML = html;
+                        new bootstrap.Modal(modalEl).show();
+                    });
+            });
+        });
+        document.querySelectorAll('[data-convert-requisition-url]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                fetch(btn.dataset.convertRequisitionUrl)
                     .then(r => r.text())
                     .then(html => {
                         modalEl.innerHTML = html;

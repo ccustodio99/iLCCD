@@ -79,6 +79,8 @@ Route::middleware('auth')->group(function () {
     Route::get('tickets/{ticket}/attachment', [TicketController::class, 'downloadAttachment'])->name('tickets.attachment');
     Route::get('tickets/{ticket}/modal/details', [TicketController::class, 'modalDetails'])->name('tickets.modal-details');
     Route::get('tickets/{ticket}/modal/edit', [TicketController::class, 'modalEdit'])->name('tickets.modal-edit');
+    Route::get('tickets/{ticket}/modal/convert-job-order', [TicketController::class, 'modalConvertJobOrder'])->name('tickets.modal-convert-job-order');
+    Route::get('tickets/{ticket}/modal/convert-requisition', [TicketController::class, 'modalConvertRequisition'])->name('tickets.modal-convert-requisition');
     Route::resource('job-orders', JobOrderController::class)->except('show');
     Route::get('job-orders/{jobOrder}/attachment', [JobOrderController::class, 'downloadAttachment'])->name('job-orders.attachment');
     Route::put('job-orders/{jobOrder}/complete', [JobOrderController::class, 'complete'])->name('job-orders.complete');
