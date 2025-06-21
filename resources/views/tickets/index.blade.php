@@ -180,11 +180,10 @@
             modalEl.innerHTML = html;
             modalEl.querySelectorAll('script').forEach(oldScript => {
                 const script = document.createElement('script');
-                if (oldScript.src) {
-                    script.src = oldScript.src;
-                } else {
-                    script.textContent = oldScript.textContent;
-                }
+                Array.from(oldScript.attributes).forEach(attr => {
+                    script.setAttribute(attr.name, attr.value);
+                });
+                script.textContent = oldScript.textContent;
                 document.body.appendChild(script);
                 script.remove();
             });
