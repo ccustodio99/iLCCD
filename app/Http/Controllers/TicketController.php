@@ -138,9 +138,16 @@ class TicketController extends Controller
     public function create()
     {
         $users = User::orderBy('name')->get();
+
+        $parentId = $ticket->ticketCategory->parent_id
+            ?? $ticket->ticketCategory->id;
+
         $categories = TicketCategory::whereNull('parent_id')
             ->with('children')
-            ->where('is_active', true)
+            ->where(function ($q) use ($parentId) {
+                $q->where('is_active', true)
+                    ->orWhere('id', $parentId);
+            })
             ->orderBy('name')
             ->get();
 
@@ -456,9 +463,16 @@ class TicketController extends Controller
         }
 
         $users = User::orderBy('name')->get();
+
+        $parentId = $ticket->ticketCategory->parent_id
+            ?? $ticket->ticketCategory->id;
+
         $categories = TicketCategory::whereNull('parent_id')
             ->with('children')
-            ->where('is_active', true)
+            ->where(function ($q) use ($parentId) {
+                $q->where('is_active', true)
+                    ->orWhere('id', $parentId);
+            })
             ->orderBy('name')
             ->get();
 
