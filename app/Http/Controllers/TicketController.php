@@ -56,6 +56,10 @@ class TicketController extends Controller
 
         if ($request->boolean('archived')) {
             $query->withTrashed();
+        } else {
+            $query->whereDoesntHave('archivedBy', function ($aq) use ($user) {
+                $aq->where('users.id', $user->id);
+            });
         }
 
         if ($request->filled('status')) {
@@ -553,7 +557,9 @@ class TicketController extends Controller
             $ticket->save();
         }
 
-        $ticket->delete();
+        $ticket->archivedBy()->syncWithoutDetaching([
+            auth()->id() => ['created_at' => now(), 'updated_at' => now()],
+        ]);
 
         return redirect()->route('tickets.index');
     }
