@@ -463,8 +463,9 @@ class TicketController extends Controller
         $parentId = $ticket->ticketCategory->parent_id
             ?? $ticket->ticketCategory->id;
 
-        $categories = TicketCategory::whereNull('parent_id')
-            ->with('children')
+        $categories = TicketCategory::withTrashed()
+            ->whereNull('parent_id')
+            ->with(['children' => fn ($q) => $q->withTrashed()])
             ->where(function ($q) use ($parentId) {
                 $q->where('is_active', true)
                     ->orWhere('id', $parentId);
