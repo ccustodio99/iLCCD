@@ -76,8 +76,8 @@
                     @if ($ticket->user_id === auth()->id() || $ticket->assigned_to_id === auth()->id())
                         <button type="button" class="btn btn-sm btn-primary ms-1" data-edit-url="{{ route('tickets.modal-edit', $ticket) }}">Edit</button>
                         @if($ticket->status !== 'converted')
-                            <button type="button" class="btn btn-sm btn-outline-primary ms-1" data-convert-job-order-url="{{ route('tickets.modal-convert-job-order', $ticket) }}">Convert to Job Order</button>
-                            <button type="button" class="btn btn-sm btn-outline-primary ms-1" data-convert-requisition-url="{{ route('tickets.modal-convert-requisition', $ticket) }}">Convert to Requisition</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary ms-1" data-convert-job-order-url="{{ route('tickets.modal-convert-job-order', $ticket) }}">Job Order</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary ms-1" data-convert-requisition-url="{{ route('tickets.modal-convert-requisition', $ticket) }}">Requisition</button>
                         @endif
                     @endif
                     @if($ticket->jobOrder)
