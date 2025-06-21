@@ -24,6 +24,23 @@
             <p><strong>Resolved:</strong> {{ optional($ticket->resolved_at)->format('Y-m-d H:i') }}</p>
             <p><strong>Due:</strong> {{ optional($ticket->due_at)->format('Y-m-d H:i') }}</p>
 
+            @if(in_array(auth()->id(), [$ticket->user_id, $ticket->assigned_to_id]) && $ticket->status !== 'converted')
+                <div class="mb-3">
+                    <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#job-order-form-{{ $ticket->id }}" aria-expanded="false">
+                        Convert to Job Order
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#requisition-form-{{ $ticket->id }}" aria-expanded="false">
+                        Convert to Requisition
+                    </button>
+                </div>
+                <div class="collapse" id="job-order-form-{{ $ticket->id }}">
+                    @include('tickets.partials._convert_job_order_form', ['ticket' => $ticket, 'jobOrderTypes' => $jobOrderTypes, 'typeMap' => $typeMap])
+                </div>
+                <div class="collapse" id="requisition-form-{{ $ticket->id }}">
+                    @include('tickets.partials._convert_requisition_form', ['ticket' => $ticket])
+                </div>
+            @endif
+
             @if($ticket->jobOrder)
                 <p><strong>Job Order ID:</strong> {{ $ticket->jobOrder->id }}</p>
             @endif
