@@ -96,6 +96,11 @@ class Ticket extends Model
         return $this->belongsToMany(User::class, 'ticket_watchers')->withTimestamps();
     }
 
+    public function archivedBy(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'ticket_user_archives')->withTimestamps();
+    }
+
     public function comments()
     {
         return $this->hasMany(TicketComment::class);
