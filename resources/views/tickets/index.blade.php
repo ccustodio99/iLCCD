@@ -73,12 +73,21 @@
                 <td>{{ optional($ticket->due_at)->format('Y-m-d') }}</td>
                 <td>
                     <button type="button" class="btn btn-sm btn-info" data-details-url="{{ route('tickets.modal-details', $ticket) }}">Details</button>
-                    @if ($ticket->user_id === auth()->id() || $ticket->assigned_to_id === auth()->id())
+                    @if (
+                        $ticket->user_id === auth()->id() ||
+                        $ticket->assigned_to_id === auth()->id() ||
+                        (auth()->user()->role === 'head' && auth()->user()->department === $ticket->user->department)
+                    )
                         <button type="button" class="btn btn-sm btn-primary ms-1" data-edit-url="{{ route('tickets.modal-edit', $ticket) }}">Edit</button>
                         @if($ticket->status !== 'converted')
                             <button type="button" class="btn btn-sm btn-outline-primary ms-1" data-convert-job-order-url="{{ route('tickets.modal-convert-job-order', $ticket) }}">Job Order</button>
                             <button type="button" class="btn btn-sm btn-outline-primary ms-1" data-convert-requisition-url="{{ route('tickets.modal-convert-requisition', $ticket) }}">Requisition</button>
                         @endif
+                        <form action="{{ route('tickets.destroy', $ticket) }}" method="POST" class="d-inline ms-1">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Archive this ticket?')">Archive</button>
+                        </form>
                     @endif
                     @if($ticket->jobOrder)
                         <span class="visually-hidden">Job Order ID {{ $ticket->jobOrder->id }}</span>
@@ -86,11 +95,6 @@
                     @if($ticket->requisitions->count())
                         <span class="visually-hidden">Requisitions {{ $ticket->requisitions->pluck('id')->implode(' ') }}</span>
                     @endif
-                    <form action="{{ route('tickets.destroy', $ticket) }}" method="POST" class="d-inline ms-1">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Archive this ticket?')">Archive</button>
-                    </form>
                 </td>
             </tr>
             @endforeach
