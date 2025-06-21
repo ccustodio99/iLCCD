@@ -4,6 +4,14 @@
 
 @section('content')
 <div class="container">
+    @php
+        $categoryData = $categories->mapWithKeys(function ($cat) {
+            return [$cat->id => $cat->children->map(fn($c) => ['id' => $c->id, 'name' => $c->name])];
+        });
+    @endphp
+    <script>
+        window.ticketCategories = @json($categoryData);
+    </script>
     <h1 class="mb-4">My Tickets</h1>
     @include('components.per-page-selector')
     <div class="mb-3">
@@ -123,13 +131,10 @@
                                     break;
                                 }
                             }
-                            $categoryData = $categories->mapWithKeys(function($cat) {
-                                return [$cat->id => $cat->children->map(fn($c) => ['id' => $c->id, 'name' => $c->name])];
-                            });
                         @endphp
                         <div class="mb-3">
                             <label class="form-label">Category</label>
-                            <select class="form-select category-select mb-2" data-categories='@json($categoryData)' required>
+                            <select class="form-select category-select mb-2" required>
                                 <option value="">Select Category</option>
                                 @foreach($categories as $cat)
                                     <option value="{{ $cat->id }}" {{ (string)$selectedModalCat === (string)$cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
