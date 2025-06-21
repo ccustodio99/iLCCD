@@ -55,3 +55,19 @@ The `Setting` model automatically casts integer strings to integers. Clear the c
 
 ### Unsanitized notification templates
 Notification templates are stored in Markdown format and converted to HTML when messages are generated. This ensures the raw Markdown is never rendered directly.
+
+## Sub‑category dropdown empty after selecting a category
+If the sub‑category field does not populate on ticket forms, the front‑end assets may not be compiled. Run the Vite build step so the partial `resources/views/partials/category-dropdown-script.blade.php` detects `public/build/manifest.json`:
+
+```bash
+npm run build
+```
+
+After building, clear cached views and configuration:
+
+```bash
+php artisan view:clear
+php artisan cache:clear
+```
+
+Reload the page and the sub‑categories should appear when choosing a category.
