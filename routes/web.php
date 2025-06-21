@@ -65,6 +65,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class)
         ->except(['show'])
         ->middleware('role:admin');
+    Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::resource('tickets', TicketController::class)->except(['show', 'edit']);

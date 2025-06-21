@@ -165,4 +165,17 @@ class UserController extends Controller
 
         return redirect()->route('users.index');
     }
+
+    public function search(Request $request)
+    {
+        $term = $request->input('q', '');
+        $results = User::query()
+            ->where('name', 'like', "%{$term}%")
+            ->orderBy('name')
+            ->limit(10)
+            ->get(['id', 'name'])
+            ->map(fn($u) => ['id' => $u->id, 'text' => $u->name]);
+
+        return response()->json(['results' => $results]);
+    }
 }
