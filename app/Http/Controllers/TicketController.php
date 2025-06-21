@@ -81,7 +81,7 @@ class TicketController extends Controller
         }
 
         $tickets = $query
-            ->with(['auditTrails.user', 'watchers', 'assignedTo', 'comments.user'])
+            ->with(['watchers', 'assignedTo'])
             ->paginate($perPage)
             ->withQueryString();
 
