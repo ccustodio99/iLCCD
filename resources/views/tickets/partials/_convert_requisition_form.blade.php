@@ -31,11 +31,7 @@
         <button type="button" id="req-add-item" class="btn btn-secondary btn-sm mb-2">Add Item</button>
         <div class="mb-2">
             <label class="form-label">Purpose</label>
-            <textarea name="purpose" class="form-control" rows="3" required>{{ old('purpose', $ticket->subject) }}</textarea>
-        </div>
-        <div class="mb-2">
-            <label class="form-label">Remarks</label>
-            <textarea name="remarks" class="form-control" rows="2">{{ old('remarks', $ticket->description) }}</textarea>
+            <textarea name="purpose" class="form-control" rows="3" required>{{ old('purpose', $ticket->subject . PHP_EOL . $ticket->description) }}</textarea>
         </div>
         <div class="mb-3">
             <label class="form-label">Attachment</label>
