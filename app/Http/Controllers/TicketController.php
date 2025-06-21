@@ -402,7 +402,17 @@ class TicketController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
-        return view('tickets._modal_details', compact('ticket'));
+        $jobOrderTypes = JobOrderType::whereNull('parent_id')
+            ->where('is_active', true)
+            ->with('children')
+            ->orderBy('name')
+            ->get();
+
+        $typeMap = $jobOrderTypes->mapWithKeys(function ($type) {
+            return [$type->id => $type->children->map(fn ($c) => ['name' => $c->name])];
+        });
+
+        return view('tickets._modal_details', compact('ticket', 'jobOrderTypes', 'typeMap'));
     }
 
     public function modalEdit(Ticket $ticket)
@@ -490,7 +500,7 @@ class TicketController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
-        $data = $request->validate([
+        $data = $request->validateWithBag('convertJobOrder', [
             'type_parent' => ['required', 'exists:job_order_types,id'],
             'job_type' => [
                 'required',
@@ -542,7 +552,7 @@ class TicketController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Access denied');
         }
 
-        $data = $request->validate([
+        $data = $request->validateWithBag('convertRequisition', [
             'item.*' => 'required|string|max:255',
             'quantity.*' => 'required|integer|min:1',
             'specification.*' => 'nullable|string',
