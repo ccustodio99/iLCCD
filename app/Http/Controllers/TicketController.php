@@ -81,27 +81,40 @@ class TicketController extends Controller
             });
         }
 
-        $cacheKey = 'tickets:index:' . md5($request->fullUrl());
-        $tickets = Cache::tags('tickets')->remember($cacheKey, 300, function () use ($query, $perPage) {
-            return $query->with(['watchers', 'assignedTo'])
+        $repository = Cache::getStore() instanceof \Illuminate\Contracts\Cache\TaggableStore
+            ? Cache::tags('tickets')
+            : Cache::store();
+
+        $cacheKey = 'tickets:index:'.md5($request->fullUrl());
+        $tickets = $repository->remember($cacheKey, 300, function () use ($query, $perPage) {
+            return $query->with('assignedTo')
                 ->paginate($perPage)
                 ->withQueryString();
         });
 
-        $users = User::orderBy('name')->get();
-        $categories = TicketCategory::whereNull('parent_id')
-            ->with('children')
-            ->where('is_active', true)
-            ->orderBy('name')
-            ->get();
+        $users = $repository->remember('tickets:users', 300, function () {
+            return User::orderBy('name')->get();
+        });
 
-        $types = JobOrderType::whereNull('parent_id')
-            ->where('is_active', true)
-            ->orderBy('name')
-            ->with('children')
-            ->get();
+        $categories = $repository->remember('tickets:categories', 300, function () {
+            return TicketCategory::whereNull('parent_id')
+                ->with('children')
+                ->where('is_active', true)
+                ->orderBy('name')
+                ->get();
+        });
 
-        $statuses = Ticket::select('status')->distinct()->pluck('status');
+        $types = $repository->remember('tickets:types', 300, function () {
+            return JobOrderType::whereNull('parent_id')
+                ->where('is_active', true)
+                ->orderBy('name')
+                ->with('children')
+                ->get();
+        });
+
+        $statuses = $repository->remember('tickets:statuses', 300, function () {
+            return Ticket::select('status')->distinct()->pluck('status');
+        });
 
         return view('tickets.index', compact(
             'tickets',
