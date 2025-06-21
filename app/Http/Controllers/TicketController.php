@@ -11,6 +11,7 @@ use App\Models\TicketCategory;
 use App\Models\User;
 use App\Notifications\TicketStatusNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -80,10 +81,12 @@ class TicketController extends Controller
             });
         }
 
-        $tickets = $query
-            ->with(['auditTrails.user', 'watchers', 'assignedTo', 'comments.user'])
-            ->paginate($perPage)
-            ->withQueryString();
+        $cacheKey = 'tickets:index:' . md5($request->fullUrl());
+        $tickets = Cache::tags('tickets')->remember($cacheKey, 300, function () use ($query, $perPage) {
+            return $query->with(['watchers', 'assignedTo'])
+                ->paginate($perPage)
+                ->withQueryString();
+        });
 
         $users = User::orderBy('name')->get();
         $categories = TicketCategory::whereNull('parent_id')
