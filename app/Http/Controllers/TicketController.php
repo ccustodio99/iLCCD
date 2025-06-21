@@ -139,15 +139,9 @@ class TicketController extends Controller
     {
         $users = User::orderBy('name')->get();
 
-        $parentId = $ticket->ticketCategory->parent_id
-            ?? $ticket->ticketCategory->id;
-
         $categories = TicketCategory::whereNull('parent_id')
             ->with('children')
-            ->where(function ($q) use ($parentId) {
-                $q->where('is_active', true)
-                    ->orWhere('id', $parentId);
-            })
+            ->where('is_active', true)
             ->orderBy('name')
             ->get();
 
