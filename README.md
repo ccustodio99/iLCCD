@@ -123,6 +123,7 @@ Deliver a holistic, faith-driven digital backbone for LCCD, empowering every use
 - Full account lifecycle: create, edit, activate/deactivate, bulk import
 - Department & role assignment, permission matrix, audit trails
 - Integrated with all workflows and dashboards
+ - Departments are stored in a dedicated `departments` table referenced by `department_id`
 
 ### 10. 🔐 Access Control
 - Role-based security at UI & backend; session management, password policy
