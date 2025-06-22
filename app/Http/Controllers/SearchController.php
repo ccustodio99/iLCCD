@@ -25,7 +25,7 @@ class SearchController extends Controller
 
             $results['jobOrders'] = JobOrder::query()
                 ->where('description', 'like', $like)
-                ->orWhere('job_type', 'like', $like)
+                ->orWhereHas('jobOrderType', fn ($q) => $q->where('name', 'like', $like))
                 ->get();
 
             $results['requisitions'] = Requisition::query()

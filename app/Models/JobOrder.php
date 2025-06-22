@@ -2,24 +2,31 @@
 
 namespace App\Models;
 
+use App\Traits\ClearsDashboardCache;
+use App\Traits\LogsAudit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Traits\LogsAudit;
-use App\Traits\ClearsDashboardCache;
 
 class JobOrder extends Model
 {
-    use HasFactory, LogsAudit, ClearsDashboardCache;
+    use ClearsDashboardCache, HasFactory, LogsAudit;
 
     /** Job order status values */
     public const STATUS_PENDING_HEAD = 'pending_head';
+
     public const STATUS_PENDING_PRESIDENT = 'pending_president';
+
     public const STATUS_PENDING_FINANCE = 'pending_finance';
+
     public const STATUS_APPROVED = 'approved';
+
     public const STATUS_ASSIGNED = 'assigned';
+
     public const STATUS_IN_PROGRESS = 'in_progress';
+
     public const STATUS_COMPLETED = 'completed';
+
     public const STATUS_CLOSED = 'closed';
 
     /** All valid status values */
@@ -37,7 +44,7 @@ class JobOrder extends Model
     protected $fillable = [
         'user_id',
         'ticket_id',
-        'job_type',
+        'job_order_type_id',
         'description',
         'attachment_path',
         'status',
@@ -49,6 +56,8 @@ class JobOrder extends Model
         'completion_notes',
         'closed_at',
     ];
+
+    protected $appends = ['job_type'];
 
     protected function casts(): array
     {
@@ -74,6 +83,16 @@ class JobOrder extends Model
     public function requisitions()
     {
         return $this->hasMany(Requisition::class);
+    }
+
+    public function jobOrderType(): BelongsTo
+    {
+        return $this->belongsTo(JobOrderType::class);
+    }
+
+    public function getJobTypeAttribute(): ?string
+    {
+        return $this->jobOrderType->name ?? null;
     }
 
     public function assignedTo(): BelongsTo

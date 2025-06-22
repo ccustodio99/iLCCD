@@ -21,7 +21,7 @@ it('locks requester editing after head approval until returned', function () {
     $type = JobOrderType::factory()->create(['parent_id' => $parent->id]);
 
     $this->actingAs($requester);
-    $order = JobOrder::factory()->for($requester)->create(['job_type' => $type->name]);
+    $order = JobOrder::factory()->for($requester)->create(['job_order_type_id' => $type->id]);
 
     $this->actingAs($head);
     $this->put("/job-orders/{$order->id}/approve");

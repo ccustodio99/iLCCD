@@ -3,8 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\JobOrder;
-use App\Models\User;
 use App\Models\JobOrderType;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,10 +18,8 @@ class JobOrderFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            // Use a seeded job order type if available; otherwise default to
-            // a generic value instead of creating random lorem words
-            'job_type' => JobOrderType::inRandomOrder()->value('name')
-                ?? 'Other Job Request',
+            // Use a seeded job order type if available
+            'job_order_type_id' => JobOrderType::inRandomOrder()->value('id'),
             'description' => fake()->paragraph(),
             'attachment_path' => null,
             'status' => JobOrder::STATUS_PENDING_HEAD,

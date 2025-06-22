@@ -7,7 +7,7 @@ use App\Models\User;
 it('prevents deleting job order type in use', function () {
     $admin = User::factory()->create(['role' => 'admin']);
     $type = JobOrderType::factory()->create();
-    JobOrder::factory()->for($admin)->create(['job_type' => $type->name]);
+    JobOrder::factory()->for($admin)->create(['job_order_type_id' => $type->id]);
     $this->actingAs($admin);
 
     $response = $this->delete("/settings/job-order-types/{$type->id}");
