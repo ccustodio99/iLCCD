@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\ApprovalProcess;
+use App\Models\Department;
 use App\Models\JobOrder;
 use App\Models\Requisition;
 use App\Models\User;
@@ -15,17 +16,18 @@ class ApprovalProcessSeeder extends Seeder
      */
     public function run(): void
     {
-        $departments = ['ITRC', 'Nursing', 'CCS'];
+        $departments = Department::whereIn('name', ['ITRC', 'Nursing', 'CCS', 'Finance Office', 'President Department'])->get()->keyBy('name');
 
-        foreach ($departments as $department) {
-            $head = User::where('department', $department)->where('role', 'head')->first();
-            $financeHead = User::where('department', 'Finance Office')->where('role', 'head')->first();
-            $president = User::where('department', 'President Department')->where('role', 'head')->first();
+        foreach (['ITRC', 'Nursing', 'CCS'] as $deptName) {
+            $department = $departments[$deptName];
+            $head = User::where('department_id', $department->id)->where('role', 'head')->first();
+            $financeHead = User::where('department_id', $departments['Finance Office']->id)->where('role', 'head')->first();
+            $president = User::where('department_id', $departments['President Department']->id)->where('role', 'head')->first();
 
             // Requisition workflow
             $reqProcess = ApprovalProcess::firstOrCreate([
                 'module' => 'requisitions',
-                'department' => $department,
+                'department_id' => $department->id,
             ]);
 
             $reqProcess->stages()->firstOrCreate([
@@ -47,7 +49,7 @@ class ApprovalProcessSeeder extends Seeder
             // Job order workflow
             $jobProcess = ApprovalProcess::firstOrCreate([
                 'module' => 'job_orders',
-                'department' => $department,
+                'department_id' => $department->id,
             ]);
 
             $jobProcess->stages()->firstOrCreate([

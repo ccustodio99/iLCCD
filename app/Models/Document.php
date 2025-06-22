@@ -18,7 +18,7 @@ class Document extends Model
         'title',
         'description',
         'document_category_id',
-        'department',
+        'department_id',
         'current_version',
     ];
 
@@ -40,6 +40,11 @@ class Document extends Model
     public function documentCategory(): BelongsTo
     {
         return $this->belongsTo(DocumentCategory::class)->withTrashed();
+    }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
     }
 
     public function delete()

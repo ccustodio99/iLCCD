@@ -17,7 +17,7 @@ class RequisitionFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'department' => null,
+            'department_id' => null,
             'purpose' => $this->faker->sentence(),
             'attachment_path' => null,
             'status' => Requisition::STATUS_PENDING_HEAD,
@@ -31,8 +31,8 @@ class RequisitionFactory extends Factory
     {
         return $this
             ->afterMaking(function (Requisition $requisition) {
-                if ($requisition->user && ! $requisition->department) {
-                    $requisition->department = $requisition->user->department;
+                if ($requisition->user && ! $requisition->department_id) {
+                    $requisition->department_id = $requisition->user->department_id;
                 }
             })
             ->afterCreating(function (Requisition $requisition) {

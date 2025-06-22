@@ -2,9 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Department;
 use App\Models\Document;
-use App\Models\User;
 use App\Models\DocumentCategory;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,15 +22,7 @@ class DocumentFactory extends Factory
             'title' => fake()->sentence(3),
             'description' => fake()->sentence(),
             'document_category_id' => DocumentCategory::factory(),
-            'department' => fake()->randomElement([
-                'Nursing',
-                'CHTM',
-                'BED Department',
-                'Non-Teaching Department',
-                'ITRC',
-                'Finance Office',
-                'President Department',
-            ]),
+            'department_id' => Department::factory(),
             'current_version' => 1,
         ];
     }
