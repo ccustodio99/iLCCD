@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Traits\LogsAudit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -37,7 +38,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'department',
+        'department_id',
         'designation',
         'profile_photo_path',
         'contact_info',
@@ -85,6 +86,11 @@ class User extends Authenticatable
     public function ticketComments(): HasMany
     {
         return $this->hasMany(TicketComment::class);
+    }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
     }
 
     /**

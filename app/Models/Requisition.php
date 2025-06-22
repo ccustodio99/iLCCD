@@ -2,22 +2,24 @@
 
 namespace App\Models;
 
+use App\Traits\ClearsDashboardCache;
+use App\Traits\LogsAudit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\RequisitionItem;
-use App\Traits\LogsAudit;
-use App\Traits\ClearsDashboardCache;
 
 class Requisition extends Model
 {
-    use HasFactory, LogsAudit, ClearsDashboardCache;
+    use ClearsDashboardCache, HasFactory, LogsAudit;
 
     /** Requisition status values */
     public const STATUS_PENDING_HEAD = 'pending_head';
+
     public const STATUS_PENDING_PRESIDENT = 'pending_president';
+
     public const STATUS_PENDING_FINANCE = 'pending_finance';
+
     public const STATUS_APPROVED = 'approved';
 
     /**
@@ -36,7 +38,7 @@ class Requisition extends Model
         'user_id',
         'ticket_id',
         'job_order_id',
-        'department',
+        'department_id',
         'purpose',
         'attachment_path',
         'status',
@@ -71,6 +73,11 @@ class Requisition extends Model
     public function jobOrder(): BelongsTo
     {
         return $this->belongsTo(JobOrder::class);
+    }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
     }
 
     public function items(): HasMany

@@ -40,7 +40,7 @@ class InventoryItem extends Model
         'name',
         'description',
         'inventory_category_id',
-        'department',
+        'department_id',
         'location',
         'supplier',
         'purchase_date',
@@ -71,5 +71,10 @@ class InventoryItem extends Model
     public function inventoryCategory(): BelongsTo
     {
         return $this->belongsTo(InventoryCategory::class);
+    }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
     }
 }

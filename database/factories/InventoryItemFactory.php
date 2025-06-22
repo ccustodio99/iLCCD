@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Department;
 use App\Models\InventoryCategory;
 use App\Models\InventoryItem;
 use App\Models\User;
@@ -24,7 +25,7 @@ class InventoryItemFactory extends Factory
             'description' => fake()->sentence(),
             'inventory_category_id' => InventoryCategory::inRandomOrder()->value('id')
                 ?? InventoryCategory::factory(),
-            'department' => fake()->randomElement(['IT', 'HR', 'Admin']),
+            'department_id' => Department::factory(),
             'location' => fake()->city(),
             'supplier' => fake()->company(),
             'purchase_date' => now()->subDays(random_int(1, 365)),
