@@ -43,7 +43,7 @@ it('rejects inactive job order types', function () {
 it('shows user job orders', function () {
     $user = User::factory()->create();
     $type = JobOrderType::factory()->create(['name' => 'Setup']);
-    $order = JobOrder::factory()->for($user)->create(['job_type' => $type->name]);
+    $order = JobOrder::factory()->for($user)->create(['job_order_type_id' => $type->id]);
     $this->actingAs($user);
 
     $response = $this->get('/job-orders');
@@ -56,7 +56,7 @@ it('shows job orders assigned to user', function () {
     $requester = User::factory()->create();
     $type = JobOrderType::factory()->create(['name' => 'Repair']);
     JobOrder::factory()->for($requester)->create([
-        'job_type' => $type->name,
+        'job_order_type_id' => $type->id,
         'assigned_to_id' => $user->id,
         'status' => JobOrder::STATUS_ASSIGNED,
     ]);

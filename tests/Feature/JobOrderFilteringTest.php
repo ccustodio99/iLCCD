@@ -8,12 +8,12 @@ it('filters job orders by status', function () {
     $user = User::factory()->create();
     $type = JobOrderType::factory()->create(['name' => 'Repair']);
     JobOrder::factory()->for($user)->create([
-        'job_type' => $type->name,
+        'job_order_type_id' => $type->id,
         'status' => JobOrder::STATUS_PENDING_HEAD,
         'description' => 'pending',
     ]);
     JobOrder::factory()->for($user)->create([
-        'job_type' => $type->name,
+        'job_order_type_id' => $type->id,
         'status' => JobOrder::STATUS_APPROVED,
         'description' => 'approved',
     ]);
@@ -31,8 +31,8 @@ it('filters job orders by type', function () {
     $parentB = JobOrderType::factory()->create(['name' => 'Repair']);
     $childB = JobOrderType::factory()->create(['parent_id' => $parentB->id, 'name' => 'Replace']);
 
-    JobOrder::factory()->for($user)->create(['job_type' => $childA->name, 'description' => 'A']);
-    JobOrder::factory()->for($user)->create(['job_type' => $childB->name, 'description' => 'B']);
+    JobOrder::factory()->for($user)->create(['job_order_type_id' => $childA->id, 'description' => 'A']);
+    JobOrder::factory()->for($user)->create(['job_order_type_id' => $childB->id, 'description' => 'B']);
 
     $this->actingAs($user);
     $response = $this->get('/job-orders?type_parent='.$parentA->id);
@@ -43,11 +43,11 @@ it('filters job orders by type', function () {
 it('filters job orders by parent when no children exist', function () {
     $user = User::factory()->create();
     $parentA = JobOrderType::factory()->create(['name' => 'General']);
-    JobOrder::factory()->for($user)->create(['job_type' => $parentA->name, 'description' => 'A']);
+    JobOrder::factory()->for($user)->create(['job_order_type_id' => $parentA->id, 'description' => 'A']);
 
     $parentB = JobOrderType::factory()->create(['name' => 'Other']);
     $childB = JobOrderType::factory()->create(['parent_id' => $parentB->id, 'name' => 'OtherChild']);
-    JobOrder::factory()->for($user)->create(['job_type' => $childB->name, 'description' => 'B']);
+    JobOrder::factory()->for($user)->create(['job_order_type_id' => $childB->id, 'description' => 'B']);
 
     $this->actingAs($user);
     $response = $this->get('/job-orders?type_parent='.$parentA->id);
@@ -62,13 +62,13 @@ it('filters job orders by assignee', function () {
     $type = JobOrderType::factory()->create();
 
     JobOrder::factory()->for($requester)->create([
-        'job_type' => $type->name,
+        'job_order_type_id' => $type->id,
         'assigned_to_id' => $assigneeA->id,
         'description' => 'A',
         'status' => JobOrder::STATUS_ASSIGNED,
     ]);
     JobOrder::factory()->for($requester)->create([
-        'job_type' => $type->name,
+        'job_order_type_id' => $type->id,
         'assigned_to_id' => $assigneeB->id,
         'description' => 'B',
         'status' => JobOrder::STATUS_ASSIGNED,
@@ -83,8 +83,8 @@ it('filters job orders by assignee', function () {
 it('searches job order descriptions', function () {
     $user = User::factory()->create();
     $type = JobOrderType::factory()->create();
-    JobOrder::factory()->for($user)->create(['job_type' => $type->name, 'description' => 'Fix laptop screen']);
-    JobOrder::factory()->for($user)->create(['job_type' => $type->name, 'description' => 'Replace bulb']);
+    JobOrder::factory()->for($user)->create(['job_order_type_id' => $type->id, 'description' => 'Fix laptop screen']);
+    JobOrder::factory()->for($user)->create(['job_order_type_id' => $type->id, 'description' => 'Replace bulb']);
 
     $this->actingAs($user);
     $response = $this->get('/job-orders?search=laptop');

@@ -612,6 +612,8 @@ class TicketController extends Controller
             'attachment' => 'nullable|file|max:2048',
         ]);
 
+        $type = JobOrderType::where('name', $data['job_type'])->first();
+        $data['job_order_type_id'] = $type?->id;
         $data['user_id'] = $ticket->user_id;
         $data['ticket_id'] = $ticket->id;
         $data['status'] = JobOrder::STATUS_PENDING_HEAD;
@@ -626,7 +628,7 @@ class TicketController extends Controller
                     $data['attachment_path'] = $attachmentPath;
                 }
 
-                unset($data['type_parent']);
+                unset($data['type_parent'], $data['job_type']);
 
                 JobOrder::create($data);
 

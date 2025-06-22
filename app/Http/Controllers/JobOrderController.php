@@ -40,19 +40,20 @@ class JobOrderController extends Controller
 
         if ($request->filled('type_parent')) {
             $children = JobOrderType::where('parent_id', $request->input('type_parent'))
-                ->pluck('name');
+                ->pluck('id');
 
             if ($children->isEmpty()) {
-                $parentName = JobOrderType::where('id', $request->input('type_parent'))
-                    ->value('name');
-                $query->where('job_type', $parentName);
+                $query->where('job_order_type_id', $request->input('type_parent'));
             } else {
-                $query->whereIn('job_type', $children);
+                $query->whereIn('job_order_type_id', $children);
             }
         }
 
         if ($request->filled('job_type')) {
-            $query->where('job_type', $request->input('job_type'));
+            $typeId = JobOrderType::where('name', $request->input('job_type'))->value('id');
+            if ($typeId) {
+                $query->where('job_order_type_id', $typeId);
+            }
         }
 
         if ($request->filled('assigned_to_id')) {
@@ -127,6 +128,8 @@ class JobOrderController extends Controller
             ->first();
         $firstStage = $process?->stages->sortBy('position')->first();
 
+        $type = JobOrderType::where('name', $data['job_type'])->first();
+        $data['job_order_type_id'] = $type?->id;
         $data['user_id'] = $request->user()->id;
         $data['status'] = $firstStage->name ?? JobOrder::STATUS_PENDING_HEAD;
         if ($request->hasFile('attachment')) {
@@ -137,7 +140,7 @@ class JobOrderController extends Controller
                 Log::error('Failed to store job order attachment: '.$e->getMessage());
             }
         }
-        unset($data['type_parent']);
+        unset($data['type_parent'], $data['job_type']);
         JobOrder::create($data);
 
         return redirect()->route('job-orders.index');
@@ -157,7 +160,7 @@ class JobOrderController extends Controller
             ->with('children')
             ->get();
 
-        $child = JobOrderType::where('name', $jobOrder->job_type)->first();
+        $child = $jobOrder->jobOrderType;
         $parentId = $child?->parent_id;
 
         return view('job_orders.edit', compact('jobOrder', 'types', 'parentId'));
@@ -214,7 +217,9 @@ class JobOrderController extends Controller
                 $data['attachment_path'] = $oldPath;
             }
         }
-        unset($data['type_parent']);
+        $type = JobOrderType::where('name', $data['job_type'])->first();
+        $data['job_order_type_id'] = $type?->id;
+        unset($data['type_parent'], $data['job_type']);
         $jobOrder->update($data);
 
         return redirect()->route('job-orders.index');

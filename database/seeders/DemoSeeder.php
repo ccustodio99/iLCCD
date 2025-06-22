@@ -4,19 +4,19 @@ namespace Database\Seeders;
 
 use App\Models\AuditTrail;
 use App\Models\Document;
+use App\Models\DocumentCategory;
 use App\Models\DocumentLog;
 use App\Models\DocumentVersion;
+use App\Models\InventoryCategory;
 use App\Models\InventoryItem;
+use App\Models\InventoryTransaction;
 use App\Models\JobOrder;
 use App\Models\PurchaseOrder;
-use App\Models\DocumentCategory;
-use App\Models\TicketCategory;
-use App\Models\InventoryCategory;
 use App\Models\Requisition;
-use App\Models\Ticket;
-use App\Models\TicketComment;
 use App\Models\RequisitionItem;
-use App\Models\InventoryTransaction;
+use App\Models\Ticket;
+use App\Models\TicketCategory;
+use App\Models\TicketComment;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -228,7 +228,7 @@ class DemoSeeder extends Seeder
                 ->for($ticket->user)
                 ->for($staff, 'assignedTo')
                 ->state([
-                    'job_type' => $data['type'],
+                    'job_order_type_id' => JobOrderType::where('name', $data['type'])->value('id'),
                     'description' => $data['description'],
                     'status' => $status,
                     'approved_at' => now()->subDays(fake()->numberBetween(1, 5)),
@@ -276,6 +276,7 @@ class DemoSeeder extends Seeder
 
             RequisitionItem::factory()->count(2)->for($req)->state(function () use ($requisitionItems) {
                 $data = collect($requisitionItems)->random();
+
                 return [
                     'item' => $data['item'],
                     'specification' => $data['specification'],

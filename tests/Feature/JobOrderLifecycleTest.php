@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\JobOrder;
-use App\Models\User;
 use App\Models\AuditTrail;
+use App\Models\JobOrder;
 use App\Models\JobOrderType;
+use App\Models\User;
 
 it('allows assignee to start and finish job order', function () {
     $assignee = User::factory()->create();
@@ -70,12 +70,12 @@ it('shows assigned orders to assignee only', function () {
     $install = JobOrderType::factory()->create(['name' => 'Install']);
     $repair = JobOrderType::factory()->create(['name' => 'Repair']);
     $order = JobOrder::factory()->create([
-        'job_type' => $install->name,
+        'job_order_type_id' => $install->id,
         'status' => JobOrder::STATUS_ASSIGNED,
         'assigned_to_id' => $assignee->id,
     ]);
     $otherOrder = JobOrder::factory()->create([
-        'job_type' => $repair->name,
+        'job_order_type_id' => $repair->id,
         'status' => JobOrder::STATUS_ASSIGNED,
         'assigned_to_id' => $other->id,
     ]);
@@ -132,5 +132,3 @@ it('rejects finishing when not in progress', function () {
     $this->actingAs($assignee);
     $this->put("/job-orders/{$order->id}/finish")->assertForbidden();
 });
-
-

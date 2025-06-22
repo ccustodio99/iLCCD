@@ -69,7 +69,7 @@ class JobOrderTypeController extends Controller
 
     public function destroy(JobOrderType $jobOrderType)
     {
-        $inUse = \App\Models\JobOrder::where('job_type', $jobOrderType->name)
+        $inUse = \App\Models\JobOrder::where('job_order_type_id', $jobOrderType->id)
             ->exists();
 
         if ($inUse) {

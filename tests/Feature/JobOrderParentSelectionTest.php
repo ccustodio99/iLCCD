@@ -17,7 +17,7 @@ it('allows selecting parent when no child types exist', function () {
     ]);
 
     $response->assertRedirect('/job-orders');
-    expect(JobOrder::where('job_type', $parent->name)->exists())->toBeTrue();
+    expect(JobOrder::where('job_order_type_id', $parent->id)->exists())->toBeTrue();
 });
 
 it('allows updating using parent when no child types exist', function () {
@@ -26,7 +26,7 @@ it('allows updating using parent when no child types exist', function () {
 
     $parent = JobOrderType::factory()->create(['name' => 'General']);
     $order = JobOrder::factory()->for($user)->create([
-        'job_type' => $parent->name,
+        'job_order_type_id' => $parent->id,
         'description' => 'Old',
     ]);
 
