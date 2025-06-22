@@ -12,11 +12,11 @@ The Access Control module is the core of security and data integrity in the syst
 - Every user is assigned a **role** (e.g., Admin, Department Head, or Staff).
 - Each role maps to a specific set of permissions, such as:
   - View/Create/Approve/Modify/Delete requests
-  - Manage users or departments
+  - Manage users or departments (entries in the `departments` table)
   - Access to sensitive modules or audit logs
 - **Permissions** are enforced both at the UI level (what buttons/menus are visible) and at the controller level (what the backend will allow).
 - Route middleware (`role:admin`, etc.) checks the authenticated user's role before allowing access to sensitive endpoints.
-- **Departmental scoping**: Data access is filtered by department unless the role has cross-department permissions (e.g., Admin, President).
+- **Departmental scoping**: Data access is filtered by `department_id` unless the role has cross-department permissions (e.g., Admin, President).
 
 ### 2. Secure Login Mechanisms
 - **Login page** is accessible over HTTPS (recommended).

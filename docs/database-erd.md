@@ -4,6 +4,11 @@ This diagram summarizes the main tables and relationships in the LCCD Integrated
 
 ```mermaid
 erDiagram
+    DEPARTMENTS {
+        BIGINT id PK
+        STRING name
+        BOOLEAN is_active
+    }
     USERS {
         BIGINT id PK
         STRING name
@@ -138,6 +143,11 @@ erDiagram
     DOCUMENTS ||--|{ DOCUMENT_VERSIONS : versioned
     DOCUMENTS ||--|{ DOCUMENT_LOGS : activity
     APPROVAL_PROCESSES ||--|{ APPROVAL_STAGES : has
+    DEPARTMENTS ||--o{ USERS : staffs
+    DEPARTMENTS ||--o{ REQUISITIONS : requests
+    DEPARTMENTS ||--o{ INVENTORY_ITEMS : items
+    DEPARTMENTS ||--o{ DOCUMENTS : files
+    DEPARTMENTS ||--o{ APPROVAL_PROCESSES : processes
 ```
 
 *Note: Not all columns are shown. This simplified ERD highlights the primary keys and foreign key relationships used across the major modules.*

@@ -32,7 +32,7 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
 - Each role grants access to specific views and actions (using RBAC).
 
 ### 3. Departmental Affiliations and Access Controls
-- Users are linked to departments (e.g., CCS, HR, Finance, ITRC, Library).
+- Users are linked to departments via a `department_id` foreign key (records are stored in the `departments` table, e.g., CCS, HR, Finance, ITRC, Library).
 - Requests, approvals, and dashboard access are filtered by department.
 - Cross-departmental access is managed only by Admins or Super Admins.
 
@@ -107,13 +107,13 @@ Users should also review the [User Manual](user_manual.md) for day-to-day action
 2. **User Management** verifies the account is active and not disabled
 3. **Access Control** checks the password and records a login attempt
 4. On success, a session is created and the session ID regenerates
-5. User Management loads role and department data to personalize the dashboard
+5. User Management loads role and department data (via the `departments` table) to personalize the dashboard
 6. The login event is written to the audit log
 
 ### Database Schema & Seeded Accounts
 The `users` table stores account information with key fields:
 - `name`, unique `email`, and hashed `password`
-- `department` and `role`
+ - `department_id` referencing the `departments` table and `role`
 - `is_active` plus lockout timestamps
 - optional `designation`, `contact_info`, and `profile_photo_path`
 
