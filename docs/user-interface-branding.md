@@ -26,10 +26,12 @@ The interface embraces seven core UX principles:
 7. **Usability** – responsive layouts and quick AJAX updates keep tasks simple
    and fast.
 
-### Improved Navigation
+-### Improved Navigation
 
-- A **Skip to main content** link and a new **Back to Top** button help with
-  keyboard navigation and screen readers.
+- A **Skip to main content** link sits at the very top of every page. It is
+  visually hidden until focused so keyboard users can quickly jump over the
+  navigation directly to the main content area. A **Back to Top** button is
+  also provided for easier page navigation.
 - Each standalone form page now includes a **Cancel** button that returns users
   to the list view without submitting changes.
 
