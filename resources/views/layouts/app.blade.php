@@ -147,6 +147,25 @@
             top: 0;
             z-index: 1090;
         }
+        .skip-link {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            background-color: var(--color-accent);
+            color: var(--color-primary);
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+        }
+        .skip-link:focus {
+            left: 0;
+            top: 0;
+            width: auto;
+            height: auto;
+            z-index: 1100;
+        }
         .modal-dialog {
             margin-top: 5rem;
         }
@@ -164,6 +183,7 @@
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     @include('components.hamburger-menu')
     @auth
         @include('components.site-header', ['showSidebar' => true])
