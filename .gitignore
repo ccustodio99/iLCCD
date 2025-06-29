@@ -27,3 +27,7 @@ yarn-error.log
 /.vscode
 /.zed
 /database/*.sqlite
+
+# Cleanup
+*Copy.gitignore
+--cache-result/
