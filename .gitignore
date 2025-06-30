@@ -9,6 +9,7 @@
 /storage/logs
 /storage/framework
 /storage/app/public
+/storage/app/private
 /bootstrap/cache
 .phpunit.result.cache
 .phpunit.cache
