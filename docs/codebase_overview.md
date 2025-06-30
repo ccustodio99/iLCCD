@@ -53,6 +53,10 @@ Each module has its own documentation within the `docs/` directory.
    ```bash
    composer dev
    ```
+   `composer dev` relies on [Pail](https://github.com/laravel/pail) which
+   requires the PHP `pcntl` extension. Windows users can run the underlying
+   `php artisan serve`, `php artisan queue:listen`, and `npm run dev` commands
+   manually or use WSL where `pcntl` is available.
 5. Execute the automated test suite:
    ```bash
    php artisan test

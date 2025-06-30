@@ -74,9 +74,10 @@ Deliver a holistic, faith-driven digital backbone for LCCD, empowering every use
    The migrations add and then remove a column on the `audit_trails` table. Run
    them in chronological order or see [Migration Sequence](docs/migration-sequence.md) for details.
 8. Ensure `public/storage` is linked. The `composer dev` script checks and runs `php artisan storage:link` if needed.
-9. Start the local server using `php artisan serve` or `composer dev` for hot reloading.
-10. Run a queue worker with `php artisan queue:work` so queued notifications are processed.
-11. Execute the test suite with `php artisan test` to verify the setup.
+9. **Note:** `composer dev` uses [Pail](https://github.com/laravel/pail) under the hood and therefore requires the PHP `pcntl` extension. Windows users can manually run `php artisan serve`, `php artisan queue:listen`, and `npm run dev` or use WSL where `pcntl` is available.
+10. Start the local server using `php artisan serve` or `composer dev` for hot reloading.
+11. Run a queue worker with `php artisan queue:work` so queued notifications are processed.
+12. Execute the test suite with `php artisan test` to verify the setup.
 
 ---
 
